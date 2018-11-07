@@ -8,10 +8,12 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { MarcadistriComponent } from './marcadistri/marcadistri.component';
 import { RouterModule, Route } from '@angular/router';
 import { LoginComponent } from './login/login.component';
+import { CategoriaComponent } from './categoria/categoria.component';
 
 const routes: Route[] = [
   {path: 'marca', component: MarcadistriComponent},
-  {path: 'login', component: LoginComponent}
+  {path: 'login', component: LoginComponent},
+  {path: 'categoria', component: CategoriaComponent}
 ];
 
 @NgModule({
@@ -21,7 +23,8 @@ const routes: Route[] = [
     MenuComponent,
     BreadcrumbComponent,
     MarcadistriComponent,
-    LoginComponent
+    LoginComponent,
+    CategoriaComponent
   ],
   imports: [
     BrowserModule,
