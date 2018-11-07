@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { CategoriaComponent } from './categoria/categoria.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgFlashMessagesModule } from 'ng-flash-messages';
+import { MaterialModule } from './material';
 
 const routes: Route[] = [
   {path: 'marca', component: MarcadistriComponent},
@@ -32,6 +33,7 @@ const routes: Route[] = [
   imports: [
     BrowserModule,
     FormsModule,
+    MaterialModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     NgFlashMessagesModule.forRoot(),
