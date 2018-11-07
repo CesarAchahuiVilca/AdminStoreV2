@@ -1,8 +1,13 @@
 table {
     width: 100%;
+    font-size: 14px;
   }
   
   .mat-form-field {
     font-size: 14px;
     width: 100%;
+  }
+  .example-container {
+    height: 200px;
+    overflow: auto;
   }
