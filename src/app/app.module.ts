@@ -11,6 +11,7 @@ import { LoginComponent } from './login/login.component';
 
 const routes: Route[] = [
   {path: 'marca', component: MarcadistriComponent},
+  {path: 'login', component: LoginComponent}
 ];
 
 @NgModule({

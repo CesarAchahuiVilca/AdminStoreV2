@@ -1,11 +1,13 @@
-
-<app-header></app-header>
-<div class="app-body">
+<app-header *ngIf="!ruta"></app-header>
+<div *ngIf="!ruta; else elseBlock" class="app-body">
   <app-menu></app-menu>
-<main class="main">
-  <app-breadcrumb></app-breadcrumb>
-  <div class="container-fluid">
+  <main class="main">
+    <app-breadcrumb></app-breadcrumb>
+    <div class="container-fluid">
       <router-outlet></router-outlet>
-  </div>
-</main>
+    </div>
+  </main>
 </div>
+<ng-template #elseBlock>
+  <router-outlet></router-outlet>
+</ng-template>
