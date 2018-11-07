@@ -5,19 +5,18 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 
-export class Usuario {
-
+/*export class Usuario {
   constructor(usuario = '', password = '') {
       this.usuario = usuario;
       this.password = password;
   }
   usuario : string;
   password : string;
-}
+}*/
 
 export class LoginService {
 
-  private usuario : Usuario;
+  /*private usuario : Usuario;
 
   readonly URL_API = 'http://localhost:3000/api/usuarios';
 
@@ -27,5 +26,5 @@ export class LoginService {
 
   login(user : Usuario){
     return this.http.post(this.URL_API+ 'adminLogin', user);
-  }
+  }*/
 }
