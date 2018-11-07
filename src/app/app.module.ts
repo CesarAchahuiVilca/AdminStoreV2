@@ -7,6 +7,7 @@ import { MenuComponent } from './menu/menu.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { MarcadistriComponent } from './marcadistri/marcadistri.component';
 import { RouterModule, Route } from '@angular/router';
+import { LoginComponent } from './login/login.component';
 
 const routes: Route[] = [
   {path: 'marca', component: MarcadistriComponent},
@@ -18,7 +19,8 @@ const routes: Route[] = [
     HeaderComponent,
     MenuComponent,
     BreadcrumbComponent,
-    MarcadistriComponent
+    MarcadistriComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
