@@ -8,7 +8,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-md-2">
-                    <button class="btn btn-block btn-link" type="button"><i class="fa fa-plus"></i> Agregar Categoria</button><br>
+                    <button class="btn btn-block btn-link" type="button" data-toggle="modal" data-target="#modalnuevacategoria"><i class="fa fa-plus" ></i> Agregar Categoria</button><br>
                 </div>
                 <div class="col-md-12">
                     <table class="table table-responsive-sm table-striped table-bordered table-sm">
@@ -75,3 +75,71 @@
     </div>
   </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalnuevacategoria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document" style="max-width: 70% !important; margin-left: auto; margin-right: auto;">
+      <div class="modal-content">
+        <div class="modal-header"  style="background-color: orange; color: white;">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-plus"></i> Nueva Categoria</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i class="fa fa-close"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-5">
+                <div class="form-group">
+                  <label for="name">Nombre</label>
+                  <input class="form-control" id="nombre" type="text" placeholder="Ingrese nombre de la categoria">
+                </div>
+                <div class="form-group">
+                  <label for="name">Descripción</label>
+                  <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Ingrese descripcion de la categoria"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-7">
+              <div class="row">
+                <div class="col-lg-12">
+                    <label>Imagen de portada de la categoria</label>
+                </div>
+                <div class="col-lg-1">
+                    <div class="form-group">
+                        
+                          <div class="input-group">
+                              <label class="input-group-btn">
+                                  <span class="btn btn-primary" style="background-color: orange; border: 1px solid gray;">
+                                      <i class="fa fa-search"></i> <input type="file" style="display: none;" (change)="onFileSelected($event)" id="archivo">
+                                  </span>
+                              </label>
+                          </div>
+                       </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="progress"  style="height: 35px;">
+                    <label style="height: 100%; padding-top: 10px;" id="nombrearchivo"> DIRECCION DEL ARCHIVO</label>
+                    <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: orange;"></div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <button class="btn btn-success input-group-btn" style="background-color: dimgrey;" (click)="onUpload()"><i class="fa fa-upload"></i> Subir</button>
+                </div>
+                <div class="col-lg-12">
+                  <div class="cont-imagen">
+                      <img src="" style="width: 100%; height: auto;" id="imagen-select">
+                  </div>
+                  
+                </div>
+              </div>
+                
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
