@@ -17,6 +17,6 @@ export class LoginService {
   }
 
   login(user : Usuario){
-    return this.http.post(this.URL_API+ 'adminLogin', user);
+    return this.http.post(this.URL_API+ '/adminLogin', user);
   }
 }
