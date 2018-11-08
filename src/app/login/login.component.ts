@@ -23,10 +23,16 @@ export class LoginComponent implements OnInit {
 
   login(form?: NgForm) {
     console.log(form.value);
-    //this.loginService.login(form.value).subscribe(res =>{
-    //  var xres = JSON.parse(JSON.stringify(res));
-    //  console.log(xres);
-    //});
+    this.loginService.login(form.value).subscribe(res =>{
+      var xres = JSON.parse(JSON.stringify(res));
+      if(xres.estado){
+        this.flashMessage.showFlashMessage({messages: [xres.status], timeout: 5000, dismissible: true, type: 'success'});
+        //this.router.navigate(['/']);       
+      } else {
+        this.flashMessage.showFlashMessage({messages: [xres.status], timeout: 5000,dismissible: true, type: 'danger'});
+        //this.resetForm(form)
+      }
+    });
   }
 
 }
