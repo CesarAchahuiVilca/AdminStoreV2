@@ -13,12 +13,14 @@ import { LoginComponent } from './login/login.component';
 import { CategoriaComponent } from './categoria/categoria.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgFlashMessagesModule } from 'ng-flash-messages';
+import { CaracteristicasComponent } from './caracteristicas/caracteristicas.component';
 
 
 const routes: Route[] = [
   {path: 'marca', component: MarcadistriComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'categoria', component: CategoriaComponent}
+  {path: 'categoria', component: CategoriaComponent},
+  {path: 'caracteristicas', component: CaracteristicasComponent},
 ];
 
 @NgModule({
@@ -29,7 +31,8 @@ const routes: Route[] = [
     BreadcrumbComponent,
     MarcadistriComponent,
     LoginComponent,
-    CategoriaComponent
+    CategoriaComponent,
+    CaracteristicasComponent
   ],
   imports: [
     BrowserModule,

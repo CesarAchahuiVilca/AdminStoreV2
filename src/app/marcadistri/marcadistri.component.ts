@@ -30,6 +30,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class MarcadistriComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
+  value2 = '';
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();

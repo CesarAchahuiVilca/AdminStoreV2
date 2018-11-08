@@ -1,37 +1,32 @@
 <!-- nav-contenido -->
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
-    <a
-      class="nav-link active"
-      id="home-tab"
-      data-toggle="tab"
-      href="#marca"
-      role="tab"
-      aria-controls="home"
-      aria-selected="true"
-      >Marca</a
-    >
+    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#marca" role="tab" aria-controls="home"
+      aria-selected="true">Marca</a>
   </li>
   <li class="nav-item">
-    <a
-      class="nav-link"
-      id="profile-tab"
-      data-toggle="tab"
-      href="#distribuidor"
-      role="tab"
-      aria-controls="profile"
-      aria-selected="false"
-      >Distribuidor</a
-    >
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#distribuidor" role="tab" aria-controls="profile"
+      aria-selected="false">Distribuidor</a>
   </li>
 </ul>
 <div class="tab-content" id="myTabContent">
   <!-- nav1 -->
   <div class="tab-pane fade show active" id="marca" role="tabpanel" aria-labelledby="home-tab">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter"/>
+    <div class="example-button-row">
+      <mat-form-field class="example-form-field">
+        <input matInput type="text" placeholder="Agregar Marca" [(ngModel)]="value2">
+        <button mat-button *ngIf="value2" matSuffix mat-icon-button aria-label="Clear" (click)="value2=''">
+          <i class="material-icons">clear</i>
+        </button>
       </mat-form-field>
-      <div class="example-container mat-elevation-z8">
+      <p></p>
+      <button mat-raised-button>Agregar</button>
+    </div>
+    <br>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
+    </mat-form-field>
+    <div class="example-container mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <!-- Position Column -->
         <ng-container matColumnDef="position">
@@ -67,42 +62,52 @@
   </div>
   <!-- nav2 -->
   <div class="tab-pane fade" id="distribuidor" role="tabpanel" aria-labelledby="profile-tab">
-      <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter"/>
-        </mat-form-field>
-        <div class="example-container mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-          <!-- Position Column -->
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef>No.</th>
-            <td mat-cell *matCellDef="let element">{{ element.position }}</td>
-          </ng-container>
-  
-          <!-- Name Column -->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-          </ng-container>
-  
-          <!-- Weight Column -->
-          <ng-container matColumnDef="weight">
-            <th mat-header-cell *matHeaderCellDef>Weight</th>
-            <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
-          </ng-container>
-  
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="symbol">
-            <th mat-header-cell *matHeaderCellDef>Symbol</th>
-            <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
-          </ng-container>
-  
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-  
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <div class="example-button-row">
+          <mat-form-field class="example-form-field">
+            <input matInput type="text" placeholder="Agregar Distribuidor" [(ngModel)]="value2">
+            <button mat-button *ngIf="value2" matSuffix mat-icon-button aria-label="Clear" (click)="value2=''">
+              <i class="material-icons">clear</i>
+            </button>
+          </mat-form-field>
+          <p></p>
+          <button mat-raised-button>Agregar</button>
+        </div>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
+    </mat-form-field>
+    <div class="example-container mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="weight">
+          <th mat-header-cell *matHeaderCellDef>Weight</th>
+          <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="symbol">
+          <th mat-header-cell *matHeaderCellDef>Symbol</th>
+          <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </div>
+      </table>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </div>
   </div>
 </div>
 <!-- fin contenido -->
