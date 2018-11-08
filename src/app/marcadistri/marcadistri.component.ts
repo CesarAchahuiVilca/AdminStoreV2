@@ -40,5 +40,9 @@ export class MarcadistriComponent implements OnInit {
 
   ngOnInit() {
   }
+  
+  funprueba(dato){
+    console.log(ELEMENT_DATA[dato-1]);
+  }
 
 }

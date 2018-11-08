@@ -11,5 +11,5 @@ export class CaracteristicasComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  
 }
