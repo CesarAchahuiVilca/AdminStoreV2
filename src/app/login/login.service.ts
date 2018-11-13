@@ -8,7 +8,7 @@ import { Usuario } from './usuario';
 
 export class LoginService {
 
-  private usuarioSeleccionado : Usuario;
+  public usuarioSeleccionado : Usuario;
 
   readonly URL_API = 'http://localhost:3000/api/usuarios';
 

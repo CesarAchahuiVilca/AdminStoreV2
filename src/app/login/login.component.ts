@@ -3,12 +3,13 @@ import { LoginService } from './login.service';
 import { NgFlashMessageService } from 'ng-flash-messages';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Usuario } from './usuario';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [LoginService]
+  providers: [ LoginService ]
 })
 export class LoginComponent implements OnInit {
 
@@ -22,17 +23,23 @@ export class LoginComponent implements OnInit {
   }
 
   login(form?: NgForm) {
-    console.log(form.value);
     this.loginService.login(form.value).subscribe(res =>{
       var xres = JSON.parse(JSON.stringify(res));
       if(xres.estado){
         this.flashMessage.showFlashMessage({messages: [xres.status], timeout: 5000, dismissible: true, type: 'success'});
-        //this.router.navigate(['/']);       
+        document.getElementById('refrescar').click();
       } else {
         this.flashMessage.showFlashMessage({messages: [xres.status], timeout: 5000,dismissible: true, type: 'danger'});
-        //this.resetForm(form)
+        this.resetForm(form)
       }
     });
+  }
+
+  resetForm(form?: NgForm) {
+    if (form) {
+      form.reset();
+      this.loginService.usuarioSeleccionado = new Usuario();
+    }
   }
 
 }

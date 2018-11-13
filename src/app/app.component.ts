@@ -11,6 +11,7 @@ export class AppComponent {
   ruta : boolean;
 
   constructor(location: Location){
+    
     this.ruta = location.path() == '/login';
   }
 }
