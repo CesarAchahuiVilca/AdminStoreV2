@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient} from '@angular/common/http'
+import { Constantes} from '../constantes'
 import { Categoria } from './categoria';
 
 @Injectable({
@@ -6,13 +8,27 @@ import { Categoria } from './categoria';
 })
 export class CategoriaService {
 
-  readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
+  categoriaSeleccionada: Categoria;
+  categorias: Categoria[];
 
-  constructor() {
+  constructor(private http: HttpClient) {
+    this.categoriaSeleccionada = new Categoria();
+  }
 
-   }
+  getCategorias(){
+    return this.http.get(Constantes.URL_API)
+  }
 
-   subir_imagen(){
+  postCategoria(Categoria: Categoria){
+    return this.http.post(Constantes.URL_API,Categoria);
+  }
+  
+  putCategoria(categoria: Categoria){
+    return this.http.put(Constantes.URL_API+'/'+categoria._id,categoria);
+  }
+  deleteCategoria(id: string){
+    return this.http.delete(Constantes.URL_API+'/'+id);
+  }
 
-   }
+  
 }

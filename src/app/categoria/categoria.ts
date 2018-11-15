@@ -1,18 +1,16 @@
 export class Categoria {
 
-    constructor(_id = '', correo = '', nombres = '', apellidos = '', password = '', promociones = false) {
+    constructor(_id = '', nombre = '', descripcion = '', padre = '', imagen = '') {
         this._id = _id;
-        this.correo = correo;
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.password = password;
-        this.promociones = promociones;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.padre = padre;
+        this.imagen = imagen;
     }
   
     _id: string;
-    correo: string;
-    nombres: string;
-    apellidos: string;
-    password: string;
-    promociones: boolean;
+    nombre: string;
+    descripcion: string;
+    padre: string;
+    imagen: string;
   }

@@ -23,3 +23,9 @@
     border: 1px 
     solid gray;
 }
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    
+    border-radius: 15px;
+  }
