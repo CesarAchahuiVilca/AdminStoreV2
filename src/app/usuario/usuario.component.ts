@@ -28,6 +28,7 @@ export class UsuarioComponent implements OnInit {
     if(form.value._id) {
       this.usuarioService.putUsuario(form.value)
         .subscribe(res => {
+          var jres = JSON.parse(JSON.stringify(res));
           this.resetForm(form);
           this.getUsuarios();
           //M.toast({html: 'Updated Successfully'});
