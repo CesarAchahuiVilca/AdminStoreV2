@@ -29,3 +29,23 @@
     
     border-radius: 15px;
   }
+.btn-detalle-categoria{
+    color: black; 
+    font-weight: bold; 
+    text-align: center;
+    cursor: pointer;    
+    
+}
+.btn-detalle-categoria:hover{
+    color: orange;
+}
+  @media (min-width: 360px) {
+    .modal-dialog{
+        max-width: 100% !important; 
+    }
+  }
+  @media (min-width: 768px) {
+    .modal-dialog{
+        max-width: 80% !important; 
+    }
+  }

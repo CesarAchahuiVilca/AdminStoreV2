@@ -8,7 +8,7 @@ import { Categoria } from './categoria';
 })
 export class CategoriaService {
 
-  categoriaSeleccionada: Categoria;
+  categoriaSeleccionada: Categoria = new Categoria();
   categorias: Categoria[];
 
   constructor(private http: HttpClient) {
@@ -16,18 +16,21 @@ export class CategoriaService {
   }
 
   getCategorias(){
-    return this.http.get(Constantes.URL_API)
+    return this.http.get(Constantes.URL_API_CATEGORIA)
+  }
+  getSubCategorias(id: string){
+    return this.http.get(Constantes.URL_API_CATEGORIA+'/subcategorias/'+id)
   }
 
   postCategoria(Categoria: Categoria){
-    return this.http.post(Constantes.URL_API,Categoria);
+    return this.http.post(Constantes.URL_API_CATEGORIA,Categoria);
   }
   
   putCategoria(categoria: Categoria){
-    return this.http.put(Constantes.URL_API+'/'+categoria._id,categoria);
+    return this.http.put(Constantes.URL_API_CATEGORIA+'/'+categoria._id,categoria);
   }
   deleteCategoria(id: string){
-    return this.http.delete(Constantes.URL_API+'/'+id);
+    return this.http.delete(Constantes.URL_API_CATEGORIA+'/'+id);
   }
 
   

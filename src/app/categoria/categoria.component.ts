@@ -21,32 +21,39 @@ export class CategoriaComponent implements OnInit {
   nextID : Number = 0 ;
   vista: string = "1";
 
+  IDCategoriaSelecionada: string = "root";
+  
+  breadcrumb_categorias: Categoria[] = new Array();
+  todasCategorias:Categoria[];
   ngOnInit() {
-    this.getCategorias();
+    
     var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-      imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
-
-    document.getElementById("contenido_lista_categorias").hidden = false;
-    document.getElementById("contenido_agregar_categoria").hidden = true;
+    imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
+    var cat = new Categoria();
+    cat.nombre = "Categorias";
+    cat._id = "root";
+    this.mostrarSubCategorias(cat);
+    this.getCategorias();
+   
   }
-  cambiarvista(){
-    console.log(this.vista);
+ /* cambiarvista(form?: NgForm){
+    this.limpiarform(form);
     if(this.vista == "1"){
       this.vista ="2";
-    document.getElementById("contenido_lista_categorias").hidden = true;
-    document.getElementById("contenido_agregar_categoria").hidden = false;
-    var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
-    botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
+      document.getElementById("contenido_lista_categorias").hidden = true;
+      document.getElementById("contenido_agregar_categoria").hidden = false;
+      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
+      botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
     }else{
       this.vista ="1";
       document.getElementById("contenido_lista_categorias").hidden = false;
-    document.getElementById("contenido_agregar_categoria").hidden = true;
-    var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
-    botones.innerHTML='<i class="fa fa-plus" ></i> Agregar Categoria';
+      document.getElementById("contenido_agregar_categoria").hidden = true;
+      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
+      botones.innerHTML='<i class="fa fa-plus" ></i> Agregar Categoria';
 
     }
 
-  }
+  }*/
   
   limpiarform(form?: NgForm){
     if(form){
@@ -74,7 +81,7 @@ export class CategoriaComponent implements OnInit {
       this.categoriaService.putCategoria(form.value)
       .subscribe(res=>{
         this.limpiarform(form);
-        this.getCategorias();
+        this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
         console.log(res);
       });
       
@@ -91,7 +98,7 @@ export class CategoriaComponent implements OnInit {
     this.categoriaService.postCategoria(cat as Categoria)
     .subscribe(res=>{
       this.limpiarform(form);
-      this.getCategorias();
+      this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
       console.log(res);
       
     });
@@ -106,7 +113,7 @@ export class CategoriaComponent implements OnInit {
     var imagenInput  = document.getElementById("imagen") as HTMLInputElement;
     var inputfile = document.getElementById("nombrearchivo") as HTMLLabelElement;
     inputfile.innerHTML = this.categoriaService.categoriaSeleccionada.imagen;
-    this.cambiarvista();
+    
     
 
   }
@@ -114,7 +121,7 @@ export class CategoriaComponent implements OnInit {
   eliminarCategoria(idCategoria){
     this.categoriaService.deleteCategoria(idCategoria)
     .subscribe(res=>{
-      this.getCategorias();
+      this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
       console.log(res);
     });
     console.log(idCategoria);
@@ -124,6 +131,20 @@ export class CategoriaComponent implements OnInit {
   getCategorias(){
     this.categoriaService.getCategorias()
     .subscribe(res=>{
+      this.todasCategorias = res as Categoria[];
+      
+      
+    });
+  }
+
+  mostrarSubCategorias(categoria: Categoria){
+
+    
+
+    this.breadcrumb_categorias.push(categoria);
+    
+    this.categoriaService.getSubCategorias(categoria._id)
+    .subscribe(res=>{
       this.categoriaService.categorias = res as Categoria[];
       if(this.categoriaService.categorias.length == 0){
          document.getElementById("mensaje").innerHTML = "NO SE ENCONTRARON DATOS.";
@@ -132,6 +153,17 @@ export class CategoriaComponent implements OnInit {
       }
       
     });
+
+    
+  }
+  irASubCategoria(categoria: Categoria){
+    console.log("");
+    while(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1].nombre != categoria.nombre){
+      this.breadcrumb_categorias.pop();
+    }
+    this.breadcrumb_categorias.pop();
+    
+    this.mostrarSubCategorias(categoria);
   }
 
   onFileSelected(event){
