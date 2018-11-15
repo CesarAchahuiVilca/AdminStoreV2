@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from './usuario.service';
+import { DireccionService } from './direccion.service';
 import { NgForm } from '@angular/forms';
 import { NgFlashMessageService } from 'ng-flash-messages';
 import { Usuario } from './usuario';
+import { Direccion } from './direccion';
 
 @Component({
   selector: 'app-usuario',
@@ -13,18 +15,25 @@ import { Usuario } from './usuario';
 export class UsuarioComponent implements OnInit {
 
   private boton_accion : string;
+  private usuario_header : string;
+  private direccion_header : string;
 
   constructor(
     private usuarioService : UsuarioService,
-    private flashMessage : NgFlashMessageService
+    private flashMessage : NgFlashMessageService,
+    private direccionService : DireccionService
     ) { }
 
   ngOnInit() {
+    document.getElementById('btnDireccion').hidden = true;
     this.getUsuarios();
   }
 
-  agregarUsuario(form?: NgForm) {
+  agregarDireccion(form?: NgForm){
     console.log(form.value);
+  }
+
+  agregarUsuario(form?: NgForm) {
     if(form.value._id) {
       this.usuarioService.putUsuario(form.value)
         .subscribe(res => {
@@ -55,19 +64,27 @@ export class UsuarioComponent implements OnInit {
     document.getElementById('lista_usuarios').hidden = false;
     document.getElementById('volver').hidden = true;
     document.getElementById('nuevo').hidden = false;
+    document.getElementById('direccion').hidden = true;
+    document.getElementById('lista_direcciones').hidden = true;
     this.usuarioService.getUsuarios().subscribe( res => {
       this.usuarioService.usuarios = res as Usuario[];
     });
   }
 
   editarUsuario(usuario: Usuario) {
-    this.boton_accion = "Editar Usuario";
+    this.usuario_header = "MODIFICAR USUARIO";
+    this.boton_accion = "Guardar Cambios";
     this.usuarioService.usuarioSeleccionado = usuario;
     document.getElementById('nuevo_usuario').hidden = false;
     document.getElementById('lista_usuarios').hidden = true;
     document.getElementById('limpiar').hidden = true;
     document.getElementById('nuevo').hidden = true;
     document.getElementById('volver').hidden = false;
+    document.getElementById('lista_direcciones').hidden = false;
+    document.getElementById('btnDireccion').hidden = false;
+    this.direccionService.getDirecciones().subscribe( res => {
+      this.direccionService.direcciones = res as Direccion[];
+    })
   }
 
   eliminarUsuario(_id: string, form: NgForm) {
@@ -88,13 +105,21 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
+  nueva_direccion(form?: NgForm){
+    this.resetForm(form);
+    this.direccion_header = "NUEVA DIRECCIÓN";
+    document.getElementById('direccion').hidden = false;
+  }
+
   nuevo_usuario(form?: NgForm){
     this.resetForm(form);
+    this.usuario_header = "NUEVO USUARIO";
     this.boton_accion = "Crear Usuario";
     document.getElementById('nuevo_usuario').hidden = false;
     document.getElementById('lista_usuarios').hidden = true;
     document.getElementById('limpiar').hidden = false;
     document.getElementById('nuevo').hidden = true;
     document.getElementById('volver').hidden = false;
+    
   }
 }

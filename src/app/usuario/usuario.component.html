@@ -9,118 +9,202 @@
         <div class="card-body">
           <div class="row col-form-label">
             <div class="col-md-2">
-                <button id="nuevo" class="btn btn-block btn-info" type="button" (click)="nuevo_usuario(nuevoUsuarioForm)"><i class="fa fa-plus"></i>&nbsp;Nuevo
-                  Usuario</button>
-                <button id="volver" class="btn btn-block btn-info" type="button" (click)="getUsuarios()"><i class="fa fa-arrow-circle-left"></i>&nbsp;Volver</button>
+              <button id="nuevo" class="btn btn-block btn-info" type="button" (click)="nuevo_usuario(nuevoUsuarioForm)"><i
+                  class="fa fa-plus"></i>&nbsp;Nuevo
+                Usuario</button>
+              <button id="volver" class="btn btn-block btn-info" type="button" (click)="getUsuarios()"><i class="fa fa-arrow-circle-left"></i>&nbsp;Volver</button>
             </div>
             <div class="col-md-10">
-                <ng-flash-message></ng-flash-message>
-            </div> 
+              <ng-flash-message></ng-flash-message>
+            </div>
           </div>
-          <form id="nuevo_usuario" #nuevoUsuarioForm="ngForm" class="form-horizontal" (ngSubmit)="agregarUsuario(nuevoUsuarioForm)">
-            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado._id">
-            <div class="form-group row">
-              <label class="col-md-2 col-form-label" for="tipoDocumento">Tipo Documento</label>
-              <div class="col-md-4">
-                <select class="form-control" id="tipoDocumento" name="tipoDocumento" #tipoDocumento="ngModel"
-                  [(ngModel)]="usuarioService.usuarioSeleccionado.tipoDocumento">
-                  <option value="DNI">DNI</option>
-                  <option value="Pasaporte">Pasaporte</option>
-                </select>
-              </div>
-              <label class="col-md-2 col-form-label" for="numeroDocumento">Número de Documento</label>
-              <div class="col-md-4">
-                <input class="form-control" id="numeroDocumento" type="text" name="numeroDocumento" #numeroDocumento="ngModel"
-                  [(ngModel)]="usuarioService.usuarioSeleccionado.numeroDocumento" placeholder="44335566" minlength="8"
-                  required>
-                <div *ngIf="numeroDocumento.invalid && (numeroDocumento.dirty || numeroDocumento.touched)" class="alert alert-danger">
-                  <div *ngIf="numeroDocumento.errors.required">
-                    El número de documento es obligatorio.
-                  </div>
-                  <div *ngIf="numeroDocumento.errors.minlength">
-                    La longitud mínima del número de documento es 8.
-                  </div>
-                </div>
-              </div>
+          <div id="nuevo_usuario" class="card">
+            <div class="card-header">
+              {{usuario_header}}
             </div>
-            <div class="form-group row">
-              <label class="col-md-2 col-form-label" for="nombres">Nombres</label>
-              <div class="col-md-4">
-                <input class="form-control" id="nombres" type="text" name="nombres" #nombres="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.nombres"
-                  placeholder="Cesar Augusto" required>
-                <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)" class="alert alert-danger">
-                  <div *ngIf="nombres.errors.required">
-                    El nombre es obligatorio.
-                  </div>
-                </div>
-              </div>
-              <label class="col-md-2 col-form-label" for="apellidos">Apellidos</label>
-              <div class="col-md-4">
-                <input class="form-control" id="apellidos" type="text" name="apellidos" #apellidos="ngModel"
-                  [(ngModel)]="usuarioService.usuarioSeleccionado.apellidos" placeholder="Achahui Vilca" required>
-                <div *ngIf="apellidos.invalid && (apellidos.dirty || apellidos.touched)" class="alert alert-danger">
-                  <div *ngIf="apellidos.errors.required">
-                    El campo apellidos es obligatorio.
-                  </div>
-                </div>
-              </div>
+            <div class="card-body">
+                <form #nuevoUsuarioForm="ngForm" class="form-horizontal" (ngSubmit)="agregarUsuario(nuevoUsuarioForm)">
+                    <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado._id">
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label" for="tipoDocumento">Tipo Documento</label>
+                      <div class="col-md-4">
+                        <select class="form-control" id="tipoDocumento" name="tipoDocumento" #tipoDocumento="ngModel"
+                          [(ngModel)]="usuarioService.usuarioSeleccionado.tipoDocumento">
+                          <option value="DNI">DNI</option>
+                          <option value="Pasaporte">Pasaporte</option>
+                        </select>
+                      </div>
+                      <label class="col-md-2 col-form-label" for="numeroDocumento">Número de Documento</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="numeroDocumento" type="text" name="numeroDocumento" #numeroDocumento="ngModel"
+                          [(ngModel)]="usuarioService.usuarioSeleccionado.numeroDocumento" placeholder="44335566" minlength="8"
+                          required>
+                        <div *ngIf="numeroDocumento.invalid && (numeroDocumento.dirty || numeroDocumento.touched)" class="alert alert-danger">
+                          <div *ngIf="numeroDocumento.errors.required">
+                            El número de documento es obligatorio.
+                          </div>
+                          <div *ngIf="numeroDocumento.errors.minlength">
+                            La longitud mínima del número de documento es 8.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label" for="nombres">Nombres</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="nombres" type="text" name="nombres" #nombres="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.nombres"
+                          placeholder="Cesar Augusto" required>
+                        <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)" class="alert alert-danger">
+                          <div *ngIf="nombres.errors.required">
+                            El nombre es obligatorio.
+                          </div>
+                        </div>
+                      </div>
+                      <label class="col-md-2 col-form-label" for="apellidos">Apellidos</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="apellidos" type="text" name="apellidos" #apellidos="ngModel"
+                          [(ngModel)]="usuarioService.usuarioSeleccionado.apellidos" placeholder="Achahui Vilca" required>
+                        <div *ngIf="apellidos.invalid && (apellidos.dirty || apellidos.touched)" class="alert alert-danger">
+                          <div *ngIf="apellidos.errors.required">
+                            El campo apellidos es obligatorio.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label">Sexo</label>
+                      <div class="col-md-4 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                          <input class="form-check-input" id="femenino" type="radio" value="F" name="sexo" #sexo="ngModel"
+                            [(ngModel)]="usuarioService.usuarioSeleccionado.sexo">
+                          <label class="form-check-label" for="femenino">Femenino</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1">
+                          <input class="form-check-input" id="masculino" type="radio" value="M" name="sexo" #sexo="ngModel"
+                            [(ngModel)]="usuarioService.usuarioSeleccionado.sexo">
+                          <label class="form-check-label" for="masculino">Masculino</label>
+                        </div>
+                      </div>
+                      <label class="col-md-2 col-form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="fechaNacimiento" type="date" name="fechaNacimiento" #fechaNacimiento="ngModel"
+                          [(ngModel)]="usuarioService.usuarioSeleccionado.fechaNacimiento" placeholder="date" required>
+                        <div *ngIf="fechaNacimiento.invalid && (fechaNacimiento.dirty || fechaNacimiento.touched)" class="alert alert-danger">
+                          <div *ngIf="fechaNacimiento.errors.required">
+                            La fecha de nacimiento es obligatoria.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label" for="email">Correo Electrónico</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="email" type="email" name="correo" #correo="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.correo"
+                          placeholder="cesarav95@gmail.com" email="true" required>
+                        <div *ngIf="correo.invalid && (correo.dirty || correo.touched)" class="alert alert-danger">
+                          <div *ngIf="correo.errors.required">
+                            El correo electrónico es obligatorio.
+                          </div>
+                          <div *ngIf="correo.errors.email">
+                            Use un correo válido.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label">Opciones</label>
+                      <div class="col-md-6 col-form-label">
+                        <div class="form-check checkbox">
+                          <input class="form-check-input" id="check1" type="checkbox" name="promociones" #promociones="ngModel"
+                            [(ngModel)]="usuarioService.usuarioSeleccionado.promociones">
+                          <label class="form-check-label" for="check1">Promociones</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-form-label">
+                        <button class="btn btn-md btn-success" type="submit">
+                          {{boton_accion}}</button>
+                        <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetForm(nuevoUsuarioForm)">Limpiar</button>
+                        <button id="btnDireccion" class="btn btn-md btn-info" type="button" (click)="nueva_direccion(direccionForm)">Añadir
+                          Dirección</button>
+                      </div>
+                    </div>
+                  </form>
             </div>
-            <div class="form-group row">
-              <label class="col-md-2 col-form-label">Sexo</label>
-              <div class="col-md-4 col-form-label">
-                <div class="form-check form-check-inline mr-1">
-                  <input class="form-check-input" id="femenino" type="radio" value="F" name="sexo" #sexo="ngModel"
-                    [(ngModel)]="usuarioService.usuarioSeleccionado.sexo">
-                  <label class="form-check-label" for="femenino">Femenino</label>
-                </div>
-                <div class="form-check form-check-inline mr-1">
-                  <input class="form-check-input" id="masculino" type="radio" value="M" name="sexo" #sexo="ngModel"
-                    [(ngModel)]="usuarioService.usuarioSeleccionado.sexo">
-                  <label class="form-check-label" for="masculino">Masculino</label>
-                </div>
-              </div>
-              <label class="col-md-2 col-form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
-              <div class="col-md-4">
-                <input class="form-control" id="fechaNacimiento" type="date" name="fechaNacimiento" #fechaNacimiento="ngModel"
-                  [(ngModel)]="usuarioService.usuarioSeleccionado.fechaNacimiento" placeholder="date" required>
-                <div *ngIf="fechaNacimiento.invalid && (fechaNacimiento.dirty || fechaNacimiento.touched)" class="alert alert-danger">
-                  <div *ngIf="fechaNacimiento.errors.required">
-                    La fecha de nacimiento es obligatoria.
-                  </div>
-                </div>
-              </div>
+          </div>
+          
+          <div id="direccion" class="card">
+            <div class="card-header">
+              {{direccion_header}}
             </div>
-            <div class="form-group row">
-              <label class="col-md-2 col-form-label" for="email">Correo Electrónico</label>
-              <div class="col-md-4">
-                <input class="form-control" id="email" type="email" name="correo" #correo="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.correo"
-                  placeholder="cesarav95@gmail.com" email="true" required>
-                <div *ngIf="correo.invalid && (correo.dirty || correo.touched)" class="alert alert-danger">
-                  <div *ngIf="correo.errors.required">
-                    El correo electrónico es obligatorio.
+            <div class="card-body">
+              <form #direccionForm="ngForm" class="form-horizontal" (ngSubmit)="agregarDireccion(direccionForm)">
+                <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="direccionService.dirSelected._id">
+                <input type="hidden" name="usuario" #usuario="ngModel" [(ngModel)]="direccionService.dirSelected.usuario" value="usuarioService.usuarioSeleccionado.correo">
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label" for="direccion">Dirección</label>
+                  <div class="col-md-4">
+                    <input class="form-control" id="direccion" type="text" name="direccion" #direccion="ngModel" [(ngModel)] = "direccionService.dirSelected.direccion">
                   </div>
-                  <div *ngIf="correo.errors.email">
-                      Use un correo válido.
+                  <label class="col-md-2 col-form-label" for="text-input">Manzana</label>
+                  <div class="col-md-4">
+                    <input class="form-control" id="manzana" type="text" name="manzana" #manzana="ngModel" [(ngModel)]="direccionService.dirSelected.manzana">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label" for="nroLote">Número / Lote</label>
+                  <div class="col-md-4">
+                    <input class="form-control" id="nroLote" type="text" name="nroLote" #nroLote="ngModel" [(ngModel)]="direccionService.dirSelected.nroLote">
+                  </div>
+                  <label class="col-md-2 col-form-label" for="depInterior">Departamento / Interior</label>
+                  <div class="col-md-4">
+                    <input class="form-control" id="depInterior" type="text" name="depInterior" #depInterior [(ngModel)]="direccionService.dirSelected.depInterior">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label" for="urbanizacion">Urbanización</label>
+                  <div class="col-md-4">
+                    <input class="form-control" id="urbanizacion" type="text" name="urbanizacion" #urbanizacion="ngModel" [(ngModel)]="direccionService.dirSelected.urbanizacion">
+                  </div>
+                  <label class="col-md-2 col-form-label" for="referencia">Referencia</label>
+                  <div class="col-md-4">
+                    <input class="form-control" id="referencia" type="text" name="referencia" #referencia="ngModel" [(ngModel)]="direccionService.dirSelected.referencia">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label" for="departamento">Departamento</label>
+                  <div class="col-md-2">
+                      <select class="form-control" id="departamento" name="departamento" #departamento="ngModel" [(ngModel)]="direccionService.dirSelected.departamento">
+                        <option value="CUSCO">CUSCO</option>
+                        <option value="APURIMAC">APURIMAC</option>
+                        <option value="MADRE DE DIOS">MADRE DE DIOS</option>
+                      </select>
+                    </div>
+                  <label class="col-md-2 col-form-label" for="provincia">Provincia</label>
+                  <div class="col-md-2">
+                      <select class="form-control" id="provincia" name="provincia" #provincia="ngModel" [(ngModel)]="direccionService.dirSelected.provincia">
+                        <option value="0">Please select</option>
+                        <option value="1">Option #1</option>
+                        <option value="2">Option #2</option>
+                        <option value="3">Option #3</option>
+                      </select>
+                    </div>
+                  <label class="col-md-2 col-form-label" for="distrito">Distrito</label>
+                  <div class="col-md-2">
+                      <select class="form-control" id="distrito" name="distrito" #distrito="ngModel" [(ngModel)] = "direccionService.dirSelected.distrito">
+                        <option value="0">Please select</option>
+                        <option value="1">Option #1</option>
+                        <option value="2">Option #2</option>
+                        <option value="3">Option #3</option>
+                      </select>
                     </div>
                 </div>
-              </div>
+                <div class="card-footer">
+                    <button class="btn btn-md btn-success" type="submit">
+                      Guardar nueva dirección</button>
+                  </div>
+              </form>
             </div>
-            <div class="form-group row">
-              <label class="col-md-2 col-form-label">Opciones</label>
-              <div class="col-md-6 col-form-label">
-                <div class="form-check checkbox">
-                  <input class="form-check-input" id="check1" type="checkbox" name="promociones" #promociones="ngModel"
-                    [(ngModel)]="usuarioService.usuarioSeleccionado.promociones">
-                  <label class="form-check-label" for="check1">Promociones</label>
-                </div>
-              </div>
-              <div class="col-md-4 col-form-label">
-                <button class="btn btn-md btn-success" type="submit">
-                  {{boton_accion}}</button>
-                <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetForm(nuevoUsuarioForm)">Limpiar</button>
-              </div>
-            </div>
-          </form>
+          </div>
           <table id="lista_usuarios" class="table table-responsive-sm table-bordered table-striped table-sm">
             <thead>
               <tr>
@@ -137,6 +221,26 @@
                 <td>{{usuario.nombres + ' ' + usuario.apellidos}}</td>
                 <td>{{usuario.tipoDocumento + ' : ' + usuario.numeroDocumento}}</td>
                 <td>{{usuario.fecha_afiliacion}}</td>
+                <td><button class="btn btn-sm btn-info" type="button" (click)="editarUsuario(usuario)">Editar</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <table id="lista_direcciones" class="table table-responsive-sm table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th>DIRECCIÓN</th>
+                <th>DEPARTAMENTO</th>
+                <th>PROVINCIA</th>
+                <th>DISTRITO</th>
+                <th>EDITAR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let direccion of direccionService.direcciones">
+                <td>{{direccion.direccion}}</td>
+                <td>{{direccion.departamento}}</td>
+                <td>{{direccion.provincia}}</td>
+                <td>{{direccion.distrito}}</td>
                 <td><button class="btn btn-sm btn-info" type="button" (click)="editarUsuario(usuario)">Editar</button></td>
               </tr>
             </tbody>
