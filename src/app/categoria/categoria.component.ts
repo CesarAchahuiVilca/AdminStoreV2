@@ -32,9 +32,12 @@ export class CategoriaComponent implements OnInit {
     var cat = new Categoria();
     cat.nombre = "Categorias";
     cat._id = "root";
+    cat.padre="root";
     this.mostrarSubCategorias(cat);
     this.getCategorias();
-   
+    this.categoriaService.categoriaSeleccionada.padre  = "root";
+    
+       
   }
  /* cambiarvista(form?: NgForm){
     this.limpiarform(form);
@@ -55,16 +58,24 @@ export class CategoriaComponent implements OnInit {
 
   }*/
   
-  limpiarform(form?: NgForm){
-    if(form){
+  limpiarform(form?: NgForm){    
+    if(form){      
       this.categoriaService.categoriaSeleccionada = new Categoria();
-      form.reset();      
+      
+     // form.reset();      
+     this.categoriaService.categoriaSeleccionada.padre  = this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]._id;
+      console.log("pader es: "+this.categoriaService.categoriaSeleccionada.padre);
+      document.getElementById("titulomodal").innerHTML='<i class="fa fa-plus"></i> Agregar Categoria';
+
+
       var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
       imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
       var progreso = document.getElementById("progreso") as HTMLDivElement;
       progreso.innerHTML = "";
-      progreso.style.width = "0%";
+      progreso.style.width = "0%";  
+      
     }
+    
   }
   clearProgress(){
     var progreso = document.getElementById("progreso") as HTMLDivElement;
@@ -73,16 +84,29 @@ export class CategoriaComponent implements OnInit {
     var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
     inputfile.style.display = "block";
     progreso.innerHTML = "";
+    var archivoinput = document.getElementById("archivo") as HTMLInputElement;
+    archivoinput.click();
 
   }
 
   guardarCategoria(form?: NgForm){
+    var btncerrarmodal = document.getElementById("btnCerrarModal");
     if(form.value._id){
       this.categoriaService.putCategoria(form.value)
       .subscribe(res=>{
-        this.limpiarform(form);
+        
         this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
-        console.log(res);
+        var respuesta = JSON.parse(JSON.stringify(res));
+        if(respuesta.estado == "0"){
+          
+          console.log("OCURRIO UN ERROR ESTADO 0");
+        }else{
+          this.limpiarform(form);
+          btncerrarmodal.click();
+          this.getCategorias();
+          console.log("TODO ESTA CORRECTO");
+        }       
+        
       });
       
     }else{
@@ -97,9 +121,20 @@ export class CategoriaComponent implements OnInit {
 
     this.categoriaService.postCategoria(cat as Categoria)
     .subscribe(res=>{
-      this.limpiarform(form);
+      
       this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
-      console.log(res);
+      
+      var respuesta = JSON.parse(JSON.stringify(res));
+      if(respuesta.estado == "0"){
+          
+        console.log("OCURRIO UN ERROR ESTADO 0:"+cat.nombre+" - "+cat.padre);
+      }else{
+        this.limpiarform(form);
+        btncerrarmodal.click();
+        this.getCategorias();
+        console.log("TODO ESTA CORRECTO");
+      }
+       
       
     });
   }
@@ -113,7 +148,7 @@ export class CategoriaComponent implements OnInit {
     var imagenInput  = document.getElementById("imagen") as HTMLInputElement;
     var inputfile = document.getElementById("nombrearchivo") as HTMLLabelElement;
     inputfile.innerHTML = this.categoriaService.categoriaSeleccionada.imagen;
-    
+    document.getElementById("titulomodal").innerHTML='<i class="fa fa-edit"></i> Editar Categoria: '+categoria.nombre;
     
 
   }
@@ -123,6 +158,7 @@ export class CategoriaComponent implements OnInit {
     .subscribe(res=>{
       this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
       console.log(res);
+      this.getCategorias();
     });
     console.log(idCategoria);
 
@@ -133,13 +169,10 @@ export class CategoriaComponent implements OnInit {
     .subscribe(res=>{
       this.todasCategorias = res as Categoria[];
       
-      
     });
   }
 
-  mostrarSubCategorias(categoria: Categoria){
-
-    
+  mostrarSubCategorias(categoria: Categoria){    
 
     this.breadcrumb_categorias.push(categoria);
     
@@ -173,7 +206,7 @@ export class CategoriaComponent implements OnInit {
     inputfile.innerHTML = file.value;
     this.selectedFile  = <File> event.target.files[0];
 
-    //console.log(event);
+    console.log(event);
   }
   onUpload(evento){
     evento.preventDefault()

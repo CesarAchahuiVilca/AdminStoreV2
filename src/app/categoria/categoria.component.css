@@ -26,7 +26,6 @@
 .btn-circle {
     width: 30px;
     height: 30px;
-    
     border-radius: 15px;
   }
 .btn-detalle-categoria{
@@ -39,13 +38,23 @@
 .btn-detalle-categoria:hover{
     color: orange;
 }
-  @media (min-width: 360px) {
+
+.item-breadcrumb-categoria{
+    margin-left: 3px; 
+    margin-right: 3px;
+    color: rgb(59, 61, 59) !important;
+    cursor: pointer;
+}
+.item-breadcrumb-categoria:hover{
+    color: orange !important;    
+}
+@media (min-width: 360px) {
     .modal-dialog{
         max-width: 100% !important; 
     }
-  }
-  @media (min-width: 768px) {
+    }
+    @media (min-width: 768px) {
     .modal-dialog{
         max-width: 80% !important; 
     }
-  }
+}
