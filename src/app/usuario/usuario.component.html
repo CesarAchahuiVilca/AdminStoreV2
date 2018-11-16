@@ -9,8 +9,7 @@
         <div class="card-body">
           <div class="row col-form-label">
             <div class="col-md-2">
-              <button id="nuevo" class="btn btn-block btn-info" type="button" (click)="nuevo_usuario(nuevoUsuarioForm)"><i
-                  class="fa fa-plus"></i>&nbsp;Nuevo
+              <button id="nuevo" class="btn btn-info" type="button" (click)="nuevo_usuario(nuevoUsuarioForm)"><i class="fa fa-plus"></i>&nbsp;Nuevo
                 Usuario</button>
               <button id="volver" class="btn btn-block btn-info" type="button" (click)="getUsuarios()"><i class="fa fa-arrow-circle-left"></i>&nbsp;Volver</button>
             </div>
@@ -30,8 +29,7 @@
                       <div class="col-md-4">
                         <select class="form-control" id="tipoDocumento" name="tipoDocumento" #tipoDocumento="ngModel"
                           [(ngModel)]="usuarioService.usuarioSeleccionado.tipoDocumento">
-                          <option value="DNI">DNI</option>
-                          <option value="Pasaporte">Pasaporte</option>
+                          <option *ngFor="let item of tiposDocumento" value="{{item}}">{{item}}</option>
                         </select>
                       </div>
                       <label class="col-md-2 col-form-label" for="numeroDocumento">Número de Documento</label>
@@ -124,14 +122,13 @@
                         <button class="btn btn-md btn-success" type="submit">
                           {{boton_accion}}</button>
                         <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetForm(nuevoUsuarioForm)">Limpiar</button>
-                        <button id="btnDireccion" class="btn btn-md btn-info" type="button" (click)="nueva_direccion(direccionForm)">Añadir
+                        <button id="btnDireccion" class="btn btn-md btn-info" type="button" (click)="nueva_direccion(direccionForm, usuarioService.usuarioSeleccionado.correo)">Añadir
                           Dirección</button>
                       </div>
                     </div>
                   </form>
             </div>
-          </div>
-          
+          </div>          
           <div id="direccion" class="card">
             <div class="card-header">
               {{direccion_header}}
@@ -139,7 +136,7 @@
             <div class="card-body">
               <form #direccionForm="ngForm" class="form-horizontal" (ngSubmit)="agregarDireccion(direccionForm)">
                 <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="direccionService.dirSelected._id">
-                <input type="hidden" name="usuario" #usuario="ngModel" [(ngModel)]="direccionService.dirSelected.usuario" value="usuarioService.usuarioSeleccionado.correo">
+                <input type="hidden" id="id_direccion" name="usuario" #usuario="ngModel" [(ngModel)]="direccionService.dirSelected.usuario">
                 <div class="form-group row">
                   <label class="col-md-2 col-form-label" for="direccion">Dirección</label>
                   <div class="col-md-4">
@@ -173,34 +170,30 @@
                 <div class="form-group row">
                   <label class="col-md-2 col-form-label" for="departamento">Departamento</label>
                   <div class="col-md-2">
-                      <select class="form-control" id="departamento" name="departamento" #departamento="ngModel" [(ngModel)]="direccionService.dirSelected.departamento">
-                        <option value="CUSCO">CUSCO</option>
-                        <option value="APURIMAC">APURIMAC</option>
-                        <option value="MADRE DE DIOS">MADRE DE DIOS</option>
+                      <select class="form-control" id="departamento" name="departamento" #departamento="ngModel" [(ngModel)]="direccionService.dirSelected.departamento" (change)="departamento_selected($event.target.value)">
+                        <option value="">Seleccione un departamento</option>
+                        <option *ngFor="let dep of departamentos" [value]="dep.nombre">{{dep.nombre}}</option>
                       </select>
                     </div>
                   <label class="col-md-2 col-form-label" for="provincia">Provincia</label>
                   <div class="col-md-2">
-                      <select class="form-control" id="provincia" name="provincia" #provincia="ngModel" [(ngModel)]="direccionService.dirSelected.provincia">
-                        <option value="0">Please select</option>
-                        <option value="1">Option #1</option>
-                        <option value="2">Option #2</option>
-                        <option value="3">Option #3</option>
+                      <select class="form-control" id="provincia" name="provincia" #provincia="ngModel" [(ngModel)]="direccionService.dirSelected.provincia" (change)="provincia_selected($event.target.value)">
+                        <option value="">Seleccione una provincia</option>
+                        <option *ngFor="let prov of dep_selected.provincias" [value]="prov.nombre">{{prov.nombre}}</option>
                       </select>
                     </div>
                   <label class="col-md-2 col-form-label" for="distrito">Distrito</label>
                   <div class="col-md-2">
                       <select class="form-control" id="distrito" name="distrito" #distrito="ngModel" [(ngModel)] = "direccionService.dirSelected.distrito">
-                        <option value="0">Please select</option>
-                        <option value="1">Option #1</option>
-                        <option value="2">Option #2</option>
-                        <option value="3">Option #3</option>
+                        <option value="">Selecciones un distrito</option>
+                        <option *ngFor="let dis of prov_selected.distritos" [value]="dis">{{dis}}</option>
                       </select>
                     </div>
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-md btn-success" type="submit">
-                      Guardar nueva dirección</button>
+                      {{boton_direccion}}</button>
+                    <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetDireccionForm(direccionForm)">Limpiar</button>
                   </div>
               </form>
             </div>
@@ -241,7 +234,7 @@
                 <td>{{direccion.departamento}}</td>
                 <td>{{direccion.provincia}}</td>
                 <td>{{direccion.distrito}}</td>
-                <td><button class="btn btn-sm btn-info" type="button" (click)="editarUsuario(usuario)">Editar</button></td>
+                <td><button class="btn btn-sm btn-info" type="button" (click)="editarDireccion(direccion)">Editar</button></td>
               </tr>
             </tbody>
           </table>

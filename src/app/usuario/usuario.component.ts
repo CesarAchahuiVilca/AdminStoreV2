@@ -12,11 +12,18 @@ import { Direccion } from './direccion';
   styleUrls: ['./usuario.component.css'],
   providers: [ UsuarioService ]
 })
+
 export class UsuarioComponent implements OnInit {
 
   private boton_accion : string;
+  private boton_direccion : string;
   private usuario_header : string;
   private direccion_header : string;
+  private tiposDocumento : string[];
+  private departamentos : Departamento[];
+  private prov_selected : Provincia = new Provincia('',[]);
+  private dep_selected : Departamento = new Departamento('',[this.prov_selected]);
+  
 
   constructor(
     private usuarioService : UsuarioService,
@@ -24,7 +31,17 @@ export class UsuarioComponent implements OnInit {
     private direccionService : DireccionService
     ) { }
 
-  ngOnInit() {
+  ngOnInit() {  
+    this.tiposDocumento = ['DNI'];
+    // PROVINCIAS
+    let cuscoProvincia = new Provincia('CUSCO',['CUSCO', 'SAN JERONIMO', 'SAN SEBASTIAN', 'SANTIAGO', 'WANCHAQ']);
+    let canchisProv = new Provincia('CANCHIS', ['SICUANI']);
+    let espinarProv = new Provincia('ESPINAR', ['ESPINAR']);
+    // DEPARTAMENTOS
+    let cusco = new Departamento('CUSCO', [canchisProv, cuscoProvincia, espinarProv]);
+    let apurimac = new Departamento('APURIMAC',[]);
+    let madreDios = new Departamento('MADRE DE DIOS',[]);
+    this.departamentos = [apurimac, cusco, madreDios];
     document.getElementById('btnDireccion').hidden = true;
     this.getUsuarios();
   }
@@ -34,29 +51,81 @@ export class UsuarioComponent implements OnInit {
   }
 
   agregarUsuario(form?: NgForm) {
-    if(form.value._id) {
-      this.usuarioService.putUsuario(form.value)
+    var validacion : boolean = true;
+    if(form.value.tipoDocumento == 'DNI'){
+      var dni : string = form.value.numeroDocumento;
+      if (dni.length != 8){
+        validacion = false;
+        this.flashMessage.showFlashMessage({messages: ['El número de documento no es válido.'], timeout: 5000, dismissible: true, type: 'danger'});
+      }
+    }
+    if(validacion){
+      if(form.value._id) {
+        this.usuarioService.putUsuario(form.value)
+          .subscribe(res => {
+            var jres = JSON.parse(JSON.stringify(res));
+            if(jres.estado){
+              this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+              this.resetForm(form);
+              this.getUsuarios();
+            }else{
+              this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'danger'})
+            }        
+          });
+      } else {
+        form.value.password = form.value.numeroDocumento;
+        this.usuarioService.postUsuario(form.value)
         .subscribe(res => {
           var jres = JSON.parse(JSON.stringify(res));
-          this.resetForm(form);
-          this.getUsuarios();
-          //M.toast({html: 'Updated Successfully'});
+          if(jres.exito){
+            this.flashMessage.showFlashMessage({messages: ['Usuario creado con éxito'], timeout: 5000, dismissible: true, type: 'success'});
+            this.getUsuarios();
+            this.resetForm(form);
+          } else {
+            this.flashMessage.showFlashMessage({messages: ['El correo electrónico usado ya existe'], timeout: 5000,dismissible: true, type: 'danger'});
+          }
         });
-    } else {
-      form.value.password = form.value.numeroDocumento;
-      this.usuarioService.postUsuario(form.value)
-      .subscribe(res => {
-        var jres = JSON.parse(JSON.stringify(res));
-        if(jres.exito){
-          this.flashMessage.showFlashMessage({messages: ['Usuario creado con éxito'], timeout: 5000, dismissible: true, type: 'success'});
+      }  
+    }
+  }
+
+  departamento_selected(departamento : string){
+    var i : number = 0;
+    while(this.departamentos[i].nombre != departamento){
+      i = i + 1;
+    }
+    this.dep_selected = this.departamentos[i];
+  }
+
+  editarDireccion(direccion : Direccion){
+    this.boton_direccion = "Editar dirección";
+  }
+
+  editarUsuario(usuario: Usuario) {
+    this.usuario_header = "MODIFICAR USUARIO";
+    this.boton_accion = "Guardar Cambios";
+    this.usuarioService.usuarioSeleccionado = usuario;
+    document.getElementById('nuevo_usuario').hidden = false;
+    document.getElementById('lista_usuarios').hidden = true;
+    document.getElementById('limpiar').hidden = true;
+    document.getElementById('nuevo').hidden = true;
+    document.getElementById('volver').hidden = false;
+    document.getElementById('lista_direcciones').hidden = false;
+    document.getElementById('btnDireccion').hidden = false;
+    document.getElementById('email').setAttribute("disabled", "true");
+    this.direccionService.getDirecciones().subscribe( res => {
+      this.direccionService.direcciones = res as Direccion[];
+    })
+  }
+
+  eliminarUsuario(_id: string, form: NgForm) {
+    /*if(confirm('Are you sure you want to delete it?')) {
+      this.usuarioService.deleteUsuario(_id)
+        .subscribe(res => {
           this.getUsuarios();
           this.resetForm(form);
-        } else {
-          this.flashMessage.showFlashMessage({messages: ['El correo electrónico usado ya existe'], timeout: 5000,dismissible: true, type: 'danger'});
-        }
-      });
-    }
-    
+        });
+    }*/
   }
 
   getUsuarios() {
@@ -71,30 +140,40 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  editarUsuario(usuario: Usuario) {
-    this.usuario_header = "MODIFICAR USUARIO";
-    this.boton_accion = "Guardar Cambios";
-    this.usuarioService.usuarioSeleccionado = usuario;
-    document.getElementById('nuevo_usuario').hidden = false;
-    document.getElementById('lista_usuarios').hidden = true;
-    document.getElementById('limpiar').hidden = true;
-    document.getElementById('nuevo').hidden = true;
-    document.getElementById('volver').hidden = false;
-    document.getElementById('lista_direcciones').hidden = false;
-    document.getElementById('btnDireccion').hidden = false;
-    this.direccionService.getDirecciones().subscribe( res => {
-      this.direccionService.direcciones = res as Direccion[];
-    })
+  nueva_direccion(form?: NgForm, usuario? : string){
+    this.resetDireccionForm(form);
+    this.direccion_header = "NUEVA DIRECCIÓN";
+    this.boton_direccion = "Guardar nueva dirección";
+    document.getElementById('direccion').hidden = false;
+    this.direccionService.dirSelected.usuario = usuario;
   }
 
-  eliminarUsuario(_id: string, form: NgForm) {
-    if(confirm('Are you sure you want to delete it?')) {
-      this.usuarioService.deleteUsuario(_id)
-        .subscribe(res => {
-          this.getUsuarios();
-          this.resetForm(form);
-          //M.toast({html: 'Deleted Succesfully'});
-        });
+  nuevo_usuario(form?: NgForm){
+    this.resetForm(form);
+    this.usuario_header = "NUEVO USUARIO";
+    this.boton_accion = "Crear Usuario";
+    document.getElementById('btnDireccion').hidden = true;
+    document.getElementById('nuevo_usuario').hidden = false;
+    document.getElementById('lista_usuarios').hidden = true;
+    document.getElementById('limpiar').hidden = false;
+    document.getElementById('nuevo').hidden = true;
+    document.getElementById('volver').hidden = false;
+    document.getElementById('email').removeAttribute('disabled');
+    document.getElementById('email').setAttribute('editable','true');
+  }
+
+  provincia_selected(provincia: string){
+    var i : number = 0;
+    while(this.dep_selected.provincias[i].nombre != provincia){
+      i = i + 1;
+    }
+    this.prov_selected = this.dep_selected.provincias[i];
+  }
+
+  resetDireccionForm(form?: NgForm) {
+    if(form) {
+      this.direccionService.dirSelected = new Direccion();
+      form.reset();
     }
   }
 
@@ -105,21 +184,25 @@ export class UsuarioComponent implements OnInit {
     }
   }
 
-  nueva_direccion(form?: NgForm){
-    this.resetForm(form);
-    this.direccion_header = "NUEVA DIRECCIÓN";
-    document.getElementById('direccion').hidden = false;
+}
+
+class Provincia{
+  constructor(nombre, distritos){
+    this.nombre = nombre;
+    this.distritos = distritos;
+  }
+  
+  nombre : string;
+  distritos : string[];
+  
+}
+
+class Departamento {
+  constructor(nombre, provincias){
+    this.nombre = nombre;
+    this.provincias = provincias;
   }
 
-  nuevo_usuario(form?: NgForm){
-    this.resetForm(form);
-    this.usuario_header = "NUEVO USUARIO";
-    this.boton_accion = "Crear Usuario";
-    document.getElementById('nuevo_usuario').hidden = false;
-    document.getElementById('lista_usuarios').hidden = true;
-    document.getElementById('limpiar').hidden = false;
-    document.getElementById('nuevo').hidden = true;
-    document.getElementById('volver').hidden = false;
-    
-  }
+  nombre : string;
+  provincias : Provincia[];
 }
