@@ -47,16 +47,44 @@ export class UsuarioComponent implements OnInit {
   }
 
   agregarDireccion(form?: NgForm){
-    console.log(form.value);
+    if(form.value._id) {
+      this.direccionService.putDireccion(form.value).subscribe(res => {
+        var jres = JSON.parse(JSON.stringify(res));
+        if(jres.status) {
+          this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+          this.resetDireccionForm(form);
+          this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
+        }else{
+          this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000, dismissible: true, type: 'danger'})
+        }
+      });
+    }else {
+      this.direccionService.postDireccion(form.value).subscribe(res =>{
+        var jres = JSON.parse(JSON.stringify(res));
+        if (jres.status) {
+          this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+          this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
+          this.resetDireccionForm(form);
+        }else{
+          this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+        }
+      });
+    }  
   }
 
   agregarUsuario(form?: NgForm) {
+    console.log(form.value);
     var validacion : boolean = true;
+    var mensaje : string;
+    if(form.value.numeroDocumento == null || form.value.nombres == null || form.value.apellidos == null || form.value.correo == null || form.value.tipoDocumento == null || form.value.fechaNacimiento == null  || form.value.sexo == null){
+      mensaje = 'Algunos campos del formulario no estan debidamente completados';
+      validacion = false;
+    }
     if(form.value.tipoDocumento == 'DNI'){
-      var dni : string = form.value.numeroDocumento;
+      var dni : string = form.value.numeroDocumento ? form.value.numeroDocumento : '';
       if (dni.length != 8){
         validacion = false;
-        this.flashMessage.showFlashMessage({messages: ['El número de documento no es válido.'], timeout: 5000, dismissible: true, type: 'danger'});
+        mensaje = 'El número de documento no es válido, un DNI sólo tiene 8 dígitos.';
       }
     }
     if(validacion){
@@ -64,12 +92,12 @@ export class UsuarioComponent implements OnInit {
         this.usuarioService.putUsuario(form.value)
           .subscribe(res => {
             var jres = JSON.parse(JSON.stringify(res));
-            if(jres.estado){
+            if(jres.status){
               this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
               this.resetForm(form);
               this.getUsuarios();
             }else{
-              this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'danger'})
+              this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000, dismissible: true, type: 'danger'})
             }        
           });
       } else {
@@ -77,15 +105,17 @@ export class UsuarioComponent implements OnInit {
         this.usuarioService.postUsuario(form.value)
         .subscribe(res => {
           var jres = JSON.parse(JSON.stringify(res));
-          if(jres.exito){
-            this.flashMessage.showFlashMessage({messages: ['Usuario creado con éxito'], timeout: 5000, dismissible: true, type: 'success'});
+          if(jres.status){
+            this.flashMessage.showFlashMessage({messages: [ jres.msg], timeout: 5000, dismissible: true, type: 'success'});
             this.getUsuarios();
             this.resetForm(form);
           } else {
-            this.flashMessage.showFlashMessage({messages: ['El correo electrónico usado ya existe'], timeout: 5000,dismissible: true, type: 'danger'});
+            this.flashMessage.showFlashMessage({messages: [ jres.error], timeout: 5000,dismissible: true, type: 'danger'});
           }
         });
       }  
+    } else {
+      this.flashMessage.showFlashMessage({messages: [mensaje], timeout: 5000, dismissible: true, type : 'warning'});
     }
   }
 
@@ -99,6 +129,9 @@ export class UsuarioComponent implements OnInit {
 
   editarDireccion(direccion : Direccion){
     this.boton_direccion = "Editar dirección";
+    this.direccion_header = "MODIFICAR DIRECCIÓN";
+    this.direccionService.dirSelected = direccion;
+    document.getElementById('direccion').hidden = false;
   }
 
   editarUsuario(usuario: Usuario) {
@@ -113,9 +146,7 @@ export class UsuarioComponent implements OnInit {
     document.getElementById('lista_direcciones').hidden = false;
     document.getElementById('btnDireccion').hidden = false;
     document.getElementById('email').setAttribute("disabled", "true");
-    this.direccionService.getDirecciones().subscribe( res => {
-      this.direccionService.direcciones = res as Direccion[];
-    })
+    this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
   }
 
   eliminarUsuario(_id: string, form: NgForm) {
@@ -126,6 +157,12 @@ export class UsuarioComponent implements OnInit {
           this.resetForm(form);
         });
     }*/
+  }
+
+  getDirecciones(correo : string) {
+    this.direccionService.getDirecciones(correo).subscribe(res => {
+      this.direccionService.direcciones = res  as Direccion[];
+    })
   }
 
   getUsuarios() {

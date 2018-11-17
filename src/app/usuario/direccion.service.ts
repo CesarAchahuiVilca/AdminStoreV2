@@ -20,8 +20,8 @@ export class DireccionService {
     return this.http.post(this.URL_API, direccion);
   }
   
-  getDirecciones(){
-    return this.http.get(this.URL_API);
+  getDirecciones(direccion: string){
+    return this.http.get(this.URL_API + `/${direccion}`);
   }
 
   putDireccion(direccion :  Direccion){
