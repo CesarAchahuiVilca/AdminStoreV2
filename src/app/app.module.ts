@@ -16,6 +16,7 @@ import { NgFlashMessagesModule } from 'ng-flash-messages';
 import { CaracteristicasComponent } from './caracteristicas/caracteristicas.component';
 import { DetallemarcaComponent } from './detallemarca/detallemarca.component';
 import { UsuarioComponent } from './usuario/usuario.component';
+import { RegionComponent } from './region/region.component';
 
 
 const routes: Route[] = [
@@ -23,7 +24,8 @@ const routes: Route[] = [
   {path: 'login', component: LoginComponent},
   {path: 'categoria', component: CategoriaComponent},
   {path: 'caracteristicas', component: CaracteristicasComponent},
-  {path: 'usuarios', component: UsuarioComponent}
+  {path: 'usuarios', component: UsuarioComponent},
+  {path: 'region', component: RegionComponent}
 ];
 
 @NgModule({
@@ -37,7 +39,8 @@ const routes: Route[] = [
     CategoriaComponent,
     CaracteristicasComponent,
     DetallemarcaComponent,
-    UsuarioComponent
+    UsuarioComponent,
+    RegionComponent
   ],
   imports: [
     BrowserModule,

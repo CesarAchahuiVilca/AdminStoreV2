@@ -1,0 +1,156 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <button class="btn btn-md btn-link" type="button" (click)="getUsuarios()"><i class="fa fa-align-justify"></i></button>
+          &nbsp;LUGARES DE ENVÍO
+        </div>
+        <div class="card-body">
+          <div class="row col-form-label">
+            <div class="col-md-2">
+              <button id="nuevo" class="btn btn-info" type="button" (click)="nuevo_usuario(nuevoUsuarioForm)"><i class="fa fa-plus"></i>&nbsp;Nuevo
+                Usuario</button>
+              <button id="volver" class="btn btn-block btn-info" type="button" (click)="getUsuarios()"><i class="fa fa-arrow-circle-left"></i>&nbsp;Volver</button>
+            </div>
+            <div class="col-md-10">
+              <ng-flash-message></ng-flash-message>
+            </div>
+          </div>
+          <div id="nuevo_usuario" class="card">
+            <div class="card-header">
+              {{usuario_header}}
+            </div>
+            <div class="card-body">
+                <form #nuevoUsuarioForm="ngForm" class="form-horizontal" (ngSubmit)="agregarUsuario(nuevoUsuarioForm)">
+                    <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado._id">
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label" for="tipoDocumento">Tipo Documento</label>
+                      <div class="col-md-4">
+                        <select class="form-control" id="tipoDocumento" name="tipoDocumento" #tipoDocumento="ngModel"
+                          [(ngModel)]="usuarioService.usuarioSeleccionado.tipoDocumento">
+                          <option *ngFor="let tipodoc of tiposDocumento" [value]="tipodoc">{{tipodoc}}</option>
+                        </select>
+                      </div>
+                      <label class="col-md-2 col-form-label" for="numeroDocumento">Número de Documento</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="numeroDocumento" type="text" name="numeroDocumento" #numeroDocumento="ngModel"
+                          [(ngModel)]="usuarioService.usuarioSeleccionado.numeroDocumento" placeholder="00000000" minlength="8"
+                          required>
+                        <div *ngIf="numeroDocumento.invalid && (numeroDocumento.dirty || numeroDocumento.touched)" class="alert alert-danger">
+                          <div *ngIf="numeroDocumento.errors.required">
+                            El número de documento es obligatorio.
+                          </div>
+                          <div *ngIf="numeroDocumento.errors.minlength">
+                            La longitud mínima del número de documento es 8.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label" for="nombres">Nombres</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="nombres" type="text" name="nombres" #nombres="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.nombres"
+                          placeholder="Cesar Augusto" required>
+                        <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)" class="alert alert-danger">
+                          <div *ngIf="nombres.errors.required">
+                            El nombre es obligatorio.
+                          </div>
+                        </div>
+                      </div>
+                      <label class="col-md-2 col-form-label" for="apellidos">Apellidos</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="apellidos" type="text" name="apellidos" #apellidos="ngModel"
+                          [(ngModel)]="usuarioService.usuarioSeleccionado.apellidos" placeholder="Achahui Vilca" required>
+                        <div *ngIf="apellidos.invalid && (apellidos.dirty || apellidos.touched)" class="alert alert-danger">
+                          <div *ngIf="apellidos.errors.required">
+                            El campo apellidos es obligatorio.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label">Sexo</label>
+                      <div class="col-md-4 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                          <input class="form-check-input" id="femenino" type="radio" value="F" name="sexo" #sexo="ngModel"
+                            [(ngModel)]="usuarioService.usuarioSeleccionado.sexo">
+                          <label class="form-check-label" for="femenino">Femenino</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1">
+                          <input class="form-check-input" id="masculino" type="radio" value="M" name="sexo" #sexo="ngModel"
+                            [(ngModel)]="usuarioService.usuarioSeleccionado.sexo">
+                          <label class="form-check-label" for="masculino">Masculino</label>
+                        </div>
+                      </div>
+                      <label class="col-md-2 col-form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="fechaNacimiento" type="date" name="fechaNacimiento" #fechaNacimiento="ngModel"
+                          [(ngModel)]="usuarioService.usuarioSeleccionado.fechaNacimiento" placeholder="date" required>
+                        <div *ngIf="fechaNacimiento.invalid && (fechaNacimiento.dirty || fechaNacimiento.touched)" class="alert alert-danger">
+                          <div *ngIf="fechaNacimiento.errors.required">
+                            La fecha de nacimiento es obligatoria.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label" for="email">Correo Electrónico</label>
+                      <div class="col-md-4">
+                        <input class="form-control" id="email" type="email" name="correo" #correo="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.correo"
+                          placeholder="cesarav95@gmail.com" email="true" required>
+                        <div *ngIf="correo.invalid && (correo.dirty || correo.touched)" class="alert alert-danger">
+                          <div *ngIf="correo.errors.required">
+                            El correo electrónico es obligatorio.
+                          </div>
+                          <div *ngIf="correo.errors.email">
+                            Use un correo válido.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label">Opciones</label>
+                      <div class="col-md-4 col-form-label">
+                        <div class="form-check checkbox">
+                          <input class="form-check-input" id="check1" type="checkbox" name="promociones" #promociones="ngModel"
+                            [(ngModel)]="usuarioService.usuarioSeleccionado.promociones">
+                          <label class="form-check-label" for="check1">Promociones</label>
+                        </div>
+                      </div>
+                      <div id="botones" class="col-md-6 col-form-label">
+                        <button class="btn btn-md btn-success" type="submit">
+                          {{boton_accion}}</button>
+                        <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetForm(nuevoUsuarioForm)">Limpiar</button>
+                        <button id="btnDireccion" class="btn btn-md btn-info" type="button" (click)="nueva_direccion(direccionForm, usuarioService.usuarioSeleccionado.correo)">Añadir
+                          Dirección</button>
+                      </div>
+                    </div>
+                  </form>
+            </div>
+          </div>          
+          <table id="lista_usuarios" class="table table-responsive-sm table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th>CORRREO</th>
+                <th>NOMBRES Y APELLIDOS</th>
+                <th>DOCUMENTO</th>
+                <th>FECHA AFILIACIÓN</th>
+                <th>EDITAR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of usuarioService.usuarios">
+                <td>{{usuario.correo}}</td>
+                <td>{{usuario.nombres + ' ' + usuario.apellidos}}</td>
+                <td>{{usuario.tipoDocumento + ' : ' + usuario.numeroDocumento}}</td>
+                <td>{{usuario.fecha_afiliacion}}</td>
+                <td><button class="btn btn-sm btn-info" type="button" (click)="editarUsuario(usuario)">Editar</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
