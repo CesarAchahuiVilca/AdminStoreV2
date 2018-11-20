@@ -5,6 +5,9 @@ import { NgForm } from '@angular/forms';
 import { NgFlashMessageService } from 'ng-flash-messages';
 import { Usuario } from './usuario';
 import { Direccion } from './direccion';
+import { RegionService } from '../region/region.service';
+import { Region } from '../region/region';
+import { Provincia } from '../region/provincia';
 
 @Component({
   selector: 'app-usuario',
@@ -20,28 +23,16 @@ export class UsuarioComponent implements OnInit {
   private usuario_header : string;
   private direccion_header : string;
   private tiposDocumento : string[];
-  private departamentos : Departamento[];
-  private prov_selected : Provincia = new Provincia('',[]);
-  private dep_selected : Departamento = new Departamento('',[this.prov_selected]);
   
-
   constructor(
     private usuarioService : UsuarioService,
     private flashMessage : NgFlashMessageService,
-    private direccionService : DireccionService
+    private direccionService : DireccionService,
+    private regionService : RegionService
     ) { }
 
   ngOnInit() {  
     this.tiposDocumento = ['DNI'];
-    // PROVINCIAS
-    let cuscoProvincia = new Provincia('CUSCO',['CUSCO', 'SAN JERONIMO', 'SAN SEBASTIAN', 'SANTIAGO', 'WANCHAQ']);
-    let canchisProv = new Provincia('CANCHIS', ['SICUANI']);
-    let espinarProv = new Provincia('ESPINAR', ['ESPINAR']);
-    // DEPARTAMENTOS
-    let cusco = new Departamento('CUSCO', [canchisProv, cuscoProvincia, espinarProv]);
-    let apurimac = new Departamento('APURIMAC',[]);
-    let madreDios = new Departamento('MADRE DE DIOS',[]);
-    this.departamentos = [apurimac, cusco, madreDios];
     document.getElementById('btnDireccion').hidden = true;
     this.getUsuarios();
   }
@@ -120,11 +111,12 @@ export class UsuarioComponent implements OnInit {
   }
 
   departamento_selected(departamento : string){
+    console.log(departamento);
     var i : number = 0;
-    while(this.departamentos[i].nombre != departamento){
+    while(this.regionService.regiones[i].departamento != departamento){
       i = i + 1;
     }
-    this.dep_selected = this.departamentos[i];
+    this.regionService.departamentoSelected = this.regionService.regiones[i];
   }
 
   editarDireccion(direccion : Direccion){
@@ -149,16 +141,6 @@ export class UsuarioComponent implements OnInit {
     this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
   }
 
-  eliminarUsuario(_id: string, form: NgForm) {
-    /*if(confirm('Are you sure you want to delete it?')) {
-      this.usuarioService.deleteUsuario(_id)
-        .subscribe(res => {
-          this.getUsuarios();
-          this.resetForm(form);
-        });
-    }*/
-  }
-
   getDirecciones(correo : string) {
     this.direccionService.getDirecciones(correo).subscribe(res => {
       this.direccionService.direcciones = res  as Direccion[];
@@ -177,12 +159,19 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
+  getRegiones(){
+    this.regionService.getRegiones().subscribe(res => {
+      this.regionService.regiones = res as Region[];
+    })
+  }
+
   nueva_direccion(form?: NgForm, usuario? : string){
     this.resetDireccionForm(form);
     this.direccion_header = "NUEVA DIRECCIÓN";
     this.boton_direccion = "Guardar nueva dirección";
     document.getElementById('direccion').hidden = false;
     this.direccionService.dirSelected.usuario = usuario;
+    this.getRegiones();
   }
 
   nuevo_usuario(form?: NgForm){
@@ -201,10 +190,10 @@ export class UsuarioComponent implements OnInit {
 
   provincia_selected(provincia: string){
     var i : number = 0;
-    while(this.dep_selected.provincias[i].nombre != provincia){
+    while(this.regionService.departamentoSelected.provincias[i].provincia != provincia){
       i = i + 1;
     }
-    this.prov_selected = this.dep_selected.provincias[i];
+    this.regionService.provinciaSelected = this.regionService.departamentoSelected.provincias[i];
   }
 
   resetDireccionForm(form?: NgForm) {
@@ -223,7 +212,7 @@ export class UsuarioComponent implements OnInit {
 
 }
 
-class Provincia{
+/*class Provincia{
   constructor(nombre, distritos){
     this.nombre = nombre;
     this.distritos = distritos;
@@ -242,4 +231,4 @@ class Departamento {
 
   nombre : string;
   provincias : Provincia[];
-}
+} */

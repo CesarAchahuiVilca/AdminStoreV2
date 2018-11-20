@@ -175,21 +175,21 @@
                   <div class="col-md-2">
                       <select class="form-control" id="departamento" name="departamento" #departamento="ngModel" [(ngModel)]="direccionService.dirSelected.departamento" (change)="departamento_selected($event.target.value)">
                         <option value="">Seleccione un departamento</option>
-                        <option *ngFor="let dep of departamentos" [value]="dep.nombre">{{dep.nombre}}</option>
+                        <option *ngFor="let dep of regionService.regiones" [value]="dep.departamento">{{dep.departamento}}</option>
                       </select>
                     </div>
                   <label class="col-md-2 col-form-label" for="provincia">Provincia</label>
                   <div class="col-md-2">
                       <select class="form-control" id="provincia" name="provincia" #provincia="ngModel" [(ngModel)]="direccionService.dirSelected.provincia" (change)="provincia_selected($event.target.value)">
                         <option value="">Seleccione una provincia</option>
-                        <option *ngFor="let prov of dep_selected.provincias" [value]="prov.nombre">{{prov.nombre}}</option>
+                        <option *ngFor="let prov of regionService.departamentoSelected.provincias" [value]="prov.provincia">{{prov.provincia}}</option>
                       </select>
                     </div>
                   <label class="col-md-2 col-form-label" for="distrito">Distrito</label>
                   <div class="col-md-2">
                       <select class="form-control" id="distrito" name="distrito" #distrito="ngModel" [(ngModel)] = "direccionService.dirSelected.distrito">
                         <option value="">Selecciones un distrito</option>
-                        <option *ngFor="let dis of prov_selected.distritos" [value]="dis">{{dis}}</option>
+                        <option *ngFor="let dis of regionService.provinciaSelected.distritos" [value]="dis">{{dis}}</option>
                       </select>
                     </div>
                 </div>
