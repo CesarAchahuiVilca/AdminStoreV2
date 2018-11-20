@@ -1,3 +1,5 @@
+import {Provincia} from './provincia';
+
 export class Region {
   
   constructor(_id = '', departamento = '', provincias = []){
@@ -10,14 +12,4 @@ export class Region {
   departamento : string;
   provincias : Provincia[];
 
-}
-export class Provincia {
-
-  constructor(provincia = '', distritos = []){
-    this.provincia = provincia;
-    this.distritos = distritos;
-  }
-
-  provincia : string;
-  distritos : string[];
 }
