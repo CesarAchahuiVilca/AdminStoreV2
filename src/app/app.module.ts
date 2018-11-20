@@ -18,6 +18,7 @@ import { DetallemarcaComponent } from './detallemarca/detallemarca.component';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { RegionComponent } from './region/region.component';
 import { ArticuloComponent } from './articulo/articulo.component';
+import { DataTablesModule } from 'angular-datatables';
 
 
 const routes: Route[] = [
@@ -52,7 +53,8 @@ const routes: Route[] = [
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     NgFlashMessagesModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    DataTablesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

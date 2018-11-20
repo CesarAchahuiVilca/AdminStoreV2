@@ -15,11 +15,11 @@
                   </div>
                   <div class="col-lg-12">
                     <div class="lista-articulos">
-                        <table class="table  table-responsive-sm table-sm" id="tabla_categoria">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers"  class="table table-responsive-sm table-sm table-striped" id="tabla_categoria">
                             <thead>
                               <tr >
-                                <th style="width: 15%;">Id Articulos</th>
-                                <th style="width: 50%">Descripcion</th>
+                                <th style="width: 8%;">Id Articulo</th>
+                                <th style="width: 40%">Descripcion</th>
                                 <th style="width: 10%;"> </th>
                               </tr>
                             </thead>
@@ -28,10 +28,10 @@
                               <tr *ngFor="let articulomysql of articuloService.articulosMysql">
                                 <td>{{articulomysql.idArticulo}}</td>
                                 <td>{{articulomysql.Descripcion}}</td>
-                                <td >
+                                <td>
                                   <div  style="margin-left: 0px; display: flex; flex-direction: row;">
                                     <div style="flex-grow: 0;margin-right: 2px;">
-                                      <button type="button" class="btn btn-pill btn-block btn-warning" >Completar Registro</button>
+                                      <button type="button" class="btn btn-pill btn-block btn-primary" >Completar Registro</button>
     
                                     </div>
                                   </div>                                   
