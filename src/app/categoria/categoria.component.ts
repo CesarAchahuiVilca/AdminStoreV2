@@ -89,6 +89,21 @@ export class CategoriaComponent implements OnInit {
 
   }
 
+  mostrarmensaje(mensaje: string, estado: string){
+
+    
+    if(estado == "0"){
+      var labelmensaje =  document.getElementById("resultadoerror") as HTMLLabelElement;
+      labelmensaje.innerHTML = mensaje;      
+      document.getElementById("btnmensajeerror").click();
+    }else{
+      var labelmensaje =  document.getElementById("resultadoexito") as HTMLLabelElement;
+      labelmensaje.innerHTML = mensaje;
+      document.getElementById("btnmensajeexito").click();
+    }
+  }
+
+
   guardarCategoria(form?: NgForm){
     var btncerrarmodal = document.getElementById("btnCerrarModal");
     if(form.value._id){
@@ -100,11 +115,13 @@ export class CategoriaComponent implements OnInit {
         if(respuesta.estado == "0"){
           
           console.log("OCURRIO UN ERROR ESTADO 0");
+          this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
         }else{
           this.limpiarform(form);
           btncerrarmodal.click();
           this.getCategorias();
           console.log("TODO ESTA CORRECTO");
+          this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
         }       
         
       });
@@ -127,17 +144,20 @@ export class CategoriaComponent implements OnInit {
       var respuesta = JSON.parse(JSON.stringify(res));
       if(respuesta.estado == "0"){
           
-        console.log("OCURRIO UN ERROR ESTADO 0:"+cat.nombre+" - "+cat.padre);
+       //console.log("OCURRIO UN ERROR ESTADO 0:"+cat.nombre+" - "+cat.padre);
+        this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
       }else{
         this.limpiarform(form);
         btncerrarmodal.click();
         this.getCategorias();
         console.log("TODO ESTA CORRECTO");
+        this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
       }
        
       
     });
   }
+  
   }
   
   editarCategoria(categoria: Categoria){
@@ -158,6 +178,9 @@ export class CategoriaComponent implements OnInit {
     .subscribe(res=>{
       this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
       console.log(res);
+
+      var respuesta = JSON.parse(JSON.stringify(res));
+      this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
       this.getCategorias();
     });
     console.log(idCategoria);

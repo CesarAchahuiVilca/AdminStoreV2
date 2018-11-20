@@ -17,6 +17,7 @@ import { CaracteristicasComponent } from './caracteristicas/caracteristicas.comp
 import { DetallemarcaComponent } from './detallemarca/detallemarca.component';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { RegionComponent } from './region/region.component';
+import { ArticuloComponent } from './articulo/articulo.component';
 
 
 const routes: Route[] = [
@@ -25,7 +26,8 @@ const routes: Route[] = [
   {path: 'categoria', component: CategoriaComponent},
   {path: 'caracteristicas', component: CaracteristicasComponent},
   {path: 'usuarios', component: UsuarioComponent},
-  {path: 'region', component: RegionComponent}
+  {path: 'region', component: RegionComponent},
+  {path: 'articulos', component: ArticuloComponent}
 ];
 
 @NgModule({
@@ -40,7 +42,8 @@ const routes: Route[] = [
     CaracteristicasComponent,
     DetallemarcaComponent,
     UsuarioComponent,
-    RegionComponent
+    RegionComponent,
+    ArticuloComponent
   ],
   imports: [
     BrowserModule,

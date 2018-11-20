@@ -1,0 +1,54 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="card" style="width: 100%;">
+              <div class="card-header"> <i class="fa fa-list"></i>
+                <strong>Lista de Articulos</strong>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-6" style="text-align: left !important;">
+                      <button class="btn btn-block btn-link" type="button" (click)="limpiarform(categoriaForm)"  style="color: black; width: auto;"><i class="fa fa-plus" ></i> Agregar Articulos</button><br>
+                  </div>
+                  <div class="col-lg-6">
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="lista-articulos">
+                        <table class="table  table-responsive-sm table-sm" id="tabla_categoria">
+                            <thead>
+                              <tr >
+                                <th style="width: 15%;">Id Articulos</th>
+                                <th style="width: 50%">Descripcion</th>
+                                <th style="width: 10%;"> </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+    
+                              <tr *ngFor="let articulomysql of articuloService.articulosMysql">
+                                <td>{{articulomysql.idArticulo}}</td>
+                                <td>{{articulomysql.Descripcion}}</td>
+                                <td >
+                                  <div  style="margin-left: 0px; display: flex; flex-direction: row;">
+                                    <div style="flex-grow: 0;margin-right: 2px;">
+                                      <button type="button" class="btn btn-pill btn-block btn-warning" >Completar Registro</button>
+    
+                                    </div>
+                                  </div>                                   
+                                </td>
+                              </tr>
+                              
+                            </tbody>
+                          </table>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+        </div>
+
+    </div>
+  </div>
+</div>

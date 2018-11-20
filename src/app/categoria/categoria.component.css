@@ -49,12 +49,12 @@
     color: orange !important;    
 }
 @media (min-width: 360px) {
-    .modal-dialog{
+    #modalcategoriacontenido{
         max-width: 100% !important; 
     }
-    }
-    @media (min-width: 768px) {
-    .modal-dialog{
+}
+@media (min-width: 768px) {
+    #modalcategoriacontenido{
         max-width: 80% !important; 
     }
 }
