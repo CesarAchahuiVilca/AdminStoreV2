@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
+import { Subject } from 'rxjs';
+import { MarcaMysql } from './marca-mysql';
+import { MarcaService } from './marca.service';
+
 
 export interface PeriodicElement {
   marca: string;
@@ -23,7 +27,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 @Component({
   selector: 'app-marcadistri',
   templateUrl: './marcadistri.component.html',
-  styleUrls: ['./marcadistri.component.css']
+  styleUrls: ['./marcadistri.component.css'],
+  providers:[MarcaService]
 })
 
 export class MarcadistriComponent implements OnInit {
@@ -38,6 +43,10 @@ export class MarcadistriComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  listarmarcas(){
+    
   }
   
   funprueba(dato){
