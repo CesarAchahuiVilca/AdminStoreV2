@@ -23,34 +23,17 @@
       <button mat-raised-button>Agregar</button>
     </div>
     <br>
-    <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
-    </mat-form-field>
-    <div class="example-container mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-        <!-- Position Column -->
-        <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef>No.</th>
-          <td mat-cell *matCellDef="let element" (click)="funprueba(element.position)">{{ element.position }}</td>
-        </ng-container>
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="codigo">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let element" (click)="funprueba(element.position)">{{ element.codigo }}</td>
-        </ng-container>
-
-        <!-- Weight Column -->
-        <ng-container matColumnDef="marca">
-          <th mat-header-cell *matHeaderCellDef>Weight</th>
-          <td mat-cell *matCellDef="let element" (click)="funprueba(element.position)">{{ element.marca }}</td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <div class="col-lg-12">
+      <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers"  class="table table-responsive-sm table-sm table-striped">
+        <thead>
+          <th>Id</th>
+          <th>Marca</th>
+          <th></th>
+          <th></th>
+        </thead>
+        <tbody></tbody>
       </table>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </div>
   </div>
   <!-- nav2 -->
