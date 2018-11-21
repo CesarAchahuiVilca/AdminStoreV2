@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { UsuarioService } from './usuario.service';
 import { DireccionService } from './direccion.service';
 import { NgForm } from '@angular/forms';
@@ -7,7 +7,9 @@ import { Usuario } from './usuario';
 import { Direccion } from './direccion';
 import { RegionService } from '../region/region.service';
 import { Region } from '../region/region';
+import { Subject } from 'rxjs';
 import { Provincia } from '../region/provincia';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-usuario',
@@ -16,13 +18,18 @@ import { Provincia } from '../region/provincia';
   providers: [ UsuarioService ]
 })
 
-export class UsuarioComponent implements OnInit {
+export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
 
+  @ViewChild(DataTableDirective)
+  dtElement : DataTableDirective; 
+  dtOptions: DataTables.Settings = {};
+  dtTriggers: Subject<any> = new Subject();
   private boton_accion : string;
   private boton_direccion : string;
   private usuario_header : string;
   private direccion_header : string;
   private tiposDocumento : string[];
+  private flag : boolean = true;
   
   constructor(
     private usuarioService : UsuarioService,
@@ -32,9 +39,50 @@ export class UsuarioComponent implements OnInit {
     ) { }
 
   ngOnInit() {  
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ elementos",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "Primero",
+          previous: "Anterior",
+          next: "Siguiente",
+          last: "Último"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }  
+    };
     this.tiposDocumento = ['DNI'];
     document.getElementById('btnDireccion').hidden = true;
     this.getUsuarios();
+  }
+
+  ngAfterViewInit() : void {
+    this.dtTriggers.next();
+  }
+
+  ngOnDestroy() : void {
+    this.dtTriggers.unsubscribe();
+  }
+
+  reRender() : void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTriggers.next();
+    });
   }
 
   agregarDireccion(form?: NgForm){
@@ -156,6 +204,7 @@ export class UsuarioComponent implements OnInit {
     document.getElementById('lista_direcciones').hidden = true;
     this.usuarioService.getUsuarios().subscribe( res => {
       this.usuarioService.usuarios = res as Usuario[];
+      this.reRender();
     });
   }
 

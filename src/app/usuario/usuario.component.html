@@ -201,26 +201,29 @@
               </form>
             </div>
           </div>
-          <table id="lista_usuarios" class="table table-responsive-sm table-bordered table-striped table-sm">
-            <thead>
-              <tr>
-                <th>CORRREO</th>
-                <th>NOMBRES Y APELLIDOS</th>
-                <th>DOCUMENTO</th>
-                <th>FECHA AFILIACIÓN</th>
-                <th>EDITAR</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let usuario of usuarioService.usuarios">
-                <td>{{usuario.correo}}</td>
-                <td>{{usuario.nombres + ' ' + usuario.apellidos}}</td>
-                <td>{{usuario.tipoDocumento + ' : ' + usuario.numeroDocumento}}</td>
-                <td>{{usuario.fecha_afiliacion}}</td>
-                <td><button class="btn btn-sm btn-info" type="button" (click)="editarUsuario(usuario)">Editar</button></td>
-              </tr>
-            </tbody>
-          </table>
+          <div id="lista_usuarios">
+            <table id ="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-bordered table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>CORRREO</th>
+                  <th>NOMBRES Y APELLIDOS</th>
+                  <th>DOCUMENTO</th>
+                  <th>FECHA AFILIACIÓN</th>
+                  <th>EDITAR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let usuario of usuarioService.usuarios">
+                  <td>{{usuario.correo}}</td>
+                  <td>{{usuario.nombres + ' ' + usuario.apellidos}}</td>
+                  <td>{{usuario.tipoDocumento + ' : ' + usuario.numeroDocumento}}</td>
+                  <td>{{usuario.fecha_afiliacion}}</td>
+                  <td><button class="btn btn-sm btn-info" type="button" (click)="editarUsuario(usuario)">Editar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+         
           <table id="lista_direcciones" class="table table-responsive-sm table-bordered table-striped table-sm">
             <thead>
               <tr>
