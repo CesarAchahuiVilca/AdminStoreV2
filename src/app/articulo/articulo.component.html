@@ -14,13 +14,19 @@
                   <div class="col-lg-6">
                   </div>
                   <div class="col-lg-12">
-                    <div class="lista-articulos">
-                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers"  class="table table-responsive-sm table-sm table-striped" id="tabla_categoria">
+                      <div id="carga" style="width: 100%;text-align: center;">
+                          <img src="assets/imagenes/carga.gif"> Cargando Datos
+                        </div>
+                    <div id="listaarticulos">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers"  class="table table-responsive-sm table-sm table-striped table-hover" id="tabla_categoria">
                             <thead>
                               <tr >
                                 <th style="width: 8%;">Id Articulo</th>
-                                <th style="width: 40%">Descripcion</th>
-                                <th style="width: 10%;"> </th>
+                                <th style="width: 30%">Descripcion</th>
+                                <th style="width: 20%">Categoria</th>
+                                <th style="width: 5%">Cantidad</th>
+                                <th style="width: 10%;">Estado</th>
+                                <th style="width: 5%;"></th>
                               </tr>
                             </thead>
                             <tbody>
@@ -28,27 +34,55 @@
                               <tr *ngFor="let articulomysql of articuloService.articulosMysql">
                                 <td>{{articulomysql.idArticulo}}</td>
                                 <td>{{articulomysql.Descripcion}}</td>
-                                <td>
-                                  <div  style="margin-left: 0px; display: flex; flex-direction: row;">
-                                    <div style="flex-grow: 0;margin-right: 2px;">
-                                      <button type="button" class="btn btn-pill btn-block btn-primary" >Completar Registro</button>
-    
-                                    </div>
-                                  </div>                                   
+                                <td>{{articulomysql.Categoria}}</td>
+                                <td style="text-align: center;">{{articulomysql.Cantidad}}</td>
+                                <td style="text-align: center;">                                  
+                                  <button *ngIf="articulomysql.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary" data-toggle="modal" data-target="#modalarticulo" (click) = "completaRegistro(articulomysql)" >Completar Registro</button>                                   
+                                  <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '1'" class="fa fa-check"></i>                                     
+                                  <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '2'" class="fa fa-check"></i>                                     
+
                                 </td>
-                              </tr>
-                              
+                                <td style="text-align: center;">
+                                    <div  style="margin-left: 0px; display: flex; flex-direction: row;">
+                                        <div style="flex-grow: 0;margin-right: 2px;">
+                                          <button type="button"  *ngIf="articulomysql.Estado == '0'" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql.idArticulo)" data-toggle="modal" data-target="#modalcategoria" disabled ><i class="fa fa-edit"></i></button>
+                                          <button type="button" *ngIf="articulomysql.Estado == '1'" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql.idArticulo)" data-toggle="modal" data-target="#modalcategoria" ><i class="fa fa-edit"></i></button>
+
+                                        </div>    
+                                      </div>                                   
+                                  </td>
+                              </tr>                              
                             </tbody>
                           </table>
-
-                    </div>
+                    </div>                    
                   </div>
                 </div>
-
               </div>
             </div>
         </div>
-
     </div>
   </div>
 </div>
+
+
+
+<!-- Modal Articulos -->
+<div class="modal fade" id="modalarticulo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" id="modalarticulocontenido">
+      <div class="modal-content">
+        <div class="modal-header"  >
+          <h5 class="modal-title" id="titulomodal"><i class="fa fa-plus"></i> Articulo:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
+            <i class="fa fa-close"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+

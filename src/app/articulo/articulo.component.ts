@@ -4,6 +4,8 @@ import {HttpClient, HttpEventType} from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Articulo } from './articulo';
 import { ArticuloMysql } from './articuloMysql';
+import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 
 
@@ -14,8 +16,12 @@ import { Subject } from 'rxjs';
   providers: [ArticuloService]
 })
 export class ArticuloComponent implements OnInit {
+
+  @ViewChild(DataTableDirective)
+  dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
+  flag: boolean = true;
 
   constructor(private http: HttpClient, private articuloService: ArticuloService) { }
 
@@ -50,7 +56,28 @@ export class ArticuloComponent implements OnInit {
     };
   }
 
+
+  ngAfterViewInit(): void {
+    this.dtTriggers.next();
+  }
+
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTriggers.unsubscribe();
+  }
+
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTriggers.next();
+    });
+  }
+
   getArticulosMysql(){
+    document.getElementById("carga").hidden = false;
+    document.getElementById("listaarticulos").hidden=true;
     this.articuloService.getArticulosMysql()
     .subscribe(res=>{
       this.articuloService.articulosMysql = res as ArticuloMysql[];
@@ -59,9 +86,19 @@ export class ArticuloComponent implements OnInit {
       }else{
 
         console.log("Exito..");
+        document.getElementById("listaarticulos").hidden=false;
       }
-      this.dtTriggers.next();
+      this.rerender();
+      document.getElementById("carga").hidden = true;
     });
+  }
+
+  completaRegistro(articulomysql: ArticuloMysql){
+    document.getElementById("titulomodal").innerHTML = "Completar Registro para el articulo : "+articulomysql.Descripcion;
+
+  }
+  editarArticulo(id: string){
+
   }
 
 

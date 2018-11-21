@@ -7,4 +7,5 @@ export class ArticuloMysql {
   
     idArticulo: string;
     Descripcion: string;
+    Cantidad: string;
   }
