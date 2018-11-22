@@ -1,28 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import { Subject } from 'rxjs';
 import { MarcaMysql } from './marca-mysql';
 import { MarcaService } from './marca.service';
+import {HttpClient, HttpEventType} from '@angular/common/http';
+import { Marca } from './marca';
+import { DataTableDirective } from 'angular-datatables';
 
-
-export interface PeriodicElement {
-  marca: string;
-  position: number;
-  codigo: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, codigo:'12', marca: 'Hydrogen'},
-  {position: 2, codigo:'12', marca: 'Helium'},
-  {position: 3, codigo:'12', marca: 'Lithium'},
-  {position: 4, codigo:'12', marca: 'Beryllium'},
-  {position: 5, codigo:'12', marca: 'Boron'},
-  {position: 6, codigo:'12', marca: 'Carbon'},
-  {position: 7, codigo:'12', marca: 'Nitrogen'},
-  {position: 8, codigo:'12', marca: 'Oxygen'},
-  {position: 9, codigo:'12', marca: 'Fluorine'},
-  {position: 10, codigo:'12', marca: 'Neon'},
-];
 
 @Component({
   selector: 'app-marcadistri',
@@ -32,25 +17,82 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 
 export class MarcadistriComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'codigo', 'marca'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
-  value2 = '';
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  constructor() { }
+  //datatable
+  @ViewChild(DataTableDirective)
+  dtElement: DataTableDirective;
+  dtOptions: DataTables.Settings = {};
+  dtTriggers: Subject<any> = new Subject();
+  flag: boolean = true;
+  //fin
+  constructor(private http: HttpClient,private marcaService:MarcaService) { }
 
   ngOnInit() {
+    this.listarmarcas();
+    //datatable
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ elementos",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "Primero",
+          previous: "Anterior",
+          next: "Siguiente",
+          last: "Último"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
   }
 
-  listarmarcas(){
-    
+  /* data table*/
+  ngAfterViewInit(): void {
+    this.dtTriggers.next();
   }
-  
-  funprueba(dato){
-    console.log(ELEMENT_DATA[dato-1]);
+
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTriggers.unsubscribe();
+  }
+
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTriggers.next();
+    });
+  }
+  /*fin datatable*/
+  listarmarcas(){
+    document.getElementById("carga").hidden = false;
+    document.getElementById("listarmarcas").hidden=true;
+    this.marcaService.listarmarcamysql()
+    .subscribe(res =>{
+      this.marcaService.marcaMysql=res as MarcaMysql[];
+
+      if(this.marcaService.marcaMysql.length == 0){
+        console.log("No se encontraron datos");
+      }else{
+
+        console.log("Exito..");
+        document.getElementById("listarmarcas").hidden=false;
+      }
+      this.rerender();
+      document.getElementById("carga").hidden = true;
+    });
   }
 
 }
