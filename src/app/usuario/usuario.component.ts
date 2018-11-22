@@ -175,6 +175,7 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
   }
 
   editarUsuario(usuario: Usuario) {
+    console.log(usuario);
     this.usuario_header = "MODIFICAR USUARIO";
     this.boton_accion = "Guardar Cambios";
     this.usuarioService.usuarioSeleccionado = usuario;

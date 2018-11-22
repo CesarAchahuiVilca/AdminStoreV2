@@ -16,7 +16,7 @@ import { DataTableDirective } from 'angular-datatables';
   providers:[MarcaService]
 })
 
-export class MarcadistriComponent implements OnInit {
+export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   //datatable
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
@@ -27,7 +27,6 @@ export class MarcadistriComponent implements OnInit {
   constructor(private http: HttpClient,private marcaService:MarcaService) { }
 
   ngOnInit() {
-    this.listarmarcas();
     //datatable
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -55,6 +54,7 @@ export class MarcadistriComponent implements OnInit {
         }
       }
     };
+    this.listarmarcas();
   }
 
   /* data table*/

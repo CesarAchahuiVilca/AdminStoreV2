@@ -14,50 +14,51 @@
   <div class="tab-pane fade show active" id="marca" role="tabpanel" aria-labelledby="home-tab">
     <br>
     <div class="animated fadeIn">
-        <div class="row">
-          <div class="col-lg-12">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                  <div class="card" style="width: 100%;">
-                    <div class="card-header"> <i class="fa fa-list"></i>
-                      <strong>Lista de Marcas</strong>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="card" style="width: 100%;">
+              <div class="card-header"> <i class="fa fa-list"></i>
+                <strong>Lista de Marcas</strong>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-6" style="text-align: left !important;">
+                    <button class="btn btn-block btn-link" type="button" style="color: black; width: auto;"><i class="fa fa-plus"></i>
+                      Agregar Marca</button><br>
+                  </div>
+                  <div class="col-lg-6">
+                  </div>
+                  <div class="col-lg-12">
+                    <div id="carga" style="width: 100%;text-align: center;">
+                      <img src="assets/imagenes/carga.gif"> Cargando Datos
                     </div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-lg-6" style="text-align: left !important;">
-                            <button class="btn btn-block btn-link" type="button"   style="color: black; width: auto;"><i class="fa fa-plus" ></i> Agregar Marca</button><br>
-                        </div>
-                        <div class="col-lg-6">
-                        </div>
-                        <div class="col-lg-12">
-                            <div id="carga" style="width: 100%;text-align: center;">
-                              <img src="assets/imagenes/carga.gif"> Cargando Datos
-                            </div>
-                            <div id="listarmarcas">
-                              <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover">
-                                <thead>
-                                  <tr>
-                                  <th style="width: 8%;">Id</th>
-                                  <th style="width: 8%;">Marca</th>
-                                  <th style="width: 8%;"></th>
-                                </tr>
-                                </thead>
-                                <tbody *ngFor="let marca of marcaService.marcaMysql">
-                                  <tr>
-                                  <td>{{marca.idMarcaProducto}}</td>
-                                  <td>{{marca.NombreMarca}}</td>
-                                  <td></td>
-                                </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                      </div>
+                    <div id="listarmarcas">
+                      <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 8%;">Id</th>
+                            <th style="width: 8%;">Marca</th>
+                            <th style="width: 8%;"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let marca of marcaService.marcaMysql">
+                            <td>{{marca.idMarcaProducto}}</td>
+                            <td>{{marca.NombreMarca}}</td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
+                </div>
               </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
   </div>
   <!---->
   <!---->
