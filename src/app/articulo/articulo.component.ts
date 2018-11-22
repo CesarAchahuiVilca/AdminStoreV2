@@ -6,7 +6,7 @@ import { Articulo } from './articulo';
 import { ArticuloMysql } from './articuloMysql';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
+import { Subject, identity } from 'rxjs';
 
 
 @Component({
@@ -22,10 +22,13 @@ export class ArticuloComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
   flag: boolean = true;
+  itemsDatosGenerales: [number, string][] = new Array();
+  contador_datos_generales = 1;
 
   constructor(private http: HttpClient, private articuloService: ArticuloService) { }
 
   ngOnInit() {
+    this.itemsDatosGenerales.push([1,""]);
     this.getArticulosMysql();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -99,6 +102,17 @@ export class ArticuloComponent implements OnInit {
   }
   editarArticulo(id: string){
 
+  }
+  agregarInformacionGeneral(){
+    this.contador_datos_generales = this.contador_datos_generales+1;
+    this.itemsDatosGenerales.push([this.contador_datos_generales,""]);
+  }
+  eliminarItem(id:Number){
+    for(var i=0;i<this.itemsDatosGenerales.length;i++){
+      if(this.itemsDatosGenerales[i][0] == id){
+        this.itemsDatosGenerales.splice(i,1);
+      }
+    }
   }
 
 
