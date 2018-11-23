@@ -1,10 +1,33 @@
+.item-imagen{
+    display: flex; 
+    flex-direction: row; 
+    flex-grow: 0;
+    margin: 3px; 
+    border: 2px dotted rgb(63, 63, 63); 
+    width: auto; 
+    height: 150px;
+    background-color: rgb(199, 199, 199);
+    cursor: pointer;
+    min-width: 150px;
+}
+.item-imagen:hover{
+    background-color: rgba(131, 130, 128, 0.918);
+
+}
+.imagen-item-articulo{
+    display: block;
+  width: auto;
+  height: 100%;
+}
 @media (min-width: 360px) {
     #modalarticulocontenido {
         max-width: 100% !important; 
+        max-height: 100% !important;
     }
 }
 @media (min-width: 768px) {
     #modalarticulocontenido{
         max-width: 80% !important; 
+        max-height: 100% !important;
     }
 }
