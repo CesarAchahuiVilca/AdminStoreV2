@@ -1,23 +1,80 @@
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#marca" role="tab" aria-controls="home"
-      aria-selected="true">Atributos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#distribuidor" role="tab" aria-controls="profile"
-      aria-selected="false">Características</a>
-  </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-  <!-- nav1 -->
-  <div class="tab-pane fade show active" id="marca" role="tabpanel" aria-labelledby="home-tab">
-    <div class="example-button-row">
-      <button mat-button>Crear Atributo<i class="material-icons">add </i></button>
-      <button mat-button>Crear Atributo Detalle<i class="material-icons">add </i></button>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <button class="btn btn-md btn-link" type="button" (click)="getUsuarios()"><i class="fa fa-align-justify"></i></button>
+          &nbsp;USUARIOS
+        </div>
+        <div class="card-body">
+          <div class="row col-form-label">
+            <div class="col-md-2">
+              <button id="new" class="btn btn-info" type="button" (click)="nuevaCaracteristica(caracteristicaForm)"><i class="fa fa-plus"></i>&nbsp;Nuevo
+                Usuario</button>
+              <button id="back" class="btn btn-block btn-info" type="button" (click)="getCaracteristicas()"><i class="fa fa-arrow-circle-left"></i>&nbsp;Volver</button>
+            </div>
+            <div class="col-md-10">
+              <ng-flash-message></ng-flash-message>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              {{caracteristicaHeader}}
+            </div>
+            <div class="card-body">
+              <form #caracteristicaForm="ngForm" class="form-horizontal" (ngSubmit)="caracteristica(caracteristicaForm)">
+                <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected._id">
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label" for="nombres">Nombre de la Característica</label>
+                  <div class="col-md-4">
+                    <input class="form-control" id="nombre" type="text" name="nombre" #nombre="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected.nombre" required>
+                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                      <div *ngIf="nombre.errors.required">
+                        El nombre de la característica es obligatorio.
+                      </div>
+                    </div>
+                  </div>
+                  <label class="col-md-2 col-form-label" for="medida">Unidad de Medida</label>
+                  <div class="col-md-4">
+                    <input class="form-control" id="medida" type="text" name="medida" #medida="ngModel"
+                      [(ngModel)]="caracteristicaService.caracteristicaSelected.medida" required>
+                    <div *ngIf="medida.invalid && (medida.dirty || medida.touched)" class="alert alert-danger">
+                      <div *ngIf="medida.errors.required">
+                        La unidad de medida es un campo obligatorio.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div id="botones" class="col-md-6 col-form-label">
+                    <button class="btn btn-md btn-success" type="submit">
+                      {{accionBoton}}</button>
+                    <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetForm(caracteristicaForm)">Limpiar</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div>
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-bordered table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>NOMBRE</th>
+                  <th>MEDIDA</th>
+                  <th>EDITAR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let caracteristica of caracteristicaService.caracteristicas">
+                  <td>{{caracteristica.nombre}}</td>
+                  <td>{{caracteristica.medida}}</td>
+                  <td><button class="btn btn-sm btn-info" type="button" (click)="editarUsuario(usuario)">Editar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- nav2 -->
-  <div class="tab-pane fade" id="distribuidor" role="tabpanel" aria-labelledby="profile-tab">
-
-  </div>
-  <!-- fin contenido -->
+</div>

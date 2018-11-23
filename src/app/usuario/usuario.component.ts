@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
-import { UsuarioService } from './usuario.service';
-import { DireccionService } from './direccion.service';
 import { NgForm } from '@angular/forms';
-import { NgFlashMessageService } from 'ng-flash-messages';
 import { Usuario } from './usuario';
 import { Direccion } from './direccion';
-import { RegionService } from '../region/region.service';
 import { Region } from '../region/region';
 import { Subject } from 'rxjs';
-import { Provincia } from '../region/provincia';
 import { DataTableDirective } from 'angular-datatables';
+// Sericios
+import { UsuarioService } from './usuario.service';
+import { DireccionService } from './direccion.service';
+import { NgFlashMessageService } from 'ng-flash-messages';
+import { RegionService } from '../region/region.service';
 
 @Component({
   selector: 'app-usuario',
@@ -18,10 +18,9 @@ import { DataTableDirective } from 'angular-datatables';
   providers: [ UsuarioService ]
 })
 
-export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
+export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
 
-  @ViewChild(DataTableDirective)
-  dtElement : DataTableDirective; 
+  @ViewChild(DataTableDirective) dtElement : DataTableDirective; 
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
   private boton_accion : string;
@@ -31,6 +30,13 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
   private tiposDocumento : string[];
   private flag : boolean = true;
   
+  /**
+   * Constructor del componente Usuario
+   * @param usuarioService 
+   * @param flashMessage 
+   * @param direccionService 
+   * @param regionService 
+   */
   constructor(
     private usuarioService : UsuarioService,
     private flashMessage : NgFlashMessageService,
@@ -38,6 +44,9 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     private regionService : RegionService
     ) { }
 
+  /**
+   * Método que se ejecuta al iniciar el componente
+   */
   ngOnInit() {  
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -70,14 +79,23 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     this.getUsuarios();
   }
 
+  /**
+   * Método que se ejecuta despues de cargar la vista del componente
+   */
   ngAfterViewInit() : void {
     this.dtTriggers.next();
   }
 
+  /**
+   * Método que se ejecuta al destruir el datatable
+   */
   ngOnDestroy() : void {
     this.dtTriggers.unsubscribe();
   }
 
+  /**
+   * Método que se ejecuta para revisualizar el datatable
+   */
   reRender() : void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
@@ -85,6 +103,10 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     });
   }
 
+  /**
+   * Método que agrega una nueva dirección a un usuario
+   * @param form 
+   */
   agregarDireccion(form?: NgForm){
     if(form.value._id) {
       this.direccionService.putDireccion(form.value).subscribe(res => {
@@ -111,6 +133,10 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     }  
   }
 
+  /**
+   * Método que agrega un nuevo usuario
+   * @param form 
+   */
   agregarUsuario(form?: NgForm) {
     console.log(form.value);
     var validacion : boolean = true;
@@ -158,8 +184,11 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     }
   }
 
+  /**
+   * Método que selecciona un departamento 
+   * @param departamento 
+   */
   departamento_selected(departamento : string){
-    console.log(departamento);
     var i : number = 0;
     while(this.regionService.regiones[i].departamento != departamento){
       i = i + 1;
@@ -167,6 +196,10 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     this.regionService.departamentoSelected = this.regionService.regiones[i];
   }
 
+  /**
+   * Método que muestra el formulario para editar una dirección
+   * @param direccion 
+   */
   editarDireccion(direccion : Direccion){
     this.boton_direccion = "Editar dirección";
     this.direccion_header = "MODIFICAR DIRECCIÓN";
@@ -174,8 +207,11 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     document.getElementById('direccion').hidden = false;
   }
 
+  /**
+   * Método que muestra el formulario para editar un usuario
+   * @param usuario 
+   */
   editarUsuario(usuario: Usuario) {
-    console.log(usuario);
     this.usuario_header = "MODIFICAR USUARIO";
     this.boton_accion = "Guardar Cambios";
     this.usuarioService.usuarioSeleccionado = usuario;
@@ -190,12 +226,19 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
   }
 
+  /**
+   * Método que obtiene las direcciones de un usuario
+   * @param correo 
+   */
   getDirecciones(correo : string) {
     this.direccionService.getDirecciones(correo).subscribe(res => {
       this.direccionService.direcciones = res  as Direccion[];
     })
   }
 
+  /**
+   * Método que muestra los usuarios de la base de datos
+   */
   getUsuarios() {
     document.getElementById('nuevo_usuario').hidden = true;
     document.getElementById('lista_usuarios').hidden = false;
@@ -209,12 +252,20 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     });
   }
 
+  /**
+   * Método que obtiene las regiones o departamentos
+   */
   getRegiones(){
     this.regionService.getRegiones().subscribe(res => {
       this.regionService.regiones = res as Region[];
     })
   }
 
+  /**
+   * Método que muestra el formulario de una nueva dirección
+   * @param form 
+   * @param usuario 
+   */
   nueva_direccion(form?: NgForm, usuario? : string){
     this.resetDireccionForm(form);
     this.direccion_header = "NUEVA DIRECCIÓN";
@@ -224,6 +275,10 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     this.getRegiones();
   }
 
+  /**
+   * Método que muestra el formulario para un nuevo usuario
+   * @param form 
+   */
   nuevo_usuario(form?: NgForm){
     this.resetForm(form);
     this.usuario_header = "NUEVO USUARIO";
@@ -238,6 +293,10 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     document.getElementById('email').setAttribute('editable','true');
   }
 
+  /**
+   * Método que muestra los distritos de una provincia seleccionada
+   * @param provincia 
+   */
   provincia_selected(provincia: string){
     var i : number = 0;
     while(this.regionService.departamentoSelected.provincias[i].provincia != provincia){
@@ -246,6 +305,10 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     this.regionService.provinciaSelected = this.regionService.departamentoSelected.provincias[i];
   }
 
+  /**
+   * Método que vuelve a cargar el formulario de dirección
+   * @param form 
+   */
   resetDireccionForm(form?: NgForm) {
     if(form) {
       this.direccionService.dirSelected = new Direccion();
@@ -253,6 +316,10 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
     }
   }
 
+  /**
+   * Método que vuelve a cargar el formulario de usuario
+   * @param form 
+   */
   resetForm(form?: NgForm) {
     if (form) {  
       this.usuarioService.usuarioSeleccionado = new Usuario();
@@ -261,24 +328,3 @@ export class UsuarioComponent implements AfterViewInit,OnDestroy, OnInit {
   }
 
 }
-
-/*class Provincia{
-  constructor(nombre, distritos){
-    this.nombre = nombre;
-    this.distritos = distritos;
-  }
-  
-  nombre : string;
-  distritos : string[];
-  
-}
-
-class Departamento {
-  constructor(nombre, provincias){
-    this.nombre = nombre;
-    this.provincias = provincias;
-  }
-
-  nombre : string;
-  provincias : Provincia[];
-} */
