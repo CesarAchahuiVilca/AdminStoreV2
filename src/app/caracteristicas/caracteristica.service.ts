@@ -27,7 +27,7 @@ export class CaracteristicaService {
      );
    }
 
-   getCaracteristica() : Observable<Caracteristica[]> {
+   getCaracteristicas() : Observable<Caracteristica[]> {
      return this.http.get<Caracteristica[]>(this.URL_API).pipe(
        catchError(this.handleError('getCaracteristicas',[]))
      );

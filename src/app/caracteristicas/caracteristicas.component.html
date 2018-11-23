@@ -8,53 +8,46 @@
         </div>
         <div class="card-body">
           <div class="row col-form-label">
-            <div class="col-md-2">
-              <button id="new" class="btn btn-info" type="button" (click)="nuevaCaracteristica(caracteristicaForm)"><i class="fa fa-plus"></i>&nbsp;Nuevo
-                Usuario</button>
-              <button id="back" class="btn btn-block btn-info" type="button" (click)="getCaracteristicas()"><i class="fa fa-arrow-circle-left"></i>&nbsp;Volver</button>
-            </div>
-            <div class="col-md-10">
-              <ng-flash-message></ng-flash-message>
-            </div>
+            <ng-flash-message></ng-flash-message>
           </div>
-          <div class="card">
+          <form form #caracteristicaForm="ngForm" class="card form-horizontal" (ngSubmit)="caracteristica(caracteristicaForm)">
             <div class="card-header">
               {{caracteristicaHeader}}
             </div>
             <div class="card-body">
-              <form #caracteristicaForm="ngForm" class="form-horizontal" (ngSubmit)="caracteristica(caracteristicaForm)">
-                <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected._id">
-                <div class="form-group row">
-                  <label class="col-md-2 col-form-label" for="nombres">Nombre de la Característica</label>
-                  <div class="col-md-4">
-                    <input class="form-control" id="nombre" type="text" name="nombre" #nombre="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected.nombre" required>
-                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
-                      <div *ngIf="nombre.errors.required">
-                        El nombre de la característica es obligatorio.
-                      </div>
-                    </div>
-                  </div>
-                  <label class="col-md-2 col-form-label" for="medida">Unidad de Medida</label>
-                  <div class="col-md-4">
-                    <input class="form-control" id="medida" type="text" name="medida" #medida="ngModel"
-                      [(ngModel)]="caracteristicaService.caracteristicaSelected.medida" required>
-                    <div *ngIf="medida.invalid && (medida.dirty || medida.touched)" class="alert alert-danger">
-                      <div *ngIf="medida.errors.required">
-                        La unidad de medida es un campo obligatorio.
-                      </div>
+              <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected._id">
+              <div class="form-group row">
+                <label class="col-md-2 col-form-label" for="nombres">Nombre de la Característica</label>
+                <div class="col-md-4">
+                  <input class="form-control" id="nombre" type="text" name="nombre" #nombre="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected.nombre"
+                    required>
+                  <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                    <div *ngIf="nombre.errors.required">
+                      El nombre de la característica es obligatorio.
                     </div>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <div id="botones" class="col-md-6 col-form-label">
-                    <button class="btn btn-md btn-success" type="submit">
-                      {{accionBoton}}</button>
-                    <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetForm(caracteristicaForm)">Limpiar</button>
+                <label class="col-md-2 col-form-label" for="medida">Unidad de Medida</label>
+                <div class="col-md-4">
+                  <input class="form-control" id="medida" type="text" name="medida" #medida="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected.medida"
+                    required>
+                  <div *ngIf="medida.invalid && (medida.dirty || medida.touched)" class="alert alert-danger">
+                    <div *ngIf="medida.errors.required">
+                      La unidad de medida es un campo obligatorio.
+                    </div>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
-          </div>
+
+            <div class="card-footer">
+              <div id="botones" class="col-md-6 col-form-label">
+                <button class="btn btn-md btn-success" type="submit">
+                  {{accionBoton}}</button>
+                <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetForm(caracteristicaForm)">Limpiar</button>
+              </div>
+            </div>
+          </form>
           <div>
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-bordered table-striped table-sm">
               <thead>
