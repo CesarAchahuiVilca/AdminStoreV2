@@ -1,3 +1,5 @@
+import { DistribuidorService } from './distribuidor.service';
+import { Distribuidormysql } from './distribuidormysql';
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
@@ -13,7 +15,7 @@ import { DataTableDirective } from 'angular-datatables';
   selector: 'app-marcadistri',
   templateUrl: './marcadistri.component.html',
   styleUrls: ['./marcadistri.component.css'],
-  providers:[MarcaService]
+  providers:[MarcaService,DistribuidorService]
 })
 
 export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
@@ -22,9 +24,10 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
+  dtTriggers2: Subject<any> = new Subject();
   flag: boolean = true;
   //fin
-  constructor(private http: HttpClient,private marcaService:MarcaService) { }
+  constructor(private http: HttpClient,private marcaService:MarcaService, private distribuidorService:DistribuidorService) { }
 
   ngOnInit() {
     //datatable
@@ -55,16 +58,19 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       }
     };
     this.listarmarcas();
+    this.listardistri();
   }
 
   /* data table*/
   ngAfterViewInit(): void {
     this.dtTriggers.next();
+    this.dtTriggers2.next();
   }
 
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
     this.dtTriggers.unsubscribe();
+    this.dtTriggers2.unsubscribe();
   }
 
   rerender(): void {
@@ -73,6 +79,14 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTriggers.next();
+    });
+  }
+  rerender2(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTriggers2.next();
     });
   }
   /*fin datatable*/
@@ -93,6 +107,29 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       this.rerender();
       document.getElementById("carga").hidden = true;
     });
+  }
+
+  listardistri(){
+    document.getElementById("carga2").hidden = false;
+    document.getElementById("listardistri").hidden=true;
+    this.distribuidorService.listardistrimysql()
+    .subscribe(res =>{
+      this.distribuidorService.distriMysql=res as Distribuidormysql[];
+
+      if(this.distribuidorService.distriMysql.length == 0){
+        console.log("No se encontraron datos");
+      }else{
+
+        console.log("Exito..");
+        document.getElementById("listardistri").hidden=false;
+      }
+      this.rerender2();
+      document.getElementById("carga").hidden = true;
+    });
+  }
+
+  guardartemdatos(marcamysql:MarcaMysql){
+    document.getElementById("titulomodal").innerHTML = "Completar Registro para la Marca : "+marcamysql.NombreMarca;
   }
 
 }

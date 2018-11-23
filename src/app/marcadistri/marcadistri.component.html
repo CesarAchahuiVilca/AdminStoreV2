@@ -39,14 +39,16 @@
                           <tr>
                             <th style="width: 8%;">Id</th>
                             <th style="width: 8%;">Marca</th>
-                            <th style="width: 8%;"></th>
+                            <th style="width: 2%;"></th>
+                            <th style="width: 2%"></th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let marca of marcaService.marcaMysql">
                             <td>{{marca.idMarcaProducto}}</td>
                             <td>{{marca.NombreMarca}}</td>
-                            <td></td>
+                            <td><button class="btn btn-success" data-toggle="modal" data-target="#modalmarca" (click)="guardartemdatos(marca)">editar</button></td>
+                            <td><button>eliminar</button></td>
                           </tr>
                         </tbody>
                       </table>
@@ -64,18 +66,95 @@
   <!---->
   <!-- nav2 -->
   <div class="tab-pane fade" id="distribuidor" role="tabpanel" aria-labelledby="profile-tab">
-    <div class="example-button-row">
-      <mat-form-field class="example-form-field">
-        <input matInput type="text" placeholder="Agregar Distribuidor" [(ngModel)]="value2">
-        <button mat-button *ngIf="value2" matSuffix mat-icon-button aria-label="Clear" (click)="value2=''">
-          <i class="material-icons">clear</i>
-        </button>
-      </mat-form-field>
-      <p></p>
-      <button mat-raised-button>Agregar</button>
+<br>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="card" style="width: 100%;">
+          <div class="card-header"> <i class="fa fa-list"></i>
+            <strong>Lista de Distribuidores</strong>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6" style="text-align: left !important;">
+                <button class="btn btn-block btn-link" type="button" style="color: black; width: auto;"><i class="fa fa-plus"></i>
+                  Agregar Distribuidor</button><br>
+              </div>
+              <div class="col-lg-6">
+              </div>
+              <div class="col-lg-12">
+                <div id="carga2" style="width: 100%;text-align: center;">
+                  <img src="assets/imagenes/carga.gif"> Cargando Datos
+                </div>
+                <div id="listardistri">
+                  <table id="tabladistri" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers2" class="table table-responsive-sm table-sm table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th style="width: 8%;">Id</th>
+                        <th style="width: 8%;">Razon Social</th>
+                        <th style="width: 8%;">Representante</th>
+                        <th style="width: 2%"></th>
+                        <th style="width: 2%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let distri of distribuidorService.distriMysql">
+                        <td>{{distri.idProveedorRUC}}</td>
+                        <td>{{distri.RazonSocial}}</td>
+                        <td>{{distri.NombreRepresentante}}</td>
+                        <td><button class="btn btn-success" data-toggle="modal" data-target="#modalmarca" (click)="guardartemdatos(marca)">editar</button></td>
+                        <td><button>eliminar</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
 
   </div>
 </div>
 <!-- fin contenido -->
+<!--modalmarca-->
+<div class="modal fade" id="modalmarca" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document" id="modalarticulocontenido">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titulomodal">Agregar detalles a la Marca</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="">
+          <input class="form-control" id="idmarca" name="idmarca" type="hidden" required>
+          <div class="row"> 
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label style="font-weight: bold;">Descripción</label>
+                <input class="form-control" id="descripcionmarca" name="titulo" type="text" placeholder="Ingrese una descripción de la marca"
+                  required style="border-color: rgb(114, 114, 114);">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                  <label style="font-weight: bold;margin-right: 2%;">Imagen marca</label>
+                <button class="btn btn-primary">Cargar Imagen</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--finmodalmarca-->
