@@ -1,0 +1,79 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-container">
+            <table class="table">
+                <tr>
+                  <th><i class="material-icons" style="color: chartreuse">
+                      attach_money
+                    </i>
+                    <label>Valor promedio de los pedidos: 0</label></th>
+                  <th><i class="material-icons" style="color: yellow">
+                      shopping_cart
+                    </i>
+                    <label>Total de carritos:0</label></th>
+                  <th><i class="material-icons" style="color: red">
+                      remove_shopping_cart
+                    </i>
+                    <label>Carritos abandonados:0</label></th>
+                </tr>
+              </table>
+        </div>
+      </div>
+    
+    </div>
+    <div class="col-lg-12">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="card" style="width: 100%;">
+                <div class="card-header"> <i class="fa fa-list"></i>
+                  <strong>Pedidos</strong>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                    </div>
+                    <div class="col-lg-12">
+                      <!--  <div id="carga" style="width: 100%;text-align: center;">
+                            <img src="assets/imagenes/carga.gif"> Cargando Datos
+                          </div>-->
+                      <div id="listarmarcas">
+                        <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th style="width: 8%;">Cliente</th>
+                              <th style="width: 8%;">Entrega</th>
+                              <th style="width: 8%;">Fecha</th>
+                              <th style="width: 8%">Pago</th>
+                              <th style="width: 8%">Total</th>
+                              <th style="width: 16%">Estado</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

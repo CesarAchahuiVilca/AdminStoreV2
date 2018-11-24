@@ -20,6 +20,7 @@ import { RegionComponent } from './region/region.component';
 import { ArticuloComponent } from './articulo/articulo.component';
 import { DataTablesModule } from 'angular-datatables';
 import { DistribuidorComponent } from './distribuidor/distribuidor.component';
+import { PedidosComponent } from './pedidos/pedidos.component';
 
 
 const routes: Route[] = [
@@ -31,6 +32,7 @@ const routes: Route[] = [
   {path: 'region', component: RegionComponent},
   {path: 'articulos', component: ArticuloComponent},
   {path: 'distribuidor',component: DistribuidorComponent},
+  {path: 'pedidos',component:PedidosComponent},
 ];
 
 @NgModule({
@@ -47,7 +49,8 @@ const routes: Route[] = [
     UsuarioComponent,
     RegionComponent,
     ArticuloComponent,
-    DistribuidorComponent
+    DistribuidorComponent,
+    PedidosComponent
   ],
   imports: [
     BrowserModule,

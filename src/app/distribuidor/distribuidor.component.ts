@@ -6,6 +6,8 @@ import {MatTableDataSource} from '@angular/material';
 import { Subject } from 'rxjs';
 import {HttpClient, HttpEventType} from '@angular/common/http';
 import { DataTableDirective } from 'angular-datatables';
+import { NgForm } from '@angular/forms';
+import { Distribuidor } from './distribuidor';
 
 @Component({
   selector: 'app-distribuidor',
@@ -92,5 +94,24 @@ export class DistribuidorComponent implements AfterViewInit,OnDestroy,OnInit {
       this.rerender();
       document.getElementById("carga").hidden = true;
     });
+  }
+
+  guardartemdatos(distrimysql:Distribuidormysql){
+    console.log(distrimysql.RazonSocial);
+    document.getElementById("titulomodal").innerHTML = "Actualizar datos para el distribuidor : "+distrimysql.RazonSocial;
+  }
+  actualizardistri(form:NgForm){
+    this.distriService.putDistribuidor(form.value)
+    .subscribe(res=>{
+      this.resetForm(form);
+      alert('Distribuidor Actualizado');
+    })
+  }
+
+  resetForm(form?: NgForm) {
+    if (form) {
+      form.reset();
+      this.distriService.distriselec = new Distribuidor();
+    }
   }
 }
