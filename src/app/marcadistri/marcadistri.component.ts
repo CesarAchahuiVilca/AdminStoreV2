@@ -26,7 +26,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   dtTriggers2: Subject<any> = new Subject();
   flag: boolean = true;
   //fin
-  constructor(private http: HttpClient,private marcaService:MarcaService, private distribuidorService:DistribuidorService) { }
+  constructor(private http: HttpClient,private marcaService:MarcaService) { }
 
   ngOnInit() {
     //datatable
@@ -57,7 +57,6 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       }
     };
     this.listarmarcas();
-    this.listardistri();
   }
 
   /* data table*/
@@ -104,25 +103,6 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
         document.getElementById("listarmarcas").hidden=false;
       }
       this.rerender();
-      document.getElementById("carga").hidden = true;
-    });
-  }
-
-  listardistri(){
-    document.getElementById("carga2").hidden = false;
-    document.getElementById("listardistri").hidden=true;
-    this.distribuidorService.listardistrimysql()
-    .subscribe(res =>{
-      this.distribuidorService.distriMysql=res as Distribuidormysql[];
-
-      if(this.distribuidorService.distriMysql.length == 0){
-        console.log("No se encontraron datos");
-      }else{
-
-        console.log("Exito..");
-        document.getElementById("listardistri").hidden=false;
-      }
-      this.rerender2();
       document.getElementById("carga").hidden = true;
     });
   }
