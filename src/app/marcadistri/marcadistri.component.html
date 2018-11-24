@@ -1,108 +1,37 @@
-<!-- nav-contenido -->
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#marca" role="tab" aria-controls="home"
-      aria-selected="true">Marca</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#distribuidor" role="tab" aria-controls="profile"
-      aria-selected="false">Distribuidor</a>
-  </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-  <!-- nav1 -->
-  <div class="tab-pane fade show active" id="marca" role="tabpanel" aria-labelledby="home-tab">
-    <br>
-    <div class="animated fadeIn">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="card" style="width: 100%;">
-              <div class="card-header"> <i class="fa fa-list"></i>
-                <strong>Lista de Marcas</strong>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-6" style="text-align: left !important;">
-                    <button class="btn btn-block btn-link" type="button" style="color: black; width: auto;"><i class="fa fa-plus"></i>
-                      Agregar Marca</button><br>
-                  </div>
-                  <div class="col-lg-6">
-                  </div>
-                  <div class="col-lg-12">
-                    <div id="carga" style="width: 100%;text-align: center;">
-                      <img src="assets/imagenes/carga.gif"> Cargando Datos
-                    </div>
-                    <div id="listarmarcas">
-                      <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover">
-                        <thead>
-                          <tr>
-                            <th style="width: 8%;">Id</th>
-                            <th style="width: 8%;">Marca</th>
-                            <th style="width: 2%;"></th>
-                            <th style="width: 2%"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let marca of marcaService.marcaMysql">
-                            <td>{{marca.idMarcaProducto}}</td>
-                            <td>{{marca.NombreMarca}}</td>
-                            <td><button class="btn btn-success" data-toggle="modal" data-target="#modalmarca" (click)="guardartemdatos(marca)">editar</button></td>
-                            <td><button>eliminar</button></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!---->
-  <!---->
-  <!-- nav2 -->
-  <div class="tab-pane fade" id="distribuidor" role="tabpanel" aria-labelledby="profile-tab">
-<br>
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-lg-12">
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="card" style="width: 100%;">
           <div class="card-header"> <i class="fa fa-list"></i>
-            <strong>Lista de Distribuidores</strong>
+            <strong>Lista de Marcas</strong>
           </div>
           <div class="card-body">
             <div class="row">
               <div class="col-lg-6" style="text-align: left !important;">
                 <button class="btn btn-block btn-link" type="button" style="color: black; width: auto;"><i class="fa fa-plus"></i>
-                  Agregar Distribuidor</button><br>
+                  Agregar Marca</button><br>
               </div>
               <div class="col-lg-6">
               </div>
               <div class="col-lg-12">
-                <div id="carga2" style="width: 100%;text-align: center;">
+                <div id="carga" style="width: 100%;text-align: center;">
                   <img src="assets/imagenes/carga.gif"> Cargando Datos
                 </div>
-                <div id="listardistri">
-                  <table id="tabladistri" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers2" class="table table-responsive-sm table-sm table-striped table-hover">
+                <div id="listarmarcas">
+                  <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover">
                     <thead>
                       <tr>
                         <th style="width: 8%;">Id</th>
-                        <th style="width: 8%;">Razon Social</th>
-                        <th style="width: 8%;">Representante</th>
-                        <th style="width: 2%"></th>
+                        <th style="width: 8%;">Marca</th>
+                        <th style="width: 2%;"></th>
                         <th style="width: 2%"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let distri of distribuidorService.distriMysql">
-                        <td>{{distri.idProveedorRUC}}</td>
-                        <td>{{distri.RazonSocial}}</td>
-                        <td>{{distri.NombreRepresentante}}</td>
+                      <tr *ngFor="let marca of marcaService.marcaMysql">
+                        <td>{{marca.idMarcaProducto}}</td>
+                        <td>{{marca.NombreMarca}}</td>
                         <td><button class="btn btn-success" data-toggle="modal" data-target="#modalmarca" (click)="guardartemdatos(marca)">editar</button></td>
                         <td><button>eliminar</button></td>
                       </tr>
@@ -118,10 +47,6 @@
   </div>
 </div>
 
-
-  </div>
-</div>
-<!-- fin contenido -->
 <!--modalmarca-->
 <div class="modal fade" id="modalmarca" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
   data-backdrop="static" data-keyboard="false">
@@ -136,7 +61,7 @@
       <div class="modal-body">
         <form action="">
           <input class="form-control" id="idmarca" name="idmarca" type="hidden" required>
-          <div class="row"> 
+          <div class="row">
             <div class="col-lg-6">
               <div class="form-group">
                 <label style="font-weight: bold;">Descripción</label>
@@ -146,7 +71,7 @@
             </div>
             <div class="col-lg-6">
               <div class="form-group">
-                  <label style="font-weight: bold;margin-right: 2%;">Imagen marca</label>
+                <label style="font-weight: bold;margin-right: 2%;">Imagen marca</label>
                 <button class="btn btn-primary">Cargar Imagen</button>
               </div>
             </div>

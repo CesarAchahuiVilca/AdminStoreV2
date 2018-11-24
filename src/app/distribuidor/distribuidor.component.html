@@ -1,3 +1,50 @@
-<p>
-  distribuidor works!
-</p>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="card" style="width: 100%;">
+          <div class="card-header"> <i class="fa fa-list"></i>
+            <strong>Lista de Distribuidores</strong>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6" style="text-align: left !important;">
+                <button class="btn btn-block btn-link" type="button" style="color: black; width: auto;"><i class="fa fa-plus"></i>
+                  Agregar Distribuidor</button><br>
+              </div>
+              <div class="col-lg-6">
+              </div>
+              <div class="col-lg-12">
+                <div id="carga" style="width: 100%;text-align: center;">
+                  <img src="assets/imagenes/carga.gif"> Cargando Datos
+                </div>
+                <div id="listardistri">
+                  <table id="tabladistri" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th style="width: 8%;">Id</th>
+                        <th style="width: 8%;">Razon Social</th>
+                        <th style="width: 8%;">Representante</th>
+                        <th style="width: 2%"></th>
+                        <th style="width: 2%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let distri of distriService.distriMysql">
+                        <td>{{distri.idProveedorRUC}}</td>
+                        <td>{{distri.RazonSocial}}</td>
+                        <td>{{distri.NombreRepresentante}}</td>
+                        <td><button class="btn btn-success" data-toggle="modal" data-target="#modalmarca" (click)="guardartemdatos(marca)">editar</button></td>
+                        <td><button>eliminar</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

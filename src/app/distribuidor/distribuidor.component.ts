@@ -53,6 +53,7 @@ export class DistribuidorComponent implements AfterViewInit,OnDestroy,OnInit {
         }
       }
     };
+    this.listardistri();
   }
 
   /* data table*/
@@ -75,7 +76,7 @@ export class DistribuidorComponent implements AfterViewInit,OnDestroy,OnInit {
   }
   /*fin datatable*/
   listardistri(){
-    document.getElementById("carga2").hidden = false;
+    document.getElementById("carga").hidden = false;
     document.getElementById("listardistri").hidden=true;
     this.distriService.listardistrimysql()
     .subscribe(res =>{
