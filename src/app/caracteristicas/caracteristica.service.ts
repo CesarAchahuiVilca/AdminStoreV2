@@ -15,7 +15,7 @@ export class CaracteristicaService {
 
   caracteristicaSelected: Caracteristica;
   caracteristicas: Caracteristica[];
-  readonly URL_API = 'http://localhost:3000/api/caracteristicas';
+  readonly URL_API = 'http://localhost:3000/api/caracteristica';
 
   constructor(private http: HttpClient) {
     this.caracteristicaSelected = new Caracteristica();

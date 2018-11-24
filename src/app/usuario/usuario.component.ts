@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Usuario } from './usuario';
 import { Direccion } from './direccion';
 import { Region } from '../region/region';
+import { Provincia } from '../region/provincia';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 // Sericios
@@ -77,6 +78,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.tiposDocumento = ['DNI'];
     document.getElementById('btnDireccion').hidden = true;
     this.getUsuarios();
+    document.getElementById('carga').hidden = true;
   }
 
   /**
@@ -194,6 +196,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       i = i + 1;
     }
     this.regionService.departamentoSelected = this.regionService.regiones[i];
+    this.regionService.provinciaSelected = new Provincia("",[]);
   }
 
   /**

@@ -25,11 +25,11 @@ export class LoginComponent implements OnInit {
   login(form?: NgForm) {
     this.loginService.login(form.value).subscribe(res =>{
       var xres = JSON.parse(JSON.stringify(res));
-      if(xres.estado){
-        this.flashMessage.showFlashMessage({messages: [xres.status], timeout: 5000, dismissible: true, type: 'success'});
+      if(xres.status){
+        this.flashMessage.showFlashMessage({messages: [xres.msg], timeout: 5000, dismissible: true, type: 'success'});
         document.getElementById('refrescar').click();
       } else {
-        this.flashMessage.showFlashMessage({messages: [xres.status], timeout: 5000,dismissible: true, type: 'danger'});
+        this.flashMessage.showFlashMessage({messages: [xres.error], timeout: 5000,dismissible: true, type: 'danger'});
         this.resetForm(form)
       }
     });
