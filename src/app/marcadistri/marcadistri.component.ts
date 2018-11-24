@@ -1,5 +1,4 @@
-import { DistribuidorService } from './distribuidor.service';
-import { Distribuidormysql } from './distribuidormysql';
+
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
@@ -15,7 +14,7 @@ import { DataTableDirective } from 'angular-datatables';
   selector: 'app-marcadistri',
   templateUrl: './marcadistri.component.html',
   styleUrls: ['./marcadistri.component.css'],
-  providers:[MarcaService,DistribuidorService]
+  providers:[MarcaService]
 })
 
 export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
