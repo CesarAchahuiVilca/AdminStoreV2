@@ -54,11 +54,17 @@ export class RegionComponent implements OnInit {
     document.getElementById('btnDepartamento').innerHTML = '<i class="fa fa-edit"></i>';
     document.getElementById('btnDepartamento').style.backgroundColor = 'orange';
     document.getElementById('spanDepartamento').hidden = false;
+    this.provSelected = new Provincia("",[]);
+    this.regionService.provinciaSelected = this.provSelected;
+    document.getElementById('divDistrito').hidden = true;
+    document.getElementById('btnProvincia').innerHTML = '<i class="fa fa-plus"></i>';
+    document.getElementById('btnProvincia').style.backgroundColor = '#63c2de';
+    document.getElementById('spanProvincia').hidden = true;
+    this.lblProvincia = 'Nueva Provincia';
   }
 
   distSelected(distrito : string){
     document.getElementById('spanDistrito').hidden = false;
-    console.log(distrito);
   }
 
   eliminarDepartamento(){

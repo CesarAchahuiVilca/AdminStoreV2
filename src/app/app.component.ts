@@ -7,11 +7,10 @@ import { Location } from '@angular/common';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'AdminStoreV2';
+  title = 'El Tribuno';
   ruta : boolean;
 
   constructor(location: Location){
-    
     this.ruta = location.path() == '/login';
   }
 }

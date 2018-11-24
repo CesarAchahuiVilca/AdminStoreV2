@@ -24,8 +24,8 @@ import { PedidosComponent } from './pedidos/pedidos.component';
 
 
 const routes: Route[] = [
-  {path: 'marca', component: MarcadistriComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'marca', component: MarcadistriComponent},
   {path: 'categoria', component: CategoriaComponent},
   {path: 'caracteristicas', component: CaracteristicasComponent},
   {path: 'usuarios', component: UsuarioComponent},

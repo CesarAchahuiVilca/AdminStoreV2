@@ -1,54 +1,56 @@
 <div class="animated fadeIn">
   <div class="row">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-          <div class="card" style="width: 100%;">
-            <div class="card-header">
-              <strong>Lista de Categorias</strong>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="card" style="width: 100%;">
+        <div class="card-header">
+          <strong>Lista de Categorias</strong>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="breadcrum-categorias row" style="margin-left: 5px;">
+                <i class="fa fa-home"> </i>
+                <div class="item-breadcrumb-categorias" *ngFor="let categoria of breadcrumb_categorias" style="margin-top: -3px;">
+                  <a class="item-breadcrumb-categoria" (click)="irASubCategoria(categoria)">{{categoria.nombre}}</a>/
+                </div>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-8">
-                  <div  class="breadcrum-categorias row" style="margin-left: 5px;">
-                    <i class="fa fa-home"> </i>  
-                    <div class="item-breadcrumb-categorias" *ngFor="let categoria of breadcrumb_categorias" style="margin-top: -3px;">
-                        <a class="item-breadcrumb-categoria" (click)="irASubCategoria(categoria)" >{{categoria.nombre}}</a>/ </div>
-                    
-                  </div>
-
-                </div>
-                <div class="col-lg-4 col-md-4">
-                    <button class="btn btn-block btn-link" type="button" (click)="limpiarform(categoriaForm)" data-toggle="modal" data-target="#modalcategoria" style="color: black"><i class="fa fa-plus" ></i> Agregar Categoria</button><br>
-                </div>
-                <div class="col-md-12">
-                  <div id="contenido_lista_categorias">
-                    <table class="table  table-responsive-sm table-sm" id="tabla_categoria">
-                        <thead>
-                          <tr>
-                            <th style="width: 5%;"> </th>
-                            <th style="width: 15%;">Nombre</th>
-                            <th style="width: 50%">Descripcion</th>
-                            <th style="width: 8%">Mostrar</th>
-                            <th style="width: 10%;"> </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                          <tr *ngFor="let categoria of categoriaService.categorias">
-                            <td  class="btn-detalle-categoria" (click)="mostrarSubCategorias(categoria)"> <i class="fa fa-plus" title="Ver Sub Categorias"></i></td>
-                            <td>{{ categoria.nombre }}</td>
-                            <td>{{ categoria.descripcion }}</td>
-                            <td></td>
-                            <td >
-                              <div  style="margin-left: 0px; display: flex; flex-direction: row;">
-                                <div style="flex-grow: 0;margin-right: 2px;">
-                                  <button type="button" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;" (click)="editarCategoria(categoria)" data-toggle="modal" data-target="#modalcategoria" ><i class="fa fa-edit"></i></button>
-
-                                </div>
-                                <div style="flex-grow: 1;">
-                                  <button type="button" class="btn btn-pill btn-block btn-danger" style="width: 40px;height: 40px;"  (click)="eliminarCategoria(categoria._id)" ><i class="fa fa-trash"></i></button>
-                                </div>
-                              </div>
-                               <!-- <div class="dropdown" >
+            <div class="col-lg-4 col-md-4">
+              <button class="btn btn-block btn-link" type="button" (click)="limpiarform(categoriaForm)" data-toggle="modal"
+                data-target="#modalcategoria" style="color: black"><i class="fa fa-plus"></i> Agregar Categoria</button><br>
+            </div>
+            <div class="col-md-12">
+              <div id="contenido_lista_categorias">
+                <table class="table  table-responsive-sm table-sm" id="tabla_categoria">
+                  <thead>
+                    <tr>
+                      <th style="width: 5%;"> </th>
+                      <th style="width: 15%;">Nombre</th>
+                      <th style="width: 50%">Descripcion</th>
+                      <th style="width: 8%">Mostrar</th>
+                      <th style="width: 10%;"> </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let categoria of categoriaService.categorias">
+                      <td class="btn-detalle-categoria" (click)="mostrarSubCategorias(categoria)"> <i class="fa fa-plus"
+                          title="Ver Sub Categorias"></i></td>
+                      <td>{{ categoria.nombre }}</td>
+                      <td>{{ categoria.descripcion }}</td>
+                      <td></td>
+                      <td>
+                        <div style="margin-left: 0px; display: flex; flex-direction: row;">
+                          <div style="flex-grow: 0;margin-right: 2px;">
+                            <button type="button" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;"
+                              (click)="editarCategoria(categoria)" data-toggle="modal" data-target="#modalcategoria"><i
+                                class="fa fa-edit"></i></button>
+                          </div>
+                          <div style="flex-grow: 1;">
+                            <button type="button" class="btn btn-pill btn-block btn-danger" style="width: 40px;height: 40px;"
+                              (click)="eliminarCategoria(categoria._id)"><i class="fa fa-trash"></i></button>
+                          </div>
+                        </div>
+                        <!-- <div class="dropdown" >
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       <i class="fa fa-sliders"></i>
                                     </button>
@@ -57,20 +59,19 @@
                                       <a class="dropdown-item" style="padding-top: 0px; padding-bottom: 0px;" (click)="eliminarCategoria(categoria._id)"> <i class="fa fa-trash" style="color: rgb(0, 0, 0)"></i>Eliminar</a>
                                     </div>
                                 </div>-->
-                            </td>
-                          </tr>
-                          
-                        </tbody>
-                      </table>
-                    </div>
-                    <div id="mensaje"></div>
-                </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-                
+              <div id="mensaje"></div>
             </div>
           </div>
+
         </div>
-        <!--<div class="col-md-3 col-sm-12 col-xs-12">
+      </div>
+    </div>
+    <!--<div class="col-md-3 col-sm-12 col-xs-12">
           <div class="card">
             <div class="card-header">
               <strong>Arbol de Categorias</strong>
@@ -91,188 +92,172 @@
   </div>
 </div>
 
-
 <!-- Modal -->
-<div class="modal fade" id="modalcategoria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-    <div class="modal-dialog" role="document" id="modalcategoriacontenido">
-      <div class="modal-content">
-        <div class="modal-header"  style="background-color: orange; color: white;">
-          <h5 class="modal-title" id="titulomodal"><i class="fa fa-plus"></i> Nueva Categoria</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
-            <i class="fa fa-close"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form #categoriaForm="ngForm" (ngSubmit) = "guardarCategoria(categoriaForm)">    
+<div class="modal fade" id="modalcategoria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" id="modalcategoriacontenido">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: orange; color: white;">
+        <h5 class="modal-title" id="titulomodal"><i class="fa fa-plus"></i> Nueva Categoria</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #categoriaForm="ngForm" (ngSubmit)="guardarCategoria(categoriaForm)">
           <div class="row">
-              <div class="col-lg-5">
-                  <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada._id" name="_id" type="text" placeholder="ID CATEGORIA" style="display: none;">
-
-                  <div class="form-group">
-                    <label for="name">Nombre</label>
-                    <input class="form-control" id="nombre" #nombre="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.nombre" name="nombre" type="text" placeholder="Ingrese nombre de la categoria" required>
-                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
-                        <div *ngIf="nombre.errors.required">
-                          El campo Nombre es requerido
-                        </div>
-                      </div>
+            <div class="col-lg-5">
+              <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada._id"
+                name="_id" type="text" placeholder="ID CATEGORIA" style="display: none;">
+              <div class="form-group">
+                <label for="name">Nombre</label>
+                <input class="form-control" id="nombre" #nombre="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.nombre"
+                  name="nombre" type="text" placeholder="Ingrese nombre de la categoria" required>
+                <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                  <div *ngIf="nombre.errors.required">
+                    El campo Nombre es requerido
                   </div>
-                  
-                  <div class="form-group">
-                    <label for="name">Descripción</label>
-                    <textarea class="form-control" id="descripcion" name="descripcion" #descripcion="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.descripcion" rows="3" placeholder="Ingrese descripcion de la categoria" required></textarea>
-                    <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="alert alert-danger">
-                        <div *ngIf="descripcion.errors.required">
-                          El campo Descripcion es requerido
-                        </div>
-                      </div>
-                  </div>
-                  <input type="text" name="imagen" id="imagen" #imagen="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.imagen"style="display: none;" required>
-
-                  <div class="form-group">
-                    <label for="name">Categoria Padre</label>
-                    
-                    <select  class="form-control" id="padre" name="padre" #padre="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.padre">
-                        <option value="root">Principal</option>
-                      <option *ngFor="let catpadre of todasCategorias" value="{{catpadre._id}}">{{catpadre.nombre}}</option>
-                      
-                    </select>
-                    <div *ngIf="padre.invalid && (padre.dirty || padre.touched)" class="alert alert-danger" required>
-                        <div *ngIf="padre.errors.required">
-                          El campo Padre es requerido
-                        </div>
-                      </div>
-                  </div>
-                
                 </div>
-            
+              </div>
+              <div class="form-group">
+                <label for="name">Descripción</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" #descripcion="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.descripcion"
+                  rows="3" placeholder="Ingrese descripcion de la categoria" required></textarea>
+                <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="alert alert-danger">
+                  <div *ngIf="descripcion.errors.required">
+                    El campo Descripcion es requerido
+                  </div>
+                </div>
+              </div>
+              <input type="text" name="imagen" id="imagen" #imagen="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.imagen"
+                style="display: none;" required>
+              <div class="form-group">
+                <label for="name">Categoria Padre</label>
+                <select class="form-control" id="padre" name="padre" #padre="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.padre">
+                  <option value="root">Principal</option>
+                  <option *ngFor="let catpadre of todasCategorias" value="{{catpadre._id}}">{{catpadre.nombre}}</option>
+                </select>
+                <div *ngIf="padre.invalid && (padre.dirty || padre.touched)" class="alert alert-danger" required>
+                  <div *ngIf="padre.errors.required">
+                    El campo Padre es requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="caracteristicas">Características</label>
+                <div class="col-form-label">
+                  <div class="form-check checkbox" *ngFor="let caracteristica of caracteristicas">
+                    <input id="caracteristica.nombre" type="checkbox" class="form-check-input" value="">
+                    <label for="caracteristica.nombre" class="form-check-label">{{caracteristica.nombre}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="col-lg-7">
               <div class="row">
                 <div class="col-lg-12">
-                    <label>Imagen de portada de la categoria</label>
+                  <label>Imagen de portada de la categoria</label>
                 </div>
-                
                 <div class="col-lg-12">
                   <div style="display:flex; flex-direction: row; width: 100%; ">
-                  <div style="flex-grow: 0;margin-right: 2px;">
+                    <div style="flex-grow: 0;margin-right: 2px;">
                       <span class="btn btn-primary" style="background-color: orange; border: 1px solid gray;" (click)="clearProgress()">
-                          <i class="fa fa-search"></i> <input type="file"  hidden="true" (change)="onFileSelected($event)" id="archivo">
+                        <i class="fa fa-search"></i> <input type="file" hidden="true" (change)="onFileSelected($event)"
+                          id="archivo">
                       </span>
-                  </div>
-                  <div style="flex-grow: 0;margin-right: 2px; width: 50%;">
-                      <div class="progress"  style="height: 35px;">
-                          <label  id="nombrearchivo"></label>
-                          <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: orange; float: left;"></div>
-                        </div>
-                  </div>
-                  <div style="flex-grow: 0;margin-right: 2px;">
-                      <button class="btn btn-success input-group-btn" style="background-color: dimgrey;" (click)="onUpload($event)"><i class="fa fa-upload"></i> Subir</button>
-
-                  </div>
-                </div>
-                  
-                  
-
-                </div>
-                
-                <div *ngIf="imagen.invalid && (padre.dirty || imagen.touched)" class="alert alert-danger">
-                    <div *ngIf="imagen.errors.required">
-                      Debe elegir y subir una imagen para la categoria
+                    </div>
+                    <div style="flex-grow: 0;margin-right: 2px; width: 50%;">
+                      <div class="progress" style="height: 35px;">
+                        <label id="nombrearchivo"></label>
+                        <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                          aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: orange; float: left;"></div>
+                      </div>
+                    </div>
+                    <div style="flex-grow: 0;margin-right: 2px;">
+                      <button class="btn btn-success input-group-btn" style="background-color: dimgrey;" (click)="onUpload($event)"><i
+                          class="fa fa-upload"></i> Subir</button>
                     </div>
                   </div>
+                </div>
+                <div *ngIf="imagen.invalid && (padre.dirty || imagen.touched)" class="alert alert-danger">
+                  <div *ngIf="imagen.errors.required">
+                    Debe elegir y subir una imagen para la categoria
+                  </div>
+                </div>
                 <div class="col-lg-12">
                   <div class="cont-imagen">
-                      <img src="" style="width: 100%; height: auto;" id="imagen-select">
+                    <img src="" style="width: 100%; height: auto;" id="imagen-select">
                   </div>
-                  
                 </div>
               </div>
-                
             </div>
             <div class="col-lg-12" style="text-align: right">
               <hr>
-                <button type="button" class="btn btn-default" (click)="limpiarform(categoriaForm)"><i class="fa fa-trash"></i> Limpiar</button>
-                <button type="submit" class="btn btn-success" style="margin-left: 10px;"> <i class="fa fa-save"></i> Guardar</button>
-             
+              <button type="button" class="btn btn-default" (click)="limpiarform(categoriaForm)"><i class="fa fa-trash"></i>
+                Limpiar</button>
+              <button type="submit" class="btn btn-success" style="margin-left: 10px;"> <i class="fa fa-save"></i>
+                Guardar</button>
             </div>
           </div>
         </form>
-        </div>
-        
       </div>
     </div>
   </div>
-
+</div>
 
 <button id="btnmensajeexito" style="display: none" data-toggle="modal" data-target="#modalmensajeexito"></button>
 <button id="btnmensajeerror" style="display: none" data-toggle="modal" data-target="#modalmensajeerror"></button>
 
 <!-- Modal mensajes-->
-<div class="modal fade" id="modalmensajeerror" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+<div class="modal fade" id="modalmensajeerror" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document" style="margin-top: 15%; ">
-    <div class="modal-content" style="border:3px solid  rgb(150, 65, 44) !important; background-color: rgb(255, 255, 255);" id="contenedor-mensaje">
+    <div class="modal-content" style="border:3px solid  rgb(150, 65, 44) !important; background-color: rgb(255, 255, 255);"
+      id="contenedor-mensaje">
       <div class="modal-body">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
-              <i class="fa fa-close"></i>
-          </button>
-          <br>
-          <div style="display: flex; flex-direction: row;">
-            <div style="flex-grow: 0">
-                <img src="assets/imagenes/error.png" alt="" id="imagen-respuesta">
-                
-            </div>
-            <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
-                <label id="resultadoerror"></label>
-              </div>
-
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
+          <i class="fa fa-close"></i>
+        </button>
+        <br>
+        <div style="display: flex; flex-direction: row;">
+          <div style="flex-grow: 0">
+            <img src="assets/imagenes/error.png" alt="" id="imagen-respuesta">
           </div>
-         
-          
-          <div style="width: 100%; text-align: right;">
-              <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal" > Aceptar</button>
-
+          <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
+            <label id="resultadoerror"></label>
           </div>
-
-      </div>  
-        
+        </div>
+        <div style="width: 100%; text-align: right;">
+          <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal"> Aceptar</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 
 <!-- Modal mensajes-->
-<div class="modal fade" id="modalmensajeexito" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-    <div class="modal-dialog" role="document" style="margin-top: 15%; ">
-      <div class="modal-content" style="border:3px solid  rgb(5, 173, 41) !important; background-color: rgb(255, 255, 255);" id="contenedor-mensaje">
-        <div class="modal-body">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
-                <i class="fa fa-close"></i>
-            </button>
-            <br>
-            <div style="display: flex; flex-direction: row;">
-              <div style="flex-grow: 0">
-                  <img src="assets/imagenes/checked.png" alt="" >
-                  
-              </div>
-              <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
-                  <label id="resultadoexito"></label>
-                </div>
-  
-            </div>
-           
-            
-            <div style="width: 100%; text-align: right;">
-                <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal" > Aceptar</button>
-  
-            </div>
-  
-        </div>  
-          
+<div class="modal fade" id="modalmensajeexito" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document" style="margin-top: 15%; ">
+    <div class="modal-content" style="border:3px solid  rgb(5, 173, 41) !important; background-color: rgb(255, 255, 255);"
+      id="contenedor-mensaje">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
+          <i class="fa fa-close"></i>
+        </button>
+        <br>
+        <div style="display: flex; flex-direction: row;">
+          <div style="flex-grow: 0">
+            <img src="assets/imagenes/checked.png" alt="">
+          </div>
+          <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
+            <label id="resultadoexito"></label>
+          </div>
+        </div>
+        <div style="width: 100%; text-align: right;">
+          <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal"> Aceptar</button>
+        </div>
       </div>
     </div>
   </div>
-  
-
-
-
-
+</div>

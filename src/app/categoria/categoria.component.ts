@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import{ CategoriaService} from './categoria.service';
-import {HttpClient, HttpEventType} from '@angular/common/http';
+import { CategoriaService } from './categoria.service';
+import { CaracteristicaService } from '../caracteristicas/caracteristica.service';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Categoria } from './categoria';
+import { Caracteristica }  from '../caracteristicas/caracteristica';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import { formDirectiveProvider } from '@angular/forms/src/directives/reactive_directives/form_group_directive';
 
@@ -17,16 +19,20 @@ export class CategoriaComponent implements OnInit {
   readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
   readonly URL_IMAGES = 'http://localhost:3000/imagenes';
   selectedFile: File = null;
-  constructor( private http: HttpClient, private categoriaService: CategoriaService) { }
   nextID : Number = 0 ;
   vista: string = "1";
-
   IDCategoriaSelecionada: string = "root";
-  
   breadcrumb_categorias: Categoria[] = new Array();
-  todasCategorias:Categoria[];
+  todasCategorias: Categoria[];
+  caracteristicas: Caracteristica[];
+
+  constructor( 
+    private http: HttpClient, 
+    private categoriaService: CategoriaService,
+    private caracteristicasService: CaracteristicaService
+  ) { }
+
   ngOnInit() {
-    
     var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
     imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
     var cat = new Categoria();
@@ -35,10 +41,10 @@ export class CategoriaComponent implements OnInit {
     cat.padre="root";
     this.mostrarSubCategorias(cat);
     this.getCategorias();
-    this.categoriaService.categoriaSeleccionada.padre  = "root";
-    
-       
+    this.getCaracteristicas();
+    this.categoriaService.categoriaSeleccionada.padre  = "root";    
   }
+
  /* cambiarvista(form?: NgForm){
     this.limpiarform(form);
     if(this.vista == "1"){
@@ -53,29 +59,22 @@ export class CategoriaComponent implements OnInit {
       document.getElementById("contenido_agregar_categoria").hidden = true;
       var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
       botones.innerHTML='<i class="fa fa-plus" ></i> Agregar Categoria';
-
     }
-
   }*/
   
   limpiarform(form?: NgForm){    
     if(form){      
-      this.categoriaService.categoriaSeleccionada = new Categoria();
-      
+      this.categoriaService.categoriaSeleccionada = new Categoria();   
      // form.reset();      
      this.categoriaService.categoriaSeleccionada.padre  = this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]._id;
       console.log("pader es: "+this.categoriaService.categoriaSeleccionada.padre);
       document.getElementById("titulomodal").innerHTML='<i class="fa fa-plus"></i> Agregar Categoria';
-
-
       var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
       imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
       var progreso = document.getElementById("progreso") as HTMLDivElement;
       progreso.innerHTML = "";
-      progreso.style.width = "0%";  
-      
+      progreso.style.width = "0%";        
     }
-    
   }
   clearProgress(){
     var progreso = document.getElementById("progreso") as HTMLDivElement;
@@ -86,12 +85,9 @@ export class CategoriaComponent implements OnInit {
     progreso.innerHTML = "";
     var archivoinput = document.getElementById("archivo") as HTMLInputElement;
     archivoinput.click();
-
   }
 
   mostrarmensaje(mensaje: string, estado: string){
-
-    
     if(estado == "0"){
       var labelmensaje =  document.getElementById("resultadoerror") as HTMLLabelElement;
       labelmensaje.innerHTML = mensaje;      
@@ -103,17 +99,14 @@ export class CategoriaComponent implements OnInit {
     }
   }
 
-
   guardarCategoria(form?: NgForm){
     var btncerrarmodal = document.getElementById("btnCerrarModal");
     if(form.value._id){
       this.categoriaService.putCategoria(form.value)
       .subscribe(res=>{
-        
         this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
         var respuesta = JSON.parse(JSON.stringify(res));
-        if(respuesta.estado == "0"){
-          
+        if(respuesta.estado == "0"){    
           console.log("OCURRIO UN ERROR ESTADO 0");
           this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
         }else{
@@ -122,28 +115,20 @@ export class CategoriaComponent implements OnInit {
           this.getCategorias();
           console.log("TODO ESTA CORRECTO");
           this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
-        }       
-        
-      });
-      
+        }           
+      }); 
     }else{
-    
     const cat = {
       nombre : form.value.nombre,
       descripcion: form.value.descripcion,
       imagen: form.value.imagen,
       padre: form.value.padre
-
     }
-
     this.categoriaService.postCategoria(cat as Categoria)
-    .subscribe(res=>{
-      
+    .subscribe(res=>{ 
       this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
-      
       var respuesta = JSON.parse(JSON.stringify(res));
-      if(respuesta.estado == "0"){
-          
+      if(respuesta.estado == "0"){   
        //console.log("OCURRIO UN ERROR ESTADO 0:"+cat.nombre+" - "+cat.padre);
         this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
       }else{
@@ -152,25 +137,20 @@ export class CategoriaComponent implements OnInit {
         this.getCategorias();
         console.log("TODO ESTA CORRECTO");
         this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
-      }
-       
-      
+      }          
     });
   }
   
   }
   
-  editarCategoria(categoria: Categoria){
-    
+  editarCategoria(categoria: Categoria){  
     this.categoriaService.categoriaSeleccionada = categoria;
     var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
     imagen.src =this.URL_IMAGES+"/tmp/"+categoria.imagen;
     var imagenInput  = document.getElementById("imagen") as HTMLInputElement;
     var inputfile = document.getElementById("nombrearchivo") as HTMLLabelElement;
     inputfile.innerHTML = this.categoriaService.categoriaSeleccionada.imagen;
-    document.getElementById("titulomodal").innerHTML='<i class="fa fa-edit"></i> Editar Categoria: '+categoria.nombre;
-    
-
+    document.getElementById("titulomodal").innerHTML='<i class="fa fa-edit"></i> Editar Categoria: '+categoria.nombre;   
   }
 
   eliminarCategoria(idCategoria){
@@ -178,27 +158,28 @@ export class CategoriaComponent implements OnInit {
     .subscribe(res=>{
       this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
       console.log(res);
-
       var respuesta = JSON.parse(JSON.stringify(res));
       this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
       this.getCategorias();
     });
     console.log(idCategoria);
-
   }
 
   getCategorias(){
     this.categoriaService.getCategorias()
     .subscribe(res=>{
-      this.todasCategorias = res as Categoria[];
-      
+      this.todasCategorias = res as Categoria[];     
+    });
+  }
+
+  getCaracteristicas(){
+    this.caracteristicasService.getCaracteristicas().subscribe(res =>{
+      this.caracteristicas = res as Caracteristica[];
     });
   }
 
   mostrarSubCategorias(categoria: Categoria){    
-
-    this.breadcrumb_categorias.push(categoria);
-    
+    this.breadcrumb_categorias.push(categoria);  
     this.categoriaService.getSubCategorias(categoria._id)
     .subscribe(res=>{
       this.categoriaService.categorias = res as Categoria[];
@@ -206,31 +187,26 @@ export class CategoriaComponent implements OnInit {
          document.getElementById("mensaje").innerHTML = "NO SE ENCONTRARON DATOS.";
       }else{
         document.getElementById("mensaje").innerHTML = "";
-      }
-      
-    });
-
-    
+      }     
+    });    
   }
   irASubCategoria(categoria: Categoria){
     console.log("");
     while(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1].nombre != categoria.nombre){
       this.breadcrumb_categorias.pop();
     }
-    this.breadcrumb_categorias.pop();
-    
+    this.breadcrumb_categorias.pop();   
     this.mostrarSubCategorias(categoria);
   }
 
   onFileSelected(event){
-
     var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
     var file = document.getElementById("archivo") as HTMLInputElement;
     inputfile.innerHTML = file.value;
     this.selectedFile  = <File> event.target.files[0];
-
     console.log(event);
   }
+
   onUpload(evento){
     evento.preventDefault()
     var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
@@ -261,16 +237,12 @@ export class CategoriaComponent implements OnInit {
             var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
             imagen.src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;
             progreso.style.backgroundColor = "green";
-            progreso.innerHTML = "Completado.";          
-            
+            progreso.innerHTML = "Completado.";                    
             this.categoriaService.categoriaSeleccionada.imagen = this.selectedFile.name;
-
-
           }
         }
       }
     );
   }
   
-
 }
