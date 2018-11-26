@@ -1,11 +1,12 @@
 export class Categoria {
 
-    constructor(_id = '', nombre = '', descripcion = '', padre = '', imagen = '') {
+    constructor(_id = null, nombre = '', descripcion = '', padre = '', imagen = '', caracteristicas = []) {
         this._id = _id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.padre = padre;
         this.imagen = imagen;
+        this.caracteristicas = caracteristicas
     }
   
     _id: string;
@@ -13,4 +14,5 @@ export class Categoria {
     descripcion: string;
     padre: string;
     imagen: string;
+    caracteristicas: string[]
   }

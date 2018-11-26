@@ -146,8 +146,8 @@
                 <label for="caracteristicas">Características</label>
                 <div class="col-form-label">
                   <div class="form-check checkbox" *ngFor="let caracteristica of caracteristicas">
-                    <input id="caracteristica.nombre" type="checkbox" class="form-check-input" value="">
-                    <label for="caracteristica.nombre" class="form-check-label">{{caracteristica.nombre}}</label>
+                    <input id="{{caracteristica.nombre}}" type="checkbox" class="form-check-input" value="{{caracteristica.nombre}}" (click)="checkCaracteristica(caracteristica)">
+                    <label for="{{caracteristica.nombre}}" class="form-check-label">{{caracteristica.nombre}}</label>
                   </div>
                 </div>
               </div>
