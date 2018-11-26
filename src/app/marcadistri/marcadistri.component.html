@@ -48,7 +48,7 @@
 </div>
 
 <!--modalmarca-->
-<div class="modal fade" id="modalmarca" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+<!--<div class="modal fade" id="modalmarca" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
   data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog" role="document" id="modalarticulocontenido">
     <div class="modal-content">
@@ -81,5 +81,147 @@
 
     </div>
   </div>
-</div>
+</div>-->
 <!--finmodalmarca-->
+<!--modal2-->
+
+<!-- Modal -->
+<div class="modal fade" id="modalmarca" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" id="modalmarcacontenido">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: orange; color: white;">
+        <h5 class="modal-title" id="titulomodal"><i class="fa fa-plus"></i> Nueva Categoria</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #marcaForm="ngForm" (ngSubmit)="guardarmarca(marcaForm)">
+          <input type="hidden" name="_id">
+          <div class="row">
+            <div class="col-lg-5">
+              <div class="form-group" style="display: none">
+                <label for="name">idMarca</label>
+                <textarea class="form-control" id="idmarca" name="idmarca" #idmarca="ngModel" [(ngModel)]="marcaService.marcaselect.idMarca"></textarea>
+              </div>
+              <div class="form-group" style="display: none">
+                  <label for="name">Nombre Marca</label>
+                  <textarea class="form-control" id="nombremarca" name="nombremarca" #nombremarca="ngModel" [(ngModel)]="marcaService.marcaselect.nombre"></textarea>
+                </div>
+              <div class="form-group">
+                <label for="name">Descripción</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" #decripcion="ngModel" [(ngModel)]="marcaService.marcaselect.descripcion" rows="3" placeholder="Ingrese descripcion de la categoria"
+                  required></textarea>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="col-lg-7">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <label>Imagen de portada de la categoria</label>
+                  </div>
+                  <div class="col-lg-12">
+                    <div style="display:flex; flex-direction: row; width: 100%; ">
+                      <div style="flex-grow: 0;margin-right: 2px;">
+                        <span class="btn btn-primary" style="background-color: orange; border: 1px solid gray;" (click)="clearProgress()">
+                          <i class="fa fa-search"></i> <input type="file" hidden="true" (change)="onFileSelected($event)"
+                            id="archivo">
+                        </span>
+                      </div>
+                      <div style="flex-grow: 0;margin-right: 2px; width: 50%;">
+                        <div class="progress" style="height: 35px;">
+                          <label id="nombrearchivo"></label>
+                          <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: orange; float: left;"></div>
+                        </div>
+                      </div>
+                      <div style="flex-grow: 0;margin-right: 2px;">
+                        <button class="btn btn-success input-group-btn" style="background-color: dimgrey;" (click)="onUpload($event)"><i
+                            class="fa fa-upload"></i> Subir</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!--    <div *ngIf="imagen.invalid && (padre.dirty || imagen.touched)" class="alert alert-danger">
+                    <div *ngIf="imagen.errors.required">
+                      Debe elegir y subir una imagen para la categoria
+                    </div>
+                  </div>-->
+                  <div class="col-lg-12">
+                    <div class="cont-imagen">
+                      <img src="" style="width: 100%; height: auto;" id="imagen-select">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12" style="text-align: right">
+                <hr>
+                <button type="button" class="btn btn-default" (click)="limpiarform(categoriaForm)"><i class="fa fa-trash"></i>
+                  Limpiar</button>
+                <button type="submit" class="btn btn-success" style="margin-left: 10px;"> <i class="fa fa-save"></i>
+                  Guardar</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button id="btnmensajeexito" style="display: none" data-toggle="modal" data-target="#modalmensajeexito"></button>
+<button id="btnmensajeerror" style="display: none" data-toggle="modal" data-target="#modalmensajeerror"></button>
+
+<!-- Modal mensajes-->
+<div class="modal fade" id="modalmensajeerror" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document" style="margin-top: 15%; ">
+    <div class="modal-content" style="border:3px solid  rgb(150, 65, 44) !important; background-color: rgb(255, 255, 255);"
+      id="contenedor-mensaje">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
+          <i class="fa fa-close"></i>
+        </button>
+        <br>
+        <div style="display: flex; flex-direction: row;">
+          <div style="flex-grow: 0">
+            <img src="assets/imagenes/error.png" alt="" id="imagen-respuesta">
+          </div>
+          <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
+            <label id="resultadoerror"></label>
+          </div>
+        </div>
+        <div style="width: 100%; text-align: right;">
+          <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal"> Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal mensajes-->
+<div class="modal fade" id="modalmensajeexito" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document" style="margin-top: 15%; ">
+    <div class="modal-content" style="border:3px solid  rgb(5, 173, 41) !important; background-color: rgb(255, 255, 255);"
+      id="contenedor-mensaje">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
+          <i class="fa fa-close"></i>
+        </button>
+        <br>
+        <div style="display: flex; flex-direction: row;">
+          <div style="flex-grow: 0">
+            <img src="assets/imagenes/checked.png" alt="">
+          </div>
+          <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
+            <label id="resultadoexito"></label>
+          </div>
+        </div>
+        <div style="width: 100%; text-align: right;">
+          <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal"> Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

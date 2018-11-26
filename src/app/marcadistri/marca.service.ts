@@ -2,6 +2,7 @@ import { MarcaMysql } from './marca-mysql';
 import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http'
 import { Constantes} from '../constantes'
+import { Marca } from './marca';
 
 
 @Injectable({
@@ -9,14 +10,19 @@ import { Constantes} from '../constantes'
 })
 export class MarcaService {
   marcaselectmysql:MarcaMysql=new MarcaMysql();
+  marcaselect:Marca=new Marca();
   marcaMysql:MarcaMysql[];
+  marcas: Marca[];
 
   constructor(private http:HttpClient) { 
     this.marcaselectmysql= new MarcaMysql();
   }
-
+  
   listarmarcamysql(){
     return this.http.get(Constantes.URL_API_MARCA);
+  }
+  postMarca(Marca:Marca){//agregar empleados post
+    return this.http.post(Constantes.URL_API_MARCA,Marca);
   }
 
 }
