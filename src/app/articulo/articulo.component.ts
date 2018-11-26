@@ -35,6 +35,37 @@ export class ArticuloComponent implements OnInit {
   readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
   readonly URL_IMAGES = 'http://localhost:3000/imagenes';
   selectedFile: File = null;
+  vista: string = "1";
+
+  quillConfig={
+    toolbar: {
+      container: [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+        
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+        
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+        
+            ['clean'],                                         // remove formatting button
+        
+            ['link', 'image', 'video']                         // link and image, video
+         ],
+         handlers: {'image': function() {
+           console.log("hola mundo aqui estoy yo.....");
+         }}
+       }
+
+  };
 
   constructor(private http: HttpClient, private articuloService: ArticuloService) { }
 
@@ -71,6 +102,32 @@ export class ArticuloComponent implements OnInit {
       }
       
     };
+   // document.getElementById("listaarticulos").hidden = false;
+    document.getElementById("formulario-articulo").hidden = true;
+    document.getElementById("btnOpcion").hidden=true;
+  }
+
+  cambiarvista(articulo?: ArticuloMysql, form?: NgForm){
+    //this.limpiarform(form);
+    if(this.vista == "1"){
+      this.vista ="2";
+      document.getElementById("listaarticulos").hidden = true;
+      document.getElementById("formulario-articulo").hidden = false;
+      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
+      botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
+      document.getElementById("btnOpcion").hidden=false;
+      document.getElementById("titulo-card").innerHTML = "Completar Registro para el articulo : "+articulo.Descripcion;
+
+    }else{
+      this.vista ="1";
+      document.getElementById("listaarticulos").hidden = false;
+      document.getElementById("formulario-articulo").hidden = true;
+      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
+      botones.innerHTML='<i class="fa fa-plus" ></i> Agregar Articulo';
+      document.getElementById("titulo-card").innerHTML = "Lista de Articulos";
+      document.getElementById("btnOpcion").hidden=true;
+
+    }
   }
 
 
@@ -111,7 +168,6 @@ export class ArticuloComponent implements OnInit {
   }
 
   completaRegistro(articulomysql: ArticuloMysql){
-    document.getElementById("titulomodal").innerHTML = "Completar Registro para el articulo : "+articulomysql.Descripcion;
 
   }
   editarArticulo(id: string){
