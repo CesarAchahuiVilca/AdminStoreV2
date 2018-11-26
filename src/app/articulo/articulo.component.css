@@ -19,6 +19,9 @@
   width: auto;
   height: 100%;
 }
+.ql-container,.ql-snow{
+    height: auto !important;
+}
 @media (min-width: 360px) {
     #modalarticulocontenido {
         max-width: 100% !important; 

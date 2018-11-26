@@ -8,7 +8,6 @@ import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject, identity } from 'rxjs';
 
-
 @Component({
   selector: 'app-articulo',
   templateUrl: './articulo.component.html',
@@ -32,7 +31,6 @@ export class ArticuloComponent implements OnInit {
   itemsImagenes: string[] = new Array();
   contador_imagenes = 1;
   itemseleccionado: string = "";
-
 
   readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
   readonly URL_IMAGES = 'http://localhost:3000/imagenes';
