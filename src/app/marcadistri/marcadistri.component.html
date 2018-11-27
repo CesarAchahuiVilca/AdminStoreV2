@@ -1,4 +1,4 @@
-<div class="animated fadeIn">
+<div class="animated fadeIn" id="marcageneral">
   <div class="row">
     <div class="col-lg-12">
       <div class="col-md-12 col-sm-12 col-xs-12">
@@ -32,8 +32,8 @@
                       <tr *ngFor="let marca of marcaService.marcaMysql">
                         <td>{{marca.idMarcaProducto}}</td>
                         <td>{{marca.NombreMarca}}</td>
-                        <td><button class="btn btn-success" data-toggle="modal" data-target="#modalmarca" (click)="guardartemdatos(marca)">editar</button></td>
-                        <td><button>eliminar</button></td>
+                        <td><button class="btn btn-primary" (click) = "cambiarvista(marca,marcaForm)">Completar Registro<i class="material-icons">note_add</i></button></td>
+                        <td><button class="btn btn-success"><i class="material-icons">edit</i></button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -46,73 +46,28 @@
     </div>
   </div>
 </div>
-
-<!--modalmarca-->
-<!--<div class="modal fade" id="modalmarca" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog" role="document" id="modalarticulocontenido">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="titulomodal">Agregar detalles a la Marca</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
-          <i class="fa fa-close"></i>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="">
-          <input class="form-control" id="idmarca" name="idmarca" type="hidden" required>
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="form-group">
-                <label style="font-weight: bold;">Descripción</label>
-                <input class="form-control" id="descripcionmarca" name="titulo" type="text" placeholder="Ingrese una descripción de la marca"
-                  required style="border-color: rgb(114, 114, 114);">
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="form-group">
-                <label style="font-weight: bold;margin-right: 2%;">Imagen marca</label>
-                <button class="btn btn-primary">Cargar Imagen</button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-
-    </div>
-  </div>
-</div>-->
-<!--finmodalmarca-->
-<!--modal2-->
-
-<!-- Modal -->
-<div class="modal fade" id="modalmarca" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document" id="modalmarcacontenido">
-    <div class="modal-content">
-      <div class="modal-header" style="background-color: orange; color: white;">
-        <h5 class="modal-title" id="titulomodal"><i class="fa fa-plus"></i> Nueva Categoria</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
-          <i class="fa fa-close"></i>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form #marcaForm="ngForm" (ngSubmit)="guardarmarca(marcaForm)">
-          <input type="hidden" name="_id">
+<!--marca detalle-->
+<div class="container" id="marca-detalle">
+<div class="card">
+ <form #marcaForm="ngForm" (ngSubmit)="guardarmarca(marcaForm)">
+          <input type="hidden" name="_id"  #_id="ngModel" [(ngModel)]="marcaService.marcaselect._id">
           <div class="row">
             <div class="col-lg-5">
-              <div class="form-group" style="display: none">
+              <div class="form-group" >
                 <label for="name">idMarca</label>
-                <textarea class="form-control" id="idmarca" name="idmarca" #idmarca="ngModel" [(ngModel)]="marcaService.marcaselect.idMarca"></textarea>
+                <textarea class="form-control" value={{idm}} id="idmarca" name="idmarca" #idmarca="ngModel" [(ngModel)]="marcaService.marcaselect.idMarca"></textarea>
               </div>
-              <div class="form-group" style="display: none">
+              <div class="form-group" >
                   <label for="name">Nombre Marca</label>
-                  <textarea class="form-control" id="nombremarca" name="nombremarca" #nombremarca="ngModel" [(ngModel)]="marcaService.marcaselect.nombre"></textarea>
+                  <textarea class="form-control" value={{nombrem}} id="nombremarca" name="nombremarca" #nombremarca="ngModel" [(ngModel)]="marcaService.marcaselect.nombre"></textarea>
                 </div>
               <div class="form-group">
                 <label for="name">Descripción</label>
                 <textarea class="form-control" id="descripcion" name="descripcion" #decripcion="ngModel" [(ngModel)]="marcaService.marcaselect.descripcion" rows="3" placeholder="Ingrese descripcion de la categoria"
                   required></textarea>
               </div>
+              <input type="text" name="imagen" id="imagen" #imagen="ngModel" [(ngModel)]="marcaService.marcaselect.imagen"
+                style="display: none;" required>
             </div>
             <div class="col-lg-5">
               <div class="col-lg-7">
@@ -163,65 +118,5 @@
             </div>
           </div>
         </form>
-      </div>
-    </div>
-  </div>
 </div>
-
-<button id="btnmensajeexito" style="display: none" data-toggle="modal" data-target="#modalmensajeexito"></button>
-<button id="btnmensajeerror" style="display: none" data-toggle="modal" data-target="#modalmensajeerror"></button>
-
-<!-- Modal mensajes-->
-<div class="modal fade" id="modalmensajeerror" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document" style="margin-top: 15%; ">
-    <div class="modal-content" style="border:3px solid  rgb(150, 65, 44) !important; background-color: rgb(255, 255, 255);"
-      id="contenedor-mensaje">
-      <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
-          <i class="fa fa-close"></i>
-        </button>
-        <br>
-        <div style="display: flex; flex-direction: row;">
-          <div style="flex-grow: 0">
-            <img src="assets/imagenes/error.png" alt="" id="imagen-respuesta">
-          </div>
-          <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
-            <label id="resultadoerror"></label>
-          </div>
-        </div>
-        <div style="width: 100%; text-align: right;">
-          <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal"> Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal mensajes-->
-<div class="modal fade" id="modalmensajeexito" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document" style="margin-top: 15%; ">
-    <div class="modal-content" style="border:3px solid  rgb(5, 173, 41) !important; background-color: rgb(255, 255, 255);"
-      id="contenedor-mensaje">
-      <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
-          <i class="fa fa-close"></i>
-        </button>
-        <br>
-        <div style="display: flex; flex-direction: row;">
-          <div style="flex-grow: 0">
-            <img src="assets/imagenes/checked.png" alt="">
-          </div>
-          <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
-            <label id="resultadoexito"></label>
-          </div>
-        </div>
-        <div style="width: 100%; text-align: right;">
-          <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal"> Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

@@ -1,7 +1,7 @@
 export class Marca {
-    constructor(_id='',idMarca='',nombre='',descripcion='', imagen = ''){
+    constructor(_id=null,idMarca='',nombre='',descripcion='', imagen = ''){
         this._id=_id;
-        this.idMarca=idMarca
+        this.idMarca=idMarca;
         this.nombre=nombre;
         this.imagen=imagen;
         this.descripcion=descripcion;

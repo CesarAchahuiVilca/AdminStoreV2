@@ -23,6 +23,8 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   readonly URL_IMAGES = 'http://localhost:3000/imagenes';
   selectedFile: File = null;
   todasMarcas: Marca[];
+  idm:string='';
+  nombrem:string='';
   //datatable
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
@@ -63,6 +65,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       }
     };
     this.listarmarcas();
+    document.getElementById('marca-detalle').hidden=true;
   }
 
   /* data table*/
@@ -105,8 +108,10 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
 
   guardartemdatos(marcamysql:MarcaMysql){
     document.getElementById("titulomodal").innerHTML = "Completar Registro para la Marca : "+marcamysql.NombreMarca;
-    document.getElementById("idmarca").innerHTML=marcamysql.idMarcaProducto;
-    document.getElementById("nombremarca").innerHTML=marcamysql.NombreMarca;
+    this.idm=marcamysql.idMarcaProducto;
+    this.nombrem=marcamysql.NombreMarca;
+    /*document.getElementById("idmarca").innerHTML=marcamysql.idMarcaProducto.toString();
+    document.getElementById("nombremarca").innerHTML=marcamysql.NombreMarca.toString();*/
   }
   //imagen
   onFileSelected(event){
@@ -195,16 +200,25 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     });
   }
   guardarmarca(form:NgForm){
-    var btncerrarmodal = document.getElementById("btnCerrarModal");
+   var btncerrarmodal = document.getElementById("btnCerrarModal");
+   console.log(form.value);
     this.marcaService.postMarca(form.value)
     .subscribe(res => {
       var respuesta = JSON.parse(JSON.stringify(res));
-      console.log(res);
-      this.limpiarform(form);
-          btncerrarmodal.click();
-          this.getCategorias();
+      console.log('Error.....'+res);
+      //this.limpiarform(form);
+          //btncerrarmodal.click();
+         // this.getCategorias();
           console.log("TODO ESTA CORRECTO");
-          this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+          //this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
     });
   }
+
+  cambiarvista(marca?:MarcaMysql,form?:NgForm){
+    document.getElementById('marca-detalle').hidden=false;
+    document.getElementById('marcageneral').hidden=true;
+    this.marcaService.marcaselect.idMarca=marca.idMarcaProducto;
+    this.marcaService.marcaselect.nombre=marca.NombreMarca;
+  }
 }
+
