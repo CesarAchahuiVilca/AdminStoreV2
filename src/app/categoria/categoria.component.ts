@@ -120,13 +120,6 @@ export class CategoriaComponent implements OnInit {
         }           
       }); 
     }else{
-      const cat = {
-        nombre : form.value.nombre,
-        descripcion: form.value.descripcion,
-        imagen: form.value.imagen,
-        padre: form.value.padre,
-        caracteristicas: form.value.caracteristicas
-      }
       this.categoriaService.postCategoria(this.categoriaService.categoriaSeleccionada)
       .subscribe(res=>{ 
         this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
@@ -156,9 +149,11 @@ export class CategoriaComponent implements OnInit {
     inputfile.innerHTML = this.categoriaService.categoriaSeleccionada.imagen;
     document.getElementById("titulomodal").innerHTML='<i class="fa fa-edit"></i> Editar Categoria: '+categoria.nombre;   
     this.limpiarChecks();
+
+    console.log(this.caracteristicas);
     for(var i = 0; i < this.categoriaService.categoriaSeleccionada.caracteristicas.length; i++){
       var j = 0;
-      while(this.categoriaService.categoriaSeleccionada.caracteristicas[i] != this.caracteristicas[j]._id)
+      while(this.categoriaService.categoriaSeleccionada.caracteristicas[i]._id != this.caracteristicas[j]._id)
       {
         j = j + 1;
       }
@@ -265,10 +260,10 @@ export class CategoriaComponent implements OnInit {
     console.log(this.categoriaService.categoriaSeleccionada);
     var checkButton = document.getElementById(caracteristica.nombre) as HTMLInputElement;
     if (checkButton.checked){
-      this.categoriaService.categoriaSeleccionada.caracteristicas.push(caracteristica._id)
+      this.categoriaService.categoriaSeleccionada.caracteristicas.push(caracteristica);
     }else {
       var i = 0;
-      while(this.categoriaService.categoriaSeleccionada.caracteristicas[i] != caracteristica._id){ i = i + 1;}
+      while(this.categoriaService.categoriaSeleccionada.caracteristicas[i]._id != caracteristica._id){ i = i + 1;}
       this.categoriaService.categoriaSeleccionada.caracteristicas.splice(i,1);
     }
     console.log(this.categoriaService.categoriaSeleccionada.caracteristicas);

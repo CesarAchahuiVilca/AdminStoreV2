@@ -4,10 +4,15 @@ import {HttpClient, HttpEventType} from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Articulo } from './articulo';
 import { ArticuloMysql } from './articuloMysql';
-import { Caracteristica } from './caracteristica';
+import { CaracteristicaItem } from './caracteristica';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject, identity } from 'rxjs';
+import { CategoriaService } from '../categoria/categoria.service';
+import { CaracteristicaService } from '../caracteristicas/caracteristica.service';
+import { Categoria } from '../categoria/categoria';
+import { Caracteristica }  from '../caracteristicas/caracteristica';
+import { CategoriaComponent } from '../categoria/categoria.component'
 
 @Component({
   selector: 'app-articulo',
@@ -37,6 +42,15 @@ export class ArticuloComponent implements OnInit {
   readonly URL_IMAGES = 'http://localhost:3000/imagenes';
   selectedFile: File = null;
   vista: string = "1";
+
+  //CATEGORIAS
+  listacategorias: Categoria[];
+  //CARACTERISRTICAS
+  listacaracteristicas: Caracteristica[];
+
+  //lista imagenes
+   listaimagenes: string[];
+
 
   quillConfig={
     toolbar: {
@@ -68,12 +82,17 @@ export class ArticuloComponent implements OnInit {
 
   };
 
-  constructor(private http: HttpClient, private articuloService: ArticuloService) { }
+  constructor(private http: HttpClient, 
+              private articuloService: ArticuloService,
+              private categoriaService: CategoriaService,
+              private caracteristicaService: CaracteristicaService) { }
 
   ngOnInit() {
     this.itemsDatosGenerales.push([1,""]);
     this.itemsCaracteristicas.push(1);
     this.itemsImagenes.push("imagen-1");
+    
+    this.listacaracteristicas = new Array();
 
     this.getArticulosMysql();
     this.dtOptions = {
@@ -106,6 +125,11 @@ export class ArticuloComponent implements OnInit {
    // document.getElementById("listaarticulos").hidden = false;
     document.getElementById("formulario-articulo").hidden = true;
     document.getElementById("btnOpcion").hidden=true;
+
+
+    //Obtener categorias 
+    this.getCategorias();
+    
   }
 
   cambiarvista(articulo?: ArticuloMysql, form?: NgForm){
@@ -170,6 +194,23 @@ export class ArticuloComponent implements OnInit {
     });
   }
 
+  getCategorias(){
+    this.categoriaService.getCategorias()
+    .subscribe(res=>{
+      this.listacategorias = res as Categoria[];
+    });
+  }
+
+  getCaracteristicas(){
+    
+    for(var i=0;i<this.listacategorias.length;i++){
+      if(this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id){
+        this.listacaracteristicas = this.listacategorias[i].caracteristicas;       
+      }
+    }
+    console.log(this.listacategorias)
+  }
+
   completaRegistro(articulomysql: ArticuloMysql){
 
   }
@@ -212,7 +253,13 @@ export class ArticuloComponent implements OnInit {
 
   buscarImagen(iditem: string){
     if(this.itemsImagenes[this.itemsImagenes.length-1]==iditem){
-      document.getElementById("imageninput").click();
+     // document.getElementById("imageninput").click();
+
+    this.articuloService.getImagenes()
+      .subscribe(res=>{
+        console.log(res);
+        this.listaimagenes = res as string[];
+      });
       this.itemseleccionado = iditem;
     }
     
@@ -273,21 +320,23 @@ export class ArticuloComponent implements OnInit {
     var datos = datosgenerales.getElementsByTagName("input");
     for(var i=0;i<datos.length;i++){
       var dato = datos[i] as HTMLInputElement;
-      this.articuloService.articuloSeleccionado.especificaciones.push(dato.value);
+      if(dato.value != ""){
+        this.articuloService.articuloSeleccionado.especificaciones.push(dato.value);
+      }
     }
 
     //Obtener datos caracteristicas    
     var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");  
     var caracteristicas = document.getElementsByClassName("item-caracteristicas");
-    for(var i=0;i<caracteristicas.length;i++){
-      var selectcat = caracteristicas[i].getElementsByTagName("select")[0] as HTMLSelectElement;
-      var inputcat = caracteristicas[i].getElementsByTagName("input")[0] as HTMLInputElement;
-      var c = new Caracteristica(selectcat.value,inputcat.value); 
-      if(c.valor != ""){     
-        this.articuloService.articuloSeleccionado.caracteristicas.push(c);
-      }
+    for(var i=0;i<caracteristicas.length -1 ;i++){
+      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value,caracteristicas[i].getElementsByTagName("input")[1].value); 
+        
+      this.articuloService.articuloSeleccionado.caracteristicas.push(c);
+  
+      
     }
     console.log(this.articuloService.articuloSeleccionado.caracteristicas);
+    
 
     
 

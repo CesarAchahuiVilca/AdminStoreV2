@@ -1,7 +1,7 @@
-import { Caracteristica} from './caracteristica'
+import { CaracteristicaItem} from './caracteristica'
 export class Articulo {
 
-    constructor(idarticulo = '', titulo = '', categoria = '',marca='',cantidad=0, precio = 0, especaficaciones = [], caracteristicas= [], imagenes=[], descripcion='', garantias=[]) {
+    constructor(idarticulo = null, titulo = '', categoria = '',marca='',cantidad=0, precio = 0, especaficaciones = [], caracteristicas= [], imagenes=[], descripcion='', garantias=[]) {
         this.idarticulo = idarticulo;
         this.titulo = titulo;
         this.precio = precio;
@@ -22,7 +22,7 @@ export class Articulo {
     cantidad: Number;
     precio: Number;
     especificaciones: string[];
-    caracteristicas:Caracteristica[];
+    caracteristicas:CaracteristicaItem[];
     imagenes: string[];
     descripcion: string;
     garantias: string[];

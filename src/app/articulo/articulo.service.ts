@@ -20,4 +20,7 @@ export class ArticuloService {
   getArticulosMysql(){
     return this.http.get(Constantes.URL_API_ARTICULO)
   }
+  getImagenes(){
+    return this.http.get(Constantes.URL_API_IMAGEN);
+  }
 }

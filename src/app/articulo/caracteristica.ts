@@ -1,9 +1,11 @@
-export class Caracteristica{
-    constructor(id='', valor=''){
-        this.id = id;
+export class CaracteristicaItem{
+    constructor(/*id='', */nombre='', valor=''){
+        //this.id = id;
+        this.nombre = nombre;
         this.valor = valor;
     }
-    id: string;
+    //id: string;
+    nombre: string;
     valor: string;
 
 }
