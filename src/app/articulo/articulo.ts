@@ -1,16 +1,29 @@
+import { Caracteristica} from './caracteristica'
 export class Articulo {
 
-    constructor(_id = '', nombre = '', descripcion = '', padre = '', imagen = '') {
-        this._id = _id;
-        this.nombre = nombre;
+    constructor(idarticulo = '', titulo = '', categoria = '',marca='',cantidad=0, precio = 0, especaficaciones = [], caracteristicas= [], imagenes=[], descripcion='', garantias=[]) {
+        this.idarticulo = idarticulo;
+        this.titulo = titulo;
+        this.precio = precio;
+        this.categoria = categoria;
+        this.precio = precio;
+        this.especificaciones= especaficaciones;
+        this.caracteristicas = caracteristicas;
+        this.imagenes = imagenes;
         this.descripcion = descripcion;
-        this.padre = padre;
-        this.imagen = imagen;
+        this.garantias = garantias;
+
     }
   
-    _id: string;
-    nombre: string;
+    idarticulo: string;
+    titulo: string;
+    categoria: string;
+    marca: string;
+    cantidad: Number;
+    precio: Number;
+    especificaciones: string[];
+    caracteristicas:Caracteristica[];
+    imagenes: string[];
     descripcion: string;
-    padre: string;
-    imagen: string;
+    garantias: string[];
   }

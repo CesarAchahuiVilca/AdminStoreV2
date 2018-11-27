@@ -10,6 +10,7 @@ import { ArticuloMysql } from './articuloMysql';
 export class ArticuloService {
 
   articuloSeleccionadoMysql: ArticuloMysql = new ArticuloMysql();
+  articuloSeleccionado: Articulo = new Articulo();
   articulosMysql: ArticuloMysql[];
 
   constructor(private http: HttpClient) {

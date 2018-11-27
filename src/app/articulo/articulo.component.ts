@@ -4,6 +4,7 @@ import {HttpClient, HttpEventType} from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Articulo } from './articulo';
 import { ArticuloMysql } from './articuloMysql';
+import { Caracteristica } from './caracteristica';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject, identity } from 'rxjs';
@@ -117,6 +118,8 @@ export class ArticuloComponent implements OnInit {
       botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
       document.getElementById("btnOpcion").hidden=false;
       document.getElementById("titulo-card").innerHTML = "Completar Registro para el articulo : "+articulo.Descripcion;
+      this.articuloService.articuloSeleccionado.idarticulo = articulo.idArticulo;
+      this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
 
     }else{
       this.vista ="1";
@@ -263,5 +266,31 @@ export class ArticuloComponent implements OnInit {
     );
   }
 
+  guardarDatos(){
+
+    //Obtener datos generales del articulo
+    var datosgenerales = document.getElementById("contenido-datos-generales");
+    var datos = datosgenerales.getElementsByTagName("input");
+    for(var i=0;i<datos.length;i++){
+      var dato = datos[i] as HTMLInputElement;
+      this.articuloService.articuloSeleccionado.especificaciones.push(dato.value);
+    }
+
+    //Obtener datos caracteristicas    
+    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");  
+    var caracteristicas = document.getElementsByClassName("item-caracteristicas");
+    for(var i=0;i<caracteristicas.length;i++){
+      var selectcat = caracteristicas[i].getElementsByTagName("select")[0] as HTMLSelectElement;
+      var inputcat = caracteristicas[i].getElementsByTagName("input")[0] as HTMLInputElement;
+      var c = new Caracteristica(selectcat.value,inputcat.value); 
+      if(c.valor != ""){     
+        this.articuloService.articuloSeleccionado.caracteristicas.push(c);
+      }
+    }
+    console.log(this.articuloService.articuloSeleccionado.caracteristicas);
+
+    
+
+  }
 
 }
