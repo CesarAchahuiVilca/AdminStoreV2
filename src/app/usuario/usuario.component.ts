@@ -6,6 +6,7 @@ import { Region } from '../region/region';
 import { Provincia } from '../region/provincia';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
+import { Miga } from '../miga';
 // Sericios
 import { UsuarioService } from './usuario.service';
 import { DireccionService } from './direccion.service';
@@ -30,6 +31,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   private direccion_header : string;
   private tiposDocumento : string[];
   private flag : boolean = true;
+  public miga: Miga = new Miga('Clientes','/usuarios')
   
   /**
    * Constructor del componente Usuario

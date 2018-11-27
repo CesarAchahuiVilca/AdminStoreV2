@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CaracteristicaService } from './caracteristica.service';
 import { NgFlashMessageService }  from 'ng-flash-messages';
 import { Caracteristica } from './caracteristica';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-
+import { Miga } from '../miga'
 
 @Component({
   selector: 'app-caracteristicas',
@@ -14,18 +14,21 @@ import { Subject } from 'rxjs';
   providers: [CaracteristicaService]
 })
 export class CaracteristicasComponent implements OnInit {
-
+ 
   @ViewChild(DataTableDirective) dtElement : DataTableDirective; 
-  dtOptions: DataTables.Settings = {};
-  dtTriggers: Subject<any> = new Subject();
-  caracteristicaHeader: string;
-  accionBoton: string = 'GUARDAR';
-  indice : number;
+  private dtOptions: DataTables.Settings = {};
+  private dtTriggers: Subject<any> = new Subject();
+  private caracteristicaHeader: string;
+  private accionBoton: string = 'GUARDAR';
+  private indice : number;
+  public miga = new Miga('Características','/caracteristicas');
 
   constructor(
     private caracteristicaService: CaracteristicaService,
     private flashMessage: NgFlashMessageService
-    ) { }
+    ) {
+        
+     }
 
   ngOnInit() {
     this.dtOptions = {
@@ -55,7 +58,7 @@ export class CaracteristicasComponent implements OnInit {
       }  
     };
     this.caracteristicaHeader = 'NUEVA CARACTERÍSTICA';
-    this.accionBoton = 'Guardar';
+    this.accionBoton = 'Guardar';   
     document.getElementById('carga').hidden = false;
     this.getCaracteristicas();
     document.getElementById('carga').hidden = true;

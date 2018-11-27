@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BreadcrumbComponent implements OnInit {
 
-  constructor() { }
+  @Input() migas: Miga[];
+  router : Router;
+
+  constructor() {
+    //var home =  new Miga('Inicio', '');
+    //this.links = [home];
+   }
 
   ngOnInit() {
-  }
 
+  }
 }
+

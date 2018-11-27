@@ -2,9 +2,9 @@
 <div *ngIf="!ruta; else elseBlock" class="app-body">
   <app-menu></app-menu>
   <main class="main">
-    <app-breadcrumb></app-breadcrumb>
+    <app-breadcrumb [migas]="migas"></app-breadcrumb>
     <div class="container-fluid">
-      <router-outlet></router-outlet>
+      <router-outlet (activate)="migaEvent($event)"></router-outlet>
     </div>
   </main>
 </div>
