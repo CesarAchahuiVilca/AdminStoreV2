@@ -163,12 +163,12 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     if(form){   
       this.marcaService.marcaselect=new Marca();   
      // form.reset();      
-      document.getElementById("titulomodal").innerHTML='<i class="fa fa-plus"></i> Agregar Marca';
+     // document.getElementById("titulomodal").innerHTML='<i class="fa fa-plus"></i> Agregar Marca';
       var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
       imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
       var progreso = document.getElementById("progreso") as HTMLDivElement;
-      progreso.innerHTML = "";
-      progreso.style.width = "0%";        
+     // progreso.innerHTML = "";
+     // progreso.style.width = "0%";        
     }
   }
   clearProgress(){
@@ -205,7 +205,6 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     this.marcaService.postMarca(form.value)
     .subscribe(res => {
       var respuesta = JSON.parse(JSON.stringify(res));
-      console.log('Error.....'+res);
       //this.limpiarform(form);
           //btncerrarmodal.click();
          // this.getCategorias();
@@ -219,6 +218,11 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     document.getElementById('marcageneral').hidden=true;
     this.marcaService.marcaselect.idMarca=marca.idMarcaProducto;
     this.marcaService.marcaselect.nombre=marca.NombreMarca;
+  }
+  regresar(form?: NgForm){
+    document.getElementById('marca-detalle').hidden=true;
+    document.getElementById('marcageneral').hidden=false;
+    this.limpiarform(form);
   }
 }
 

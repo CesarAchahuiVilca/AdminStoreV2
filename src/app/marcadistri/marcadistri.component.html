@@ -47,8 +47,11 @@
   </div>
 </div>
 <!--marca detalle-->
-<div class="container" id="marca-detalle">
+<div class="container-fluid" id="marca-detalle" style="text-align">
 <div class="card">
+<div class="card-header" (click)="regresar(marcaForm)"><button class="btn btn-success"><i class="material-icons">arrow_back</i></button></div>
+<div class="card-body">
+<br>
  <form #marcaForm="ngForm" (ngSubmit)="guardarmarca(marcaForm)">
           <input type="hidden" name="_id"  #_id="ngModel" [(ngModel)]="marcaService.marcaselect._id">
           <div class="row">
@@ -117,6 +120,7 @@
               </div>
             </div>
           </div>
-        </form>
+        </form></div>
+
 </div>
 </div>

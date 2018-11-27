@@ -17,6 +17,9 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
    dtTriggers2: Subject<any> = new Subject();
    flag: boolean = true;
    //fin
+   //datos temp
+   listadatos:string[]=['datos1','datos2','datos3','datos4','datos5','dtos6','datos7'];
+   //fin datos temp
   constructor() { }
 
   ngOnInit() {
@@ -47,6 +50,7 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
             }
           }
         };
+        document.getElementById('dettallepedido').hidden=true;
   }
   /* data table*/
   ngAfterViewInit(): void {
@@ -67,6 +71,10 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
       // Call the dtTrigger to rerender again
       this.dtTriggers.next();
     });
+  }
+  cambiarvista(){
+    document.getElementById('listapedidos').hidden=true;
+    document.getElementById('dettallepedido').hidden=false;
   }
 
 }
