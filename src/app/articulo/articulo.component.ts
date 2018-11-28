@@ -51,6 +51,9 @@ export class ArticuloComponent implements OnInit {
   //lista imagenes
    listaimagenes: string[];
 
+   //contenido del editor
+   contenidoEditor: string = "<h3>HOLA MUNDO</h3>";
+
 
   quillConfig={
     toolbar: {
@@ -75,9 +78,7 @@ export class ArticuloComponent implements OnInit {
         
             ['link', 'image', 'video']                         // link and image, video
          ],
-         handlers: {'image': function() {
-           console.log("hola mundo aqui estoy yo.....");
-         }}
+         handlers: {'image': this.buscaNuevaImagenEditor}
        }
 
   };
@@ -132,6 +133,16 @@ export class ArticuloComponent implements OnInit {
     
   }
 
+  editorInstance;
+
+  created(editorInstance) {
+   this.editorInstance = editorInstance;
+  }
+
+
+  newHandlerImage(){
+    console.log(this.contenidoEditor);
+  }
   cambiarvista(articulo?: ArticuloMysql, form?: NgForm){
     //this.limpiarform(form);
     if(this.vista == "1"){
@@ -251,15 +262,26 @@ export class ArticuloComponent implements OnInit {
     }
   }
 
-  buscarImagen(iditem: string){
-    if(this.itemsImagenes[this.itemsImagenes.length-1]==iditem){
-     // document.getElementById("imageninput").click();
+  buscaNuevaImagen(){
+    document.getElementById("imageninput").click();
+  }
+  buscaNuevaImagenEditor(){
+    document.getElementById("imageninputeditor").click();
+  }
 
+  getListaImagenes(){
+    
     this.articuloService.getImagenes()
       .subscribe(res=>{
         console.log(res);
         this.listaimagenes = res as string[];
       });
+  }
+
+  buscarImagen(iditem: string){
+    if(this.itemsImagenes[this.itemsImagenes.length-1]==iditem){
+     // 
+      this.getListaImagenes();
       this.itemseleccionado = iditem;
     }
     
@@ -299,13 +321,52 @@ export class ArticuloComponent implements OnInit {
             itemImagen.style.minWidth = "0px";
             imagenes[1].src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;
            /* progreso.style.backgroundColor = "green";
-            progreso.innerHTML = "Completado.";    */      
+            progreso.innerHTML = "Completado.";    */     
+            this.getListaImagenes(); 
             
            // this.categoriaService.categoriaSeleccionada.imagen = this.selectedFile.name;
            //document.getElementById("imagen-seleccionada").hidden=false;
           // document.getElementById("simbolo-mas").hidden = true;
           this.agregarImagen();
           
+
+          }
+        }
+      }
+    );
+  }
+
+  subirImagenEditor(evento){
+    this.selectedFile  = <File> evento.target.files[0];
+    //evento.preventDefault();
+    const fd = new FormData();
+    fd.append('image',this.selectedFile, this.selectedFile.name);
+    this.http.post(this.URL_API,fd,{
+      reportProgress: true,
+      observe: 'events'
+    })
+    .subscribe(event=>{
+        if(event.type === HttpEventType.UploadProgress){
+          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");
+         
+          if(Math.round(event.loaded/event.total*100) == 100){
+            console.log("termino subir la imagen");
+            console.log("Comprimiendo imagen");
+          /*  progreso.innerHTML = "Comprimiendo Imagen....";
+            inputfile.innerHTML = "";*/
+          }
+        
+        }else{
+          if(event.type === HttpEventType.Response){                  
+            this.getListaImagenes(); 
+             var cont = document.getElementsByClassName("ql-editor")[0].innerHTML;
+            //this.contenidoEditor = this.contenidoEditor + "<img src='"+this.URL_IMAGES+"/tmp/"+this.selectedFile.name; +"'>";   
+            //console.log(this.contenidoEditor);    
+            const range = this.editorInstance.getSelection();
+            this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES+"/tmp/"+this.selectedFile.name);
+            //document.getElementsByClassName("ql-editor")[0].innerHTML = cont+"<label>HOLA MUNDO FUNCIPNA</label>"
+            //console.log(cont);   
+            console.log(this.contenidoEditor);
 
           }
         }
