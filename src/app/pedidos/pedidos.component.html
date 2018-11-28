@@ -3,22 +3,47 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-container">
-            <table class="table">
+            <table class="table" id="tablapedido">
                 <tr>
                   <th><i class="material-icons" style="color: chartreuse">
                       attach_money
                     </i>
-                    <label>Valor promedio de los pedidos: 0</label></th>
+                    <label style="font-weight: normal">Valor promedio de los pedidos: 0</label></th>
                   <th><i class="material-icons" style="color: yellow">
                       shopping_cart
                     </i>
-                    <label>Total de carritos:0</label></th>
+                    <label style="font-weight: normal">Total de carritos:0</label></th>
                   <th><i class="material-icons" style="color: red">
                       remove_shopping_cart
                     </i>
-                    <label>Carritos abandonados:0</label></th>
+                    <label style="font-weight: normal">Carritos abandonados:0</label>
+                  </th>
                 </tr>
               </table>
+              <table class="table" id="tabladetallepedido">
+                  <tr>
+                    <th><i class="material-icons" style="color: rgb(255, 0, 242);">
+                        date_range
+                      </i>
+                      <label style="font-weight: normal">Fecha</label>
+                    </th>
+                    <th><i class="material-icons" style="color: rgb(21, 240, 39)">
+                        attach_money
+                      </i>
+                      <label style="font-weight: normal">Total</label>
+                    </th>
+                    <th><i class="material-icons" style="color: red">
+                        chat
+                      </i>
+                      <label style="font-weight: normal">Mensajes</label>
+                    </th>
+                    <th><i class="material-icons" style="color: rgb(0, 140, 255)">
+                        library_books
+                      </i>
+                      <label style="font-weight: normal">Productos</label>
+                    </th>
+                  </tr>
+                </table>
         </div>
       </div>
     
@@ -82,9 +107,18 @@
 
 <div class="container-fluid" id="dettallepedido">
     <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6 portfolio-item">
+        <div class="col-lg-12 col-md-12 col-sm-12 portfolio-item portafolio-div1">
+            <div class="card h-100">
+              <div class="card-body" >
+                  <button class="btn btn-success"><i class="material-icons" style="font-size: 18px;">print</i>&nbsp;Imprimir pedido</button>
+              </div>
+            </div>
+          </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
           <div class="card h-100">
-           
+           <div class="card-header" style="height: 15px;">
+             <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"  style="font-size:20px;">assignment</i>&nbsp;Estado del pedido</p>
+           </div>
             <div class="card-body">
               <h4 class="card-title">
                 <a>texto1</a>
@@ -93,38 +127,57 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 portfolio-item">
-          <div class="card h-100">
-    
-            <div class="card-body">
-              <h4 class="card-title">
-                <a>texto1</a>
-              </h4>
-              <p class="card-text">subtex2</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 portfolio-item">
+        <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
             <div class="card h-100">
-      
+             <div class="card-header" style="height: 15px;">
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"  style="font-size:20px;">person</i>&nbsp;Cliente</p>
+             </div>
               <div class="card-body">
                 <h4 class="card-title">
                   <a>texto1</a>
                 </h4>
-                <p class="card-text">subtex2</p>
+                <p class="card-text">subtex1</p>
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 portfolio-item">
+          <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
               <div class="card h-100">
-        
+               <div class="card-header" style="height: 15px;">
+                  <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"  style="font-size:20px;">payment</i>&nbsp;Pago</p>
+               </div>
                 <div class="card-body">
                   <h4 class="card-title">
                     <a>texto1</a>
                   </h4>
-                  <p class="card-text">subtex2</p>
+                  <p class="card-text">subtex1</p>
                 </div>
               </div>
             </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
+                <div class="card h-100">
+                 <div class="card-header" style="height: 15px;">
+                    <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"  style="font-size:20px;">mail_outline</i>&nbsp;Mensajes</p>
+                 </div>
+                  <div class="card-body">
+                    <h4 class="card-title">
+                      <a>texto1</a>
+                    </h4>
+                    <p class="card-text">subtex1</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-6 col-sm-3 portfolio-item">
+                  <div class="card h-100">
+                   <div class="card-header" style="height: 15px;">
+                      <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"  style="font-size:20px;">shopping_cart</i>&nbsp;Productos</p>
+                   </div>
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        <a>texto1</a>
+                      </h4>
+                      <p class="card-text">subtex1</p>
+                    </div>
+                  </div>
+                </div>
       </div>
 </div>

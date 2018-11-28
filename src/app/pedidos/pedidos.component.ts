@@ -51,6 +51,7 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
           }
         };
         document.getElementById('dettallepedido').hidden=true;
+        document.getElementById('tabladetallepedido').hidden=true;
   }
   /* data table*/
   ngAfterViewInit(): void {
@@ -75,6 +76,8 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
   cambiarvista(){
     document.getElementById('listapedidos').hidden=true;
     document.getElementById('dettallepedido').hidden=false;
+    document.getElementById('tablapedido').hidden=true;
+    document.getElementById('tabladetallepedido').hidden=false;
   }
 
 }
