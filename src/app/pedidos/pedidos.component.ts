@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
+import { HttpSentEvent } from '@angular/common/http';
+import {MatSnackBar} from '@angular/material';
+
 
 @Component({
   selector: 'app-pedidos',
@@ -17,10 +20,13 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
    dtTriggers2: Subject<any> = new Subject();
    flag: boolean = true;
    //fin
+   //mensaje alert
+   mensajeestado:string;
+   //fin
    //datos temp
    listadatos:string[]=['datos1','datos2','datos3','datos4','datos5','dtos6','datos7'];
    //fin datos temp
-  constructor() { }
+  constructor(public snackBar: MatSnackBar) { }
 
   ngOnInit() {
         //datatable
@@ -52,6 +58,7 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
         };
         document.getElementById('dettallepedido').hidden=true;
         document.getElementById('tabladetallepedido').hidden=true;
+        document.getElementById('divnombrecliente').hidden=true;
   }
   /* data table*/
   ngAfterViewInit(): void {
@@ -78,6 +85,22 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
     document.getElementById('dettallepedido').hidden=false;
     document.getElementById('tablapedido').hidden=true;
     document.getElementById('tabladetallepedido').hidden=false;
+    document.getElementById('divnombrecliente').hidden=false;
+  }
+  cambiarestado(){
+    document.getElementById('extadoselect').style.color='red'
+    var optselect=document.getElementById('selectestado') as HTMLSelectElement;
+    var idselect=optselect.value;
+    console.log(idselect);
+    document.getElementById('extadoselect').innerHTML=optselect.options[optselect.selectedIndex].text;
+    this.mensajeestado=optselect.options[optselect.selectedIndex].text;
+  }
+  actualizar(){
+    this.snackBar.open('Estado Actualizado',this.mensajeestado , {
+      duration: 2000,
+    });
+    document.getElementById('extadoselect').style.color='black';
+    
   }
 
 }
