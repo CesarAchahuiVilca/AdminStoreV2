@@ -27,60 +27,51 @@ export class ArticuloComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
   flag: boolean = true;
-
   itemsDatosGenerales: [number, string][] = new Array();
   contador_datos_generales = 1;
-
   itemsCaracteristicas: Number[] = new Array();
   contador_caracteristicas = 1;
-
   itemsImagenes: string[] = new Array();
   contador_imagenes = 1;
   itemseleccionado: string = "";
-
   readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
   readonly URL_IMAGES = 'http://localhost:3000/imagenes';
   selectedFile: File = null;
   vista: string = "1";
-
   //CATEGORIAS
   listacategorias: Categoria[];
   //CARACTERISRTICAS
   listacaracteristicas: Caracteristica[];
-
   //lista imagenes
-   listaimagenes: string[];
+  listaimagenes: string[];
+  //contenido del editor
+  contenidoEditor: string = " ";
+  // lista de imagenes seleccionadas
+  imagenesSeleccionadas: string[] = new Array();
 
-   //contenido del editor
-   contenidoEditor: string = "<h3>HOLA MUNDO</h3>";
-
+   // nombre imagen para el editor
+   imageneditorseleccionada: string="";
 
   quillConfig={
     toolbar: {
       container: [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-            ['blockquote', 'code-block'],
-        
+            ['blockquote', 'code-block'],        
             [{ 'header': 1 }, { 'header': 2 }],               // custom button values
             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
             [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
             [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-            [{ 'direction': 'rtl' }],                         // text direction
-        
+            [{ 'direction': 'rtl' }],                         // text direction        
             [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],        
             [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
             [{ 'font': [] }],
-            [{ 'align': [] }],
-        
-            ['clean'],                                         // remove formatting button
-        
+            [{ 'align': [] }],        
+            ['clean'],                                         // remove formatting button        
             ['link', 'image', 'video']                         // link and image, video
          ],
          handlers: {'image': this.buscaNuevaImagenEditor}
        }
-
   };
 
   constructor(private http: HttpClient, 
@@ -120,26 +111,19 @@ export class ArticuloComponent implements OnInit {
           sortAscending: ": Activar para ordenar la tabla en orden ascendente",
           sortDescending: ": Activar para ordenar la tabla en orden descendente"
         }
-      }
-      
+      }      
     };
    // document.getElementById("listaarticulos").hidden = false;
     document.getElementById("formulario-articulo").hidden = true;
     document.getElementById("btnOpcion").hidden=true;
-
-
     //Obtener categorias 
-    this.getCategorias();
-    
+    this.getCategorias();    
   }
 
   editorInstance;
-
   created(editorInstance) {
    this.editorInstance = editorInstance;
   }
-
-
   newHandlerImage(){
     console.log(this.contenidoEditor);
   }
@@ -164,7 +148,6 @@ export class ArticuloComponent implements OnInit {
       botones.innerHTML='<i class="fa fa-plus" ></i> Agregar Articulo';
       document.getElementById("titulo-card").innerHTML = "Lista de Articulos";
       document.getElementById("btnOpcion").hidden=true;
-
     }
   }
 
@@ -196,7 +179,6 @@ export class ArticuloComponent implements OnInit {
       if(this.articuloService.articulosMysql.length == 0){
         console.log("No se encontraron datos");
       }else{
-
         console.log("Exito..");
         document.getElementById("listaarticulos").hidden=false;
       }
@@ -212,8 +194,7 @@ export class ArticuloComponent implements OnInit {
     });
   }
 
-  getCaracteristicas(){
-    
+  getCaracteristicas(){    
     for(var i=0;i<this.listacategorias.length;i++){
       if(this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id){
         this.listacaracteristicas = this.listacategorias[i].caracteristicas;       
@@ -225,6 +206,7 @@ export class ArticuloComponent implements OnInit {
   completaRegistro(articulomysql: ArticuloMysql){
 
   }
+  
   editarArticulo(id: string){
 
   }
@@ -250,14 +232,16 @@ export class ArticuloComponent implements OnInit {
       }
     }
   }
-  agregarImagen(){
-    this.contador_imagenes = this.contador_imagenes + 1;
-    this.itemsImagenes.push("imagen-"+this.contador_imagenes);
-  }
+ 
   eliminarItemImagen(id:string){
-    for(var i=0;i<this.itemsImagenes.length;i++){
-      if(this.itemsImagenes[i] == id){
-        this.itemsImagenes.splice(i,1);
+    for(var i=0;i<this.imagenesSeleccionadas.length;i++){
+      if(this.imagenesSeleccionadas[i] == id){
+        this.imagenesSeleccionadas.splice(i,1);
+        var inputcheck = document.getElementById(id) as HTMLInputElement;
+        inputcheck.checked = false;
+        console.log(inputcheck);
+        console.log(id);
+
       }
     }
   }
@@ -266,7 +250,7 @@ export class ArticuloComponent implements OnInit {
     document.getElementById("imageninput").click();
   }
   buscaNuevaImagenEditor(){
-    document.getElementById("imageninputeditor").click();
+    document.getElementById("btnimageneditor").click();
   }
 
   getListaImagenes(){
@@ -278,13 +262,36 @@ export class ArticuloComponent implements OnInit {
       });
   }
 
-  buscarImagen(iditem: string){
-    if(this.itemsImagenes[this.itemsImagenes.length-1]==iditem){
-     // 
-      this.getListaImagenes();
-      this.itemseleccionado = iditem;
-    }
+  buscarImagen(){
+    this.getListaImagenes();    
     
+  }
+
+  elegirImagen(nombre: string){
+    this.imageneditorseleccionada = nombre;
+
+  }
+  agregarImagenEditor(){
+    console.log("holamundo");
+    console.log(this.imageneditorseleccionada);
+    const range = this.editorInstance.getSelection();
+    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES+"/tmp/"+this.imageneditorseleccionada);
+
+  }
+  agregarImagenesArticulo(nombre: string){
+    var existe = false;
+    for(var i=0;i<this.imagenesSeleccionadas.length;i++){
+      if(this.imagenesSeleccionadas[i] == nombre){
+        this.imagenesSeleccionadas.splice(i,1);
+        existe = true;     
+      }
+    }
+    if(!existe){
+      this.imagenesSeleccionadas.push(nombre);    
+    }
+  }
+  agregarImagenes(){
+
   }
   subirImagen(evento){
     this.selectedFile  = <File> evento.target.files[0];
@@ -310,31 +317,16 @@ export class ArticuloComponent implements OnInit {
         
         }else{
           if(event.type === HttpEventType.Response){
-            console.log(event.body);
-            var itemImagen = document.getElementById(this.itemseleccionado);
-            var imagenes = itemImagen.getElementsByTagName("img");
-            var simbolo = itemImagen.getElementsByTagName("i")[0];
-            imagenes[0].hidden = false;
-            simbolo.hidden = true;
-            //var  imagen = document.getElementById("imagen-seleccionada") as HTMLImageElement;
-            imagenes[1].hidden= false;
-            itemImagen.style.minWidth = "0px";
-            imagenes[1].src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;
-           /* progreso.style.backgroundColor = "green";
-            progreso.innerHTML = "Completado.";    */     
+            console.log(event.body);       
             this.getListaImagenes(); 
-            
-           // this.categoriaService.categoriaSeleccionada.imagen = this.selectedFile.name;
-           //document.getElementById("imagen-seleccionada").hidden=false;
-          // document.getElementById("simbolo-mas").hidden = true;
-          this.agregarImagen();
-          
-
           }
         }
       }
     );
   }
+
+ 
+  
 
   subirImagenEditor(evento){
     this.selectedFile  = <File> evento.target.files[0];
@@ -359,11 +351,10 @@ export class ArticuloComponent implements OnInit {
         }else{
           if(event.type === HttpEventType.Response){                  
             this.getListaImagenes(); 
-             var cont = document.getElementsByClassName("ql-editor")[0].innerHTML;
+            // var cont = document.getElementsByClassName("ql-editor")[0].innerHTML;
             //this.contenidoEditor = this.contenidoEditor + "<img src='"+this.URL_IMAGES+"/tmp/"+this.selectedFile.name; +"'>";   
             //console.log(this.contenidoEditor);    
-            const range = this.editorInstance.getSelection();
-            this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES+"/tmp/"+this.selectedFile.name);
+           
             //document.getElementsByClassName("ql-editor")[0].innerHTML = cont+"<label>HOLA MUNDO FUNCIPNA</label>"
             //console.log(cont);   
             console.log(this.contenidoEditor);
