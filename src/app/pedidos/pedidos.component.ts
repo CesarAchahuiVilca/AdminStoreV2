@@ -96,7 +96,7 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
     this.mensajeestado=optselect.options[optselect.selectedIndex].text;
   }
   actualizar(){
-    this.snackBar.open('Estado Actualizado',this.mensajeestado , {
+    this.snackBar.open('Estado Actualizado ->>',this.mensajeestado+'🧓🏻' , {
       duration: 2000,
     });
     document.getElementById('extadoselect').style.color='black';
