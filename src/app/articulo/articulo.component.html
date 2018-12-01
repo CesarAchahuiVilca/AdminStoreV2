@@ -58,12 +58,14 @@
                     
                     <div id="formulario-articulo">                              
                       <form #articuloForm="ngForm">  
+                          <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="articuloService.articuloSeleccionado._id" name="idarticulo" type="text" required hidden="true">
+
                           <input class="form-control" id="idarticulo" #idarticulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.idarticulo" name="idarticulo" type="text" required hidden="true">
                           <div class="row">  
                             <div class="col-lg-12">
                               <div class="form-group">
                                   <label style="font-weight: bold;">Titulo del Articulo</label>
-                                  <input class="form-control" id="titulo" name="titulo" type="text" placeholder="Ingrese Titulo del Articulos" required style="border-color: rgb(114, 114, 114);">
+                                  <input class="form-control" id="titulo" name="titulo" #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo" type="text" placeholder="Ingrese Titulo del Articulos" required style="border-color: rgb(114, 114, 114);">
                               </div>
                             </div>
                             <div class="col-lg-5">
@@ -79,8 +81,8 @@
                             <div class="col-lg-4">
                               <div class="form-group">
                                 <label style="font-weight: bold;">Marca</label>
-                                <select  class="form-control" id="marca" name="marca"style="border-color: rgb(114, 114, 114);">
-                                  <option></option>  
+                                <select  class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"style="border-color: rgb(114, 114, 114);">
+                                  <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>  
                                 </select>
                               </div>
                             </div>

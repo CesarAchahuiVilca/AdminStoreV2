@@ -24,5 +24,8 @@ export class MarcaService {
   postMarca(Marca:Marca){//agregar empleados post
     return this.http.post(Constantes.URL_API_MARCA,Marca);
   }
+  getMarcas(){
+    return this.http.get(Constantes.URL_API_MARCA_MONGODB)
+  }
 
 }

@@ -13,6 +13,8 @@ import { CaracteristicaService } from '../caracteristicas/caracteristica.service
 import { Categoria } from '../categoria/categoria';
 import { Caracteristica }  from '../caracteristicas/caracteristica';
 import { CategoriaComponent } from '../categoria/categoria.component'
+import { MarcaService} from '../marcadistri/marca.service';
+import { Marca} from '../marcadistri/marca';
 
 @Component({
   selector: 'app-articulo',
@@ -40,12 +42,14 @@ export class ArticuloComponent implements OnInit {
   vista: string = "1";
   //CATEGORIAS
   listacategorias: Categoria[];
+
+  listamarcas: Marca[];
   //CARACTERISRTICAS
   listacaracteristicas: Caracteristica[];
   //lista imagenes
   listaimagenes: string[];
   //contenido del editor
-  contenidoEditor: string = " ";
+  contenidoEditor: string = "<p></p>";
   // lista de imagenes seleccionadas
   imagenesSeleccionadas: string[] = new Array();
 
@@ -77,7 +81,8 @@ export class ArticuloComponent implements OnInit {
   constructor(private http: HttpClient, 
               private articuloService: ArticuloService,
               private categoriaService: CategoriaService,
-              private caracteristicaService: CaracteristicaService) { }
+              private caracteristicaService: CaracteristicaService,
+              private marcaService: MarcaService) { }
 
   ngOnInit() {
     this.itemsDatosGenerales.push([1,""]);
@@ -118,6 +123,8 @@ export class ArticuloComponent implements OnInit {
     document.getElementById("btnOpcion").hidden=true;
     //Obtener categorias 
     this.getCategorias();    
+    this.getMarcas();
+    console.log(this.listamarcas);
   }
 
   editorInstance;
@@ -191,6 +198,13 @@ export class ArticuloComponent implements OnInit {
     this.categoriaService.getCategorias()
     .subscribe(res=>{
       this.listacategorias = res as Categoria[];
+    });
+  }
+
+  getMarcas(){
+    this.marcaService.getMarcas()
+    .subscribe(res=>{
+      this.listamarcas = res as Marca[];
     });
   }
 
@@ -387,7 +401,23 @@ export class ArticuloComponent implements OnInit {
   
       
     }
-    console.log(this.articuloService.articuloSeleccionado.caracteristicas);
+
+    //Asignar imagenes
+    this.articuloService.articuloSeleccionado.imagenes = this.imagenesSeleccionadas;
+    this.articuloService.articuloSeleccionado.descripcion = this.contenidoEditor;
+    console.log(this.articuloService.articuloSeleccionado);
+
+    //guardar datos
+
+    this.articuloService.postArticulo(this.articuloService.articuloSeleccionado)
+    .subscribe(res=>{      
+      var respuesta = JSON.parse(JSON.stringify(res));
+      if(respuesta.estado == "0"){   
+        console.log("ERROR ");
+      }else{        
+        console.log("TODO ESTA CORRECTO");
+      }          
+    });
     
 
     
