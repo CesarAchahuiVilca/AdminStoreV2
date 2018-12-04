@@ -46,6 +46,7 @@ export class ArticuloComponent implements OnInit {
   listamarcas: Marca[];
   //CARACTERISRTICAS
   listacaracteristicas: Caracteristica[];
+  listacaracteristicasarticulo : CaracteristicaItem[];
   //lista imagenes
   listaimagenes: string[];
   //contenido del editor
@@ -134,6 +135,17 @@ export class ArticuloComponent implements OnInit {
   newHandlerImage(){
     console.log(this.contenidoEditor);
   }
+
+  limpiarFormulario(){
+    this.articuloService.articuloSeleccionado = new Articulo();
+    this.imagenesSeleccionadas = new Array();
+    this.listacaracteristicas = new Array();
+    this.itemsDatosGenerales = new Array();
+    this.contenidoEditor = "<p></p>";
+    this.listacaracteristicasarticulo = new Array();
+  }
+
+
   cambiarvista(articulo?: ArticuloMysql, form?: NgForm){
     //this.limpiarform(form);
     if(this.vista == "1"){
@@ -144,8 +156,11 @@ export class ArticuloComponent implements OnInit {
       botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
       document.getElementById("btnOpcion").hidden=false;
       document.getElementById("titulo-card").innerHTML = "Completar Registro para el articulo : "+articulo.Descripcion;
+      this.limpiarFormulario();
       this.articuloService.articuloSeleccionado.idarticulo = articulo.idArticulo;
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
+      
+    
 
     }else{
       this.vista ="1";
@@ -188,7 +203,7 @@ export class ArticuloComponent implements OnInit {
       }else{
         console.log("Exito..");
         document.getElementById("listaarticulos").hidden=false;
-      }
+      }   
       this.rerender();
       document.getElementById("carga").hidden = true;
     });
@@ -214,6 +229,9 @@ export class ArticuloComponent implements OnInit {
         this.listacaracteristicas = this.listacategorias[i].caracteristicas;       
       }
     }
+    for(var i=0;i<this.listacaracteristicas.length;i++){
+      this.listacaracteristicasarticulo.push(new CaracteristicaItem(this.listacaracteristicas[i].nombre,""));
+    }
     console.log(this.listacategorias)
   }
 
@@ -222,6 +240,25 @@ export class ArticuloComponent implements OnInit {
   }
   
   editarArticulo(id: string){
+    this.itemsDatosGenerales = new Array();
+    this.articuloService.getArticulo(id)
+    .subscribe(res=>{
+      this.articuloService.articuloSeleccionado = res[0] as Articulo;
+      this.imagenesSeleccionadas  = this.articuloService.articuloSeleccionado.imagenes;
+      this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
+      this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
+      for(var i=0;i<this.articuloService.articuloSeleccionado.especificaciones.length;i++){
+        this.itemsDatosGenerales.push([i+1,this.articuloService.articuloSeleccionado.especificaciones[i]]);
+      }
+      this.vista ="2";
+      document.getElementById("listaarticulos").hidden = true;
+      document.getElementById("formulario-articulo").hidden = false;
+      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
+      botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
+      document.getElementById("btnOpcion").hidden=false;
+      document.getElementById("titulo-card").innerHTML = "Editar articulo  : "+id;
+      console.log(res);
+    });
 
   }
   agregarInformacionGeneral(){
@@ -235,7 +272,7 @@ export class ArticuloComponent implements OnInit {
       }
     }
   }
-  agregarCaracteristica(){
+  agregarCaractgarCaracteristica(){
     this.contador_caracteristicas = this.contador_caracteristicas+1;
     this.itemsCaracteristicas.push(this.contador_caracteristicas);
   }

@@ -37,7 +37,7 @@
                                 <td>{{articulomysql.Categoria}}</td>
                                 <td style="text-align: center;">{{articulomysql.Cantidad}}</td>
                                 <td style="text-align: center;">                                  
-                                  <button *ngIf="articulomysql.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary" (click) = "cambiarvista(articulomysql,articuloForm)" >Completar Registro</button>                                   
+                                  <button *ngIf="articulomysql.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary" (click) = "cambiarvista(articulomysql,articuloForm)" >Completar Registro {{articulomysql.Estado}}</button>                                   
                                   <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '1'" class="fa fa-check"></i>                                     
                                   <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '2'" class="fa fa-check"></i>                                     
 
@@ -109,7 +109,7 @@
                                           <div style="flex-grow: 0;margin-top: 3px;" class="item-datos-generales" *ngFor = "let item of itemsDatosGenerales ">
                                               <div class="controls">
                                                 <div class="input-group">
-                                                  <input class="form-control" id="appendedInputButton" size="16" type="text" style="border-color: rgb(114, 114, 114);">
+                                                  <input class="form-control" id="appendedInputButton" size="16" type="text" style="border-color: rgb(114, 114, 114);" value="{{item[1]}}">
                                                   <span class="input-group-append">
                                                     <button class="btn btn-danger" type="button" (click)="eliminarItem(item[0])"><i class="fa fa-trash"></i></button>
                                                   </span>
@@ -134,12 +134,12 @@
                                       </div>
                                       <hr>
                                       <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
-                                          <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;" *ngFor = "let caracteristica of listacaracteristicas ">
+                                          <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;" *ngFor = "let caracteristica of listacaracteristicasarticulo ">
                                             <div style="flex-grow: 0; width: 40%;">
                                                 <input class="form-control" style="border-color: rgb(58, 56, 56); background: rgb(216, 213, 209); color: black; font-weight: bold;"  value="{{caracteristica.nombre}}" readonly>
                                             </div>
                                             <div style="flex-grow: 0; width: 55%;">
-                                                <input type="text" class="form-control"style="border-color: rgb(114, 114, 114);" placeholder="Ingrese valor de la carcteristica">
+                                                <input type="text" class="form-control"style="border-color: rgb(114, 114, 114);" placeholder="Ingrese valor de la carcteristica" value="{{caracteristica.valor}}">
                                             </div>
                                           </div>
                                       </div>

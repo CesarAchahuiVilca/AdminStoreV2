@@ -24,6 +24,9 @@ export class ArticuloService {
     return this.http.get(Constantes.URL_API_IMAGEN);
   }
 
+  getArticulo(idarticulo: string){
+    return this.http.get(Constantes.URL_API_ARTICULO+'/'+idarticulo);
+  }
   postArticulo(articulo: Articulo){
     return this.http.post(Constantes.URL_API_ARTICULO,articulo);
   }
