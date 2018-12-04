@@ -223,7 +223,8 @@ export class ArticuloComponent implements OnInit {
     });
   }
 
-  getCaracteristicas(){    
+  getCaracteristicas(){   
+    this.listacaracteristicasarticulo = new Array(); 
     for(var i=0;i<this.listacategorias.length;i++){
       if(this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id){
         this.listacaracteristicas = this.listacategorias[i].caracteristicas;       
@@ -232,7 +233,7 @@ export class ArticuloComponent implements OnInit {
     for(var i=0;i<this.listacaracteristicas.length;i++){
       this.listacaracteristicasarticulo.push(new CaracteristicaItem(this.listacaracteristicas[i].nombre,""));
     }
-    console.log(this.listacategorias)
+    //console.log(this.listacategorias)
   }
 
   completaRegistro(articulomysql: ArticuloMysql){
@@ -247,6 +248,9 @@ export class ArticuloComponent implements OnInit {
       this.imagenesSeleccionadas  = this.articuloService.articuloSeleccionado.imagenes;
       this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
       this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
+      if(this.listacaracteristicasarticulo.length == 0){
+        this.getCaracteristicas();
+      }
       for(var i=0;i<this.articuloService.articuloSeleccionado.especificaciones.length;i++){
         this.itemsDatosGenerales.push([i+1,this.articuloService.articuloSeleccionado.especificaciones[i]]);
       }
@@ -323,8 +327,6 @@ export class ArticuloComponent implements OnInit {
 
   }
   agregarImagenEditor(){
-    console.log("holamundo");
-    console.log(this.imageneditorseleccionada);
     const range = this.editorInstance.getSelection();
     this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES+"/tmp/"+this.imageneditorseleccionada);
 
@@ -419,6 +421,7 @@ export class ArticuloComponent implements OnInit {
   guardarDatos(){
 
     //Obtener datos generales del articulo
+    this.articuloService.articuloSeleccionado.especificaciones = new Array();
     var datosgenerales = document.getElementById("contenido-datos-generales");
     var datos = datosgenerales.getElementsByTagName("input");
     for(var i=0;i<datos.length;i++){
@@ -428,10 +431,11 @@ export class ArticuloComponent implements OnInit {
       }
     }
 
-    //Obtener datos caracteristicas    
+    //Obtener datos caracteristicas   
+    this.articuloService.articuloSeleccionado.caracteristicas = new Array();
     var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");  
-    var caracteristicas = document.getElementsByClassName("item-caracteristicas");
-    for(var i=0;i<caracteristicas.length -1 ;i++){
+    var caracteristicas = datoscaracteristicas.getElementsByClassName("item-caracteristicas");
+    for(var i=0;i<caracteristicas.length ;i++){
       var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value,caracteristicas[i].getElementsByTagName("input")[1].value); 
         
       this.articuloService.articuloSeleccionado.caracteristicas.push(c);
@@ -445,16 +449,28 @@ export class ArticuloComponent implements OnInit {
     console.log(this.articuloService.articuloSeleccionado);
 
     //guardar datos
-
-    this.articuloService.postArticulo(this.articuloService.articuloSeleccionado)
-    .subscribe(res=>{      
-      var respuesta = JSON.parse(JSON.stringify(res));
-      if(respuesta.estado == "0"){   
-        console.log("ERROR ");
-      }else{        
-        console.log("TODO ESTA CORRECTO");
-      }          
-    });
+    if(this.articuloService.articuloSeleccionado._id){
+      this.articuloService.putArticulo(this.articuloService.articuloSeleccionado)
+      .subscribe(res=>{      
+        var respuesta = JSON.parse(JSON.stringify(res));
+        if(respuesta.estado == "0"){   
+          console.log("ERROR "+respuesta.mesanje);
+        }else{        
+          console.log(respuesta.mensaje);
+        }          
+      });
+    }else{
+      this.articuloService.postArticulo(this.articuloService.articuloSeleccionado)
+      .subscribe(res=>{      
+        var respuesta = JSON.parse(JSON.stringify(res));
+        if(respuesta.estado == "0"){   
+          console.log("ERROR "+respuesta.mesanje);
+        }else{        
+          console.log(respuesta.mensaje);
+        }           
+      });
+    }
+    
     
 
     

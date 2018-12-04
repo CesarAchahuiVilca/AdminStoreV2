@@ -31,7 +31,7 @@ export class ArticuloService {
     return this.http.post(Constantes.URL_API_ARTICULO,articulo);
   }
   
-  putCategoria(articulo: Articulo){
+  putArticulo(articulo: Articulo){
     return this.http.put(Constantes.URL_API_ARTICULO+'/'+articulo._id,articulo);
   }
 }
