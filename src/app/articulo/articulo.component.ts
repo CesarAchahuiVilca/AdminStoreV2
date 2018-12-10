@@ -322,6 +322,16 @@ export class ArticuloComponent implements OnInit {
     
   }
 
+  generarURL(){
+    var titulo= this.articuloService.articuloSeleccionado.titulo;
+    for(var i = 0;i<titulo.length;i++){
+      titulo= titulo.replace(" ","-");
+    }
+    this.articuloService.articuloSeleccionado.url = titulo;
+    
+    
+  }
+
   elegirImagen(nombre: string){
     this.imageneditorseleccionada = nombre;
 

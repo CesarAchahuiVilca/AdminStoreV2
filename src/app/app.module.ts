@@ -22,6 +22,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { DistribuidorComponent } from './distribuidor/distribuidor.component';
 import { PedidosComponent } from './pedidos/pedidos.component';
 import { QuillModule } from 'ngx-quill';
+import { ServicioClienteComponent } from './servicio-cliente/servicio-cliente.component';
 
 
 const routes: Route[] = [
@@ -34,6 +35,7 @@ const routes: Route[] = [
   {path: 'articulos', component: ArticuloComponent},
   {path: 'distribuidor',component: DistribuidorComponent},
   {path: 'pedidos',component:PedidosComponent},
+  {path: 'servicio-cliente',component:ServicioClienteComponent}
 ];
 
 @NgModule({
@@ -51,7 +53,8 @@ const routes: Route[] = [
     RegionComponent,
     ArticuloComponent,
     DistribuidorComponent,
-    PedidosComponent
+    PedidosComponent,
+    ServicioClienteComponent
   ],
   imports: [
     BrowserModule,
