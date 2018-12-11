@@ -1,27 +1,27 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Usuario } from './usuario';
-import { Direccion } from './direccion';
-import { Region } from '../region/region';
-import { Provincia } from '../region/provincia';
-import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import { Miga } from '../miga';
-// Sericios
-import { UsuarioService } from './usuario.service';
+import { Direccion } from './direccion';
 import { DireccionService } from './direccion.service';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { Miga } from '../miga';
 import { NgFlashMessageService } from 'ng-flash-messages';
+import { NgForm } from '@angular/forms';
+import { Provincia } from '../region/provincia';
+import { Region } from '../region/region';
 import { RegionService } from '../region/region.service';
+import { Subject } from 'rxjs';
+import { Usuario } from './usuario';
+import { UsuarioService } from './usuario.service';
 
 @Component({
   selector: 'app-usuario',
   templateUrl: './usuario.component.html',
   styleUrls: ['./usuario.component.css'],
-  providers: [ UsuarioService, {provide: MAT_DATE_LOCALE, useValue: 'es-PE'},
-  {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-  {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS} ]
+  providers: [ UsuarioService, 
+    {provide: MAT_DATE_LOCALE, useValue: 'es-PE'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS} ]
 })
 
 export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
@@ -33,9 +33,21 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   private boton_direccion                   : string;
   private direccion_header                  : string;
   private flag                              : boolean = true;
-  public miga                               : Miga = new Miga('Clientes','/usuarios')
+  private habilitarCorreo                   : boolean = true;
+  public miga                               : Miga = new Miga('Clientes','/usuarios');
+  private mostrarBotonDireccion             : boolean = false;
+  private mostrarBotonLimpiar               : boolean = true;
+  private mostrarBotonNuevo                 : boolean = false;
+  private mostrarBotonVolver                : boolean = false;
+  private mostrarCarga                      : boolean = true;
+  private mostrarDireccion                  : boolean = false;
+  private mostrarFechaAfiliacion            : boolean = false;
+  private mostrarListaDirecciones           : boolean = false;
+  private mostrarListaUsuarios              : boolean = false;
   private mostrarMensajeCliente             : boolean = false;
+  private mostrarUsuarioForm                : boolean = false;
   private tiposDocumento                    : string[];
+  private tiposVivienda                     : string[] = [ 'Casa', 'Oficina', 'Departamento', 'Edificio', 'Condominio', 'Otro'];
   private usuario_header                    : string;
   private usuarioService                    : UsuarioService;
   private flashMessage                      : NgFlashMessageService;
@@ -88,9 +100,8 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       }  
     };
     this.tiposDocumento = ['DNI'];
-    //document.getElementById('btnDireccion').hidden = true;
     this.getUsuarios();
-    //document.getElementById('carga').hidden = true;
+    this.mostrarCarga = false;
   }
 
   /**
@@ -122,26 +133,26 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param form 
    */
   agregarDireccion(form?: NgForm){
+    form.value.usuario = this.usuarioService.usuarioSeleccionado._id;
     if(form.value._id) {
       this.direccionService.putDireccion(form.value).subscribe(res => {
         var jres = JSON.parse(JSON.stringify(res));
         if(jres.status) {
-          this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
-          this.resetDireccionForm(form);
-          this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
+          this.mostrarMensaje(jres.msg,'success');
+          this.mostrarDireccion = false;
         }else{
-          this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000, dismissible: true, type: 'danger'})
+          this.mostrarMensaje(jres.error, 'danger');
         }
       });
     }else {
       this.direccionService.postDireccion(form.value).subscribe(res =>{
         var jres = JSON.parse(JSON.stringify(res));
         if (jres.status) {
-          this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
-          this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
-          this.resetDireccionForm(form);
+          this.mostrarMensaje(jres.msg, 'success');
+          this.mostrarDireccion = false;
+          this.direccionService.direcciones.push(jres.data as Direccion);
         }else{
-          this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+          this.mostrarMensaje(jres.error, 'danger');
         }
       });
     }  
@@ -152,9 +163,9 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param form 
    */
   agregarUsuario(form?: NgForm) {
-    console.log(form.value);
     var validacion : boolean = true;
     var mensaje : string;
+    form.value.correo = this.usuarioService.usuarioSeleccionado.correo;
     if(form.value.numeroDocumento == null || form.value.nombres == null || form.value.apellidos == null || form.value.correo == null || form.value.tipoDocumento == null || form.value.fechaNacimiento == null  || form.value.sexo == null){
       mensaje = 'Algunos campos del formulario no estan debidamente completados';
       validacion = false;
@@ -216,10 +227,16 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param direccion 
    */
   editarDireccion(direccion : Direccion){
-    this.boton_direccion = "Editar dirección";
+    this.boton_direccion = "EDITAR DIRECCIÓN";
     this.direccion_header = "MODIFICAR DIRECCIÓN";
+    var i = 0;
+    while(this.regionService.regiones[i].departamento != direccion.departamento){i++}
+    this.regionService.departamentoSelected = this.regionService.regiones[i];
+    i = 0;
+    while(this.regionService.departamentoSelected.provincias[i].provincia != direccion.provincia) { i++}
+    this.regionService.provinciaSelected = this.regionService.departamentoSelected.provincias[i];
     this.direccionService.dirSelected = direccion;
-    //document.getElementById('direccion').hidden = false;
+    this.mostrarDireccion = true;
   }
 
   /**
@@ -228,17 +245,18 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    */
   editarUsuario(usuario: Usuario) {
     this.usuario_header = "MODIFICAR USUARIO";
-    this.boton_accion = "Guardar Cambios";
+    this.boton_accion = "GUARDAR CAMBIOS";
     this.usuarioService.usuarioSeleccionado = usuario;
-   /* document.getElementById('nuevo_usuario').hidden = false;
-    document.getElementById('lista_usuarios').hidden = true;
-    document.getElementById('limpiar').hidden = true;
-    document.getElementById('nuevo').hidden = true;
-    document.getElementById('volver').hidden = false;
-    document.getElementById('lista_direcciones').hidden = false;
-    document.getElementById('btnDireccion').hidden = false;
-    document.getElementById('email').setAttribute("disabled", "true");*/
-    this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
+    this.mostrarUsuarioForm = true;
+    this.mostrarListaUsuarios = false;
+    this.mostrarBotonLimpiar = false;
+    this.mostrarBotonNuevo = false;
+    this.mostrarBotonVolver = true;
+    this.mostrarListaDirecciones = true;
+    this.mostrarBotonDireccion = true;
+    this.habilitarCorreo = false;
+    this.getDirecciones(this.usuarioService.usuarioSeleccionado._id);
+    this.getRegiones();
   }
 
   /**
@@ -255,12 +273,12 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * Método que muestra los usuarios de la base de datos
    */
   getUsuarios() {
-    /*document.getElementById('nuevo_usuario').hidden = true;
-    document.getElementById('lista_usuarios').hidden = false;
-    document.getElementById('volver').hidden = true;
-    document.getElementById('nuevo').hidden = false;
-    document.getElementById('direccion').hidden = true;
-    document.getElementById('lista_direcciones').hidden = true;*/
+    this.mostrarUsuarioForm = false;
+    this.mostrarListaUsuarios = true;
+    this.mostrarBotonNuevo = true;
+    this.mostrarBotonVolver = false;
+    this.mostrarDireccion = false;
+    this.mostrarListaDirecciones = false;
     this.usuarioService.getUsuarios().subscribe( res => {
       this.usuarioService.usuarios = res as Usuario[];
       this.reRender();
@@ -277,17 +295,26 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   /**
+   * Método que muestra un flash message
+   * @param mensaje 
+   * @param tipo 
+   */
+  mostrarMensaje(mensaje: string, tipo: string){
+    this.flashMessage.showFlashMessage({messages: [mensaje],dismissible: true, timeout: 5000, type: tipo});
+  }
+
+  /**
    * Método que muestra el formulario de una nueva dirección
    * @param form 
    * @param usuario 
    */
   nueva_direccion(form?: NgForm, usuario? : string){
+    this.direccionService.dirSelected = new Direccion();
     this.resetDireccionForm(form);
     this.direccion_header = "NUEVA DIRECCIÓN";
-    this.boton_direccion = "Guardar nueva dirección";
-    //document.getElementById('direccion').hidden = false;
+    this.boton_direccion = "GUARDAR NUEVA DIRECCIÓN";
+    this.mostrarDireccion = true;
     this.direccionService.dirSelected.usuario = usuario;
-    this.getRegiones();
   }
 
   /**
@@ -297,15 +324,11 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   nuevo_usuario(form?: NgForm){
     this.resetForm(form);
     this.usuario_header = "NUEVO USUARIO";
-    this.boton_accion = "Crear Usuario";
-    /*document.getElementById('btnDireccion').hidden = true;
-    document.getElementById('nuevo_usuario').hidden = false;
-    document.getElementById('lista_usuarios').hidden = true;
-    document.getElementById('limpiar').hidden = false;
-    document.getElementById('nuevo').hidden = true;
-    document.getElementById('volver').hidden = false;
-    document.getElementById('email').removeAttribute('disabled');
-    document.getElementById('email').setAttribute('editable','true');*/
+    this.boton_accion = "CREAR USUARIO";
+    this.mostrarUsuarioForm = true;
+    this.mostrarListaUsuarios = false;
+    this.mostrarBotonNuevo = false;
+    this.mostrarBotonVolver = true;
   }
 
   /**
