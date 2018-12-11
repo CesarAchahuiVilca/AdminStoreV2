@@ -6,6 +6,8 @@ import { Region } from '../region/region';
 import { Provincia } from '../region/provincia';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { Miga } from '../miga';
 // Sericios
 import { UsuarioService } from './usuario.service';
@@ -17,21 +19,28 @@ import { RegionService } from '../region/region.service';
   selector: 'app-usuario',
   templateUrl: './usuario.component.html',
   styleUrls: ['./usuario.component.css'],
-  providers: [ UsuarioService ]
+  providers: [ UsuarioService, {provide: MAT_DATE_LOCALE, useValue: 'es-PE'},
+  {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+  {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS} ]
 })
 
 export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
 
-  @ViewChild(DataTableDirective) dtElement : DataTableDirective; 
-  dtOptions: DataTables.Settings = {};
-  dtTriggers: Subject<any> = new Subject();
-  private boton_accion : string;
-  private boton_direccion : string;
-  private usuario_header : string;
-  private direccion_header : string;
-  private tiposDocumento : string[];
-  private flag : boolean = true;
-  public miga: Miga = new Miga('Clientes','/usuarios')
+  @ViewChild(DataTableDirective) dtElement  : DataTableDirective; 
+  dtOptions                                 : DataTables.Settings = {};
+  dtTriggers                                : Subject<any> = new Subject();
+  private boton_accion                      : string;
+  private boton_direccion                   : string;
+  private direccion_header                  : string;
+  private flag                              : boolean = true;
+  public miga                               : Miga = new Miga('Clientes','/usuarios')
+  private mostrarMensajeCliente             : boolean = false;
+  private tiposDocumento                    : string[];
+  private usuario_header                    : string;
+  private usuarioService                    : UsuarioService;
+  private flashMessage                      : NgFlashMessageService;
+  private direccionService                  : DireccionService;
+  private regionService                     : RegionService;
   
   /**
    * Constructor del componente Usuario
@@ -40,12 +49,13 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param direccionService 
    * @param regionService 
    */
-  constructor(
-    private usuarioService : UsuarioService,
-    private flashMessage : NgFlashMessageService,
-    private direccionService : DireccionService,
-    private regionService : RegionService
-    ) { }
+  constructor(private adapter: DateAdapter<any>, usuarioService : UsuarioService, flashMessage : NgFlashMessageService, direccionService : DireccionService, regionService : RegionService) {
+      this.adapter.setLocale('es');
+      this.usuarioService     = usuarioService;
+      this.flashMessage       = flashMessage;
+      this.direccionService   = direccionService;
+      this.regionService      = regionService;
+     }
 
   /**
    * Método que se ejecuta al iniciar el componente
@@ -78,9 +88,9 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       }  
     };
     this.tiposDocumento = ['DNI'];
-    document.getElementById('btnDireccion').hidden = true;
+    //document.getElementById('btnDireccion').hidden = true;
     this.getUsuarios();
-    document.getElementById('carga').hidden = true;
+    //document.getElementById('carga').hidden = true;
   }
 
   /**
@@ -209,7 +219,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.boton_direccion = "Editar dirección";
     this.direccion_header = "MODIFICAR DIRECCIÓN";
     this.direccionService.dirSelected = direccion;
-    document.getElementById('direccion').hidden = false;
+    //document.getElementById('direccion').hidden = false;
   }
 
   /**
@@ -220,14 +230,14 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.usuario_header = "MODIFICAR USUARIO";
     this.boton_accion = "Guardar Cambios";
     this.usuarioService.usuarioSeleccionado = usuario;
-    document.getElementById('nuevo_usuario').hidden = false;
+   /* document.getElementById('nuevo_usuario').hidden = false;
     document.getElementById('lista_usuarios').hidden = true;
     document.getElementById('limpiar').hidden = true;
     document.getElementById('nuevo').hidden = true;
     document.getElementById('volver').hidden = false;
     document.getElementById('lista_direcciones').hidden = false;
     document.getElementById('btnDireccion').hidden = false;
-    document.getElementById('email').setAttribute("disabled", "true");
+    document.getElementById('email').setAttribute("disabled", "true");*/
     this.getDirecciones(this.usuarioService.usuarioSeleccionado.correo);
   }
 
@@ -245,12 +255,12 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * Método que muestra los usuarios de la base de datos
    */
   getUsuarios() {
-    document.getElementById('nuevo_usuario').hidden = true;
+    /*document.getElementById('nuevo_usuario').hidden = true;
     document.getElementById('lista_usuarios').hidden = false;
     document.getElementById('volver').hidden = true;
     document.getElementById('nuevo').hidden = false;
     document.getElementById('direccion').hidden = true;
-    document.getElementById('lista_direcciones').hidden = true;
+    document.getElementById('lista_direcciones').hidden = true;*/
     this.usuarioService.getUsuarios().subscribe( res => {
       this.usuarioService.usuarios = res as Usuario[];
       this.reRender();
@@ -275,7 +285,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.resetDireccionForm(form);
     this.direccion_header = "NUEVA DIRECCIÓN";
     this.boton_direccion = "Guardar nueva dirección";
-    document.getElementById('direccion').hidden = false;
+    //document.getElementById('direccion').hidden = false;
     this.direccionService.dirSelected.usuario = usuario;
     this.getRegiones();
   }
@@ -288,14 +298,14 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.resetForm(form);
     this.usuario_header = "NUEVO USUARIO";
     this.boton_accion = "Crear Usuario";
-    document.getElementById('btnDireccion').hidden = true;
+    /*document.getElementById('btnDireccion').hidden = true;
     document.getElementById('nuevo_usuario').hidden = false;
     document.getElementById('lista_usuarios').hidden = true;
     document.getElementById('limpiar').hidden = false;
     document.getElementById('nuevo').hidden = true;
     document.getElementById('volver').hidden = false;
     document.getElementById('email').removeAttribute('disabled');
-    document.getElementById('email').setAttribute('editable','true');
+    document.getElementById('email').setAttribute('editable','true');*/
   }
 
   /**

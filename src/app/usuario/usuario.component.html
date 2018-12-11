@@ -17,6 +17,69 @@
               <ng-flash-message></ng-flash-message>
             </div>
           </div>
+          
+          <mat-card id="nuevo_usuario" class="card-datos-personales">
+            <mat-card-title>Datos Personales</mat-card-title>
+            <ng-flash-message></ng-flash-message>
+            <form #nuevoUsuarioForm="ngForm" class="datos-form" *ngIf="usuarioService.usuarioSeleccionado">
+              <mat-card-content>
+                <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado._id">
+                <mat-form-field id="tipoDocumento" class="campo-form">
+                  <mat-select name="tipoDocumento" #tipoDocumento="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.tipoDocumento"
+                    placeholder="Tipo Documento">
+                    <mat-option *ngFor="let tipodoc of tiposDocumento" [value]="tipodoc">{{tipodoc}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field id="numeroDocumento" class="campo-form">
+                  <input matInput name="numeroDocumento" #numeroDocumento="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.numeroDocumento"
+                    placeholder="Número de Documento" minlength="8" required>
+                  <mat-error *ngIf="numeroDocumento.invalid && (numeroDocumento.dirty || numeroDocumento.touched) && numeroDocumento.errors.required">El
+                    número de Documento es obligatorio</mat-error>
+                  <mat-error *ngIf="numeroDocumento.invalid && (numeroDocumento.dirty || numeroDocumento.touched) && numeroDocumento.errors.minlength">El
+                    documento debe tener mínimo 8 dígitos</mat-error>
+                </mat-form-field>
+                <mat-form-field id="nombres" class="campo-form">
+                  <input matInput placeholder="Nombres" name="nombres" #nombres="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.nombres"
+                    required>
+                  <mat-error *ngIf="nombres.invalid && (nombres.dirty || nombres.touched) && nombres.errors.required">El
+                    campo nombres es requerido</mat-error>
+                </mat-form-field>
+                <mat-form-field id="apellidos" class="campo-form">
+                  <input matInput name="apellidos" #apellidos="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.apellidos"
+                    placeholder="Apellidos" required>
+                  <mat-error *ngIf="apellidos.invalid && (apellidos.dirty || apellidos.touched) && apellidos.errors.required">El
+                    campo apellidos es requerido</mat-error>
+                </mat-form-field>
+                <mat-form-field id="correo" class="campo-form">
+                  <input matInput name="correo" #correo="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.correo"
+                    placeholder="Correo Electrónico" disabled>
+                </mat-form-field>
+                <mat-radio-group id="sexo" name="sexo" #sexo="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.sexo">
+                  <mat-label>Sexo: &nbsp;</mat-label>
+                  <mat-radio-button value="F">&nbsp;Femenino&nbsp;</mat-radio-button>
+                  <mat-radio-button value="M">&nbsp;Masculino&nbsp;</mat-radio-button>
+                </mat-radio-group>
+                <mat-form-field id="fechaNacimiento" class="campo-form">
+                  <input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" name="fechaNacimiento"
+                    #fechaNacimiento="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.fechaNacimiento">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field id="fechaAfiliacion" class="campo-form">
+                  <input matInput [matDatepicker]="fechaAfiliacion" placeholder="Fecha de Afiliación" name="fecha_afiliacion"
+                    #fecha_afiliacion="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.fecha_afiliacion" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="fechaAfiliacion"></mat-datepicker-toggle>
+                  <mat-datepicker #fechaAfiliacion></mat-datepicker>
+                </mat-form-field>
+                <mat-checkbox id="promociones" name="promociones" #promociones="ngModel" [(ngModel)]="usuarioService.usuarioSeleccionado.promociones">Promociones:
+                </mat-checkbox>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="agregarUsuario(nuevoUsuarioForm)">ACTUALIZAR MIS DATOS</button>
+              </mat-card-actions>
+            </form>
+          </mat-card>
+          <!--
           <div id="nuevo_usuario" class="card">
             <div class="card-header">
               {{usuario_header}}
@@ -129,7 +192,7 @@
                 </div>
               </form>
             </div>
-          </div>
+          </div> -->
           <div id="direccion" class="card">
             <div class="card-header">
               {{direccion_header}}

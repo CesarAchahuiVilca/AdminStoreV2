@@ -23,7 +23,7 @@ import { DistribuidorComponent } from './distribuidor/distribuidor.component';
 import { PedidosComponent } from './pedidos/pedidos.component';
 import { QuillModule } from 'ngx-quill';
 import { ServicioClienteComponent } from './servicio-cliente/servicio-cliente.component';
-
+import { MatMomentDateModule, MomentDateModule } from '@angular/material-moment-adapter';
 
 const routes: Route[] = [
   {path: 'login', component: LoginComponent},
@@ -65,7 +65,9 @@ const routes: Route[] = [
     NgFlashMessagesModule.forRoot(),
     HttpClientModule,
     DataTablesModule,
-    QuillModule
+    QuillModule,
+    MomentDateModule,
+    MatMomentDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]
