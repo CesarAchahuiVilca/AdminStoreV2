@@ -11,5 +11,11 @@ export class ServicioClienteComponent implements OnInit {
 
   ngOnInit() {
   }
+  verificarMensaje(event){
+    if(event.code=="Enter" && !event.shiftKey){
+      var inputmensaje = document.getElementById("contenidomensaje") as HTMLInputElement;
+      inputmensaje.value = "";
+    }
+  }
 
-}
+} 
