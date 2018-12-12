@@ -29,6 +29,7 @@ export class ServicioClienteComponent implements OnInit {
     this.servicioClienteService.nuevoMensaje()
     .subscribe(res=>{
       var mensaje = res as MensajeChat;
+      this.agregarMensaje(mensaje);
       console.log(mensaje);
 
     });
@@ -36,10 +37,11 @@ export class ServicioClienteComponent implements OnInit {
   verificarMensaje(event){
     if(event.code=="Enter" && !event.shiftKey){
       var inputmensaje = document.getElementById("contenidomensaje") as HTMLInputElement;
-      var mensaje = new MensajeChat("admin",this.servicioClienteService.clienteSeleccionado.correo,inputmensaje.value,"","");
-      this.agregarMensaje(mensaje);
-      this.enviarMensaje(mensaje);
-      
+      if(inputmensaje.value != ""){
+        var mensaje = new MensajeChat("admin",this.servicioClienteService.clienteSeleccionado.correo,inputmensaje.value,"","");
+        inputmensaje.value = "";
+        this.enviarMensaje(mensaje);
+      }
     }
   }
   agregarMensaje(mensaje: MensajeChat){
@@ -48,7 +50,13 @@ export class ServicioClienteComponent implements OnInit {
   }
   enviarMensaje(mensaje: MensajeChat){
     this.servicioClienteService.enviarMensaje(mensaje);
+    this.agregarMensaje(mensaje);
 
+  }
+  MoverScroll() {
+    //console.log("termino de renderizar los mensajes ....");
+    var contenedorchat = document.getElementById("chat-principal") as HTMLDivElement;
+    contenedorchat.scrollTop =contenedorchat.scrollHeight;
   }
 
 } 

@@ -49,35 +49,41 @@
                     <label style=" margin-right: 10px;">De: </label> <label>anonimo</label>
                 </div>
                 <div><hr style="padding: 0px; margin: 0px;cursor:pointer; width: 100%"></div> 
-                <div class="contenido-chat">
-                    <div class="mensaje-cliente">
-                        <div class="info-mensaje">
-                            <div style="width: 30%; flex-grow: 0;">
-                                <label  style="margin:0px; ">User Name</label>
-                            </div>
-                            <div style="width: 20%; flex-grow: 0;">
-                            </div>
-                            <div style="width: 50%;  flex-grow: 0; text-align: right;" >
-                                <label  style="margin:0px;" > 10 dic 2018 11:10 a.m.</label>
-                            </div>        
-                        </div>
-                        <img src="./assets/imagenes/cliente-icon.png" alt="Andeano" style="border-radius: 50%; width: 40px; height: 40px;">
-                        <div class="item-mensaje-cliente">Hola Mundo smdklsndkn sdjs bdjbdjb  lgfmgkgn gjngjn gjbngj bngjkbngjkbnghbjh </div>
+                <div class="contenido-chat" id="chat-principal">
+                    <div  *ngFor="let mensaje of listaMensajesChat">
+                            <div class="mensaje-cliente" *ngIf="mensaje.usuario != 'admin'">
+                                    <div class="info-mensaje">
+                                        <div style="width: 30%; flex-grow: 0;">
+                                            <label  style="margin:0px; ">{{mensaje.usuario}}</label>
+                                        </div>
+                                        <div style="width: 20%; flex-grow: 0;">
+                                        </div>
+                                        <div style="width: 50%;  flex-grow: 0; text-align: right;" >
+                                            <label  style="margin:0px;" > {{mensaje.fecha}} {{mensaje.hora}}</label>
+                                        </div>        
+                                    </div>
+                                    <img src="./assets/imagenes/cliente-icon.png" alt="Andeano" style="border-radius: 50%; width: 40px; height: 40px;">
+                                    <div class="item-mensaje-cliente">{{mensaje.mensaje}} </div>
+                                </div>
+                                <div class="mensaje-user" *ngIf="mensaje.usuario == 'admin'">
+                                    <div class="info-mensaje">
+                                        <div style="width: 50%;  flex-grow: 0;">
+                                            <label  style="margin:0px;"> {{mensaje.fecha}} {{mensaje.hora}}</label>
+                                        </div>         
+                                        <div style="width: 20%; flex-grow: 0;">
+                                        </div>
+                                        <div style="width: 30%; flex-grow: 0; text-align: right;">
+                                            <label  style="margin:0px; ">{{mensaje.usuario}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="item-mensaje-user">{{mensaje.mensaje}}</div>
+                                    <img src="./assets/imagenes/andeano.png" alt="Andeano" style="border-radius: 50%; width: 40px; height: 40px;">
+                                </div>
+                                <div *ngIf="true">
+                                    {{MoverScroll()}}
+                                </div>
                     </div>
-                    <div class="mensaje-user">
-                        <div class="info-mensaje">
-                            <div style="width: 50%;  flex-grow: 0;">
-                                <label  style="margin:0px;"> 10 dic 2018 11:10 a.m.</label>
-                            </div>         
-                            <div style="width: 20%; flex-grow: 0;">
-                            </div>
-                            <div style="width: 30%; flex-grow: 0; text-align: right;">
-                                <label  style="margin:0px; ">User Name</label>
-                            </div>
-                        </div>
-                        <div class="item-mensaje-user">Hola Mundo smdklsndkn sdjs bdjbdjb  hbjh </div>
-                        <img src="./assets/imagenes/andeano.png" alt="Andeano" style="border-radius: 50%; width: 40px; height: 40px;">
-                    </div>
+                    
 
                 </div>
                 <div class="footer-chat" style="width: 100%; min-height: 50px; display: flex; flex-direction: row;padding: 10px; background-color: rgb(233, 223, 223);">
