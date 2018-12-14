@@ -24,6 +24,7 @@ import { PedidosComponent } from './pedidos/pedidos.component';
 import { QuillModule } from 'ngx-quill';
 import { ServicioClienteComponent } from './servicio-cliente/servicio-cliente.component';
 import { MatMomentDateModule, MomentDateModule } from '@angular/material-moment-adapter';
+import { TiendaComponent } from './tienda/tienda.component';
 
 const routes: Route[] = [
   {path: 'login', component: LoginComponent},
@@ -35,7 +36,8 @@ const routes: Route[] = [
   {path: 'articulos', component: ArticuloComponent},
   {path: 'distribuidor',component: DistribuidorComponent},
   {path: 'pedidos',component:PedidosComponent},
-  {path: 'servicio-cliente',component:ServicioClienteComponent}
+  {path: 'servicio-cliente',component:ServicioClienteComponent},
+  {path: 'locales', component: TiendaComponent}
 ];
 
 @NgModule({
@@ -54,7 +56,8 @@ const routes: Route[] = [
     ArticuloComponent,
     DistribuidorComponent,
     PedidosComponent,
-    ServicioClienteComponent
+    ServicioClienteComponent,
+    TiendaComponent
   ],
   imports: [
     BrowserModule,
