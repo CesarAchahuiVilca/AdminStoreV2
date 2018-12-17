@@ -10,9 +10,12 @@ import { Tienda } from './tienda';
 })
 export class TiendaService {
   tiendas          : Tienda[]   = [];
+  tienda           : Tienda;
   private URL      : string     = Constantes.URL_API_TIENDA;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.tienda = new Tienda();
+  }
 
   postTienda(tienda: Tienda): Observable<Tienda>{
     return this.http.post<Tienda>(this.URL, tienda).pipe(
