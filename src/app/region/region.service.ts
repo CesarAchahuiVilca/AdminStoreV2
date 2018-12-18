@@ -1,3 +1,4 @@
+import { Constantes } from '../constantes';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Region } from './region';
@@ -15,7 +16,7 @@ export class RegionService {
   provincias : Provincia[];
   distritos : string[];
 
-  readonly URL_API = 'http://localhost:3000/api/re';
+  readonly URL_API = Constantes.ULR_API_REGION;
 
   constructor(private http : HttpClient) {
     this.departamentoSelected = new Region();

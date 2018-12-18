@@ -1,3 +1,4 @@
+import { Constantes } from '../constantes';
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
@@ -6,7 +7,7 @@ import { Usuario } from '../usuario/usuario';
   providedIn: 'root'
 })
 export class ServicioClienteService {
-  private socket  = io('http://localhost:3000');
+  private socket  = io('https://latiendadeltiogeorge.herokuapp.com');
 
   idChat:string = "admin"
 

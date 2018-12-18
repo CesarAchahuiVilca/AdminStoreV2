@@ -1,3 +1,4 @@
+import { Constantes } from '../constantes';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Caracteristica } from './caracteristica';
@@ -15,7 +16,7 @@ export class CaracteristicaService {
 
   caracteristicaSelected: Caracteristica;
   caracteristicas: Caracteristica[];
-  readonly URL_API = 'http://localhost:3000/api/caracteristica';
+  readonly URL_API = Constantes.URL_API_CARACTERISTICA;
 
   constructor(private http: HttpClient) {
     this.caracteristicaSelected = new Caracteristica();

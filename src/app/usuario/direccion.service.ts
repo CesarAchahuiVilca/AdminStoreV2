@@ -1,3 +1,4 @@
+import { Constantes } from '../constantes';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Direccion } from './direccion';
@@ -10,7 +11,7 @@ export class DireccionService {
   dirSelected : Direccion;
   direcciones : Direccion[];
 
-  readonly URL_API = 'http://localhost:3000/api/dir';
+  readonly URL_API = Constantes.URL_API_DIRECCION;
 
   constructor(private http: HttpClient) {
     this.dirSelected = new Direccion();
