@@ -2,6 +2,7 @@
 const URL_API = 'https://latiendadeltiogeorge.herokuapp.com/api/';
 export class Constantes {
 
+    public static URL                       = 'https://latiendadeltiogeorge.herokuapp.com';
     public static URL_API                   = URL_API;
     public static URL_API_CATEGORIA         = URL_API + 'categorias';
     public static URL_API_ARTICULO          = URL_API + 'articulos';

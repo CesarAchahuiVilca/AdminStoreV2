@@ -39,6 +39,7 @@ export class ArticuloComponent implements OnInit {
   itemseleccionado: string = "";
   readonly URL_API = Constantes.URL_API_IMAGEN + '/subir';
   readonly URL_IMAGES = Constantes.URL_IMAGENES;
+  private url_imagen : string = Constantes.URL;
   selectedFile: File = null;
   vista: string = "1";
   //CATEGORIAS

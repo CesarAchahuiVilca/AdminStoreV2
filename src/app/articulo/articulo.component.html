@@ -264,7 +264,7 @@
             <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;" *ngFor="let img of listaimagenes">
               <input type="checkbox" class="form-control" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;" (change)="agregarImagenesArticulo(img)" id="{{img}}">
               
-              <img  src="http://localhost:3000/imagenes/tmp/{{img}}" class="imagen-item-articulo">
+              <img  src="{{url_imagen}}/imagenes/tmp/{{img}}" class="imagen-item-articulo">
             </div>
         </div> 
           </div>
