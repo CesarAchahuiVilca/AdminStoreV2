@@ -1,5 +1,6 @@
+import { Constantes } from '../constantes';
 import { Component, OnInit } from '@angular/core';
-import{ ArticuloService} from './articulo.service';
+import { ArticuloService} from './articulo.service';
 import {HttpClient, HttpEventType} from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Articulo } from './articulo';
@@ -36,8 +37,8 @@ export class ArticuloComponent implements OnInit {
   itemsImagenes: string[] = new Array();
   contador_imagenes = 1;
   itemseleccionado: string = "";
-  readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
-  readonly URL_IMAGES = 'http://localhost:3000/imagenes';
+  readonly URL_API = Constantes.URL_API_IMAGEN + '/subir';
+  readonly URL_IMAGES = Constantes.URL_IMAGENES;
   selectedFile: File = null;
   vista: string = "1";
   //CATEGORIAS
