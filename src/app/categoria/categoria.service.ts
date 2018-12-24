@@ -6,18 +6,20 @@ import { Categoria } from './categoria';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CategoriaService {
 
   categoriaSeleccionada: Categoria = new Categoria();
   categorias: Categoria[];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient){
     this.categoriaSeleccionada = new Categoria();
   }
 
   getCategorias(){
     return this.http.get(Constantes.URL_API_CATEGORIA)
   }
+  
   getSubCategorias(id: string){
     return this.http.get(Constantes.URL_API_CATEGORIA+'/subcategorias/'+id)
   }
@@ -29,9 +31,9 @@ export class CategoriaService {
   putCategoria(categoria: Categoria){
     return this.http.put(Constantes.URL_API_CATEGORIA+'/'+categoria._id,categoria);
   }
+
   deleteCategoria(id: string){
     return this.http.delete(Constantes.URL_API_CATEGORIA+'/'+id);
   }
-
   
 }

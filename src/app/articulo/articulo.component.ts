@@ -1,21 +1,21 @@
-import { Constantes } from '../constantes';
-import { Component, OnInit } from '@angular/core';
-import { ArticuloService} from './articulo.service';
-import {HttpClient, HttpEventType} from '@angular/common/http';
-import { NgForm } from '@angular/forms';
 import { Articulo } from './articulo';
 import { ArticuloMysql } from './articuloMysql';
+import { ArticuloService} from './articulo.service';
+import { Caracteristica }  from '../caracteristicas/caracteristica';
 import { CaracteristicaItem } from './caracteristica';
-import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
-import { DataTableDirective } from 'angular-datatables';
-import { Subject, identity } from 'rxjs';
-import { CategoriaService } from '../categoria/categoria.service';
 import { CaracteristicaService } from '../caracteristicas/caracteristica.service';
 import { Categoria } from '../categoria/categoria';
-import { Caracteristica }  from '../caracteristicas/caracteristica';
-import { CategoriaComponent } from '../categoria/categoria.component'
+import { CategoriaService } from '../categoria/categoria.service';
+import { Component, OnInit } from '@angular/core';
+import { Constantes } from '../constantes';
+import { DataTableDirective } from 'angular-datatables';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { Marca } from '../marcadistri/marca';
 import { MarcaService} from '../marcadistri/marca.service';
-import { Marca} from '../marcadistri/marca';
+import { Miga } from '../miga';
+import { NgForm } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-articulo',
@@ -26,38 +26,43 @@ import { Marca} from '../marcadistri/marca';
 export class ArticuloComponent implements OnInit {
 
   @ViewChild(DataTableDirective)
-  dtElement: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTriggers: Subject<any> = new Subject();
-  flag: boolean = true;
-  itemsDatosGenerales: [number, string][] = new Array();
-  contador_datos_generales = 1;
-  itemsCaracteristicas: Number[] = new Array();
-  contador_caracteristicas = 1;
-  itemsImagenes: string[] = new Array();
-  contador_imagenes = 1;
-  itemseleccionado: string = "";
-  readonly URL_API = Constantes.URL_API_IMAGEN + '/subir';
-  readonly URL_IMAGES = Constantes.URL_IMAGENES;
-  private url_imagen : string = Constantes.URL;
-  selectedFile: File = null;
-  vista: string = "1";
+  dtElement               : DataTableDirective;
+  dtOptions               : DataTables.Settings   = {};
+  dtTriggers              : Subject<any>          = new Subject();
+  flag                    : boolean               = true;
+  itemsDatosGenerales     : [number, string][]    = new Array();
+  contador_datos_generales                        = 1;
+  itemsCaracteristicas    : Number[]              = new Array();
+  contador_caracteristicas                        = 1;
+  itemsImagenes           : string[]              = new Array();
+  contador_imagenes                               = 1;
+  itemseleccionado        : string                = "";
+  readonly URL_API                                = Constantes.URL_API_IMAGEN + '/subir';
+  readonly URL_IMAGES                             = Constantes.URL_IMAGENES;
+  private url_imagen      : string                = Constantes.URL;
+  selectedFile            : File                  = null;
+  vista                   : string                = "1";
   //CATEGORIAS
-  listacategorias: Categoria[];
-
-  listamarcas: Marca[];
+  listacategorias         : Categoria[];
+  listamarcas             : Marca[];
   //CARACTERISRTICAS
-  listacaracteristicas: Caracteristica[];
+  listacaracteristicas    : Caracteristica[];
   listacaracteristicasarticulo : CaracteristicaItem[];
   //lista imagenes
-  listaimagenes: string[];
+  listaimagenes           : string[];
   //contenido del editor
-  contenidoEditor: string = "<p></p>";
+  contenidoEditor         : string = "<p></p>";
   // lista de imagenes seleccionadas
-  imagenesSeleccionadas: string[] = new Array();
-
+  imagenesSeleccionadas   : string[] = new Array();
    // nombre imagen para el editor
-   imageneditorseleccionada: string="";
+  imageneditorseleccionada: string="";
+  miga                    : Miga = new Miga('Articulo','articulos');
+  editorInstance : any;
+  // Property Binding
+  mostrarFormularioArticulo   : boolean = false;
+  mostrarBotonOpcion          : boolean = false;
+  mostrarListaArticulos       : boolean = false;
+  mostrarCarga                : boolean = false;
 
   quillConfig={
     toolbar: {
@@ -90,10 +95,8 @@ export class ArticuloComponent implements OnInit {
   ngOnInit() {
     this.itemsDatosGenerales.push([1,""]);
     this.itemsCaracteristicas.push(1);
-    this.itemsImagenes.push("imagen-1");
-    
+    this.itemsImagenes.push("imagen-1");   
     this.listacaracteristicas = new Array();
-
     this.getArticulosMysql();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -121,19 +124,14 @@ export class ArticuloComponent implements OnInit {
         }
       }      
     };
-   // document.getElementById("listaarticulos").hidden = false;
-    document.getElementById("formulario-articulo").hidden = true;
-    document.getElementById("btnOpcion").hidden=true;
-    //Obtener categorias 
     this.getCategorias();    
     this.getMarcas();
-    console.log(this.listamarcas);
   }
 
-  editorInstance;
-  created(editorInstance) {
+  created(editorInstance: any) {
    this.editorInstance = editorInstance;
   }
+
   newHandlerImage(){
     console.log(this.contenidoEditor);
   }
@@ -147,34 +145,28 @@ export class ArticuloComponent implements OnInit {
     this.listacaracteristicasarticulo = new Array();
   }
 
-
   cambiarvista(articulo?: ArticuloMysql, form?: NgForm){
-    //this.limpiarform(form);
     if(this.vista == "1"){
       this.vista ="2";
-      document.getElementById("listaarticulos").hidden = true;
-      document.getElementById("formulario-articulo").hidden = false;
+      this.mostrarListaArticulos = false;
+      this.mostrarFormularioArticulo = true;
       var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
       botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
-      document.getElementById("btnOpcion").hidden=false;
-      document.getElementById("titulo-card").innerHTML = "Completar Registro para el articulo : "+articulo.Descripcion;
+      this.mostrarBotonOpcion = true;
+      document.getElementById("titulo-card").innerHTML = "Completar Registro para el articulo : " + articulo.Descripcion;
       this.limpiarFormulario();
       this.articuloService.articuloSeleccionado.idarticulo = articulo.idArticulo;
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
-      
-    
-
     }else{
       this.vista ="1";
-      document.getElementById("listaarticulos").hidden = false;
-      document.getElementById("formulario-articulo").hidden = true;
+      this.mostrarListaArticulos = true;
+      this.mostrarFormularioArticulo = false;
       var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
       botones.innerHTML='<i class="fa fa-plus" ></i> Agregar Articulo';
       document.getElementById("titulo-card").innerHTML = "Lista de Articulos";
-      document.getElementById("btnOpcion").hidden=true;
+      this.mostrarBotonOpcion = false;
     }
   }
-
 
   ngAfterViewInit(): void {
     this.dtTriggers.next();
@@ -195,39 +187,34 @@ export class ArticuloComponent implements OnInit {
   }
 
   getArticulosMysql(){
-    document.getElementById("carga").hidden = false;
-    document.getElementById("listaarticulos").hidden=true;
+    this.mostrarCarga = true;
+    this.mostrarListaArticulos = false;
     this.articuloService.getArticulosMysql()
     .subscribe(res=>{
       this.articuloService.articulosMysql = res as ArticuloMysql[];
-      if(this.articuloService.articulosMysql.length == 0){
-        console.log("No se encontraron datos");
-      }else{
-        console.log("Exito..");
-        document.getElementById("listaarticulos").hidden=false;
+      if(this.articuloService.articulosMysql.length > 0){
+        this.mostrarListaArticulos = true;
       }   
       this.rerender();
-      document.getElementById("carga").hidden = true;
+      this.mostrarCarga = false;
     });
   }
 
   getCategorias(){
-    this.categoriaService.getCategorias()
-    .subscribe(res=>{
+    this.categoriaService.getCategorias().subscribe( res => {
       this.listacategorias = res as Categoria[];
     });
   }
 
   getMarcas(){
-    this.marcaService.getMarcas()
-    .subscribe(res=>{
+    this.marcaService.getMarcas().subscribe( res => {
       this.listamarcas = res as Marca[];
     });
   }
 
   getCaracteristicas(){   
     this.listacaracteristicasarticulo = new Array(); 
-    for(var i=0;i<this.listacategorias.length;i++){
+    for(var i=0; i < this.listacategorias.length; i++){
       if(this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id){
         this.listacaracteristicas = this.listacategorias[i].caracteristicas;       
       }
@@ -235,7 +222,6 @@ export class ArticuloComponent implements OnInit {
     for(var i=0;i<this.listacaracteristicas.length;i++){
       this.listacaracteristicasarticulo.push(new CaracteristicaItem(this.listacaracteristicas[i].nombre,""));
     }
-    //console.log(this.listacategorias)
   }
 
   completaRegistro(articulomysql: ArticuloMysql){
@@ -257,20 +243,19 @@ export class ArticuloComponent implements OnInit {
         this.itemsDatosGenerales.push([i+1,this.articuloService.articuloSeleccionado.especificaciones[i]]);
       }
       this.vista ="2";
-      document.getElementById("listaarticulos").hidden = true;
-      document.getElementById("formulario-articulo").hidden = false;
+      this.mostrarListaArticulos = false;
+      this.mostrarFormularioArticulo = true;
       var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
       botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
-      document.getElementById("btnOpcion").hidden=false;
+      this.mostrarBotonOpcion = true;
       document.getElementById("titulo-card").innerHTML = "Editar articulo  : "+id;
-      console.log(res);
     });
-
   }
   agregarInformacionGeneral(){
     this.contador_datos_generales = this.contador_datos_generales+1;
     this.itemsDatosGenerales.push([this.contador_datos_generales,""]);
   }
+
   eliminarItem(id:Number){
     for(var i=0;i<this.itemsDatosGenerales.length;i++){
       if(this.itemsDatosGenerales[i][0] == id){
@@ -282,6 +267,7 @@ export class ArticuloComponent implements OnInit {
     this.contador_caracteristicas = this.contador_caracteristicas+1;
     this.itemsCaracteristicas.push(this.contador_caracteristicas);
   }
+
   eliminarItemCaracteristica(id:Number){
     for(var i=0;i<this.itemsCaracteristicas.length;i++){
       if(this.itemsCaracteristicas[i] == id){
@@ -296,9 +282,8 @@ export class ArticuloComponent implements OnInit {
         this.imagenesSeleccionadas.splice(i,1);
         var inputcheck = document.getElementById(id) as HTMLInputElement;
         inputcheck.checked = false;
-        console.log(inputcheck);
-        console.log(id);
-
+        //console.log(inputcheck);
+        //console.log(id);
       }
     }
   }
@@ -311,7 +296,6 @@ export class ArticuloComponent implements OnInit {
   }
 
   getListaImagenes(){
-    
     this.articuloService.getImagenes()
       .subscribe(res=>{
         console.log(res);
@@ -329,20 +313,17 @@ export class ArticuloComponent implements OnInit {
     for(var i = 0;i<titulo.length;i++){
       titulo= titulo.replace(" ","-");
     }
-    this.articuloService.articuloSeleccionado.url = titulo;
-    
-    
+    this.articuloService.articuloSeleccionado.url = titulo;   
   }
 
   elegirImagen(nombre: string){
     this.imageneditorseleccionada = nombre;
-
   }
   agregarImagenEditor(){
     const range = this.editorInstance.getSelection();
     this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES+"/tmp/"+this.imageneditorseleccionada);
-
   }
+
   agregarImagenesArticulo(nombre: string){
     var existe = false;
     for(var i=0;i<this.imagenesSeleccionadas.length;i++){
@@ -355,9 +336,11 @@ export class ArticuloComponent implements OnInit {
       this.imagenesSeleccionadas.push(nombre);    
     }
   }
+
   agregarImagenes(){
 
   }
+
   subirImagen(evento){
     this.selectedFile  = <File> evento.target.files[0];
     //evento.preventDefault();
@@ -378,20 +361,16 @@ export class ArticuloComponent implements OnInit {
             console.log("Comprimiendo imagen");
           /*  progreso.innerHTML = "Comprimiendo Imagen....";
             inputfile.innerHTML = "";*/
-          }
-        
+          }     
         }else{
           if(event.type === HttpEventType.Response){
-            console.log(event.body);       
+            //console.log(event.body);       
             this.getListaImagenes(); 
           }
         }
       }
     );
   }
-
- 
-  
 
   subirImagenEditor(evento){
     this.selectedFile  = <File> evento.target.files[0];
@@ -404,11 +383,10 @@ export class ArticuloComponent implements OnInit {
     })
     .subscribe(event=>{
         if(event.type === HttpEventType.UploadProgress){
-          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");
-         
+          //console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");  
           if(Math.round(event.loaded/event.total*100) == 100){
-            console.log("termino subir la imagen");
-            console.log("Comprimiendo imagen");
+            //console.log("termino subir la imagen");
+            //console.log("Comprimiendo imagen");
           /*  progreso.innerHTML = "Comprimiendo Imagen....";
             inputfile.innerHTML = "";*/
           }
@@ -422,7 +400,7 @@ export class ArticuloComponent implements OnInit {
            
             //document.getElementsByClassName("ql-editor")[0].innerHTML = cont+"<label>HOLA MUNDO FUNCIPNA</label>"
             //console.log(cont);   
-            console.log(this.contenidoEditor);
+            //console.log(this.contenidoEditor);
 
           }
         }
@@ -431,7 +409,6 @@ export class ArticuloComponent implements OnInit {
   }
 
   guardarDatos(){
-
     //Obtener datos generales del articulo
     this.articuloService.articuloSeleccionado.especificaciones = new Array();
     var datosgenerales = document.getElementById("contenido-datos-generales");
@@ -442,51 +419,39 @@ export class ArticuloComponent implements OnInit {
         this.articuloService.articuloSeleccionado.especificaciones.push(dato.value);
       }
     }
-
     //Obtener datos caracteristicas   
     this.articuloService.articuloSeleccionado.caracteristicas = new Array();
     var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");  
     var caracteristicas = datoscaracteristicas.getElementsByClassName("item-caracteristicas");
     for(var i=0;i<caracteristicas.length ;i++){
-      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value,caracteristicas[i].getElementsByTagName("input")[1].value); 
-        
-      this.articuloService.articuloSeleccionado.caracteristicas.push(c);
-  
-      
+      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value,caracteristicas[i].getElementsByTagName("input")[1].value);    
+      this.articuloService.articuloSeleccionado.caracteristicas.push(c);  
     }
-
     //Asignar imagenes
     this.articuloService.articuloSeleccionado.imagenes = this.imagenesSeleccionadas;
     this.articuloService.articuloSeleccionado.descripcion = this.contenidoEditor;
-    console.log(this.articuloService.articuloSeleccionado);
-
+    //console.log(this.articuloService.articuloSeleccionado);
     //guardar datos
     if(this.articuloService.articuloSeleccionado._id){
       this.articuloService.putArticulo(this.articuloService.articuloSeleccionado)
       .subscribe(res=>{      
         var respuesta = JSON.parse(JSON.stringify(res));
-        if(respuesta.estado == "0"){   
+        /*if(respuesta.estado == "0"){   
           console.log("ERROR "+respuesta.mesanje);
         }else{        
           console.log(respuesta.mensaje);
-        }          
+        }          */
       });
     }else{
       this.articuloService.postArticulo(this.articuloService.articuloSeleccionado)
       .subscribe(res=>{      
         var respuesta = JSON.parse(JSON.stringify(res));
-        if(respuesta.estado == "0"){   
+        /*if(respuesta.estado == "0"){   
           console.log("ERROR "+respuesta.mesanje);
         }else{        
           console.log(respuesta.mensaje);
-        }           
+        }           */
       });
     }
-    
-    
-
-    
-
   }
-
 }

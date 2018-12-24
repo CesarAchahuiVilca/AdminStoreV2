@@ -1,3 +1,4 @@
+import { Constantes } from '../constantes';
 import { Component, OnInit } from '@angular/core';
 import { CategoriaService } from './categoria.service';
 import { CaracteristicaService } from '../caracteristicas/caracteristica.service';
@@ -16,15 +17,16 @@ import { formDirectiveProvider } from '@angular/forms/src/directives/reactive_di
 })
 export class CategoriaComponent implements OnInit {
 
-  readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
-  readonly URL_IMAGES = 'http://localhost:3000/imagenes';
-  selectedFile: File = null;
-  nextID : Number = 0 ;
-  vista: string = "1";
-  IDCategoriaSelecionada: string = "root";
-  breadcrumb_categorias: Categoria[] = new Array();
-  todasCategorias: Categoria[];
-  caracteristicas: Caracteristica[];
+  readonly URL_API        = Constantes.URL_API_IMAGEN + '/subir';
+  readonly URL_IMAGES     = Constantes.URL + '/imagenes';
+  selectedFile            : File = null;
+  nextID                  : Number = 0 ;
+  vista                   : string = "1";
+  IDCategoriaSelecionada  : string = "root";
+  breadcrumb_categorias   : Categoria[] = new Array();
+  todasCategorias         : Categoria[];
+  caracteristicas         : Caracteristica[];
+  mostrarCarga            : boolean = false;
 
   constructor( 
     private http: HttpClient, 
@@ -44,30 +46,12 @@ export class CategoriaComponent implements OnInit {
     this.getCaracteristicas();
     this.categoriaService.categoriaSeleccionada.padre  = "root";    
   }
-
- /* cambiarvista(form?: NgForm){
-    this.limpiarform(form);
-    if(this.vista == "1"){
-      this.vista ="2";
-      document.getElementById("contenido_lista_categorias").hidden = true;
-      document.getElementById("contenido_agregar_categoria").hidden = false;
-      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
-      botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
-    }else{
-      this.vista ="1";
-      document.getElementById("contenido_lista_categorias").hidden = false;
-      document.getElementById("contenido_agregar_categoria").hidden = true;
-      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
-      botones.innerHTML='<i class="fa fa-plus" ></i> Agregar Categoria';
-    }
-  }*/
   
   limpiarform(form?: NgForm){    
     if(form){      
       this.categoriaService.categoriaSeleccionada = new Categoria();   
-     // form.reset();      
      this.categoriaService.categoriaSeleccionada.padre  = this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]._id;
-      console.log("padre es: "+this.categoriaService.categoriaSeleccionada.padre);
+      //console.log("padre es: "+this.categoriaService.categoriaSeleccionada.padre);
       document.getElementById("titulomodal").innerHTML='<i class="fa fa-plus"></i> Agregar Categoria';
       var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
       imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
@@ -77,6 +61,7 @@ export class CategoriaComponent implements OnInit {
       this.limpiarChecks();     
     }
   }
+
   clearProgress(){
     var progreso = document.getElementById("progreso") as HTMLDivElement;
     progreso.style.width="0%";
@@ -101,7 +86,7 @@ export class CategoriaComponent implements OnInit {
   }
 
   guardarCategoria(form?: NgForm){
-    console.log(this.categoriaService.categoriaSeleccionada);
+    //console.log(this.categoriaService.categoriaSeleccionada);
     var btncerrarmodal = document.getElementById("btnCerrarModal");
     if(form.value._id){
       this.categoriaService.putCategoria(this.categoriaService.categoriaSeleccionada)
@@ -135,22 +120,20 @@ export class CategoriaComponent implements OnInit {
           this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
         }          
       });
-  }
-  
+    }
   }
   
   editarCategoria(categoria: Categoria){  
     this.categoriaService.categoriaSeleccionada = categoria;
-    console.log(categoria);
+    //console.log(categoria);
     var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
     imagen.src =this.URL_IMAGES+"/tmp/"+categoria.imagen;
-    var imagenInput  = document.getElementById("imagen") as HTMLInputElement;
+    //var imagenInput  = document.getElementById("imagen") as HTMLInputElement;
     var inputfile = document.getElementById("nombrearchivo") as HTMLLabelElement;
     inputfile.innerHTML = this.categoriaService.categoriaSeleccionada.imagen;
     document.getElementById("titulomodal").innerHTML='<i class="fa fa-edit"></i> Editar Categoria: '+categoria.nombre;   
     this.limpiarChecks();
-
-    console.log(this.caracteristicas);
+    //console.log(this.caracteristicas);
     for(var i = 0; i < this.categoriaService.categoriaSeleccionada.caracteristicas.length; i++){
       var j = 0;
       while(this.categoriaService.categoriaSeleccionada.caracteristicas[i]._id != this.caracteristicas[j]._id)
@@ -160,25 +143,26 @@ export class CategoriaComponent implements OnInit {
       var check = document.getElementById(this.caracteristicas[j].nombre) as HTMLInputElement;
       check.checked = true;
     }
-
   }
 
   eliminarCategoria(idCategoria){
     this.categoriaService.deleteCategoria(idCategoria)
     .subscribe(res=>{
       this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
-      console.log(res);
+      //console.log(res);
       var respuesta = JSON.parse(JSON.stringify(res));
       this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
       this.getCategorias();
     });
-    console.log(idCategoria);
+    //console.log(idCategoria);
   }
 
   getCategorias(){
+    this.mostrarCarga = true;
     this.categoriaService.getCategorias()
     .subscribe(res=>{
-      this.todasCategorias = res as Categoria[];     
+      this.todasCategorias = res as Categoria[];  
+      this.mostrarCarga = false;
     });
   }
 
@@ -201,7 +185,7 @@ export class CategoriaComponent implements OnInit {
     });    
   }
   irASubCategoria(categoria: Categoria){
-    console.log("");
+    //console.log("");
     while(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1].nombre != categoria.nombre){
       this.breadcrumb_categorias.pop();
     }
@@ -215,7 +199,7 @@ export class CategoriaComponent implements OnInit {
     var file = document.getElementById("archivo") as HTMLInputElement;
     inputfile.innerHTML = file.value;
     this.selectedFile  = <File> event.target.files[0];
-    console.log(event);
+    //console.log(event);
   }
 
   onUpload(evento){
@@ -236,15 +220,15 @@ export class CategoriaComponent implements OnInit {
           progreso.innerHTML = "Subiendo "+ Math.round(event.loaded/event.total*100)+" %";
           inputfile.style.display="none";
           if(Math.round(event.loaded/event.total*100) == 100){
-            console.log("termino subir la imagen");
-            console.log("Comprimiendo imagen");
+            //console.log("termino subir la imagen");
+            //console.log("Comprimiendo imagen");
             progreso.innerHTML = "Comprimiendo Imagen....";
             inputfile.innerHTML = "";
           }
         
         }else{
           if(event.type === HttpEventType.Response){
-            console.log(event.body);
+            //console.log(event.body);
             var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
             imagen.src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;
             progreso.style.backgroundColor = "green";
@@ -257,7 +241,7 @@ export class CategoriaComponent implements OnInit {
   }
 
   checkCaracteristica(caracteristica : Caracteristica){
-    console.log(this.categoriaService.categoriaSeleccionada);
+    //console.log(this.categoriaService.categoriaSeleccionada);
     var checkButton = document.getElementById(caracteristica.nombre) as HTMLInputElement;
     if (checkButton.checked){
       this.categoriaService.categoriaSeleccionada.caracteristicas.push(caracteristica);
@@ -266,7 +250,7 @@ export class CategoriaComponent implements OnInit {
       while(this.categoriaService.categoriaSeleccionada.caracteristicas[i]._id != caracteristica._id){ i = i + 1;}
       this.categoriaService.categoriaSeleccionada.caracteristicas.splice(i,1);
     }
-    console.log(this.categoriaService.categoriaSeleccionada.caracteristicas);
+    //console.log(this.categoriaService.categoriaSeleccionada.caracteristicas);
   }
 
   limpiarChecks(){

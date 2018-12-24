@@ -20,6 +20,9 @@
                 data-target="#modalcategoria" style="color: black"><i class="fa fa-plus"></i> Agregar Categoria</button><br>
             </div>
             <div class="col-md-12">
+              <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
+                <img src="assets/imagenes/carga.gif"> Cargando Datos
+              </div>
               <div id="contenido_lista_categorias">
                 <table class="table  table-responsive-sm table-sm" id="tabla_categoria">
                   <thead>
@@ -50,15 +53,6 @@
                               (click)="eliminarCategoria(categoria._id)"><i class="fa fa-trash"></i></button>
                           </div>
                         </div>
-                        <!-- <div class="dropdown" >
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      <i class="fa fa-sliders"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="color: black; padding: 0px;">
-                                      <a class="dropdown-item" style="padding-top: 0px; padding-bottom: 0px;" (click)="editarCategoria(categoria)" data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit" style="color: rgb(0, 0, 0)"></i> Editar</a>
-                                      <a class="dropdown-item" style="padding-top: 0px; padding-bottom: 0px;" (click)="eliminarCategoria(categoria._id)"> <i class="fa fa-trash" style="color: rgb(0, 0, 0)"></i>Eliminar</a>
-                                    </div>
-                                </div>-->
                       </td>
                     </tr>
                   </tbody>
@@ -67,28 +61,9 @@
               <div id="mensaje"></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
-    <!--<div class="col-md-3 col-sm-12 col-xs-12">
-          <div class="card">
-            <div class="card-header">
-              <strong>Arbol de Categorias</strong>
-            </div>
-            <div class="card-body">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary">Sony</button>
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-                    </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Tablet</a>
-                      <a class="dropdown-item" href="#">Smartphone</a>
-                    </div>
-                  </div>
-            </div>
-          </div>
-        </div>-->
   </div>
 </div>
 
@@ -146,7 +121,8 @@
                 <label for="caracteristicas">Características</label>
                 <div class="col-form-label">
                   <div class="form-check checkbox" *ngFor="let caracteristica of caracteristicas">
-                    <input id="{{caracteristica.nombre}}" type="checkbox" class="form-check-input" value="{{caracteristica.nombre}}" (click)="checkCaracteristica(caracteristica)">
+                    <input id="{{caracteristica.nombre}}" type="checkbox" class="form-check-input" value="{{caracteristica.nombre}}"
+                      (click)="checkCaracteristica(caracteristica)">
                     <label for="{{caracteristica.nombre}}" class="form-check-label">{{caracteristica.nombre}}</label>
                   </div>
                 </div>

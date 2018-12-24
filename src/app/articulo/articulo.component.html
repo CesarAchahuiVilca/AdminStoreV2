@@ -1,220 +1,234 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-lg-12">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="card" style="width: 100%;">
-              <div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
-                <strong>Lista de Articulos</strong>
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="card" style="width: 100%;">
+          <div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
+            <strong>Lista de Articulos</strong>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6" style="text-align: left !important;">
+                <button class="btn btn-block btn-link" type="button" (click)="cambiarvista(categoriaForm)" style="color: black; width: auto;"
+                  id="btnOpcion" [hidden]="!mostrarBotonOpcion"><i class="fa fa-plus"></i> Agregar Articulos</button><br>
               </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-6" style="text-align: left !important;">
-                      <button class="btn btn-block btn-link" type="button" (click)="cambiarvista(categoriaForm)"  style="color: black; width: auto;" id="btnOpcion" ><i class="fa fa-plus" ></i> Agregar Articulos</button><br>
-                  </div>
-                  <div class="col-lg-6">
-                  </div>
-                  <div class="col-lg-12">
-                      <div id="carga" style="width: 100%;text-align: center;">
-                          <img src="assets/imagenes/carga.gif"> Cargando Datos
-                        </div>
-                    <div id="listaarticulos">
-                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers"  class="table table-responsive-sm table-sm table-striped table-hover" id="tabla_categoria">
-                            <thead>
-                              <tr >
-                                <th style="width: 8%;">Id Articulo</th>
-                                <th style="width: 30%">Descripcion</th>
-                                <th style="width: 20%">Categoria</th>
-                                <th style="width: 5%">Cantidad</th>
-                                <th style="width: 10%;">Estado</th>
-                                <th style="width: 5%;"></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-    
-                              <tr *ngFor="let articulomysql of articuloService.articulosMysql">
-                                <td>{{articulomysql.idArticulo}}</td>
-                                <td>{{articulomysql.Descripcion}}</td>
-                                <td>{{articulomysql.Categoria}}</td>
-                                <td style="text-align: center;">{{articulomysql.Cantidad}}</td>
-                                <td style="text-align: center;">                                  
-                                  <button *ngIf="articulomysql.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary" (click) = "cambiarvista(articulomysql,articuloForm)" >Completar Registro {{articulomysql.Estado}}</button>                                   
-                                  <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '1'" class="fa fa-check"></i>                                     
-                                  <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '2'" class="fa fa-check"></i>                                     
-
-                                </td>
-                                <td style="text-align: center;">
-                                    <div  style="margin-left: 0px; display: flex; flex-direction: row;">
-                                        <div style="flex-grow: 0;margin-right: 2px;">
-                                          <button type="button"  *ngIf="articulomysql.Estado == '0'" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql.idArticulo)" data-toggle="modal" data-target="#modalcategoria" disabled ><i class="fa fa-edit"></i></button>
-                                          <button type="button" *ngIf="articulomysql.Estado == '1'" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql.idArticulo)" data-toggle="modal" data-target="#modalcategoria" ><i class="fa fa-edit"></i></button>
-
-                                        </div>    
-                                      </div>                                   
-                                  </td>
-                              </tr>                              
-                            </tbody>
-                          </table>
-                    </div>                      
-                    
-                    <div id="formulario-articulo">                              
-                      <form #articuloForm="ngForm">  
-                          <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="articuloService.articuloSeleccionado._id" name="idarticulo" type="text" required hidden="true">
-
-                          <input class="form-control" id="idarticulo" #idarticulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.idarticulo" name="idarticulo" type="text" required hidden="true">
-                          <div class="row">  
-                            <div class="col-lg-12">
-                              <div class="form-group">
-                                  <label style="font-weight: bold;">Titulo del Articulo</label>
-                                  <input class="form-control" id="titulo" name="titulo" #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo" type="text" placeholder="Ingrese Titulo del Articulos" required style="border-color: rgb(114, 114, 114);" (change)="generarURL()">
-                              </div>
-                            </div>
-                            <div class="col-lg-12">
-                              <div class="form-group">
-                                  <label style="font-weight: bold;">URL del Articulo</label>
-                                  <input class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.url" type="text" placeholder="URL del articulo" required style="border-color: rgb(114, 114, 114);">
-                              </div>
-                            </div>
-                            <div class="col-lg-5">
-                              <div class="form-group">
-                                <label style="font-weight: bold;">Categoria</label>
-                                <select  class="form-control" id="categoria" #categoria="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.categoria" name="categoria"style="border-color: rgb(114, 114, 114);" (change)="getCaracteristicas()">
-                                  <option> Seleccione Categoria </option>
-                                  <option *ngFor="let cat of listacategorias" value="{{cat._id}}"> {{cat.nombre}}</option>  
-                                </select>
-                              </div>
-                              
-                            </div>
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label style="font-weight: bold;">Marca</label>
-                                <select  class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"style="border-color: rgb(114, 114, 114);">
-                                  <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>  
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label style="font-weight: bold;">Cantidad</label>
-                                    <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad" class="form-control"style="border-color: rgb(114, 114, 114);" [ngModelOptions]="{standalone: true}">
-                                  </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="card" style="border-color: rgb(114, 114, 114);" >
-                                    <div class="card-body">
-                                      <div style="display: flex; flex-direction: row;">
-                                        <div style="flex-grow:0;margin-right: 5px;">
-                                            <h5>Informacion general</h5> 
-                                        </div>
-                                        <div style="flex-grow:0; margin-top: -5px;">
-                                            <button type="button" class="btn btn-link" style=" height: 35px;" (click)="agregarInformacionGeneral()"><i class="fa fa-plus"></i> Agregar</button>
-                                        </div>
-                                      </div>
-                                      <hr>
-                                      <div>
-                                        <div style="display: flex; flex-direction: column;" id="contenido-datos-generales">
-                                          <div style="flex-grow: 0;margin-top: 3px;" class="item-datos-generales" *ngFor = "let item of itemsDatosGenerales ">
-                                              <div class="controls">
-                                                <div class="input-group">
-                                                  <input class="form-control" id="appendedInputButton" size="16" type="text" style="border-color: rgb(114, 114, 114);" value="{{item[1]}}">
-                                                  <span class="input-group-append">
-                                                    <button class="btn btn-danger" type="button" (click)="eliminarItem(item[0])"><i class="fa fa-trash"></i></button>
-                                                  </span>
-                                                </div>
-                                              </div>
-                                          </div>
-                                        </div>            
-                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="card" style="border-color: rgb(114, 114, 114);">
-                                    <div class="card-body">
-                                      <div style="display: flex; flex-direction: row;">
-                                        <div style="flex-grow:0;margin-right: 5px;">
-                                            <h5>Caracteristicas del Articulo</h5> 
-                                        </div>
-                                        <div style="flex-grow:0; margin-top: -5px;">
-                                          <!--  <button type="button" class="btn btn-link" style=" height: 35px;" (click)="agregarCaracteristica()"><i class="fa fa-plus"></i> Agregar</button>-->
-                                        </div>
-                                      </div>
-                                      <hr>
-                                      <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
-                                          <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;" *ngFor = "let caracteristica of listacaracteristicasarticulo ">
-                                            <div style="flex-grow: 0; width: 40%;">
-                                                <input class="form-control" style="border-color: rgb(58, 56, 56); background: rgb(216, 213, 209); color: black; font-weight: bold;"  value="{{caracteristica.nombre}}" readonly>
-                                            </div>
-                                            <div style="flex-grow: 0; width: 55%;">
-                                                <input type="text" class="form-control"style="border-color: rgb(114, 114, 114);" placeholder="Ingrese valor de la carcteristica" value="{{caracteristica.valor}}">
-                                            </div>
-                                          </div>
-                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="card" style="border-color: rgb(114, 114, 114);">
-                                    <div class="card-body">
-                                      <div style="display: flex; flex-direction: row;">
-                                          <div style="flex-grow:0;margin-right: 5px;">
-                                              <h5>Imagenes del Articulo</h5> 
-                                              <input type="file"  style="display: none;" (change)="subirImagen($event)" id="imageninput">
-                                              <input type="file"  style="display: none;" (change)="subirImagenEditor($event)" id="imageninputeditor">
-
-                                          </div>
-                                          <div style="flex-grow:0; margin-top: -5px;">
-                                            <button type="button" class="btn btn-link" style=" height: 35px;" (click)=" buscarImagen()" data-toggle="modal"
-                                            data-target="#modalimagenes" ><i class="fa fa-plus"></i> Agregar Imagenes</button>
-                                        </div>
-                                        </div>
-                                      <hr>
-            
-                                      <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-caracteristicas">
-                                          
-                                          <div class="item-imagen"  style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px;" *ngFor = "let item of imagenesSeleccionadas "   >
-                                            <img style="position: absolute; right: -10px;top: -10px;" src="assets/imagenes/close.png" width="20px" height="20px"  (click)="eliminarItemImagen(item)">
-                                        
-                                            <img src=""class="imagen-item-articulo" src="{{URL_IMAGES}}/tmp/{{item}}">
-                                          </div>
-                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="card" style="border-color: rgb(114, 114, 114); height: auto;">
-                                    <div class="card-body">
-                                      <div style="display: flex; flex-direction: row;">
-                                          <div style="flex-grow:0;margin-right: 5px;">
-                                              <h5>Detalles del Articulo</h5> 
-                                          </div>
-                                        </div>
-                                      <hr>
-                                      <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-detalle">
-                                        <div style="width: 100%;" class="row">
-                                          <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor" (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}" ></quill-editor>    
-                                          
-                                        </div>
-                                        
-                                                          
-                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12" style="text-align: right;">
-                              <hr>
-                              <button class="btn btn-default"style="margin-right: 5px;"  (click)="cambiarvista(categoriaForm)"> <i class="fa fa-angle-left" ></i> Regresar</button>
-                              <button class="btn btn-danger"style="margin-right: 5px;" (click)="newHandlerImage();"> <i class="fa fa-close" ></i> Limpiar</button>
-                              <button class="btn btn-success" (click)="guardarDatos()"> <i class="fa fa-save"></i> Guardar Articulo</button>
+              <div class="col-lg-6">
+              </div>
+              <div class="col-lg-12">
+                <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
+                  <img src="assets/imagenes/carga.gif"> Cargando Datos
+                </div>
+                <div [hidden]="!mostrarListaArticulos">
+                  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover"
+                    id="tabla_categoria">
+                    <thead>
+                      <tr>
+                        <th style="width: 8%;">Id Articulo</th>
+                        <th style="width: 30%">Descripcion</th>
+                        <th style="width: 20%">Categoria</th>
+                        <th style="width: 5%">Cantidad</th>
+                        <th style="width: 10%;">Estado</th>
+                        <th style="width: 5%;"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let articulomysql of articuloService.articulosMysql">
+                        <td>{{articulomysql.idArticulo}}</td>
+                        <td>{{articulomysql.Descripcion}}</td>
+                        <td>{{articulomysql.Categoria}}</td>
+                        <td style="text-align: center;">{{articulomysql.Cantidad}}</td>
+                        <td style="text-align: center;">
+                          <button *ngIf="articulomysql.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary"
+                            (click)="cambiarvista(articulomysql,articuloForm)">Completar Registro
+                            {{articulomysql.Estado}}</button>
+                          <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '1'" class="fa fa-check"></i>
+                          <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '2'" class="fa fa-check"></i>
+                        </td>
+                        <td style="text-align: center;">
+                          <div style="margin-left: 0px; display: flex; flex-direction: row;">
+                            <div style="flex-grow: 0;margin-right: 2px;">
+                              <button type="button" *ngIf="articulomysql.Estado == '0'" class="btn btn-pill btn-block btn-success"
+                                style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql.idArticulo)"
+                                data-toggle="modal" data-target="#modalcategoria" disabled><i class="fa fa-edit"></i></button>
+                              <button type="button" *ngIf="articulomysql.Estado == '1'" class="btn btn-pill btn-block btn-success"
+                                style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql.idArticulo)"
+                                data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit"></i></button>
                             </div>
                           </div>
-                        </form>   
-
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div [hidden]="!mostrarFormularioArticulo">
+                  <form #articuloForm="ngForm">
+                    <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="articuloService.articuloSeleccionado._id"
+                      name="idarticulo" type="text" required hidden="true">
+                    <input class="form-control" id="idarticulo" #idarticulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.idarticulo"
+                      name="idarticulo" type="text" required hidden="true">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <label style="font-weight: bold;">Titulo del Articulo</label>
+                          <input class="form-control" id="titulo" name="titulo" #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo"
+                            type="text" placeholder="Ingrese Titulo del Articulos" required style="border-color: rgb(114, 114, 114);"
+                            (change)="generarURL()">
+                        </div>
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <label style="font-weight: bold;">URL del Articulo</label>
+                          <input class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.url"
+                            type="text" placeholder="URL del articulo" required style="border-color: rgb(114, 114, 114);">
+                        </div>
+                      </div>
+                      <div class="col-lg-5">
+                        <div class="form-group">
+                          <label style="font-weight: bold;">Categoria</label>
+                          <select class="form-control" id="categoria" #categoria="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.categoria"
+                            name="categoria" style="border-color: rgb(114, 114, 114);" (change)="getCaracteristicas()">
+                            <option> Seleccione Categoria </option>
+                            <option *ngFor="let cat of listacategorias" value="{{cat._id}}"> {{cat.nombre}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label style="font-weight: bold;">Marca</label>
+                          <select class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"
+                            style="border-color: rgb(114, 114, 114);">
+                            <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <div class="form-group">
+                          <label style="font-weight: bold;">Cantidad</label>
+                          <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad"
+                            class="form-control" style="border-color: rgb(114, 114, 114);" [ngModelOptions]="{standalone: true}">
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="card" style="border-color: rgb(114, 114, 114);">
+                          <div class="card-body">
+                            <div style="display: flex; flex-direction: row;">
+                              <div style="flex-grow:0;margin-right: 5px;">
+                                <h5>Informacion general</h5>
+                              </div>
+                              <div style="flex-grow:0; margin-top: -5px;">
+                                <button type="button" class="btn btn-link" style=" height: 35px;" (click)="agregarInformacionGeneral()"><i
+                                    class="fa fa-plus"></i> Agregar</button>
+                              </div>
+                            </div>
+                            <hr>
+                            <div>
+                              <div style="display: flex; flex-direction: column;" id="contenido-datos-generales">
+                                <div style="flex-grow: 0;margin-top: 3px;" class="item-datos-generales" *ngFor="let item of itemsDatosGenerales ">
+                                  <div class="controls">
+                                    <div class="input-group">
+                                      <input class="form-control" id="appendedInputButton" size="16" type="text" style="border-color: rgb(114, 114, 114);"
+                                        value="{{item[1]}}">
+                                      <span class="input-group-append">
+                                        <button class="btn btn-danger" type="button" (click)="eliminarItem(item[0])"><i
+                                            class="fa fa-trash"></i></button>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="card" style="border-color: rgb(114, 114, 114);">
+                          <div class="card-body">
+                            <div style="display: flex; flex-direction: row;">
+                              <div style="flex-grow:0;margin-right: 5px;">
+                                <h5>Caracteristicas del Articulo</h5>
+                              </div>
+                              <div style="flex-grow:0; margin-top: -5px;">
+                                <!--  <button type="button" class="btn btn-link" style=" height: 35px;" (click)="agregarCaracteristica()"><i class="fa fa-plus"></i> Agregar</button>-->
+                              </div>
+                            </div>
+                            <hr>
+                            <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
+                              <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
+                                *ngFor="let caracteristica of listacaracteristicasarticulo ">
+                                <div style="flex-grow: 0; width: 40%;">
+                                  <input class="form-control" style="border-color: rgb(58, 56, 56); background: rgb(216, 213, 209); color: black; font-weight: bold;"
+                                    value="{{caracteristica.nombre}}" readonly>
+                                </div>
+                                <div style="flex-grow: 0; width: 55%;">
+                                  <input type="text" class="form-control" style="border-color: rgb(114, 114, 114);"
+                                    placeholder="Ingrese valor de la carcteristica" value="{{caracteristica.valor}}">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="card" style="border-color: rgb(114, 114, 114);">
+                          <div class="card-body">
+                            <div style="display: flex; flex-direction: row;">
+                              <div style="flex-grow:0;margin-right: 5px;">
+                                <h5>Imagenes del Articulo</h5>
+                                <input type="file" style="display: none;" (change)="subirImagen($event)" id="imageninput">
+                                <input type="file" style="display: none;" (change)="subirImagenEditor($event)" id="imageninputeditor">
+                              </div>
+                              <div style="flex-grow:0; margin-top: -5px;">
+                                <button type="button" class="btn btn-link" style=" height: 35px;" (click)=" buscarImagen()"
+                                  data-toggle="modal" data-target="#modalimagenes"><i class="fa fa-plus"></i> Agregar
+                                  Imagenes</button>
+                              </div>
+                            </div>
+                            <hr>
+                            <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-caracteristicas">
+                              <div class="item-imagen" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px;"
+                                *ngFor="let item of imagenesSeleccionadas ">
+                                <img style="position: absolute; right: -10px;top: -10px;" src="assets/imagenes/close.png"
+                                  width="20px" height="20px" (click)="eliminarItemImagen(item)">
+                                <img src="" class="imagen-item-articulo" src="{{URL_IMAGES}}/tmp/{{item}}">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="card" style="border-color: rgb(114, 114, 114); height: auto;">
+                          <div class="card-body">
+                            <div style="display: flex; flex-direction: row;">
+                              <div style="flex-grow:0;margin-right: 5px;">
+                                <h5>Detalles del Articulo</h5>
+                              </div>
+                            </div>
+                            <hr>
+                            <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-detalle">
+                              <div style="width: 100%;" class="row">
+                                <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor" (onEditorCreated)="created($event)"
+                                  [ngModelOptions]="{standalone: true}"></quill-editor>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-12" style="text-align: right;">
+                        <hr>
+                        <button class="btn btn-default" style="margin-right: 5px;" (click)="cambiarvista(categoriaForm)">
+                          <i class="fa fa-angle-left"></i> Regresar</button>
+                        <button class="btn btn-danger" style="margin-right: 5px;" (click)="newHandlerImage();"> <i
+                            class="fa fa-close"></i> Limpiar</button>
+                        <button class="btn btn-success" (click)="guardarDatos()"> <i class="fa fa-save"></i> Guardar Articulo</button>
+                      </div>
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
   </div>
 </div>
@@ -222,67 +236,70 @@
 
 
 <!-- Modal Articulos -->
-<div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document" id="modalarticulocontenido">
-      <div class="modal-content">
-        <div class="modal-header"  >
-          <h5 class="modal-title" id="titulomodal"><i class="fa fa-image"> </i> Imagenes</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
-            <i class="fa fa-close"></i>
-          </button>
-        </div>
-        <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
-          <div class="row">
-            <div class="col-lg-4 col-sm-12">
-              <h4> Elija Imagenes para el Articulo</h4>
-            </div>
-            <div class="col-lg-8 col-sm-12">
-              <div class="row">
-                <div class="col-lg-4" style="text-align: center;">
-                  <button class="btn btn-default btn-pill" (click) ="buscaNuevaImagen()"><i class="fa fa-upload"></i> Subir Imagen</button>
+<div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document" id="modalarticulocontenido">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titulomodal"><i class="fa fa-image"> </i> Imagenes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
+        <div class="row">
+          <div class="col-lg-4 col-sm-12">
+            <h4> Elija Imagenes para el Articulo</h4>
+          </div>
+          <div class="col-lg-8 col-sm-12">
+            <div class="row">
+              <div class="col-lg-4" style="text-align: center;">
+                <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
+                  Subir Imagen</button>
 
-                </div>
-                <div class="col-lg-8">
-                  <div style="display: flex; flex-direction: row; width: 100%;">
-                      <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
-                          <label > Buscar: </label>
-                      </div>
-                      <div style="flex-grow: 0; width: 90%;">
-                          <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes">
-                      </div>                      
-                  </div>                    
+              </div>
+              <div class="col-lg-8">
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                  <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
+                    <label> Buscar: </label>
+                  </div>
+                  <div style="flex-grow: 0; width: 90%;">
+                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes">
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            </div>
-           
-          <br>  
-          <div  style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">    
+        </div>
+
+        <br>
+        <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
           <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-                     
-            <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;" *ngFor="let img of listaimagenes">
-              <input type="checkbox" class="form-control" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;" (change)="agregarImagenesArticulo(img)" id="{{img}}">
-              
-              <img  src="{{url_imagen}}/imagenes/tmp/{{img}}" class="imagen-item-articulo">
-            </div>
-        </div> 
-          </div>
-          <div style="text-align: right;">
-            <br>
-            <button class="btn btn-success btn-success btn-pill" data-dismiss="modal"><i class="fa fa-check"></i> Aceptar</button>
 
+            <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
+              *ngFor="let img of listaimagenes">
+              <input type="checkbox" class="form-control" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;" (change)="agregarImagenesArticulo(img)" id="{{img}}">
+              <img src="{{url_imagen}}/imagenes/tmp/{{img}}" class="imagen-item-articulo">
+            </div>
           </div>
-        </div>        
+        </div>
+        <div style="text-align: right;">
+          <br>
+          <button class="btn btn-success btn-success btn-pill" data-dismiss="modal"><i class="fa fa-check"></i> Aceptar</button>
+
+        </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Modal Imagenes editor -->
-<div class="modal fade" id="modalimageneseditor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog" role="document" id="modalarticulocontenidoeditor" >
+<!-- Modal Imagenes editor -->
+<div class="modal fade" id="modalimageneseditor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document" id="modalarticulocontenidoeditor">
     <div class="modal-content">
-      <div class="modal-header"  >
+      <div class="modal-header">
         <h5 class="modal-title" id="titulomodal"><i class="fa fa-image"> </i> Imagenes</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
           <i class="fa fa-close"></i>
@@ -296,43 +313,47 @@
           <div class="col-lg-8 col-sm-12">
             <div class="row">
               <div class="col-lg-4" style="text-align: center;">
-                <button class="btn btn-default btn-pill" (click) ="buscaNuevaImagen()"><i class="fa fa-upload"></i> Subir Nueva Imagen</button>
+                <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
+                  Subir Nueva Imagen</button>
 
               </div>
               <div class="col-lg-8">
                 <div style="display: flex; flex-direction: row; width: 100%;">
-                    <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
-                        <label > Buscar: </label>
-                    </div>
-                    <div style="flex-grow: 0; width: 90%;">
-                        <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes">
-                    </div>                      
-                </div>                    
+                  <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
+                    <label> Buscar: </label>
+                  </div>
+                  <div style="flex-grow: 0; width: 90%;">
+                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
+        </div>
+
+        <br>
+        <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
+          <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
+
+            <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
+              *ngFor="let img of listaimagenes">
+              <input type="radio" class="form-check-input" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;"
+                (change)="elegirImagen(img)" name="imagen-editor">
+
+              <img src="{{URL_IMAGES}}/tmp/{{img}}" class="imagen-item-articulo">
+            </div>
           </div>
-         
-        <br>  
-        <div  style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">    
-        <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-                   
-          <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;" *ngFor="let img of listaimagenes">
-            <input type="radio" class="form-check-input" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;" (change)="elegirImagen(img)"  name="imagen-editor">
-            
-            <img  src="{{URL_IMAGES}}/tmp/{{img}}" class="imagen-item-articulo">
-          </div>
-      </div> 
         </div>
         <div style="text-align: right;">
           <br>
-          <button class="btn btn-success btn-success btn-pill" data-dismiss="modal" (click)="agregarImagenEditor()"><i class="fa fa-plus" ></i> Agregar</button>
+          <button class="btn btn-success btn-success btn-pill" data-dismiss="modal" (click)="agregarImagenEditor()"><i
+              class="fa fa-plus"></i> Agregar</button>
 
         </div>
-      </div>        
+      </div>
     </div>
   </div>
 </div>
 
-<button  data-toggle="modal" data-target="#modalimageneseditor"  id="btnimageneditor" (click)="buscarImagen()"></button>
+<button data-toggle="modal" data-target="#modalimageneseditor" id="btnimageneditor" (click)="buscarImagen()"></button>
