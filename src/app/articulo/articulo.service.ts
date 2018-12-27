@@ -27,6 +27,9 @@ export class ArticuloService {
   getArticulo(idarticulo: string){
     return this.http.get(Constantes.URL_API_ARTICULO+'/'+idarticulo);
   }
+  getPreciosArticulo(idarticulo: string){
+   // return this.http.get(Constantes.URL_API_PRECIOS+"/"+idarticulo)
+  }
   postArticulo(articulo: Articulo){
     return this.http.post(Constantes.URL_API_ARTICULO,articulo);
   }

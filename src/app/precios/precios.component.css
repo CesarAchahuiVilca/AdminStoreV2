@@ -1,0 +1,9 @@
+.contenido-clientes{
+    display: flex; 
+    flex-direction: column;
+}
+.item-cliente{
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+}

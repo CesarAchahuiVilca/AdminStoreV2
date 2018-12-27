@@ -1,5 +1,5 @@
-//const URL_API = 'http://localhost:3000/api';
-const URL_API = 'https://latiendadeltiogeorge.herokuapp.com/api/';
+const URL_API = 'http://localhost:3000/api/';
+//const URL_API = 'https://latiendadeltiogeorge.herokuapp.com/api/';
 export class Constantes {
 
     public static URL                       = 'https://latiendadeltiogeorge.herokuapp.com';

@@ -1,0 +1,70 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+          <div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
+              <strong>Lista de Precios</strong>
+          </div>
+          <div class="card-body" style="padding: 0px; display: flex; flex-direction: column; min-height: 420px;">
+            <div class="form-subir-excel" style="display: flex; flex-direction: row; width: 100%; padding: 10px;justify-content: center;">
+                <input type="file" hidden="true" id="excelinput" (change)="cambioArchivo($event)"name="excel">
+                <label id="nombrearchivoexcel" style="min-width: 200px; border: 1px solid rgb(221, 218, 218); border-radius: 5px;height: 35px;margin: 5px;"></label>
+                <button class="btn btn-info btn-pill" (click) ="buscaNuevaArchivo($event)" style="margin-left: 5px; width: 45px; height: 45px;" ><i class="fa fa-search"></i> </button>
+                <button class="btn btn-success btn-pill" (click) ="procesarExcel($event)" style="margin-left: 5px;"><i class="fa fa-upload"></i> Subir Excel</button>
+            </div>
+            <div class="cargando" id="progresosubida" style="width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; text-align: center;" hidden="true">
+                <div style="width: 100%; text-align: center; flex-wrap: wrap;">
+                        <label for="" id="mensajeestado">{{mensajeestado}}</label>
+                </div>    
+                
+                    <div class="progress" style="width: 50%;flex-wrap: wrap;">
+                        <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                    </div>
+
+            </div>
+            <div class="vistaplanes" style="width: 100%;" hidden="true"> 
+                <div  style="width: 30%; display: flex; flex-direction: column; padding: 5px;">
+
+                    <div style="margin-bottom: 5px;" >
+                      <input class="form-control" type="text" placeholder="Buscar equipo" >
+                    </div>
+                    <div class="lista-equipos" style="padding: 5px; border: 1px solid rgb(212, 208, 208);">
+                        <div class="item-cliente" style="cursor:pointer;">              
+                            <label style="margin:0px;margin-left: 5px; padding: 0px;">EQUIPO</label>                                             
+                        </div>
+                        <div><hr style="padding: 0px; margin: 0px;"></div>  
+                        <div class="item-cliente" style="cursor:pointer;">              
+                            <label style="margin:0px;margin-left: 5px; padding: 0px;">EQUIPO</label>                                             
+                        </div>
+                        <div><hr style="padding: 0px; margin: 0px;"></div>  
+                        <div class="item-cliente" style="cursor:pointer;">              
+                            <label style="margin:0px;margin-left: 5px; padding: 0px;">EQUIPO</label>                                             
+                        </div>
+                        <div><hr style="padding: 0px; margin: 0px;"></div>  
+                        <div class="item-cliente" style="cursor:pointer;">              
+                            <label style="margin:0px;margin-left: 5px; padding: 0px;">EQUIPO</label>                                             
+                        </div>
+                        <div><hr style="padding: 0px; margin: 0px;"></div>  
+                        <div class="item-cliente" style="cursor:pointer;">              
+                            <label style="margin:0px;margin-left: 5px; padding: 0px;">EQUIPO</label>                                             
+                        </div>
+                        <div><hr style="padding: 0px; margin: 0px;"></div>  
+                    </div>
+                    
+  
+                </div>
+                <div class="lista-precios" style="width: 70%;" >
+                  LISTA DE PRECIOS
+                </div>
+            </div>
+            <div class="completar-registroplanes">
+                
+
+            </div>
+              
+              
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
