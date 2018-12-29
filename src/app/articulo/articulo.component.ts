@@ -250,19 +250,8 @@ export class ArticuloComponent implements OnInit {
       this.mostrarBotonOpcion = true;
       document.getElementById("titulo-card").innerHTML = "Editar articulo  : "+id;
     });
-  }
-  agregarInformacionGeneral(){
-    this.contador_datos_generales = this.contador_datos_generales+1;
-    this.itemsDatosGenerales.push([this.contador_datos_generales,""]);
-  }
-
-  eliminarItem(id:Number){
-    for(var i=0;i<this.itemsDatosGenerales.length;i++){
-      if(this.itemsDatosGenerales[i][0] == id){
-        this.itemsDatosGenerales.splice(i,1);
-      }
-    }
-  }
+  } 
+  
   agregarCaractgarCaracteristica(){
     this.contador_caracteristicas = this.contador_caracteristicas+1;
     this.itemsCaracteristicas.push(this.contador_caracteristicas);

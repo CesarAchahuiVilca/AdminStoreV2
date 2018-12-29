@@ -113,27 +113,14 @@
                           <div class="card-body">
                             <div style="display: flex; flex-direction: row;">
                               <div style="flex-grow:0;margin-right: 5px;">
-                                <h5>Informacion general</h5>
-                              </div>
-                              <div style="flex-grow:0; margin-top: -5px;">
-                                <button type="button" class="btn btn-link" style=" height: 35px;" (click)="agregarInformacionGeneral()"><i
-                                    class="fa fa-plus"></i> Agregar</button>
+                                <h5>Precios del Articulo</h5>
                               </div>
                             </div>
                             <hr>
                             <div>
                               <div style="display: flex; flex-direction: column;" id="contenido-datos-generales">
-                                <div style="flex-grow: 0;margin-top: 3px;" class="item-datos-generales" *ngFor="let item of itemsDatosGenerales ">
-                                  <div class="controls">
-                                    <div class="input-group">
-                                      <input class="form-control" id="appendedInputButton" size="16" type="text" style="border-color: rgb(114, 114, 114);"
-                                        value="{{item[1]}}">
-                                      <span class="input-group-append">
-                                        <button class="btn btn-danger" type="button" (click)="eliminarItem(item[0])"><i
-                                            class="fa fa-trash"></i></button>
-                                      </span>
-                                    </div>
-                                  </div>
+                                <div style="flex-grow: 0;margin-top: 3px;" class="item-datos-generales">
+                                  
                                 </div>
                               </div>
                             </div>

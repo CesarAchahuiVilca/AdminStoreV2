@@ -15,6 +15,7 @@ export class Constantes {
     public static URL_API_USUARIO           = URL_API + 'usuarios';
     public static ULR_API_REGION            = URL_API + 're';
     public static URL_API_DIRECCION         = URL_API + 'dir';
+    public static URL_API_PLANES            = URL_API + 'precio';
     public static URL_IMAGENES              = 'https://latiendadeltiogeorge.herokuapp.com/imagenes';
     
 }
