@@ -18,18 +18,18 @@ export class DireccionService {
   }
 
   postDireccion(direccion : Direccion){
-    return this.http.post(this.URL_API, direccion);
+    return this.http.post(this.URL_API, direccion, {withCredentials: true});
   }
   
   getDirecciones(direccion: string){
-    return this.http.get(this.URL_API + `/${direccion}`);
+    return this.http.get(this.URL_API + `/${direccion}`, {withCredentials: true});
   }
 
   putDireccion(direccion :  Direccion){
-    return this.http.put(this.URL_API + `/${direccion._id}`, direccion);
+    return this.http.put(this.URL_API + `/${direccion._id}`, direccion, {withCredentials: true});
   }
 
   deleteDireccion(_id : string) {
-    return this.http.delete(this.URL_API + `/${_id}`);
+    return this.http.delete(this.URL_API + `/${_id}`, {withCredentials: true});
   }
 }

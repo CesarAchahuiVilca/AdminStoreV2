@@ -18,25 +18,25 @@ export class TiendaService {
   }
 
   postTienda(tienda: Tienda): Observable<Tienda>{
-    return this.http.post<Tienda>(this.URL, tienda).pipe(
+    return this.http.post<Tienda>(this.URL, tienda, {withCredentials: true}).pipe(
       catchError(this.manejarError<Tienda>('postTienda'))
     );
   }
 
   getTiendas() : Observable<Tienda[]>{
-    return this.http.get<Tienda[]>(this.URL).pipe(
+    return this.http.get<Tienda[]>(this.URL, {withCredentials: true}).pipe(
       catchError(this.manejarError('getTiendas',[]))
     );
   }
 
   putTienda(tienda: Tienda): Observable<Tienda>{
-    return this.http.put<Tienda>(this.URL + `/${tienda._id}`, tienda ).pipe(
+    return this.http.put<Tienda>(this.URL + `/${tienda._id}`, tienda, {withCredentials: true}).pipe(
       catchError(this.manejarError<any>('putTienda'))
     );
   }
 
   deleteTienda(_id: string): Observable<Tienda>{
-    return this.http.delete<Tienda>(this.URL +  `/${_id}`).pipe(
+    return this.http.delete<Tienda>(this.URL +  `/${_id}`, {withCredentials: true}).pipe(
       catchError(this.manejarError<any>('deleteTienda'))
     );
   }

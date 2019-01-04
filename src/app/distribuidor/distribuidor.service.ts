@@ -19,10 +19,10 @@ export class DistribuidorService {
   }
 
   listardistrimysql(){
-    return this.http.get(Constantes.URL_API_DISTRI);
+    return this.http.get(Constantes.URL_API_DISTRI, {withCredentials: true});
   }
   putDistribuidor(distri:Distribuidor){
-    return this.http.put(Constantes.URL_API_DISTRI + `/${distri._id}`,distri )
+    return this.http.put(Constantes.URL_API_DISTRI + `/${distri._id}`,distri, {withCredentials: true} )
 
   }
 }

@@ -24,18 +24,18 @@ export class RegionService {
   }
 
   postRegion(region : Region){
-    return this.http.post(this.URL_API, region);
+    return this.http.post(this.URL_API, region, {withCredentials: true});
   }
 
   getRegiones(){
-    return this.http.get(this.URL_API);
+    return this.http.get(this.URL_API, {withCredentials: true});
   }
 
   putRegion(region: Region){
-    return this.http.put(this.URL_API + `/${region._id}`, region);
+    return this.http.put(this.URL_API + `/${region._id}`, region, {withCredentials: true});
   }
 
   deleteRegion(_id: string) {
-    return this.http.delete(this.URL_API + `/${_id}`);
+    return this.http.delete(this.URL_API + `/${_id}`, {withCredentials: true});
   }
 }

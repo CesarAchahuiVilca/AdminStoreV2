@@ -18,23 +18,23 @@ export class ArticuloService {
   }
 
   getArticulosMysql(){
-    return this.http.get(Constantes.URL_API_ARTICULO)
+    return this.http.get(Constantes.URL_API_ARTICULO, {withCredentials: true})
   }
   getImagenes(){
-    return this.http.get(Constantes.URL_API_IMAGEN);
+    return this.http.get(Constantes.URL_API_IMAGEN, {withCredentials: true});
   }
 
   getArticulo(idarticulo: string){
-    return this.http.get(Constantes.URL_API_ARTICULO+'/'+idarticulo);
+    return this.http.get(Constantes.URL_API_ARTICULO+'/'+idarticulo, {withCredentials: true});
   }
   getPreciosArticulo(idarticulo: string){
    // return this.http.get(Constantes.URL_API_PRECIOS+"/"+idarticulo)
   }
   postArticulo(articulo: Articulo){
-    return this.http.post(Constantes.URL_API_ARTICULO,articulo);
+    return this.http.post(Constantes.URL_API_ARTICULO,articulo, {withCredentials: true});
   }
   
   putArticulo(articulo: Articulo){
-    return this.http.put(Constantes.URL_API_ARTICULO+'/'+articulo._id,articulo);
+    return this.http.put(Constantes.URL_API_ARTICULO+'/'+articulo._id,articulo, {withCredentials: true});
   }
 }

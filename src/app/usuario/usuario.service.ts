@@ -24,20 +24,20 @@ export class UsuarioService {
   }
 
   postUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(this.URL_API, usuario).pipe(
+    return this.http.post<Usuario>(this.URL_API, usuario, {withCredentials: true}).pipe(
       catchError(this.handleError<Usuario>('postUsuario'))
     );
   }
 
   getUsuarios() : Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.URL_API)
+    return this.http.get<Usuario[]>(this.URL_API, {withCredentials: true})
       .pipe(
         catchError(this.handleError('getUsuarios',[]))
       );
   }
 
   putUsuario(usuario: Usuario) {
-    return this.http.put(this.URL_API + `/${usuario._id}`, usuario).pipe(
+    return this.http.put(this.URL_API + `/${usuario._id}`, usuario, {withCredentials: true}).pipe(
       catchError(this.handleError<any>('putUsuario'))
     );
   }

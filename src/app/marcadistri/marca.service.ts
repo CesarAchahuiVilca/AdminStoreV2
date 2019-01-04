@@ -19,13 +19,13 @@ export class MarcaService {
   }
   
   listarmarcamysql(){
-    return this.http.get(Constantes.URL_API_MARCA);
+    return this.http.get(Constantes.URL_API_MARCA, {withCredentials: true});
   }
   postMarca(Marca:Marca){//agregar empleados post
-    return this.http.post(Constantes.URL_API_MARCA,Marca);
+    return this.http.post(Constantes.URL_API_MARCA,Marca, {withCredentials: true});
   }
   getMarcas(){
-    return this.http.get(Constantes.URL_API_MARCA_MONGODB)
+    return this.http.get(Constantes.URL_API_MARCA_MONGODB, {withCredentials: true})
   }
 
 }

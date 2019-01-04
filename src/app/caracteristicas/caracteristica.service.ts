@@ -23,7 +23,7 @@ export class CaracteristicaService {
    }
 
    postCaracteristica(caracteristica: Caracteristica): Observable<Caracteristica> {
-     return this.http.post<Caracteristica>(this.URL_API, caracteristica).pipe(
+     return this.http.post<Caracteristica>(this.URL_API, caracteristica, {withCredentials: true}).pipe(
        catchError(this.handleError<Caracteristica>('postUsuario'))
      );
    }
@@ -35,13 +35,13 @@ export class CaracteristicaService {
    }
 
    putCaracteristica(caracteristica: Caracteristica): Observable<any> {
-     return this.http.put(this.URL_API + `/${caracteristica._id}`,caracteristica).pipe(
+     return this.http.put(this.URL_API + `/${caracteristica._id}`,caracteristica, {withCredentials: true}).pipe(
        catchError(this.handleError<any>('putUsuario'))
      );
    }
 
    deleteCaracteristica(caracteristica: Caracteristica): Observable<Caracteristica> {
-     return this.http.delete<Caracteristica>(this.URL_API + `/${caracteristica._id}`).pipe(
+     return this.http.delete<Caracteristica>(this.URL_API + `/${caracteristica._id}`, {withCredentials: true}).pipe(
        catchError(this.handleError<Caracteristica>('deleteCaracteristica'))
      );
    }

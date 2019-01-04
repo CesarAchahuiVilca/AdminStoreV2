@@ -17,29 +17,29 @@ export class PlanesService {
   }
 
   getTipoPlanes(){
-    return this.http.get(Constantes.URL_API_PLANES);
+    return this.http.get(Constantes.URL_API_PLANES, {withCredentials: true});
   }
 
   getPlanesEquipos(){
-    return this.http.get(Constantes.URL_API_PLANES+'/planes');
+    return this.http.get(Constantes.URL_API_PLANES+'/planes', {withCredentials: true});
   }
   getPlanesEquipo(id: string){
-    return this.http.get(Constantes.URL_API_PLANES+'/planesequipo/'+id);
+    return this.http.get(Constantes.URL_API_PLANES+'/planesequipo/'+id, {withCredentials: true});
   }
 
   postTipoPlan(tipoplan: TipoPlan){
-    return this.http.post(Constantes.URL_API_PLANES,tipoplan);
+    return this.http.post(Constantes.URL_API_PLANES,tipoplan, {withCredentials: true});
   }
   
   putTipoPlan(){
-    return this.http.put(Constantes.URL_API_PLANES+'/plan/'+this.tipoPlanSeleccionado.tipo,this.planSeleccionado);
+    return this.http.put(Constantes.URL_API_PLANES+'/plan/'+this.tipoPlanSeleccionado.tipo,this.planSeleccionado, {withCredentials: true});
   }
 
   deleteTipoPlan(id: string){
-    return this.http.delete(Constantes.URL_API_PLANES+'/'+id);
+    return this.http.delete(Constantes.URL_API_PLANES+'/'+id, {withCredentials: true});
   }
   deletePlan(){
-    return this.http.put(Constantes.URL_API_PLANES+'/plan/del/'+this.tipoPlanSeleccionado.tipo,this.planSeleccionado);
+    return this.http.put(Constantes.URL_API_PLANES+'/plan/del/'+this.tipoPlanSeleccionado.tipo,this.planSeleccionado, {withCredentials: true});
 
   }
 }
