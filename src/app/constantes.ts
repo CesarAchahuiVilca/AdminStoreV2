@@ -8,7 +8,7 @@ export class Constantes {
     public static URL_API_ARTICULO          = URL_API + 'articulos';
     public static URL_API_MARCA             = URL_API + 'marca';
     public static URL_API_DISTRI            = URL_API + 'distribuidor';
-    public static URL_API_IMAGEN            = URL_API + 'imagenes';
+    public static URL_API_IMAGEN            = 'https://latiendadeltiogeorge.herokuapp.com/api/imagenes';
     public static URL_API_MARCA_MONGODB     = URL_API + 'marca/mdb';
     public static URL_API_TIENDA            = URL_API + 'tienda';
     public static URL_API_CARACTERISTICA    = URL_API + 'caracteristica';

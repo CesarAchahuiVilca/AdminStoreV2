@@ -246,8 +246,7 @@ export class ArticuloComponent implements OnInit {
       this.articuloService.articuloSeleccionado.idarticulo = articulo.idArticulo;
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
       this.articuloService.articuloSeleccionadoMysql = articulo;
-      this.buscarPreciosEquipo();
-      
+      this.buscarPreciosEquipo();      
     }else{
       this.vista ="1";
       this.mostrarListaArticulos = true;
@@ -264,7 +263,6 @@ export class ArticuloComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
     this.dtTriggers.unsubscribe();
   }
 
