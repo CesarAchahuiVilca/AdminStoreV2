@@ -19,6 +19,14 @@ export class PlanesService {
   getTipoPlanes(){
     return this.http.get(Constantes.URL_API_PLANES);
   }
+
+  getPlanesEquipos(){
+    return this.http.get(Constantes.URL_API_PLANES+'/planes');
+  }
+  getPlanesEquipo(id: string){
+    return this.http.get(Constantes.URL_API_PLANES+'/planesequipo/'+id);
+  }
+
   postTipoPlan(tipoplan: TipoPlan){
     return this.http.post(Constantes.URL_API_PLANES,tipoplan);
   }

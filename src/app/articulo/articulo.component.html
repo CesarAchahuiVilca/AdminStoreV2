@@ -48,10 +48,10 @@
                           <div style="margin-left: 0px; display: flex; flex-direction: row;">
                             <div style="flex-grow: 0;margin-right: 2px;">
                               <button type="button" *ngIf="articulomysql.Estado == '0'" class="btn btn-pill btn-block btn-success"
-                                style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql.idArticulo)"
+                                style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql)"
                                 data-toggle="modal" data-target="#modalcategoria" disabled><i class="fa fa-edit"></i></button>
                               <button type="button" *ngIf="articulomysql.Estado == '1'" class="btn btn-pill btn-block btn-success"
-                                style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql.idArticulo)"
+                                style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql)"
                                 data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit"></i></button>
                             </div>
                           </div>
@@ -108,26 +108,8 @@
                             class="form-control" style="border-color: rgb(114, 114, 114);" [ngModelOptions]="{standalone: true}">
                         </div>
                       </div>
-                      <div class="col-lg-6">
-                        <div class="card" style="border-color: rgb(114, 114, 114);">
-                          <div class="card-body">
-                            <div style="display: flex; flex-direction: row;">
-                              <div style="flex-grow:0;margin-right: 5px;">
-                                <h5>Precios del Articulo</h5>
-                              </div>
-                            </div>
-                            <hr>
-                            <div>
-                              <div style="display: flex; flex-direction: column;" id="contenido-datos-generales">
-                                <div style="flex-grow: 0;margin-top: 3px;" class="item-datos-generales">
-                                  
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-6">
+
+                      <div class="col-lg-12">
                         <div class="card" style="border-color: rgb(114, 114, 114);">
                           <div class="card-body">
                             <div style="display: flex; flex-direction: row;">
@@ -155,6 +137,75 @@
                           </div>
                         </div>
                       </div>
+                      <div class="col-lg-12">
+                        <div class="card" style="border-color: rgb(114, 114, 114);">
+                          <div class="card-body">
+                            <div style="display: flex; flex-direction: row;">
+                              <div style="flex-grow:0;margin-right: 5px;">
+                                <h5>Precios del Articulo</h5>
+                              </div>
+                            </div>
+                            <hr>
+                            <div>
+                              <div style="display: flex; flex-direction: column;" id="contenido-datos-generales">
+                                <div class="form-group">
+                                    <label style="font-weight: bold;">Seleccione el nombre del equipo </label>
+                                  <select [(ngModel)]="articuloService.articuloSeleccionado.idprecio" [ngModelOptions]="{standalone: true}" (change)="buscarPlanesEquipo()" class="form-control">
+                                    <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}" ><a (click)="cambiarPlanes(equipo)">{{equipo.nombreequipo}}</a></option>
+                                  </select>
+                                </div>
+                                <div style="flex-grow: 0;margin-top: 3px; width: 100%; display: flex; flex-direction: row" class="item-datos-generales">
+                                  
+                                  <div style="width: 50%;">
+                                    <table class="table table-responsive-sm table-sm">
+                                      <thead>
+                                          <tr>
+                                            <th>Tipo Plan</th>
+                                            <th></th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let tipo of listaplanesequipo">
+                                            <td>{{tipo.tipoplan}}</td>
+                                            <td>
+                                              <button style="border: 1px solid rgb(0, 139, 12); border-radius: 5px; color: white; background-color: rgb(18, 177, 52)"(click)="mostrarDetalleTipoPlan(tipo)"> Ver Detalle </button>
+                                            </td>
+                                          </tr>
+                                      </tbody>
+                                    </table>  
+                                  </div>
+                                  <div class="detalletipoplan" style="width: 50%;">
+                                    <div style="width: 100%;">
+                                        <h6>{{planesseleccionada.tipoplan}} : {{articuloService.articuloSeleccionado.idprecio}}</h6>
+
+                                    </div>
+                                    <div style="width: 100%;">
+                                      <table class="table table-responsive-sm table-sm">
+                                        <thead>
+                                          <tr>
+                                            <th>Nombre Plan</th>
+                                            <th>Precio</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let plan of planesseleccionada.planes">
+                                            <td>{{plan.nombreplan}}</td>
+                                            <td>{{plan.precio}}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>                               
+                                    
+                                </div>
+                                                            
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
                       <div class="col-lg-12">
                         <div class="card" style="border-color: rgb(114, 114, 114);">
                           <div class="card-body">
@@ -344,3 +395,43 @@
 </div>
 
 <button data-toggle="modal" data-target="#modalimageneseditor" id="btnimageneditor" (click)="buscarImagen()"></button>
+
+<!-- Modal detalle tipo plan -->
+<div class="modal fade" id="modaldetalleplan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" >
+  <div class="modal-dialog modal-md" role="document" >
+    <div class="modal-content" style="margin-top: 20%;">
+      <div class="modal-header">
+        <h6 class="modal-title" id="titulomodal"><i class="fa fa-list"> </i>{{planesseleccionada.tipoplan}} : {{articuloService.articuloSeleccionado.idprecio}}</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
+        <div class="row" style="margin: 5px;">
+          <table class="table table-responsive-sm table-sm">
+            <thead>
+              <tr>
+                <th>Nombre Plan</th>
+                <th>Precio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let plan of planesseleccionada.planes">
+                <td>{{plan.nombreplan}}</td>
+                <td>{{plan.precio}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        
+        <div style="text-align: right;">
+          
+          <button class="btn btn-default btn-pill" data-dismiss="modal" (click)="agregarImagenEditor()"> Cerrar</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

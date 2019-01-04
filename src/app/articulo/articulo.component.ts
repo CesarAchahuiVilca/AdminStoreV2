@@ -16,6 +16,8 @@ import { Miga } from '../miga';
 import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { ViewChild } from '@angular/core';
+import { PlanesService} from '../planes/planes.service';
+import { Precios} from '../planes/precios';
 
 @Component({
   selector: 'app-articulo',
@@ -23,6 +25,8 @@ import { ViewChild } from '@angular/core';
   styleUrls: ['./articulo.component.css'],
   providers: [ArticuloService]
 })
+
+
 export class ArticuloComponent implements OnInit {
 
   @ViewChild(DataTableDirective)
@@ -64,6 +68,15 @@ export class ArticuloComponent implements OnInit {
   mostrarListaArticulos       : boolean = false;
   mostrarCarga                : boolean = false;
 
+  //Lista de precios
+  listaprecios            : Precios[] = new Array();
+  listaequipos = new Array();
+  listaplanesequipo = new Array();
+  planesseleccionada = {
+    tipoplan:"",
+    planes: new Array()
+  };
+
   quillConfig={
     toolbar: {
       container: [
@@ -90,7 +103,8 @@ export class ArticuloComponent implements OnInit {
               private articuloService: ArticuloService,
               private categoriaService: CategoriaService,
               private caracteristicaService: CaracteristicaService,
-              private marcaService: MarcaService) { }
+              private marcaService: MarcaService,
+              private planesService: PlanesService) { }
 
   ngOnInit() {
     this.itemsDatosGenerales.push([1,""]);
@@ -126,6 +140,7 @@ export class ArticuloComponent implements OnInit {
     };
     this.getCategorias();    
     this.getMarcas();
+    this.obtenerListaPrecios();
   }
 
   created(editorInstance: any) {
@@ -145,6 +160,79 @@ export class ArticuloComponent implements OnInit {
     this.listacaracteristicasarticulo = new Array();
   }
 
+
+  obtenerListaPrecios(){
+    this.planesService.getPlanesEquipos()
+    .subscribe(res=>{
+      this.listaprecios = res as Precios[];
+      var indice = 0;
+      for(var i = 1;i<this.listaprecios.length;i++){
+        if(this.listaprecios[i].equipos.length> this.listaprecios[indice].equipos.length){
+          indice = i;
+        }
+      }
+      this.listaequipos = this.listaprecios[indice].equipos;
+      console.log(this.listaequipos);
+    });
+  }
+
+  buscarPreciosEquipo(){
+    //console.log(this.articuloService.articuloSeleccionadoMysql.Descripcion);
+    var cont = 0;
+    var cont_ante = 0;
+    var mejor_nombre="";
+    var arraynombres = this.articuloService.articuloSeleccionadoMysql.Descripcion.split(" ");
+    
+    for( var i = 0; i<this.listaprecios[0].equipos.length;i++){
+      var nombre = this.listaprecios[0].equipos[i].nombreequipo;
+      
+      for(var j = 0;j<arraynombres.length;j++){
+        if(nombre.includes(arraynombres[j])){
+          cont++;
+        }
+      }
+      if(cont>cont_ante){
+        mejor_nombre = nombre;
+        cont_ante = cont;
+        cont = 0;
+      }else{
+        cont = 0;
+      }
+    }
+
+    this.articuloService.articuloSeleccionado.idprecio = mejor_nombre;
+    console.log(mejor_nombre);
+    this.buscarPlanesEquipo();
+    
+  }
+
+  buscarPlanesEquipo(){
+    this.planesseleccionada = {
+      tipoplan:"",
+      planes: new Array()
+    };
+    console.log(this.articuloService.articuloSeleccionado.idprecio);
+    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio as string)
+    .subscribe(res=>{
+      this.listaplanesequipo = res as [];
+      console.log(this.listaplanesequipo);
+    });
+  }
+
+  mostrarDetalleTipoPlan(tipoplan){
+    this.planesseleccionada = tipoplan;
+    console.log(this.planesseleccionada);
+  }
+
+  cambioSelect(){
+    console.log(this.listaequipos);
+  }
+
+
+  cambiarPlanes(equipo){
+    console.log(equipo);
+  }
+
   cambiarvista(articulo?: ArticuloMysql, form?: NgForm){
     if(this.vista == "1"){
       this.vista ="2";
@@ -157,6 +245,9 @@ export class ArticuloComponent implements OnInit {
       this.limpiarFormulario();
       this.articuloService.articuloSeleccionado.idarticulo = articulo.idArticulo;
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
+      this.articuloService.articuloSeleccionadoMysql = articulo;
+      this.buscarPreciosEquipo();
+      
     }else{
       this.vista ="1";
       this.mostrarListaArticulos = true;
@@ -228,10 +319,12 @@ export class ArticuloComponent implements OnInit {
 
   }
   
-  editarArticulo(id: string){
+  editarArticulo(art){
     this.itemsDatosGenerales = new Array();
-    this.articuloService.getArticulo(id)
-    .subscribe(res=>{
+    this.articuloService.articuloSeleccionadoMysql = art;
+   // this.buscarPreciosEquipo();
+    this.articuloService.getArticulo(this.articuloService.articuloSeleccionadoMysql.idArticulo)
+    .subscribe(res=>{      
       this.articuloService.articuloSeleccionado = res[0] as Articulo;
       this.imagenesSeleccionadas  = this.articuloService.articuloSeleccionado.imagenes;
       this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
@@ -239,16 +332,16 @@ export class ArticuloComponent implements OnInit {
       if(this.listacaracteristicasarticulo.length == 0){
         this.getCaracteristicas();
       }
-      for(var i=0;i<this.articuloService.articuloSeleccionado.especificaciones.length;i++){
-        this.itemsDatosGenerales.push([i+1,this.articuloService.articuloSeleccionado.especificaciones[i]]);
-      }
-      this.vista ="2";
+      this.buscarPlanesEquipo();
+      
+      this.vista = "2";
       this.mostrarListaArticulos = false;
       this.mostrarFormularioArticulo = true;
+      //this.buscarPreciosEquipo();
       var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
       botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
       this.mostrarBotonOpcion = true;
-      document.getElementById("titulo-card").innerHTML = "Editar articulo  : "+id;
+      document.getElementById("titulo-card").innerHTML = "Editar articulo  : "+this.articuloService.articuloSeleccionadoMysql.Descripcion;
     });
   } 
   
@@ -420,26 +513,32 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.imagenes = this.imagenesSeleccionadas;
     this.articuloService.articuloSeleccionado.descripcion = this.contenidoEditor;
     //console.log(this.articuloService.articuloSeleccionado);
+
+    
     //guardar datos
     if(this.articuloService.articuloSeleccionado._id){
       this.articuloService.putArticulo(this.articuloService.articuloSeleccionado)
       .subscribe(res=>{      
         var respuesta = JSON.parse(JSON.stringify(res));
-        /*if(respuesta.estado == "0"){   
+        if(respuesta.estado == "0"){   
           console.log("ERROR "+respuesta.mesanje);
         }else{        
+          this.cambiarvista();
+          this.getArticulosMysql();
           console.log(respuesta.mensaje);
-        }          */
+        }          
       });
     }else{
       this.articuloService.postArticulo(this.articuloService.articuloSeleccionado)
       .subscribe(res=>{      
         var respuesta = JSON.parse(JSON.stringify(res));
-        /*if(respuesta.estado == "0"){   
+        if(respuesta.estado == "0"){   
           console.log("ERROR "+respuesta.mesanje);
         }else{        
+          this.cambiarvista();
+          this.getArticulosMysql();
           console.log(respuesta.mensaje);
-        }           */
+        }           
       });
     }
   }
