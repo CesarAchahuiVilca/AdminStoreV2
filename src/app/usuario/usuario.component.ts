@@ -29,30 +29,30 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(DataTableDirective) dtElement  : DataTableDirective; 
   dtOptions                                 : DataTables.Settings = {};
   dtTriggers                                : Subject<any> = new Subject();
-  private boton_accion                      : string;
-  private boton_direccion                   : string;
-  private direccion_header                  : string;
-  private flag                              : boolean = true;
-  private habilitarCorreo                   : boolean = true;
+  boton_accion                      : string;
+  boton_direccion                   : string;
+  direccion_header                  : string;
+  flag                              : boolean = true;
+  habilitarCorreo                   : boolean = true;
   public migas                              = [new Miga('Clientes','usuarios')]
-  private mostrarBotonDireccion             : boolean = false;
-  private mostrarBotonLimpiar               : boolean = true;
-  private mostrarBotonNuevo                 : boolean = false;
-  private mostrarBotonVolver                : boolean = false;
-  private mostrarCarga                      : boolean = true;
-  private mostrarDireccion                  : boolean = false;
-  private mostrarFechaAfiliacion            : boolean = false;
-  private mostrarListaDirecciones           : boolean = false;
-  private mostrarListaUsuarios              : boolean = false;
-  private mostrarMensajeCliente             : boolean = false;
-  private mostrarUsuarioForm                : boolean = false;
-  private tiposDocumento                    : string[];
-  private tiposVivienda                     : string[] = [ 'Casa', 'Oficina', 'Departamento', 'Edificio', 'Condominio', 'Otro'];
-  private usuario_header                    : string;
-  private usuarioService                    : UsuarioService;
-  private flashMessage                      : NgFlashMessageService;
-  private direccionService                  : DireccionService;
-  private regionService                     : RegionService;
+  mostrarBotonDireccion             : boolean = false;
+  mostrarBotonLimpiar               : boolean = true;
+  mostrarBotonNuevo                 : boolean = false;
+  mostrarBotonVolver                : boolean = false;
+  mostrarCarga                      : boolean = true;
+  mostrarDireccion                  : boolean = false;
+  mostrarFechaAfiliacion            : boolean = false;
+  mostrarListaDirecciones           : boolean = false;
+  mostrarListaUsuarios              : boolean = false;
+  mostrarMensajeCliente             : boolean = false;
+  mostrarUsuarioForm                : boolean = false;
+  tiposDocumento                    : string[];
+  tiposVivienda                     : string[] = [ 'Casa', 'Oficina', 'Departamento', 'Edificio', 'Condominio', 'Otro'];
+  usuario_header                    : string;
+  usuarioService                    : UsuarioService;
+  flashMessage                      : NgFlashMessageService;
+  direccionService                  : DireccionService;
+  regionService                     : RegionService;
   //migas : [new Miga('usuarios','/usuarios')];
   
   /**
@@ -62,7 +62,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param direccionService 
    * @param regionService 
    */
-  constructor(private adapter: DateAdapter<any>, usuarioService : UsuarioService, flashMessage : NgFlashMessageService, direccionService : DireccionService, regionService : RegionService) {
+  constructor(public adapter: DateAdapter<any>, usuarioService : UsuarioService, flashMessage : NgFlashMessageService, direccionService : DireccionService, regionService : RegionService) {
       this.adapter.setLocale('es');
       this.usuarioService     = usuarioService;
       this.flashMessage       = flashMessage;
@@ -220,7 +220,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       i = i + 1;
     }
     this.regionService.departamentoSelected = this.regionService.regiones[i];
-    this.regionService.provinciaSelected = new Provincia("",[]);
+    this.regionService.provinciaSelected = new Provincia(undefined,"",[]);
   }
 
   /**
@@ -323,7 +323,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param form 
    */
   nuevo_usuario(form?: NgForm){
-    this.resetForm(form);
+    //this.resetForm(form);
     this.usuario_header = "NUEVO USUARIO";
     this.boton_accion = "CREAR USUARIO";
     this.mostrarUsuarioForm = true;

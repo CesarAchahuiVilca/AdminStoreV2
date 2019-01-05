@@ -1,6 +1,6 @@
 export class Direccion {
 
-  constructor(_id = '', usuario = '', direccion = '', referencia = '', departamento = '', provincia = '', distrito = ''){
+  constructor(_id = undefined, usuario = '', direccion = '', referencia = '', departamento = '', provincia = '', distrito = '', tipolocal = '', telefono = ''){
     this._id = _id;
     this.usuario = usuario;
     this.direccion = direccion;
@@ -8,6 +8,8 @@ export class Direccion {
     this.departamento = departamento;
     this.provincia = provincia;
     this.distrito = distrito;
+    this.tipolocal = tipolocal;
+    this.telefono = telefono;
   }
 
   _id : string;
@@ -17,4 +19,6 @@ export class Direccion {
   departamento : string;
   provincia : string;
   distrito : string;
+  tipolocal: string;
+  telefono: string;
 }

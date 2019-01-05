@@ -14,22 +14,22 @@ import { Miga } from '../miga';
 })
 export class RegionComponent implements OnInit {
 
-  private departamentos : Region[];
-  private depSelected : Region;
-  private provincias : Provincia[];
-  private provSelected : Provincia;
-  private distritos : string[];
-  private lblDepartamento : string;
-  private lblProvincia : string;
+  departamentos : Region[];
+  depSelected : Region;
+  provincias : Provincia[];
+  provSelected : Provincia;
+  distritos : string[];
+  lblDepartamento : string;
+  lblProvincia : string;
   migas = [new Miga('Locales', '/region')];
 
   constructor(
-    private regionService : RegionService,
-    private flashMessage : NgFlashMessageService
+    public regionService : RegionService,
+    public flashMessage : NgFlashMessageService
     ) { }
 
   ngOnInit() { 
-    this.provSelected = new Provincia('',[]);
+    this.provSelected = new Provincia(undefined,'',[]);
     this.depSelected = new Region(null,'',[this.provSelected]);
     this.provincias = [];
     this.lblDepartamento = 'Nuevo Departamento';
@@ -56,7 +56,7 @@ export class RegionComponent implements OnInit {
     document.getElementById('btnDepartamento').innerHTML = '<i class="fa fa-edit"></i>';
     document.getElementById('btnDepartamento').style.backgroundColor = 'orange';
     document.getElementById('spanDepartamento').hidden = false;
-    this.provSelected = new Provincia("",[]);
+    this.provSelected = new Provincia(undefined,"",[]);
     this.regionService.provinciaSelected = this.provSelected;
     document.getElementById('divDistrito').hidden = true;
     document.getElementById('btnProvincia').innerHTML = '<i class="fa fa-plus"></i>';
@@ -103,7 +103,7 @@ export class RegionComponent implements OnInit {
     }
     this.depSelected.provincias.splice(i,1);
     this.updateRegion(this.depSelected);
-    this.regionService.provinciaSelected = new Provincia('',[]);
+    this.regionService.provinciaSelected = new Provincia(undefined,'',[]);
   }
 
   getRegiones() {

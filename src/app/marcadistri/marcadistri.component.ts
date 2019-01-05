@@ -33,7 +33,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   flag: boolean = true;
   migas: Miga[] = [];
   //fin
-  constructor(private http: HttpClient,private marcaService:MarcaService) {
+  constructor(public http: HttpClient,public marcaService:MarcaService) {
     this.migas.push( new Miga('Marcas', 'marcadistri'));
    }
 

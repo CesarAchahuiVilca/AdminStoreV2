@@ -31,9 +31,9 @@ export class CategoriaComponent implements OnInit {
   migas                   : Miga[] = [];
 
   constructor( 
-    private http: HttpClient, 
-    private categoriaService: CategoriaService,
-    private caracteristicasService: CaracteristicaService
+    public http: HttpClient, 
+    public categoriaService: CategoriaService,
+    public caracteristicasService: CaracteristicaService
   ) { }
 
   ngOnInit() {

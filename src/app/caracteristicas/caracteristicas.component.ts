@@ -16,11 +16,11 @@ import { Miga } from '../miga'
 export class CaracteristicasComponent implements OnInit {
  
   @ViewChild(DataTableDirective) dtElement : DataTableDirective; 
-  private dtOptions: DataTables.Settings = {};
-  private dtTriggers: Subject<any> = new Subject();
-  private caracteristicaHeader: string;
-  private accionBoton: string = 'GUARDAR';
-  private indice : number;
+  public dtOptions: DataTables.Settings = {};
+  public dtTriggers: Subject<any> = new Subject();
+  public caracteristicaHeader: string;
+  public accionBoton: string = 'GUARDAR';
+  public indice : number;
   public migas = [ new Miga('Características','/caracteristicas')];
 
   constructor(

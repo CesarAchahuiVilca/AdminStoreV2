@@ -27,7 +27,7 @@ export class DistribuidorComponent implements AfterViewInit,OnDestroy,OnInit {
   migas = [new Miga('Distribuidores', '/distribuidor')]
   //fin
 
-  constructor(private http: HttpClient,private distriService:DistribuidorService) { }
+  constructor(public http: HttpClient,public distriService:DistribuidorService) { }
 
   ngOnInit() {
     //datatable

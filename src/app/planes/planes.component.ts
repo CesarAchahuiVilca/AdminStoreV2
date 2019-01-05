@@ -12,7 +12,7 @@ import { Miga } from '../miga';
 export class PlanesComponent implements OnInit {
   migas = [new Miga('Planes', '/planes')];
 
-  constructor( private planesService: PlanesService) { }
+  constructor( public planesService: PlanesService) { }
 
   ngOnInit() {
     this.getTipoPlanes();

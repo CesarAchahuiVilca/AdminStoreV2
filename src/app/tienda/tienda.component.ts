@@ -12,11 +12,11 @@ import { TiendaService } from './tienda.service';
   styleUrls: ['./tienda.component.css']
 })
 export class TiendaComponent implements OnInit {
-  private botonAccion     : string = "Agregar";
-  private mostrarTienda   : boolean;
-  private flashMessage    : NgFlashMessageService;
-  private tiendaService   : TiendaService;
-  private displayedColumns: string[] = ['nombre', 'latitud', 'longitud', 'edit'];
+  botonAccion     : string = "Agregar";
+  mostrarTienda   : boolean;
+  flashMessage    : NgFlashMessageService;
+  tiendaService   : TiendaService;
+  displayedColumns: string[] = ['nombre', 'latitud', 'longitud', 'edit'];
   dataSource              : MatTableDataSource<Tienda>; // = new MatTableDataSource(ELEMENT_DATA);
   migas                    = [ new Miga('Tienda','locales')];
 

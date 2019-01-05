@@ -10,7 +10,7 @@ import { SesionService } from '../usuario/sesion.service';
 })
 export class SesionComponent implements OnInit {
   sesionService           : SesionService;
-  private displayedColumns: string[] = ['nombre', 'latitud', 'longitud', 'edit'];
+  displayedColumns: string[] = ['nombre', 'latitud', 'longitud', 'edit'];
   dataSource              : MatTableDataSource<any>;
   miga                    : Miga = new Miga('Sesión','sesiones');
   @ViewChild(MatPaginator) paginator: MatPaginator;
