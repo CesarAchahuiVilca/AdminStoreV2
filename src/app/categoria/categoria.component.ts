@@ -8,11 +8,12 @@ import { Categoria } from './categoria';
 import { Caracteristica }  from '../caracteristicas/caracteristica';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import { formDirectiveProvider } from '@angular/forms/src/directives/reactive_directives/form_group_directive';
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-categoria',
   templateUrl: './categoria.component.html',
-  styleUrls: ['./categoria.component.css'],
+  styles: [''],
   providers: [CategoriaService]
 })
 export class CategoriaComponent implements OnInit {
@@ -27,6 +28,7 @@ export class CategoriaComponent implements OnInit {
   todasCategorias         : Categoria[];
   caracteristicas         : Caracteristica[];
   mostrarCarga            : boolean = false;
+  migas                   : Miga[] = [];
 
   constructor( 
     private http: HttpClient, 
@@ -45,6 +47,7 @@ export class CategoriaComponent implements OnInit {
     this.getCategorias();
     this.getCaracteristicas();
     this.categoriaService.categoriaSeleccionada.padre  = "root";    
+    this.migas.push(new Miga('Categorias', 'categorias'));
   }
   
   limpiarform(form?: NgForm){    

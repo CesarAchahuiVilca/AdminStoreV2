@@ -1,126 +1,134 @@
-<div class="animated fadeIn" id="marcageneral">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="card" style="width: 100%;">
-          <div class="card-header"> <i class="fa fa-list"></i>
-            <strong>Lista de Marcas</strong>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-6" style="text-align: left !important;">
-                <button class="btn btn-block btn-link" type="button" style="color: black; width: auto;"><i class="fa fa-plus"></i>
-                  Agregar Marca</button><br>
-              </div>
-              <div class="col-lg-6">
-              </div>
-              <div class="col-lg-12">
-                <div id="carga" style="width: 100%;text-align: center;">
-                  <img src="assets/imagenes/carga.gif"> Cargando Datos
+<app-header></app-header>
+<app-menu></app-menu>
+<div class="app-body">
+  <main class="main">
+    <app-breadcrumb [migas]="migas"></app-breadcrumb>
+    <div class="container-fluid">
+      <div class="animated fadeIn" id="marcageneral">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="card" style="width: 100%;">
+                <div class="card-header"> <i class="fa fa-list"></i>
+                  <strong>Lista de Marcas</strong>
                 </div>
-                <div id="listarmarcas">
-                  <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th style="width: 8%;">Id</th>
-                        <th style="width: 8%;">Marca</th>
-                        <th style="width: 2%;"></th>
-                        <th style="width: 2%"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let marca of marcaService.marcaMysql">
-                        <td>{{marca.idMarcaProducto}}</td>
-                        <td>{{marca.NombreMarca}}</td>
-                        <td><button class="btn btn-primary" (click) = "cambiarvista(marca,marcaForm)">Completar Registro<i class="material-icons">note_add</i></button></td>
-                        <td><button class="btn btn-success"><i class="material-icons">edit</i></button></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-6" style="text-align: left !important;">
+                      <button class="btn btn-block btn-link" type="button" style="color: black; width: auto;"><i class="fa fa-plus"></i>
+                        Agregar Marca</button><br>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                    <div class="col-lg-12">
+                      <div id="carga" style="width: 100%;text-align: center;">
+                        <img src="assets/imagenes/carga.gif"> Cargando Datos
+                      </div>
+                      <div id="listarmarcas">
+                        <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th style="width: 8%;">Id</th>
+                              <th style="width: 8%;">Marca</th>
+                              <th style="width: 2%;"></th>
+                              <th style="width: 2%"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let marca of marcaService.marcaMysql">
+                              <td>{{marca.idMarcaProducto}}</td>
+                              <td>{{marca.NombreMarca}}</td>
+                              <td><button class="btn btn-primary" (click)="cambiarvista(marca,marcaForm)">Completar
+                                  Registro<i class="material-icons">note_add</i></button></td>
+                              <td><button class="btn btn-success"><i class="material-icons">edit</i></button></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-<!--marca detalle-->
-<div class="container-fluid" id="marca-detalle" style="text-align">
-<div class="card">
-<div class="card-header" (click)="regresar(marcaForm)"><button class="btn btn-success"><i class="material-icons">arrow_back</i></button></div>
-<div class="card-body">
-<br>
- <form #marcaForm="ngForm" (ngSubmit)="guardarmarca(marcaForm)">
-          <input type="hidden" name="_id"  #_id="ngModel" [(ngModel)]="marcaService.marcaselect._id">
-          <div class="row">
-            <div class="col-lg-5">
-              <div class="form-group" >
-                <label for="name">idMarca</label>
-                <textarea class="form-control" value={{idm}} id="idmarca" name="idmarca" #idmarca="ngModel" [(ngModel)]="marcaService.marcaselect.idMarca"></textarea>
-              </div>
-              <div class="form-group" >
-                  <label for="name">Nombre Marca</label>
-                  <textarea class="form-control" value={{nombrem}} id="nombremarca" name="nombremarca" #nombremarca="ngModel" [(ngModel)]="marcaService.marcaselect.nombre"></textarea>
-                </div>
-              <div class="form-group">
-                <label for="name">Descripción</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" #decripcion="ngModel" [(ngModel)]="marcaService.marcaselect.descripcion" rows="3" placeholder="Ingrese descripcion de la categoria"
-                  required></textarea>
-              </div>
-              <input type="text" name="imagen" id="imagen" #imagen="ngModel" [(ngModel)]="marcaService.marcaselect.imagen"
-                style="display: none;" required>
-            </div>
-            <div class="col-lg-5">
-              <div class="col-lg-7">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <label>Imagen de portada de la categoria</label>
+      <!--marca detalle-->
+      <div class="container-fluid" id="marca-detalle">
+        <div class="card">
+          <div class="card-header" (click)="regresar(marcaForm)"><button class="btn btn-success"><i class="material-icons">arrow_back</i></button></div>
+          <div class="card-body">
+            <br>
+            <form #marcaForm="ngForm" (ngSubmit)="guardarmarca(marcaForm)">
+              <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="marcaService.marcaselect._id">
+              <div class="row">
+                <div class="col-lg-5">
+                  <div class="form-group">
+                    <label for="name">idMarca</label>
+                    <textarea class="form-control" value={{idm}} id="idmarca" name="idmarca" #idmarca="ngModel"
+                      [(ngModel)]="marcaService.marcaselect.idMarca"></textarea>
                   </div>
-                  <div class="col-lg-12">
-                    <div style="display:flex; flex-direction: row; width: 100%; ">
-                      <div style="flex-grow: 0;margin-right: 2px;">
-                        <span class="btn btn-primary" style="background-color: orange; border: 1px solid gray;" (click)="clearProgress()">
-                          <i class="fa fa-search"></i> <input type="file" hidden="true" (change)="onFileSelected($event)"
-                            id="archivo">
-                        </span>
+                  <div class="form-group">
+                    <label for="name">Nombre Marca</label>
+                    <textarea class="form-control" value={{nombrem}} id="nombremarca" name="nombremarca" #nombremarca="ngModel"
+                      [(ngModel)]="marcaService.marcaselect.nombre"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="name">Descripción</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" #decripcion="ngModel"
+                      [(ngModel)]="marcaService.marcaselect.descripcion" rows="3" placeholder="Ingrese descripcion de la categoria"
+                      required></textarea>
+                  </div>
+                  <input type="text" name="imagen" id="imagen" #imagen="ngModel" [(ngModel)]="marcaService.marcaselect.imagen" [style.display]="'none'" required>
+                </div>
+                <div class="col-lg-5">
+                  <div class="col-lg-7">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <label>Imagen de portada de la categoria</label>
                       </div>
-                      <div style="flex-grow: 0;margin-right: 2px; width: 50%;">
-                        <div class="progress" style="height: 35px;">
-                          <label id="nombrearchivo"></label>
-                          <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: orange; float: left;"></div>
+                      <div class="col-lg-12">
+                        <div style="display:flex; flex-direction: row; width: 100%; ">
+                          <div style="flex-grow: 0;margin-right: 2px;">
+                            <span class="btn btn-primary" style="background-color: orange; border: 1px solid gray;"
+                              (click)="clearProgress()">
+                              <i class="fa fa-search"></i> <input type="file" hidden="true" (change)="onFileSelected($event)"
+                                id="archivo">
+                            </span>
+                          </div>
+                          <div style="flex-grow: 0;margin-right: 2px; width: 50%;">
+                            <div class="progress" style="height: 35px;">
+                              <label id="nombrearchivo"></label>
+                              <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: orange; float: left;"></div>
+                            </div>
+                          </div>
+                          <div style="flex-grow: 0;margin-right: 2px;">
+                            <button class="btn btn-success input-group-btn" style="background-color: dimgrey;" (click)="onUpload($event)"><i
+                                class="fa fa-upload"></i> Subir</button>
+                          </div>
                         </div>
                       </div>
-                      <div style="flex-grow: 0;margin-right: 2px;">
-                        <button class="btn btn-success input-group-btn" style="background-color: dimgrey;" (click)="onUpload($event)"><i
-                            class="fa fa-upload"></i> Subir</button>
+                      <div class="col-lg-12">
+                        <div class="cont-imagen">
+                          <img src="" style="width: 100%; height: auto;" id="imagen-select">
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <!--    <div *ngIf="imagen.invalid && (padre.dirty || imagen.touched)" class="alert alert-danger">
-                    <div *ngIf="imagen.errors.required">
-                      Debe elegir y subir una imagen para la categoria
-                    </div>
-                  </div>-->
-                  <div class="col-lg-12">
-                    <div class="cont-imagen">
-                      <img src="" style="width: 100%; height: auto;" id="imagen-select">
-                    </div>
+                  <div class="col-lg-12" style="text-align: right">
+                    <hr>
+                    <button type="button" class="btn btn-default" (click)="limpiarform(categoriaForm)"><i class="fa fa-trash"></i>
+                      Limpiar</button>
+                    <button type="submit" class="btn btn-success" style="margin-left: 10px;"> <i class="fa fa-save"></i>
+                      Guardar</button>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-12" style="text-align: right">
-                <hr>
-                <button type="button" class="btn btn-default" (click)="limpiarform(categoriaForm)"><i class="fa fa-trash"></i>
-                  Limpiar</button>
-                <button type="submit" class="btn btn-success" style="margin-left: 10px;"> <i class="fa fa-save"></i>
-                  Guardar</button>
-              </div>
-            </div>
+            </form>
           </div>
-        </form></div>
-
-</div>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>

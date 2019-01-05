@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlanesService} from './planes.service';
 import { TipoPlan } from './tipoplan';
 import { Plan } from './plan';
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-planes',
@@ -9,6 +10,7 @@ import { Plan } from './plan';
   styleUrls: ['./planes.component.css']
 })
 export class PlanesComponent implements OnInit {
+  migas = [new Miga('Planes', '/planes')];
 
   constructor( private planesService: PlanesService) { }
 

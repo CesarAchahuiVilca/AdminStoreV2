@@ -1,99 +1,117 @@
-<div class="animated fadeIn">
-    <div class="row">
-      <div class="col-lg-3">
-        <div class="card" style="width: 100%; min-height: 450px; ">
-           <!-- <div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
+<app-header></app-header>
+<app-menu></app-menu>
+<div class="app-body">
+    <main class="main">
+        <app-breadcrumb [migas]="migas"></app-breadcrumb>
+        <div class="container-fluid">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="card" style="width: 100%; min-height: 450px; ">
+                            <!-- <div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
                 <strong>Lista de Clientes</strong>
             </div>-->
-            <div class="card-body" style="padding: 0px;">
-                <div class="cont-busqueda">
-                    <input  class="form-control" type="text" placeholder="Buscar" style="margin:5px;width: 95%;">
+                            <div class="card-body" style="padding: 0px;">
+                                <div class="cont-busqueda">
+                                    <input class="form-control" type="text" placeholder="Buscar" style="margin:5px;width: 95%;">
 
-                </div>
-                <div class="contenido-clientes" style="overflow: auto;height: 400px;" >
-                        <div><hr style="padding: 0px; margin: 0px;cursor:pointer;"></div>    
-                    <div class="item-cliente" style="cursor:pointer;">
-                        <div style="flex-grow: 0;cursor:pointer;">
-                            <img src="./assets/imagenes/avatar-user.png" alt="" style="border-radius: 50%;" width="40px" height="40px">
-                        </div>
-                        <div style="display: flex;flex-direction: column;cursor:pointer;">
-                            <label style="margin-left: 5px;">Cliente: Abel</label>
-                            <label style="margin-left: 5px;">Asunto: RECLAMOS</label>
-                        </div>                        
-                    </div>
-                    <div><hr style="padding: 0px; margin: 0px;cursor:pointer;"></div>                    
-                    <div class="item-cliente">
-                        <div style="flex-grow: 0;">
-                            <img src="./assets/imagenes/avatar-user.png" alt="" style="border-radius: 50%;" width="40px" height="40px">
-                        </div>
-                        <div style="display: flex;flex-direction: column;">
-                            <label style="margin-left: 5px;">Cliente: Abel</label>
-                            <label style="margin-left: 5px;">Asunto: RECLAMOS</label>
-                        </div>                        
-                    </div>
-                </div>
-                <div class="footer-clientes" style="width: 100%; min-height: 50px; display: flex; flex-direction: row;padding: 10px; background-color: rgb(233, 223, 223);">
-    
-                </div>
+                                </div>
+                                <div class="contenido-clientes" style="overflow: auto;height: 400px;">
+                                    <div>
+                                        <hr style="padding: 0px; margin: 0px;cursor:pointer;">
+                                    </div>
+                                    <div class="item-cliente" style="cursor:pointer;">
+                                        <div style="flex-grow: 0;cursor:pointer;">
+                                            <img src="./assets/imagenes/avatar-user.png" alt="" style="border-radius: 50%;"
+                                                width="40px" height="40px">
+                                        </div>
+                                        <div style="display: flex;flex-direction: column;cursor:pointer;">
+                                            <label style="margin-left: 5px;">Cliente: Abel</label>
+                                            <label style="margin-left: 5px;">Asunto: RECLAMOS</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <hr style="padding: 0px; margin: 0px;cursor:pointer;">
+                                    </div>
+                                    <div class="item-cliente">
+                                        <div style="flex-grow: 0;">
+                                            <img src="./assets/imagenes/avatar-user.png" alt="" style="border-radius: 50%;"
+                                                width="40px" height="40px">
+                                        </div>
+                                        <div style="display: flex;flex-direction: column;">
+                                            <label style="margin-left: 5px;">Cliente: Abel</label>
+                                            <label style="margin-left: 5px;">Asunto: RECLAMOS</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="footer-clientes" style="width: 100%; min-height: 50px; display: flex; flex-direction: row;padding: 10px; background-color: rgb(233, 223, 223);">
 
-            </div>
-        </div>
-      </div>
-      <div class="col-lg-9">
-        <div class="card" style="width: 100%; min-height: 450px;" >
-            <!--<div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="card" style="width: 100%; min-height: 450px;">
+                            <!--<div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
                 <strong>Chat</strong>
             </div>-->
-            <div class="card-body" style="padding: 0px;">
-                <div class="header-chat" style="width: 100%; min-height: 45px; display: flex; flex-direction: row;padding: 10px; background-color: white">
-                    <label style=" margin-right: 10px;">De: </label> <label>anonimo</label>
-                </div>
-                <div><hr style="padding: 0px; margin: 0px;cursor:pointer; width: 100%"></div> 
-                <div class="contenido-chat" id="chat-principal">
-                    <div  *ngFor="let mensaje of listaMensajesChat">
-                            <div class="mensaje-cliente" *ngIf="mensaje.usuario != 'admin'">
-                                    <div class="info-mensaje">
-                                        <div style="width: 30%; flex-grow: 0;">
-                                            <label  style="margin:0px; ">{{mensaje.usuario}}</label>
+                            <div class="card-body" style="padding: 0px;">
+                                <div class="header-chat" style="width: 100%; min-height: 45px; display: flex; flex-direction: row;padding: 10px; background-color: white">
+                                    <label style=" margin-right: 10px;">De: </label> <label>anonimo</label>
+                                </div>
+                                <div>
+                                    <hr style="padding: 0px; margin: 0px;cursor:pointer; width: 100%">
+                                </div>
+                                <div class="contenido-chat" id="chat-principal">
+                                    <div *ngFor="let mensaje of listaMensajesChat">
+                                        <div class="mensaje-cliente" *ngIf="mensaje.usuario != 'admin'">
+                                            <div class="info-mensaje">
+                                                <div style="width: 30%; flex-grow: 0;">
+                                                    <label style="margin:0px; ">{{mensaje.usuario}}</label>
+                                                </div>
+                                                <div style="width: 20%; flex-grow: 0;">
+                                                </div>
+                                                <div style="width: 50%;  flex-grow: 0; text-align: right;">
+                                                    <label style="margin:0px;"> {{mensaje.fecha}} {{mensaje.hora}}</label>
+                                                </div>
+                                            </div>
+                                            <img src="./assets/imagenes/cliente-icon.png" alt="Andeano" style="border-radius: 50%; width: 40px; height: 40px;">
+                                            <div class="item-mensaje-cliente">{{mensaje.mensaje}} </div>
                                         </div>
-                                        <div style="width: 20%; flex-grow: 0;">
+                                        <div class="mensaje-user" *ngIf="mensaje.usuario == 'admin'">
+                                            <div class="info-mensaje">
+                                                <div style="width: 50%;  flex-grow: 0;">
+                                                    <label style="margin:0px;"> {{mensaje.fecha}} {{mensaje.hora}}</label>
+                                                </div>
+                                                <div style="width: 20%; flex-grow: 0;">
+                                                </div>
+                                                <div style="width: 30%; flex-grow: 0; text-align: right;">
+                                                    <label style="margin:0px; ">{{mensaje.usuario}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="item-mensaje-user">{{mensaje.mensaje}}</div>
+                                            <img src="./assets/imagenes/andeano.png" alt="Andeano" style="border-radius: 50%; width: 40px; height: 40px;">
                                         </div>
-                                        <div style="width: 50%;  flex-grow: 0; text-align: right;" >
-                                            <label  style="margin:0px;" > {{mensaje.fecha}} {{mensaje.hora}}</label>
-                                        </div>        
+                                        <div *ngIf="true">
+                                            {{MoverScroll()}}
+                                        </div>
                                     </div>
-                                    <img src="./assets/imagenes/cliente-icon.png" alt="Andeano" style="border-radius: 50%; width: 40px; height: 40px;">
-                                    <div class="item-mensaje-cliente">{{mensaje.mensaje}} </div>
+
+
                                 </div>
-                                <div class="mensaje-user" *ngIf="mensaje.usuario == 'admin'">
-                                    <div class="info-mensaje">
-                                        <div style="width: 50%;  flex-grow: 0;">
-                                            <label  style="margin:0px;"> {{mensaje.fecha}} {{mensaje.hora}}</label>
-                                        </div>         
-                                        <div style="width: 20%; flex-grow: 0;">
-                                        </div>
-                                        <div style="width: 30%; flex-grow: 0; text-align: right;">
-                                            <label  style="margin:0px; ">{{mensaje.usuario}}</label>
-                                        </div>
-                                    </div>
-                                    <div class="item-mensaje-user">{{mensaje.mensaje}}</div>
-                                    <img src="./assets/imagenes/andeano.png" alt="Andeano" style="border-radius: 50%; width: 40px; height: 40px;">
+                                <div class="footer-chat" style="width: 100%; min-height: 50px; display: flex; flex-direction: row;padding: 10px; background-color: rgb(233, 223, 223);">
+                                    <input placeholder="Ingrese mensaje" id="contenidomensaje" style="width: 100%; min-height: 35px; padding-left: 15px; flex-grow: 0; border-radius: 10px; border:1px solid rgb(240, 234, 234);background-color: white;"
+                                        (keypress)="verificarMensaje($event)">
+
                                 </div>
-                                <div *ngIf="true">
-                                    {{MoverScroll()}}
-                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
-                    
-
                 </div>
-                <div class="footer-chat" style="width: 100%; min-height: 50px; display: flex; flex-direction: row;padding: 10px; background-color: rgb(233, 223, 223);">
-                    <input placeholder="Ingrese mensaje" id="contenidomensaje" style="width: 100%; min-height: 35px; padding-left: 15px; flex-grow: 0; border-radius: 10px; border:1px solid rgb(240, 234, 234);background-color: white;" (keypress)="verificarMensaje($event)">                
-
-                </div>
-
             </div>
         </div>
-
-      </div>
-    </div>
+    </main>
 </div>

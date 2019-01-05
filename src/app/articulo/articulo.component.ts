@@ -43,7 +43,6 @@ export class ArticuloComponent implements OnInit {
   itemseleccionado        : string                = "";
   readonly URL_API                                = Constantes.URL_API_IMAGEN + '/subir';
   readonly URL_IMAGES                             = Constantes.URL_IMAGENES;
-  private url_imagen      : string                = Constantes.URL;
   selectedFile            : File                  = null;
   vista                   : string                = "1";
   //CATEGORIAS
@@ -60,18 +59,17 @@ export class ArticuloComponent implements OnInit {
   imagenesSeleccionadas   : string[] = new Array();
    // nombre imagen para el editor
   imageneditorseleccionada: string="";
-  miga                    : Miga = new Miga('Articulo','articulos');
-  editorInstance : any;
+  migas                   : Miga[] = [new Miga('Articulo','articulos')];
+  editorInstance          : any;
   // Property Binding
   mostrarFormularioArticulo   : boolean = false;
   mostrarBotonOpcion          : boolean = false;
   mostrarListaArticulos       : boolean = false;
   mostrarCarga                : boolean = false;
-
   //Lista de precios
-  listaprecios            : Precios[] = new Array();
-  listaequipos = new Array();
-  listaplanesequipo = new Array();
+  listaprecios                : Precios[] = new Array();
+  listaequipos                = new Array();
+  listaplanesequipo           = new Array();
   planesseleccionada = {
     tipoplan:"",
     planes: new Array()
@@ -99,12 +97,12 @@ export class ArticuloComponent implements OnInit {
        }
   };
 
-  constructor(private http: HttpClient, 
-              private articuloService: ArticuloService,
-              private categoriaService: CategoriaService,
-              private caracteristicaService: CaracteristicaService,
-              private marcaService: MarcaService,
-              private planesService: PlanesService) { }
+  constructor(public http: HttpClient, 
+              public articuloService: ArticuloService,
+              public categoriaService: CategoriaService,
+              public caracteristicaService: CaracteristicaService,
+              public marcaService: MarcaService,
+              public planesService: PlanesService) { }
 
   ngOnInit() {
     this.itemsDatosGenerales.push([1,""]);
@@ -148,7 +146,7 @@ export class ArticuloComponent implements OnInit {
   }
 
   newHandlerImage(){
-    console.log(this.contenidoEditor);
+    //console.log(this.contenidoEditor);
   }
 
   limpiarFormulario(){
@@ -162,8 +160,7 @@ export class ArticuloComponent implements OnInit {
 
 
   obtenerListaPrecios(){
-    this.planesService.getPlanesEquipos()
-    .subscribe(res=>{
+    this.planesService.getPlanesEquipos().subscribe(res=>{
       this.listaprecios = res as Precios[];
       var indice = 0;
       for(var i = 1;i<this.listaprecios.length;i++){
@@ -172,20 +169,16 @@ export class ArticuloComponent implements OnInit {
         }
       }
       this.listaequipos = this.listaprecios[indice].equipos;
-      console.log(this.listaequipos);
     });
   }
 
   buscarPreciosEquipo(){
-    //console.log(this.articuloService.articuloSeleccionadoMysql.Descripcion);
     var cont = 0;
     var cont_ante = 0;
     var mejor_nombre="";
     var arraynombres = this.articuloService.articuloSeleccionadoMysql.Descripcion.split(" ");
-    
     for( var i = 0; i<this.listaprecios[0].equipos.length;i++){
       var nombre = this.listaprecios[0].equipos[i].nombreequipo;
-      
       for(var j = 0;j<arraynombres.length;j++){
         if(nombre.includes(arraynombres[j])){
           cont++;
@@ -199,11 +192,8 @@ export class ArticuloComponent implements OnInit {
         cont = 0;
       }
     }
-
     this.articuloService.articuloSeleccionado.idprecio = mejor_nombre;
-    console.log(mejor_nombre);
-    this.buscarPlanesEquipo();
-    
+    this.buscarPlanesEquipo();  
   }
 
   buscarPlanesEquipo(){
@@ -211,26 +201,24 @@ export class ArticuloComponent implements OnInit {
       tipoplan:"",
       planes: new Array()
     };
-    console.log(this.articuloService.articuloSeleccionado.idprecio);
-    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio as string)
-    .subscribe(res=>{
+    //console.log(this.articuloService.articuloSeleccionado.idprecio);
+    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio as string).subscribe(res=>{
       this.listaplanesequipo = res as [];
-      console.log(this.listaplanesequipo);
+      //console.log(this.listaplanesequipo);
     });
   }
 
   mostrarDetalleTipoPlan(tipoplan){
     this.planesseleccionada = tipoplan;
-    console.log(this.planesseleccionada);
+    //console.log(this.planesseleccionada);
   }
 
   cambioSelect(){
-    console.log(this.listaequipos);
+    //console.log(this.listaequipos);
   }
 
-
   cambiarPlanes(equipo){
-    console.log(equipo);
+    //console.log(equipo);
   }
 
   cambiarvista(articulo?: ArticuloMysql, form?: NgForm){
@@ -268,9 +256,7 @@ export class ArticuloComponent implements OnInit {
 
   rerender(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
       dtInstance.destroy();
-      // Call the dtTrigger to rerender again
       this.dtTriggers.next();
     });
   }
@@ -320,7 +306,6 @@ export class ArticuloComponent implements OnInit {
   editarArticulo(art){
     this.itemsDatosGenerales = new Array();
     this.articuloService.articuloSeleccionadoMysql = art;
-   // this.buscarPreciosEquipo();
     this.articuloService.getArticulo(this.articuloService.articuloSeleccionadoMysql.idArticulo)
     .subscribe(res=>{      
       this.articuloService.articuloSeleccionado = res[0] as Articulo;
@@ -330,8 +315,7 @@ export class ArticuloComponent implements OnInit {
       if(this.listacaracteristicasarticulo.length == 0){
         this.getCaracteristicas();
       }
-      this.buscarPlanesEquipo();
-      
+      this.buscarPlanesEquipo(); 
       this.vista = "2";
       this.mostrarListaArticulos = false;
       this.mostrarFormularioArticulo = true;

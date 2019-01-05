@@ -1,266 +1,274 @@
-<div class="animated fadeIn">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="card" style="width: 100%;">
-          <div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
-            <strong>Lista de Articulos</strong>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-6" style="text-align: left !important;">
-                <button class="btn btn-block btn-link" type="button" (click)="cambiarvista(categoriaForm)" style="color: black; width: auto;"
-                  id="btnOpcion" [hidden]="!mostrarBotonOpcion"><i class="fa fa-plus"></i> Agregar Articulos</button><br>
-              </div>
-              <div class="col-lg-6">
-              </div>
-              <div class="col-lg-12">
-                <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
-                  <img src="assets/imagenes/carga.gif"> Cargando Datos
+<app-header></app-header>
+<app-menu></app-menu>
+<div class="app-body">
+  <main class="main">
+    <app-breadcrumb [migas]="migas"></app-breadcrumb>
+    <div class="container-fluid">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="card" style="width: 100%;">
+                <div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
+                  <strong>Lista de Articulos</strong>
                 </div>
-                <div [hidden]="!mostrarListaArticulos">
-                  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover"
-                    id="tabla_categoria">
-                    <thead>
-                      <tr>
-                        <th style="width: 8%;">Id Articulo</th>
-                        <th style="width: 30%">Descripcion</th>
-                        <th style="width: 20%">Categoria</th>
-                        <th style="width: 5%">Cantidad</th>
-                        <th style="width: 10%;">Estado</th>
-                        <th style="width: 5%;"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let articulomysql of articuloService.articulosMysql">
-                        <td>{{articulomysql.idArticulo}}</td>
-                        <td>{{articulomysql.Descripcion}}</td>
-                        <td>{{articulomysql.Categoria}}</td>
-                        <td style="text-align: center;">{{articulomysql.Cantidad}}</td>
-                        <td style="text-align: center;">
-                          <button *ngIf="articulomysql.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary"
-                            (click)="cambiarvista(articulomysql,articuloForm)">Completar Registro
-                            {{articulomysql.Estado}}</button>
-                          <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '1'" class="fa fa-check"></i>
-                          <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '2'" class="fa fa-check"></i>
-                        </td>
-                        <td style="text-align: center;">
-                          <div style="margin-left: 0px; display: flex; flex-direction: row;">
-                            <div style="flex-grow: 0;margin-right: 2px;">
-                              <button type="button" *ngIf="articulomysql.Estado == '0'" class="btn btn-pill btn-block btn-success"
-                                style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql)"
-                                data-toggle="modal" data-target="#modalcategoria" disabled><i class="fa fa-edit"></i></button>
-                              <button type="button" *ngIf="articulomysql.Estado == '1'" class="btn btn-pill btn-block btn-success"
-                                style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql)"
-                                data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit"></i></button>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div [hidden]="!mostrarFormularioArticulo">
-                  <form #articuloForm="ngForm">
-                    <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="articuloService.articuloSeleccionado._id"
-                      name="idarticulo" type="text" required hidden="true">
-                    <input class="form-control" id="idarticulo" #idarticulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.idarticulo"
-                      name="idarticulo" type="text" required hidden="true">
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="form-group">
-                          <label style="font-weight: bold;">Titulo del Articulo</label>
-                          <input class="form-control" id="titulo" name="titulo" #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo"
-                            type="text" placeholder="Ingrese Titulo del Articulos" required style="border-color: rgb(114, 114, 114);"
-                            (change)="generarURL()">
-                        </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-6" style="text-align: left !important;">
+                      <button class="btn btn-block btn-link" type="button" (click)="cambiarvista(categoriaForm)" style="color: black; width: auto;"
+                        id="btnOpcion" [hidden]="!mostrarBotonOpcion"><i class="fa fa-plus"></i> Agregar Articulos</button><br>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                    <div class="col-lg-12">
+                      <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
+                        <img src="assets/imagenes/carga.gif"> Cargando Datos
                       </div>
-                      <div class="col-lg-12">
-                        <div class="form-group">
-                          <label style="font-weight: bold;">URL del Articulo</label>
-                          <input class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.url"
-                            type="text" placeholder="URL del articulo" required style="border-color: rgb(114, 114, 114);">
-                        </div>
-                      </div>
-                      <div class="col-lg-5">
-                        <div class="form-group">
-                          <label style="font-weight: bold;">Categoria</label>
-                          <select class="form-control" id="categoria" #categoria="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.categoria"
-                            name="categoria" style="border-color: rgb(114, 114, 114);" (change)="getCaracteristicas()">
-                            <option> Seleccione Categoria </option>
-                            <option *ngFor="let cat of listacategorias" value="{{cat._id}}"> {{cat.nombre}}</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-lg-4">
-                        <div class="form-group">
-                          <label style="font-weight: bold;">Marca</label>
-                          <select class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"
-                            style="border-color: rgb(114, 114, 114);">
-                            <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-lg-3">
-                        <div class="form-group">
-                          <label style="font-weight: bold;">Cantidad</label>
-                          <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad"
-                            class="form-control" style="border-color: rgb(114, 114, 114);" [ngModelOptions]="{standalone: true}">
-                        </div>
-                      </div>
-
-                      <div class="col-lg-12">
-                        <div class="card" style="border-color: rgb(114, 114, 114);">
-                          <div class="card-body">
-                            <div style="display: flex; flex-direction: row;">
-                              <div style="flex-grow:0;margin-right: 5px;">
-                                <h5>Caracteristicas del Articulo</h5>
-                              </div>
-                              <div style="flex-grow:0; margin-top: -5px;">
-                                <!--  <button type="button" class="btn btn-link" style=" height: 35px;" (click)="agregarCaracteristica()"><i class="fa fa-plus"></i> Agregar</button>-->
-                              </div>
-                            </div>
-                            <hr>
-                            <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
-                              <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
-                                *ngFor="let caracteristica of listacaracteristicasarticulo ">
-                                <div style="flex-grow: 0; width: 40%;">
-                                  <input class="form-control" style="border-color: rgb(58, 56, 56); background: rgb(216, 213, 209); color: black; font-weight: bold;"
-                                    value="{{caracteristica.nombre}}" readonly>
-                                </div>
-                                <div style="flex-grow: 0; width: 55%;">
-                                  <input type="text" class="form-control" style="border-color: rgb(114, 114, 114);"
-                                    placeholder="Ingrese valor de la carcteristica" value="{{caracteristica.valor}}">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-12">
-                        <div class="card" style="border-color: rgb(114, 114, 114);">
-                          <div class="card-body">
-                            <div style="display: flex; flex-direction: row;">
-                              <div style="flex-grow:0;margin-right: 5px;">
-                                <h5>Precios del Articulo</h5>
-                              </div>
-                            </div>
-                            <hr>
-                            <div>
-                              <div style="display: flex; flex-direction: column;" id="contenido-datos-generales">
-                                <div class="form-group">
-                                    <label style="font-weight: bold;">Seleccione el nombre del equipo </label>
-                                  <select [(ngModel)]="articuloService.articuloSeleccionado.idprecio" [ngModelOptions]="{standalone: true}" (change)="buscarPlanesEquipo()" class="form-control">
-                                    <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}" ><a (click)="cambiarPlanes(equipo)">{{equipo.nombreequipo}}</a></option>
-                                  </select>
-                                </div>
-                                <div style="flex-grow: 0;margin-top: 3px; width: 100%; display: flex; flex-direction: row" class="item-datos-generales">
-                                  
-                                  <div style="width: 50%;">
-                                    <table class="table table-responsive-sm table-sm">
-                                      <thead>
-                                          <tr>
-                                            <th>Tipo Plan</th>
-                                            <th></th>
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                          <tr *ngFor="let tipo of listaplanesequipo">
-                                            <td>{{tipo.tipoplan}}</td>
-                                            <td>
-                                              <button style="border: 1px solid rgb(0, 139, 12); border-radius: 5px; color: white; background-color: rgb(18, 177, 52)"(click)="mostrarDetalleTipoPlan(tipo)"> Ver Detalle </button>
-                                            </td>
-                                          </tr>
-                                      </tbody>
-                                    </table>  
+                      <div [hidden]="!mostrarListaArticulos">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover"
+                          id="tabla_categoria">
+                          <thead>
+                            <tr>
+                              <th style="width: 8%;">Id Articulo</th>
+                              <th style="width: 30%">Descripcion</th>
+                              <th style="width: 20%">Categoria</th>
+                              <th style="width: 5%">Cantidad</th>
+                              <th style="width: 10%;">Estado</th>
+                              <th style="width: 5%;"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let articulomysql of articuloService.articulosMysql">
+                              <td>{{articulomysql.idArticulo}}</td>
+                              <td>{{articulomysql.Descripcion}}</td>
+                              <td>{{articulomysql.Categoria}}</td>
+                              <td style="text-align: center;">{{articulomysql.Cantidad}}</td>
+                              <td style="text-align: center;">
+                                <button *ngIf="articulomysql.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary"
+                                  (click)="cambiarvista(articulomysql,articuloForm)">Completar Registro
+                                  {{articulomysql.Estado}}</button>
+                                <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '1'" class="fa fa-check"></i>
+                                <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '2'" class="fa fa-check"></i>
+                              </td>
+                              <td style="text-align: center;">
+                                <div style="margin-left: 0px; display: flex; flex-direction: row;">
+                                  <div style="flex-grow: 0;margin-right: 2px;">
+                                    <button type="button" *ngIf="articulomysql.Estado == '0'" class="btn btn-pill btn-block btn-success"
+                                      style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql)"
+                                      data-toggle="modal" data-target="#modalcategoria" disabled><i class="fa fa-edit"></i></button>
+                                    <button type="button" *ngIf="articulomysql.Estado == '1'" class="btn btn-pill btn-block btn-success"
+                                      style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql)"
+                                      data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit"></i></button>
                                   </div>
-                                  <div class="detalletipoplan" style="width: 50%;">
-                                    <div style="width: 100%;">
-                                        <h6>{{planesseleccionada.tipoplan}} : {{articuloService.articuloSeleccionado.idprecio}}</h6>
-
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div [hidden]="!mostrarFormularioArticulo">
+                        <form #articuloForm="ngForm">
+                          <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="articuloService.articuloSeleccionado._id"
+                            name="idarticulo" type="text" required hidden="true">
+                          <input class="form-control" id="idarticulo" #idarticulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.idarticulo"
+                            name="idarticulo" type="text" required hidden="true">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label style="font-weight: bold;">Titulo del Articulo</label>
+                                <input class="form-control" id="titulo" name="titulo" #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo"
+                                  type="text" placeholder="Ingrese Titulo del Articulos" required style="border-color: rgb(114, 114, 114);"
+                                  (change)="generarURL()">
+                              </div>
+                            </div>
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label style="font-weight: bold;">URL del Articulo</label>
+                                <input class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.url"
+                                  type="text" placeholder="URL del articulo" required style="border-color: rgb(114, 114, 114);">
+                              </div>
+                            </div>
+                            <div class="col-lg-5">
+                              <div class="form-group">
+                                <label style="font-weight: bold;">Categoria</label>
+                                <select class="form-control" id="categoria" #categoria="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.categoria"
+                                  name="categoria" style="border-color: rgb(114, 114, 114);" (change)="getCaracteristicas()">
+                                  <option> Seleccione Categoria </option>
+                                  <option *ngFor="let cat of listacategorias" value="{{cat._id}}"> {{cat.nombre}}</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label style="font-weight: bold;">Marca</label>
+                                <select class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"
+                                  style="border-color: rgb(114, 114, 114);">
+                                  <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label style="font-weight: bold;">Cantidad</label>
+                                <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad"
+                                  class="form-control" style="border-color: rgb(114, 114, 114);" [ngModelOptions]="{standalone: true}">
+                              </div>
+                            </div>
+                            <div class="col-lg-12">
+                              <div class="card" style="border-color: rgb(114, 114, 114);">
+                                <div class="card-body">
+                                  <div style="display: flex; flex-direction: row;">
+                                    <div style="flex-grow:0;margin-right: 5px;">
+                                      <h5>Caracteristicas del Articulo</h5>
                                     </div>
-                                    <div style="width: 100%;">
-                                      <table class="table table-responsive-sm table-sm">
-                                        <thead>
-                                          <tr>
-                                            <th>Nombre Plan</th>
-                                            <th>Precio</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr *ngFor="let plan of planesseleccionada.planes">
-                                            <td>{{plan.nombreplan}}</td>
-                                            <td>{{plan.precio}}</td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </div>                               
-                                    
+                                    <div style="flex-grow:0; margin-top: -5px;">
+                                    </div>
+                                  </div>
+                                  <hr>
+                                  <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
+                                    <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
+                                      *ngFor="let caracteristica of listacaracteristicasarticulo ">
+                                      <div style="flex-grow: 0; width: 40%;">
+                                        <input class="form-control" style="border-color: rgb(58, 56, 56); background: rgb(216, 213, 209); color: black; font-weight: bold;"
+                                          value="{{caracteristica.nombre}}" readonly>
+                                      </div>
+                                      <div style="flex-grow: 0; width: 55%;">
+                                        <input type="text" class="form-control" style="border-color: rgb(114, 114, 114);"
+                                          placeholder="Ingrese valor de la carcteristica" value="{{caracteristica.valor}}">
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                                            
+                              </div>
+                            </div>
+                            <div class="col-lg-12">
+                              <div class="card" style="border-color: rgb(114, 114, 114);">
+                                <div class="card-body">
+                                  <div style="display: flex; flex-direction: row;">
+                                    <div style="flex-grow:0;margin-right: 5px;">
+                                      <h5>Precios del Articulo</h5>
+                                    </div>
+                                  </div>
+                                  <hr>
+                                  <div>
+                                    <div style="display: flex; flex-direction: column;" id="contenido-datos-generales">
+                                      <div class="form-group">
+                                        <label style="font-weight: bold;">Seleccione el nombre del equipo </label>
+                                        <select [(ngModel)]="articuloService.articuloSeleccionado.idprecio"
+                                          [ngModelOptions]="{standalone: true}" (change)="buscarPlanesEquipo()" class="form-control">
+                                          <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}"><a
+                                              (click)="cambiarPlanes(equipo)">{{equipo.nombreequipo}}</a></option>
+                                        </select>
+                                      </div>
+                                      <div style="flex-grow: 0;margin-top: 3px; width: 100%; display: flex; flex-direction: row"
+                                        class="item-datos-generales">
+                                        <div style="width: 50%;">
+                                          <table class="table table-responsive-sm table-sm">
+                                            <thead>
+                                              <tr>
+                                                <th>Tipo Plan</th>
+                                                <th></th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr *ngFor="let tipo of listaplanesequipo">
+                                                <td>{{tipo.tipoplan}}</td>
+                                                <td>
+                                                  <button style="border: 1px solid rgb(0, 139, 12); border-radius: 5px; color: white; background-color: rgb(18, 177, 52)"
+                                                    (click)="mostrarDetalleTipoPlan(tipo)"> Ver Detalle </button>
+                                                </td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                        <div class="detalletipoplan" style="width: 50%;">
+                                          <div style="width: 100%;">
+                                            <h6>{{planesseleccionada.tipoplan}} :
+                                              {{articuloService.articuloSeleccionado.idprecio}}</h6>
+                                          </div>
+                                          <div style="width: 100%;">
+                                            <table class="table table-responsive-sm table-sm">
+                                              <thead>
+                                                <tr>
+                                                  <th>Nombre Plan</th>
+                                                  <th>Precio</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr *ngFor="let plan of planesseleccionada.planes">
+                                                  <td>{{plan.nombreplan}}</td>
+                                                  <td>{{plan.precio}}</td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                
                               </div>
+                            </div>
+                            <div class="col-lg-12">
+                              <div class="card" style="border-color: rgb(114, 114, 114);">
+                                <div class="card-body">
+                                  <div style="display: flex; flex-direction: row;">
+                                    <div style="flex-grow:0;margin-right: 5px;">
+                                      <h5>Imagenes del Articulo</h5>
+                                      <input type="file" style="display: none;" (change)="subirImagen($event)" id="imageninput">
+                                      <input type="file" style="display: none;" (change)="subirImagenEditor($event)" id="imageninputeditor">
+                                    </div>
+                                    <div style="flex-grow:0; margin-top: -5px;">
+                                      <button type="button" class="btn btn-link" style=" height: 35px;" (click)=" buscarImagen()"
+                                        data-toggle="modal" data-target="#modalimagenes"><i class="fa fa-plus"></i>
+                                        Agregar
+                                        Imagenes</button>
+                                    </div>
+                                  </div>
+                                  <hr>
+                                  <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-caracteristicas">
+                                    <div class="item-imagen" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px;"
+                                      *ngFor="let item of imagenesSeleccionadas ">
+                                      <img style="position: absolute; right: -10px;top: -10px;" src="assets/imagenes/close.png"
+                                        width="20px" height="20px" (click)="eliminarItemImagen(item)">
+                                      <img src="" class="imagen-item-articulo" src="{{URL_IMAGES}}/tmp/{{item}}">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-lg-12">
+                              <div class="card" style="border-color: rgb(114, 114, 114); height: auto;">
+                                <div class="card-body">
+                                  <div style="display: flex; flex-direction: row;">
+                                    <div style="flex-grow:0;margin-right: 5px;">
+                                      <h5>Detalles del Articulo</h5>
+                                    </div>
+                                  </div>
+                                  <hr>
+                                  <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-detalle">
+                                    <div style="width: 100%;" class="row">
+                                      <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor"
+                                        (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}"></quill-editor>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-lg-12" style="text-align: right;">
+                              <hr>
+                              <button class="btn btn-default" style="margin-right: 5px;" (click)="cambiarvista(categoriaForm)">
+                                <i class="fa fa-angle-left"></i> Regresar</button>
+                              <button class="btn btn-danger" style="margin-right: 5px;" (click)="newHandlerImage();">
+                                <i class="fa fa-close"></i> Limpiar</button>
+                              <button class="btn btn-success" (click)="guardarDatos()"> <i class="fa fa-save"></i>
+                                Guardar Articulo</button>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      
-                      <div class="col-lg-12">
-                        <div class="card" style="border-color: rgb(114, 114, 114);">
-                          <div class="card-body">
-                            <div style="display: flex; flex-direction: row;">
-                              <div style="flex-grow:0;margin-right: 5px;">
-                                <h5>Imagenes del Articulo</h5>
-                                <input type="file" style="display: none;" (change)="subirImagen($event)" id="imageninput">
-                                <input type="file" style="display: none;" (change)="subirImagenEditor($event)" id="imageninputeditor">
-                              </div>
-                              <div style="flex-grow:0; margin-top: -5px;">
-                                <button type="button" class="btn btn-link" style=" height: 35px;" (click)=" buscarImagen()"
-                                  data-toggle="modal" data-target="#modalimagenes"><i class="fa fa-plus"></i> Agregar
-                                  Imagenes</button>
-                              </div>
-                            </div>
-                            <hr>
-                            <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-caracteristicas">
-                              <div class="item-imagen" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px;"
-                                *ngFor="let item of imagenesSeleccionadas ">
-                                <img style="position: absolute; right: -10px;top: -10px;" src="assets/imagenes/close.png"
-                                  width="20px" height="20px" (click)="eliminarItemImagen(item)">
-                                <img src="" class="imagen-item-articulo" src="{{URL_IMAGES}}/tmp/{{item}}">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-12">
-                        <div class="card" style="border-color: rgb(114, 114, 114); height: auto;">
-                          <div class="card-body">
-                            <div style="display: flex; flex-direction: row;">
-                              <div style="flex-grow:0;margin-right: 5px;">
-                                <h5>Detalles del Articulo</h5>
-                              </div>
-                            </div>
-                            <hr>
-                            <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-detalle">
-                              <div style="width: 100%;" class="row">
-                                <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor" (onEditorCreated)="created($event)"
-                                  [ngModelOptions]="{standalone: true}"></quill-editor>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-12" style="text-align: right;">
-                        <hr>
-                        <button class="btn btn-default" style="margin-right: 5px;" (click)="cambiarvista(categoriaForm)">
-                          <i class="fa fa-angle-left"></i> Regresar</button>
-                        <button class="btn btn-danger" style="margin-right: 5px;" (click)="newHandlerImage();"> <i
-                            class="fa fa-close"></i> Limpiar</button>
-                        <button class="btn btn-success" (click)="guardarDatos()"> <i class="fa fa-save"></i> Guardar Articulo</button>
+                        </form>
                       </div>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -268,9 +276,8 @@
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
-
 
 
 <!-- Modal Articulos -->
@@ -294,7 +301,6 @@
               <div class="col-lg-4" style="text-align: center;">
                 <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
                   Subir Imagen</button>
-
               </div>
               <div class="col-lg-8">
                 <div style="display: flex; flex-direction: row; width: 100%;">
@@ -308,24 +314,22 @@
               </div>
             </div>
           </div>
-
         </div>
-
         <br>
         <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
           <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-
             <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
               *ngFor="let img of listaimagenes">
-              <input type="checkbox" class="form-control" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;" (change)="agregarImagenesArticulo(img)" id="{{img}}">
+              <input type="checkbox" class="form-control" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;"
+                (change)="agregarImagenesArticulo(img)" id="{{img}}">
               <img src="{{url_imagen}}/imagenes/tmp/{{img}}" class="imagen-item-articulo">
             </div>
           </div>
         </div>
         <div style="text-align: right;">
           <br>
-          <button class="btn btn-success btn-success btn-pill" data-dismiss="modal"><i class="fa fa-check"></i> Aceptar</button>
-
+          <button class="btn btn-success btn-success btn-pill" data-dismiss="modal"><i class="fa fa-check"></i>
+            Aceptar</button>
         </div>
       </div>
     </div>
@@ -353,7 +357,6 @@
               <div class="col-lg-4" style="text-align: center;">
                 <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
                   Subir Nueva Imagen</button>
-
               </div>
               <div class="col-lg-8">
                 <div style="display: flex; flex-direction: row; width: 100%;">
@@ -367,18 +370,14 @@
               </div>
             </div>
           </div>
-
         </div>
-
         <br>
         <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
           <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-
             <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
               *ngFor="let img of listaimagenes">
               <input type="radio" class="form-check-input" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;"
                 (change)="elegirImagen(img)" name="imagen-editor">
-
               <img src="{{URL_IMAGES}}/tmp/{{img}}" class="imagen-item-articulo">
             </div>
           </div>
@@ -387,7 +386,6 @@
           <br>
           <button class="btn btn-success btn-success btn-pill" data-dismiss="modal" (click)="agregarImagenEditor()"><i
               class="fa fa-plus"></i> Agregar</button>
-
         </div>
       </div>
     </div>
@@ -395,14 +393,14 @@
 </div>
 
 <button data-toggle="modal" data-target="#modalimageneseditor" id="btnimageneditor" (click)="buscarImagen()"></button>
-
 <!-- Modal detalle tipo plan -->
 <div class="modal fade" id="modaldetalleplan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true" >
-  <div class="modal-dialog modal-md" role="document" >
+  aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
     <div class="modal-content" style="margin-top: 20%;">
       <div class="modal-header">
-        <h6 class="modal-title" id="titulomodal"><i class="fa fa-list"> </i>{{planesseleccionada.tipoplan}} : {{articuloService.articuloSeleccionado.idprecio}}</h6>
+        <h6 class="modal-title" id="titulomodal"><i class="fa fa-list"> </i>{{planesseleccionada.tipoplan}} :
+          {{articuloService.articuloSeleccionado.idprecio}}</h6>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
           <i class="fa fa-close"></i>
         </button>
@@ -424,12 +422,8 @@
             </tbody>
           </table>
         </div>
-
-        
         <div style="text-align: right;">
-          
           <button class="btn btn-default btn-pill" data-dismiss="modal" (click)="agregarImagenEditor()"> Cerrar</button>
-
         </div>
       </div>
     </div>

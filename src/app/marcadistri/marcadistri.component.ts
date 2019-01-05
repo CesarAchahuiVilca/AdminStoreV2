@@ -8,7 +8,7 @@ import {HttpClient, HttpEventType} from '@angular/common/http';
 import { Marca } from './marca';
 import { DataTableDirective } from 'angular-datatables';
 import { Form, NgForm } from '@angular/forms';
-
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-marcadistri',
@@ -19,7 +19,7 @@ import { Form, NgForm } from '@angular/forms';
 
 export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
  //datos temp
- readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
+  readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
   readonly URL_IMAGES = 'http://localhost:3000/imagenes';
   selectedFile: File = null;
   todasMarcas: Marca[];
@@ -31,8 +31,11 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
   flag: boolean = true;
+  migas: Miga[] = [];
   //fin
-  constructor(private http: HttpClient,private marcaService:MarcaService) { }
+  constructor(private http: HttpClient,private marcaService:MarcaService) {
+    this.migas.push( new Miga('Marcas', 'marcadistri'));
+   }
 
   ngOnInit() {
     var  imagen = document.getElementById("imagen-select") as HTMLImageElement;

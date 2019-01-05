@@ -5,7 +5,7 @@ import { Miga } from '../miga';
 @Component({
   selector: 'app-breadcrumb',
   templateUrl: './breadcrumb.component.html',
-  styleUrls: ['./breadcrumb.component.css']
+  styles: ['']
 })
 export class BreadcrumbComponent implements OnInit {
 

@@ -1,113 +1,122 @@
-<div class="card" id="divnombrecliente">
-  <h2>Cliente:</h2>
-</div>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-container">
-          <table class="table" id="tablapedido">
-            <tr>
-              <th><i class="material-icons" style="color: chartreuse">
-                  attach_money
-                </i>
-                <label style="font-weight: normal">Valor promedio de los pedidos: 0</label></th>
-              <th><i class="material-icons" style="color: yellow">
-                  shopping_cart
-                </i>
-                <label style="font-weight: normal">Total de carritos:0</label></th>
-              <th><i class="material-icons" style="color: red">
-                  remove_shopping_cart
-                </i>
-                <label style="font-weight: normal">Carritos abandonados:0</label>
-              </th>
-            </tr>
-          </table>
-          <table class="table" id="tabladetallepedido">
-            <tr>
-              <th><i class="material-icons" style="color: rgb(255, 0, 242);">
-                  date_range
-                </i>
-                <label style="font-weight: normal">Fecha</label>
-              </th>
-              <th><i class="material-icons" style="color: rgb(21, 240, 39)">
-                  attach_money
-                </i>
-                <label style="font-weight: normal">Total</label>
-              </th>
-              <th><i class="material-icons" style="color: red">
-                  chat
-                </i>
-                <label style="font-weight: normal">Mensajes</label>
-              </th>
-              <th><i class="material-icons" style="color: rgb(0, 140, 255)">
-                  library_books
-                </i>
-                <label style="font-weight: normal">Productos</label>
-              </th>
-            </tr>
-          </table>
-        </div>
+<app-header></app-header>
+<app-menu></app-menu>
+<div class="app-body">
+  <main class="main">
+    <app-breadcrumb [migas]="migas"></app-breadcrumb>
+    <div class="container-fluid">
+      <div class="card" id="divnombrecliente">
+        <h2>Cliente:</h2>
       </div>
-
-    </div>
-    <div class="col-lg-12" id="listapedidos">
-      <div class="animated fadeIn">
+      <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-12">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="card" style="width: 100%;">
-                <div class="card-header"> <i class="fa fa-list"></i>
-                  <strong>Pedidos</strong>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-lg-6">
-                    </div>
-                    <div class="col-lg-12">
-                      <!--  <div id="carga" style="width: 100%;text-align: center;">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-container">
+                <table class="table" id="tablapedido">
+                  <tr>
+                    <th><i class="material-icons" style="color: chartreuse">
+                        attach_money
+                      </i>
+                      <label style="font-weight: normal">Valor promedio de los pedidos: 0</label></th>
+                    <th><i class="material-icons" style="color: yellow">
+                        shopping_cart
+                      </i>
+                      <label style="font-weight: normal">Total de carritos:0</label></th>
+                    <th><i class="material-icons" style="color: red">
+                        remove_shopping_cart
+                      </i>
+                      <label style="font-weight: normal">Carritos abandonados:0</label>
+                    </th>
+                  </tr>
+                </table>
+                <table class="table" id="tabladetallepedido">
+                  <tr>
+                    <th><i class="material-icons" style="color: rgb(255, 0, 242);">
+                        date_range
+                      </i>
+                      <label style="font-weight: normal">Fecha</label>
+                    </th>
+                    <th><i class="material-icons" style="color: rgb(21, 240, 39)">
+                        attach_money
+                      </i>
+                      <label style="font-weight: normal">Total</label>
+                    </th>
+                    <th><i class="material-icons" style="color: red">
+                        chat
+                      </i>
+                      <label style="font-weight: normal">Mensajes</label>
+                    </th>
+                    <th><i class="material-icons" style="color: rgb(0, 140, 255)">
+                        library_books
+                      </i>
+                      <label style="font-weight: normal">Productos</label>
+                    </th>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-12" id="listapedidos">
+            <div class="animated fadeIn">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card" style="width: 100%;">
+                      <div class="card-header"> <i class="fa fa-list"></i>
+                        <strong>Pedidos</strong>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-lg-6">
+                          </div>
+                          <div class="col-lg-12">
+                            <!--  <div id="carga" style="width: 100%;text-align: center;">
                             <img src="assets/imagenes/carga.gif"> Cargando Datos
                           </div>-->
-                      <div id="listarmarcas">
-                        <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover"
-                          style="font-size: 12px">
-                          <thead>
-                            <tr>
-                              <th style="width: 8%">N° Pedido</th>
-                              <th style="width: 8%;">Cliente</th>
-                              <th style="width: 8%;">Entrega</th>
-                              <th style="width: 8%;">Fecha</th>
-                              <th style="width: 8%">Pago</th>
-                              <th style="width: 8%">Total</th>
-                              <th style="width: 14%">Estado</th>
-                              <th style="width: 4%"></th>
-                              <th style="width: 4%"></th>
+                            <div id="listarmarcas">
+                              <table id="tablamarca" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover"
+                                style="font-size: 12px">
+                                <thead>
+                                  <tr>
+                                    <th style="width: 8%">N° Pedido</th>
+                                    <th style="width: 8%;">Cliente</th>
+                                    <th style="width: 8%;">Entrega</th>
+                                    <th style="width: 8%;">Fecha</th>
+                                    <th style="width: 8%">Pago</th>
+                                    <th style="width: 8%">Total</th>
+                                    <th style="width: 14%">Estado</th>
+                                    <th style="width: 4%"></th>
+                                    <th style="width: 4%"></th>
 
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>dat1</td>
-                              <td>dat1</td>
-                              <td>dat1</td>
-                              <td>dat1</td>
-                              <td>dat1</td>
-                              <td>dat1</td>
-                              <td>dat1</td>
-                              <td>
-                                <div class="btn-group btn-group-sm" role="group">
-                                  <button type="button" class="btn btn-primary"><i class="material-icons">assignment</i></button>
-                                  <button type="button" class="btn btn-primary"><i class="material-icons">local_shipping</i></button>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="btn-group btn-group-sm" role="group">
-                                  <button (click)="cambiarvista()" type="button" class="btn btn-success"><i class="material-icons">zoom_in</i>VER</button>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>dat1</td>
+                                    <td>dat1</td>
+                                    <td>dat1</td>
+                                    <td>dat1</td>
+                                    <td>dat1</td>
+                                    <td>dat1</td>
+                                    <td>dat1</td>
+                                    <td>
+                                      <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-primary"><i class="material-icons">assignment</i></button>
+                                        <button type="button" class="btn btn-primary"><i class="material-icons">local_shipping</i></button>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div class="btn-group btn-group-sm" role="group">
+                                        <button (click)="cambiarvista()" type="button" class="btn btn-success"><i class="material-icons">zoom_in</i>VER</button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -115,111 +124,112 @@
               </div>
             </div>
           </div>
+
         </div>
       </div>
-    </div>
 
-  </div>
-</div>
-
-<div class="container-fluid" id="dettallepedido">
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 portfolio-item portafolio-div1">
-      <div class="card h-100">
-        <div class="card-body">
-          <button class="btn btn-outline-primary" style="margin-right: 15px"><i class="material-icons" style="font-size: 18px;">print</i>&nbsp;Imprimir
-            pedido</button>
-          <button class="btn btn-outline-success"><i class="material-icons" style="font-size: 18px;">print</i>&nbsp;Imprimir
-            fac tura</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
-      <div class="card h-100">
-        <div class="card-header" style="height: 15px;">
-          <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">assignment</i>&nbsp;Estado
-            del pedido</p>
-        </div>
-        <div class="card-body">
-          <table class="table">
-            <tr>
-              <td><label id="extadoselect" style="color:black">Estado</label></td>
-              <td>Articulo</td>
-              <td>Fecha</td>
-            </tr>
-          </table>
-          <div class="container-fluid ">
-            <div class="row">
-              <div class="col-lg-6">
-                <select style="width: 200px" id="selectestado" class="form-control" (change)="cambiarestado()" >
-                  <option value="1" selected>En espera de pago</option>
-                  <option value="2">Error de pago</option>
-                  <option value="3">Enviado</option>
-                  <option value="4">Reembolso</option>
-                </select>
+      <div class="container-fluid" id="dettallepedido">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 portfolio-item portafolio-div1">
+            <div class="card h-100">
+              <div class="card-body">
+                <button class="btn btn-outline-primary" style="margin-right: 15px"><i class="material-icons" style="font-size: 18px;">print</i>&nbsp;Imprimir
+                  pedido</button>
+                <button class="btn btn-outline-success"><i class="material-icons" style="font-size: 18px;">print</i>&nbsp;Imprimir
+                  fac tura</button>
               </div>
-              <div class="col-lg-4">
-                <button class="btn btn-outline-success" style="width: 120px;font-size: 10px" (click)="actualizar()" >ACTUALIZAR ESTADO</button>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
+            <div class="card h-100">
+              <div class="card-header" style="height: 15px;">
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">assignment</i>&nbsp;Estado
+                  del pedido</p>
+              </div>
+              <div class="card-body">
+                <table class="table">
+                  <tr>
+                    <td><label id="extadoselect" style="color:black">Estado</label></td>
+                    <td>Articulo</td>
+                    <td>Fecha</td>
+                  </tr>
+                </table>
+                <div class="container-fluid ">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <select style="width: 200px" id="selectestado" class="form-control" (change)="cambiarestado()">
+                        <option value="1" selected>En espera de pago</option>
+                        <option value="2">Error de pago</option>
+                        <option value="3">Enviado</option>
+                        <option value="4">Reembolso</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-4">
+                      <button class="btn btn-outline-success" style="width: 120px;font-size: 10px" (click)="actualizar()">ACTUALIZAR
+                        ESTADO</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
+            <div class="card h-100">
+              <div class="card-header" style="height: 15px;">
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">person</i>&nbsp;Cliente</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text">subtex1</p>
+                <!-- <div class="container-fluid">
+                  <hr>
+                  <p><i class="material-icons">
+                      local_shipping
+                      </i>Direccion</p>
+                </div>-->
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
+            <div class="card h-100">
+              <div class="card-header" style="height: 15px;">
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">payment</i>&nbsp;Pago</p>
+              </div>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a>texto1</a>
+                </h4>
+                <p class="card-text">subtex1</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
+            <div class="card h-100">
+              <div class="card-header" style="height: 15px;">
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">mail_outline</i>&nbsp;Mensajes</p>
+              </div>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a>texto1</a>
+                </h4>
+                <p class="card-text">subtex1</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-6 col-sm-3 portfolio-item">
+            <div class="card h-100">
+              <div class="card-header" style="height: 15px;">
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">shopping_cart</i>&nbsp;Productos</p>
+              </div>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a>texto1</a>
+                </h4>
+                <p class="card-text">subtex1</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
-      <div class="card h-100">
-        <div class="card-header" style="height: 15px;">
-          <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">person</i>&nbsp;Cliente</p>
-        </div>
-        <div class="card-body">
-          <p class="card-text">subtex1</p>
-          <!-- <div class="container-fluid">
-                  <hr>
-                  <p><i class="material-icons">
-                      local_shipping
-                      </i>Direccion</p>
-                </div>-->
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
-      <div class="card h-100">
-        <div class="card-header" style="height: 15px;">
-          <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">payment</i>&nbsp;Pago</p>
-        </div>
-        <div class="card-body">
-          <h4 class="card-title">
-            <a>texto1</a>
-          </h4>
-          <p class="card-text">subtex1</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
-      <div class="card h-100">
-        <div class="card-header" style="height: 15px;">
-          <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">mail_outline</i>&nbsp;Mensajes</p>
-        </div>
-        <div class="card-body">
-          <h4 class="card-title">
-            <a>texto1</a>
-          </h4>
-          <p class="card-text">subtex1</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-12 col-md-6 col-sm-3 portfolio-item">
-      <div class="card h-100">
-        <div class="card-header" style="height: 15px;">
-          <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">shopping_cart</i>&nbsp;Productos</p>
-        </div>
-        <div class="card-body">
-          <h4 class="card-title">
-            <a>texto1</a>
-          </h4>
-          <p class="card-text">subtex1</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  </main>
 </div>

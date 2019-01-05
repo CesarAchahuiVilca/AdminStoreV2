@@ -8,6 +8,7 @@ import {HttpClient, HttpEventType} from '@angular/common/http';
 import { DataTableDirective } from 'angular-datatables';
 import { NgForm } from '@angular/forms';
 import { Distribuidor } from './distribuidor';
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-distribuidor',
@@ -23,6 +24,7 @@ export class DistribuidorComponent implements AfterViewInit,OnDestroy,OnInit {
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
   flag: boolean = true;
+  migas = [new Miga('Distribuidores', '/distribuidor')]
   //fin
 
   constructor(private http: HttpClient,private distriService:DistribuidorService) { }

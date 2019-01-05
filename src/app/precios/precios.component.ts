@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-precios',
@@ -11,6 +12,7 @@ export class PreciosComponent implements OnInit {
 
   mensajeestado = "";
   selectedFile: File = null;
+  migas = [new Miga('Precios','/precios')];
   constructor(private http: HttpClient) { }
 
   ngOnInit() {

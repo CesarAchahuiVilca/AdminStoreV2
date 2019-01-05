@@ -27,21 +27,24 @@ import { MatMomentDateModule, MomentDateModule } from '@angular/material-moment-
 import { TiendaComponent } from './tienda/tienda.component';
 import { PreciosComponent } from './precios/precios.component';
 import { PlanesComponent } from './planes/planes.component';
+import { SesionComponent } from './sesion/sesion.component';
+import { PrincipalComponent } from './principal/principal.component';
 
 const routes: Route[] = [
-  {path: 'login', component: LoginComponent},
-  {path: 'marca', component: MarcadistriComponent},
-  {path: 'categoria', component: CategoriaComponent},
-  {path: 'caracteristicas', component: CaracteristicasComponent},
-  {path: 'usuarios', component: UsuarioComponent},
-  {path: 'region', component: RegionComponent},
+  {path: '', component: LoginComponent},
   {path: 'articulos', component: ArticuloComponent},
+  {path: 'caracteristicas', component: CaracteristicasComponent},
+  {path: 'categoria', component: CategoriaComponent},
   {path: 'distribuidor',component: DistribuidorComponent},
-  {path: 'pedidos',component:PedidosComponent},
-  {path: 'servicio-cliente',component:ServicioClienteComponent},
   {path: 'locales', component: TiendaComponent},
+  {path: 'marca', component: MarcadistriComponent},
+  {path: 'menu', component: PrincipalComponent},
+  {path: 'pedidos',component:PedidosComponent},
+  {path: 'planes', component: PlanesComponent},
   {path: 'precios', component: PreciosComponent},
-  {path: 'planes', component: PlanesComponent}
+  {path: 'region', component: RegionComponent},
+  {path: 'servicio-cliente',component:ServicioClienteComponent},
+  {path: 'usuarios', component: UsuarioComponent}
 ];
 
 @NgModule({
@@ -63,7 +66,9 @@ const routes: Route[] = [
     ServicioClienteComponent,
     TiendaComponent,
     PreciosComponent,
-    PlanesComponent
+    PlanesComponent,
+    SesionComponent,
+    PrincipalComponent
   ],
   imports: [
     BrowserModule,

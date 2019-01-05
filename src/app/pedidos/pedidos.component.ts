@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { HttpSentEvent } from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
-
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-pedidos',
@@ -25,6 +25,7 @@ export class PedidosComponent implements AfterViewInit,OnDestroy,OnInit {
    //fin
    //datos temp
    listadatos:string[]=['datos1','datos2','datos3','datos4','datos5','dtos6','datos7'];
+   migas = [new Miga('Pedidos', '/pedidos')];
    //fin datos temp
   constructor(public snackBar: MatSnackBar) { }
 

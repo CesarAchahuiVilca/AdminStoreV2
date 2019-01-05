@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Provincia } from './provincia';
 import { Region } from './region';
 import { RegionService } from './region.service';
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-region',
@@ -20,6 +21,7 @@ export class RegionComponent implements OnInit {
   private distritos : string[];
   private lblDepartamento : string;
   private lblProvincia : string;
+  migas = [new Miga('Locales', '/region')];
 
   constructor(
     private regionService : RegionService,

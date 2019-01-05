@@ -10,7 +10,7 @@ import { NgForm } from '@angular/forms';
 import { Provincia } from '../region/provincia';
 import { Region } from '../region/region';
 import { RegionService } from '../region/region.service';
-import { Subject } from 'rxjs';
+import { Subject, from } from 'rxjs';
 import { Usuario } from './usuario';
 import { UsuarioService } from './usuario.service';
 
@@ -34,7 +34,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   private direccion_header                  : string;
   private flag                              : boolean = true;
   private habilitarCorreo                   : boolean = true;
-  public miga                               : Miga = new Miga('Clientes','/usuarios');
+  public migas                              = [new Miga('Clientes','usuarios')]
   private mostrarBotonDireccion             : boolean = false;
   private mostrarBotonLimpiar               : boolean = true;
   private mostrarBotonNuevo                 : boolean = false;
@@ -53,6 +53,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   private flashMessage                      : NgFlashMessageService;
   private direccionService                  : DireccionService;
   private regionService                     : RegionService;
+  //migas : [new Miga('usuarios','/usuarios')];
   
   /**
    * Constructor del componente Usuario

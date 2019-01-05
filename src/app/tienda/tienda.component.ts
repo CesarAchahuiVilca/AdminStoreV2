@@ -18,7 +18,7 @@ export class TiendaComponent implements OnInit {
   private tiendaService   : TiendaService;
   private displayedColumns: string[] = ['nombre', 'latitud', 'longitud', 'edit'];
   dataSource              : MatTableDataSource<Tienda>; // = new MatTableDataSource(ELEMENT_DATA);
-  miga                    : Miga = new Miga('Tienda','locales');
+  migas                    = [ new Miga('Tienda','locales')];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

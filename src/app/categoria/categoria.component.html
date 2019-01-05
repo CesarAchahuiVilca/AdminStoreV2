@@ -1,70 +1,80 @@
-<div class="animated fadeIn">
-  <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-      <div class="card" style="width: 100%;">
-        <div class="card-header">
-          <strong>Lista de Categorias</strong>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-8">
-              <div class="breadcrum-categorias row" style="margin-left: 5px;">
-                <i class="fa fa-home"> </i>
-                <div class="item-breadcrumb-categorias" *ngFor="let categoria of breadcrumb_categorias" style="margin-top: -3px;">
-                  <a class="item-breadcrumb-categoria" (click)="irASubCategoria(categoria)">{{categoria.nombre}}</a>/
+<app-header></app-header>
+<app-menu></app-menu>
+<div class="app-body">
+  <main class="main">
+    <app-breadcrumb [migas]="migas"></app-breadcrumb>
+    <div class="container-fluid">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="card" style="width: 100%;">
+              <div class="card-header">
+                <strong>Lista de Categorias</strong>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="breadcrum-categorias row" style="margin-left: 5px;">
+                      <i class="fa fa-home"> </i>
+                      <div class="item-breadcrumb-categorias" *ngFor="let categoria of breadcrumb_categorias" style="margin-top: -3px;">
+                        <a class="item-breadcrumb-categoria" (click)="irASubCategoria(categoria)">{{categoria.nombre}}</a>/
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <button class="btn btn-block btn-link" type="button" (click)="limpiarform(categoriaForm)"
+                      data-toggle="modal" data-target="#modalcategoria" style="color: black"><i class="fa fa-plus"></i>
+                      Agregar Categoria</button><br>
+                  </div>
+                  <div class="col-md-12">
+                    <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
+                      <img src="assets/imagenes/carga.gif"> Cargando Datos
+                    </div>
+                    <div id="contenido_lista_categorias">
+                      <table class="table  table-responsive-sm table-sm" id="tabla_categoria">
+                        <thead>
+                          <tr>
+                            <th style="width: 5%;"> </th>
+                            <th style="width: 15%;">Nombre</th>
+                            <th style="width: 50%">Descripcion</th>
+                            <th style="width: 8%">Mostrar</th>
+                            <th style="width: 10%;"> </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let categoria of categoriaService.categorias">
+                            <td class="btn-detalle-categoria" (click)="mostrarSubCategorias(categoria)"> <i class="fa fa-plus"
+                                title="Ver Sub Categorias"></i></td>
+                            <td>{{ categoria.nombre }}</td>
+                            <td>{{ categoria.descripcion }}</td>
+                            <td></td>
+                            <td>
+                              <div style="margin-left: 0px; display: flex; flex-direction: row;">
+                                <div style="flex-grow: 0;margin-right: 2px;">
+                                  <button type="button" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;"
+                                    (click)="editarCategoria(categoria)" data-toggle="modal" data-target="#modalcategoria"><i
+                                      class="fa fa-edit"></i></button>
+                                </div>
+                                <div style="flex-grow: 1;">
+                                  <button type="button" class="btn btn-pill btn-block btn-danger" style="width: 40px;height: 40px;"
+                                    (click)="eliminarCategoria(categoria._id)"><i class="fa fa-trash"></i></button>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="mensaje"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-lg-4 col-md-4">
-              <button class="btn btn-block btn-link" type="button" (click)="limpiarform(categoriaForm)" data-toggle="modal"
-                data-target="#modalcategoria" style="color: black"><i class="fa fa-plus"></i> Agregar Categoria</button><br>
-            </div>
-            <div class="col-md-12">
-              <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
-                <img src="assets/imagenes/carga.gif"> Cargando Datos
-              </div>
-              <div id="contenido_lista_categorias">
-                <table class="table  table-responsive-sm table-sm" id="tabla_categoria">
-                  <thead>
-                    <tr>
-                      <th style="width: 5%;"> </th>
-                      <th style="width: 15%;">Nombre</th>
-                      <th style="width: 50%">Descripcion</th>
-                      <th style="width: 8%">Mostrar</th>
-                      <th style="width: 10%;"> </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let categoria of categoriaService.categorias">
-                      <td class="btn-detalle-categoria" (click)="mostrarSubCategorias(categoria)"> <i class="fa fa-plus"
-                          title="Ver Sub Categorias"></i></td>
-                      <td>{{ categoria.nombre }}</td>
-                      <td>{{ categoria.descripcion }}</td>
-                      <td></td>
-                      <td>
-                        <div style="margin-left: 0px; display: flex; flex-direction: row;">
-                          <div style="flex-grow: 0;margin-right: 2px;">
-                            <button type="button" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;"
-                              (click)="editarCategoria(categoria)" data-toggle="modal" data-target="#modalcategoria"><i
-                                class="fa fa-edit"></i></button>
-                          </div>
-                          <div style="flex-grow: 1;">
-                            <button type="button" class="btn btn-pill btn-block btn-danger" style="width: 40px;height: 40px;"
-                              (click)="eliminarCategoria(categoria._id)"><i class="fa fa-trash"></i></button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div id="mensaje"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
 
 <!-- Modal -->

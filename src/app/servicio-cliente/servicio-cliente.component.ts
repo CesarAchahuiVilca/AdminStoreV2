@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ServicioClienteService} from './servicio-cliente.service'
 import { MensajeChat} from './mensaje-chat';
 import { Usuario } from '../usuario/usuario';
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-servicio-cliente',
@@ -9,6 +10,7 @@ import { Usuario } from '../usuario/usuario';
   styleUrls: ['./servicio-cliente.component.css']
 })
 export class ServicioClienteComponent implements OnInit {
+  migas = [new Miga('Servicio al Cliente', '/servicio-cliente')];
 
   constructor(private servicioClienteService: ServicioClienteService) { }
 
