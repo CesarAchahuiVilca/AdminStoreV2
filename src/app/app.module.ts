@@ -29,6 +29,7 @@ import { PreciosComponent } from './precios/precios.component';
 import { PlanesComponent } from './planes/planes.component';
 import { SesionComponent } from './sesion/sesion.component';
 import { PrincipalComponent } from './principal/principal.component';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -81,7 +82,8 @@ const routes: Route[] = [
     DataTablesModule,
     QuillModule,
     MomentDateModule,
-    MatMomentDateModule
+    MatMomentDateModule, 
+    ScrollDispatchModule
   ],
   providers: [],
   bootstrap: [AppComponent]
