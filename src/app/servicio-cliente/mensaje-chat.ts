@@ -1,16 +1,14 @@
 export class MensajeChat {
 
-    constructor(usuario = '', destino='',mensaje='',fecha='', hora='') {
-        this.usuario=usuario;
-        this.mensaje= mensaje;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.destino = destino;
+    constructor(conversacionId = '', cuerpo = '', autor = '', destino = '') {
+        this.conversacionId     = conversacionId;
+        this.cuerpo             = cuerpo;
+        this.autor              = autor;
+        this.destino            = destino;
     }
   
-    usuario: string;
-    destino: string;
-    mensaje : string;
-    fecha : string;
-    hora: string;
+    conversacionId  : string;
+    cuerpo          : string;
+    autor           : string;
+    destino         : string;
   }

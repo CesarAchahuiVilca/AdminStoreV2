@@ -1,21 +1,34 @@
 import { Constantes } from '../constantes';
+import { Conversacion } from './conversacion';
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { Usuario } from '../usuario/usuario';
+import { HttpClient } from '@angular/common/http';
+import { MensajeChat } from './mensaje-chat';
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class ServicioClienteService {
-  private socket  = io('https://latiendadeltiogeorge.herokuapp.com');
+  public socket                   = io(Constantes.URL);
+  idChat                : string  = "admin"
+  clienteSeleccionado   : Usuario = new Usuario();
+  usuario               : Usuario = new Usuario();
+  clientes              : Usuario[] = [];
+  conversaciones        : Conversacion[] = [];
+  chatSeleccionado      : Conversacion;
 
-  idChat:string = "admin"
+  constructor(public http: HttpClient) { }
 
-  clienteSeleccionado: Usuario = new Usuario();
-  usuario: Usuario = new Usuario();
-  constructor() { }
-  enviarMensaje(data){
-    this.socket.emit("chat-admin",data);
+  enviarMensaje(data: MensajeChat){
+    this.http.post(Constantes.URL_API_CHAT + '/' + data.conversacionId, data, {withCredentials: true}).subscribe( res =>{
+      var jres = JSON.parse(JSON.stringify(res));
+      if (jres.status){
+        this.socket.emit("chat-admin",data);
+      }
+    })
   }
 
   nuevoMensaje(){
@@ -29,6 +42,7 @@ export class ServicioClienteService {
    });
    return observable;
   }
+
   iniciarChat(){
     let observable = new Observable(observer => {
       this.socket.on("init-admin", (data) => {
@@ -39,5 +53,13 @@ export class ServicioClienteService {
       }
     });
     return observable;
+  }
+
+  obtenerConversaciones(){
+    return this.http.get(Constantes.URL_API_CHAT,{withCredentials: true});
+  }
+
+  obtenerMensajes(idConversacion: string){
+    return this.http.get(Constantes.URL_API_CHAT + '/' + idConversacion, {withCredentials: true});
   }
 }
