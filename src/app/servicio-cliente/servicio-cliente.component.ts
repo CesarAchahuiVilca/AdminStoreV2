@@ -72,10 +72,8 @@ export class ServicioClienteComponent implements OnInit {
   }
 
   unirseChat(){
-    const data = {
-      usuario : 'admin'
-    };
+    const mensaje = new MensajeChat(this.servicioClienteService.chatSeleccionado._id, 'admin se ha unido al chat', '$unirChat', this.servicioClienteService.chatSeleccionado.email);
     this.servicioClienteService.chatSeleccionado.unir = true;
-    this.servicioClienteService.unirseChat(data);
+    this.servicioClienteService.unirseChat(mensaje);
   }
 } 

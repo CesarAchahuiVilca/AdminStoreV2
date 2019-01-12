@@ -38,7 +38,7 @@
                                 <label style=" margin-right: 10px;">De: </label> <label>{{servicioClienteService.chatSeleccionado
                                     ? servicioClienteService.chatSeleccionado.nombreCliente : 'Ningún chat
                                     seleccionado.'}}</label>
-                                <button mat-raised-button color="accent" style="position: absolute; right: 5px;" [hidden]="ocultarBotonChat" (click)="unirseChat()">Unirse al Chat</button>
+                                <button mat-raised-button color="accent" style="position: absolute; right: 5px;" [hidden]="ocultarBotonChat" (click)="unirseChat(servicioClienteService.chatSeleccionado._id)">Unirse al Chat</button>
                             </div>
                             <div>
                                 <hr style="padding: 0px; margin: 0px;cursor:pointer; width: 100%">
