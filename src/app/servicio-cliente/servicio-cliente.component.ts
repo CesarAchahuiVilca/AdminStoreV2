@@ -11,11 +11,12 @@ import { Conversacion } from './conversacion';
   styleUrls: ['./servicio-cliente.component.css']
 })
 export class ServicioClienteComponent implements OnInit {
-  migas = [new Miga('Servicio al Cliente', '/servicio-cliente')];
+  migas             = [new Miga('Servicio al Cliente', '/servicio-cliente')];
+  listaMensajesChat : MensajeChat[] = new Array();
+  ocultarBotonChat  : boolean       = true;
+  ocultarEnviarMensaje : boolean    = true;
 
   constructor(public servicioClienteService: ServicioClienteService) { }
-
-  listaMensajesChat: MensajeChat[] = new Array();
 
   ngOnInit() {
     this.servicioClienteService.obtenerConversaciones().subscribe( res => {
@@ -26,17 +27,12 @@ export class ServicioClienteComponent implements OnInit {
     });
     // Cuando alguien intenta iniciar conversacion
     this.servicioClienteService.iniciarChat().subscribe( res => {
-      //var cliente = res as Usuario;
       this.servicioClienteService.conversaciones.push(res as Conversacion);
-      //this.servicioClienteService.clienteSeleccionado = res as Usuario;
-      //this.servicioClienteService.clientes.push(res as Usuario);
-      //console.log(this.servicioClienteService.clienteSeleccionado);
     });
     //Al recibir nuevos mensajes
     this.servicioClienteService.nuevoMensaje().subscribe(res=>{
       var mensaje = res as MensajeChat;
       this.agregarMensaje(mensaje);
-      console.log(mensaje);
     });
   }
 
@@ -44,7 +40,7 @@ export class ServicioClienteComponent implements OnInit {
     if(event.code=="Enter" && !event.shiftKey){
       var inputmensaje = document.getElementById("contenidomensaje") as HTMLInputElement;
       if(inputmensaje.value != ""){
-        var mensaje = new MensajeChat(this.servicioClienteService.chatSeleccionado._id, inputmensaje.value, "admin",this.servicioClienteService.chatSeleccionado.email);
+        var mensaje = new MensajeChat(this.servicioClienteService.chatSeleccionado._id, inputmensaje.value, "admin", this.servicioClienteService.chatSeleccionado.email);
         this.enviarMensaje(mensaje);
         inputmensaje.value = "";
       }
@@ -53,7 +49,6 @@ export class ServicioClienteComponent implements OnInit {
 
   agregarMensaje(mensaje: MensajeChat){
     this.listaMensajesChat.push(mensaje);
-    //console.log(this.listaMensajesChat);
   }
 
   enviarMensaje(mensaje: MensajeChat){
@@ -62,6 +57,7 @@ export class ServicioClienteComponent implements OnInit {
   }
 
   mostrarMensajes(conversacion : Conversacion){
+    this.ocultarBotonChat = false;
     this.servicioClienteService.chatSeleccionado = conversacion;
     this.servicioClienteService.obtenerMensajes(conversacion._id).subscribe( res => {
       var jres = JSON.parse(JSON.stringify(res));
@@ -71,10 +67,15 @@ export class ServicioClienteComponent implements OnInit {
     });
   }
 
-  MoverScroll() {
-    //console.log("termino de renderizar los mensajes ....");
-    var contenedorchat = document.getElementById("chat-principal") as HTMLDivElement;
-    contenedorchat.scrollTop =contenedorchat.scrollHeight;
+  MoverScroll(chatPrincipal: HTMLDivElement) {
+    chatPrincipal.scrollTop = chatPrincipal.scrollHeight;
   }
 
+  unirseChat(){
+    const data = {
+      usuario : 'admin'
+    };
+    this.servicioClienteService.chatSeleccionado.unir = true;
+    this.servicioClienteService.unirseChat(data);
+  }
 } 

@@ -78,3 +78,7 @@ label{
     display: flex;
     flex-direction: row;
 }
+
+.container-fluid {
+    padding: 0px 5px;
+}

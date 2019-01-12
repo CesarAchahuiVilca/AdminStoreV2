@@ -4,6 +4,7 @@ export class Conversacion {
   email           : string;
   tipoConsulta    : string;
   consulta        : string;
+  unir            : boolean = false;
   
   constructor(_id= '', nombreCliente = '', email = '', tipoConsulta = '', consulta = ''){
     this._id = _id;

@@ -31,6 +31,10 @@ export class ServicioClienteService {
     })
   }
 
+  unirseChat(data: any){
+    this.socket.emit("join-chat", data);
+  }
+
   nuevoMensaje(){
     let observable = new Observable(observer => {
       this.socket.on("admin", (data) => {
