@@ -23,16 +23,33 @@ export class ServicioClienteComponent implements OnInit {
       var jres = JSON.parse(JSON.stringify(res));
       if (jres.status){
         this.servicioClienteService.conversaciones = jres.data as Conversacion[];
+        this.servicioClienteService.nombreUsuario = jres.usuario;
+        this.servicioClienteService.tipoUsuario = jres.tipoUsuario;
+        this.servicioClienteService.idUsuario = jres.idUsuario;
+        for(var i = 0; i < this.servicioClienteService.conversaciones.length; i++){
+          if(this.servicioClienteService.conversaciones[i].participantes.includes(this.servicioClienteService.idUsuario)){
+            this.servicioClienteService.conversaciones[i].unir = true;
+          }
+        }
       }
     });
     // Cuando alguien intenta iniciar conversacion
     this.servicioClienteService.iniciarChat().subscribe( res => {
-      this.servicioClienteService.conversaciones.push(res as Conversacion);
+      this.servicioClienteService.obtenerConversaciones().subscribe( convs =>{
+        var jres = JSON.parse(JSON.stringify(convs));
+        if (jres.status){
+          this.servicioClienteService.conversaciones = jres.data as Conversacion[];
+        }
+      });
     });
     //Al recibir nuevos mensajes
     this.servicioClienteService.nuevoMensaje().subscribe(res=>{
       var mensaje = res as MensajeChat;
-      this.agregarMensaje(mensaje);
+      if(mensaje.cuerpo == '$desconectar$'){
+        this.agregarMensaje(new MensajeChat('','Esta sesión ha terminado', '$desconectar','admin'));
+      }else {
+        this.agregarMensaje(mensaje);
+      }     
     });
   }
 
@@ -72,7 +89,7 @@ export class ServicioClienteComponent implements OnInit {
   }
 
   unirseChat(){
-    const mensaje = new MensajeChat(this.servicioClienteService.chatSeleccionado._id, 'admin se ha unido al chat', '$unirChat', this.servicioClienteService.chatSeleccionado.email);
+    const mensaje = new MensajeChat(this.servicioClienteService.chatSeleccionado._id, this.servicioClienteService.nombreUsuario.split(' ')[0] + ' se ha unido al chat', '$unirChat', this.servicioClienteService.chatSeleccionado.email);
     this.servicioClienteService.chatSeleccionado.unir = true;
     this.servicioClienteService.unirseChat(mensaje);
   }

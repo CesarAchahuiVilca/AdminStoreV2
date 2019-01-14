@@ -13,10 +13,10 @@ import { MensajeChat } from './mensaje-chat';
 
 export class ServicioClienteService {
   public socket                   = io(Constantes.URL);
-  idChat                : string  = "admin"
-  clienteSeleccionado   : Usuario = new Usuario();
-  usuario               : Usuario = new Usuario();
-  clientes              : Usuario[] = [];
+  idChat                : string  = "admin";
+  nombreUsuario         : string;
+  tipoUsuario           : string;
+  idUsuario             : string;
   conversaciones        : Conversacion[] = [];
   chatSeleccionado      : Conversacion;
 
@@ -31,8 +31,14 @@ export class ServicioClienteService {
     })
   }
 
-  unirseChat(data: any){
-    this.socket.emit("join-chat", data);
+  unirseChat(data: MensajeChat){  
+    this.http.put(Constantes.URL_API_CHAT + '/'+ data.conversacionId, {idUsuario: this.idUsuario},{withCredentials: true}).subscribe( res => {
+      var jres = JSON.parse(JSON.stringify(res));
+      console.log(res);
+      if(jres.status){
+        this.socket.emit("join-chat", data);
+      }
+    })
   }
 
   nuevoMensaje(){

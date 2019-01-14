@@ -4,7 +4,10 @@ export class Conversacion {
   email           : string;
   tipoConsulta    : string;
   consulta        : string;
+  createdAt       : Date;
+  concluido       : boolean;
   unir            : boolean = false;
+  participantes   : string[] = [];
   
   constructor(_id= '', nombreCliente = '', email = '', tipoConsulta = '', consulta = ''){
     this._id = _id;
