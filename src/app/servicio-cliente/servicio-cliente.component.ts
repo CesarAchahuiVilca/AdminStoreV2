@@ -65,6 +65,8 @@ export class ServicioClienteComponent implements OnInit {
   }
 
   agregarMensaje(mensaje: MensajeChat){
+    const tiempo  = Date.now();
+    mensaje.tiempo = tiempo;
     this.listaMensajesChat.push(mensaje);
   }
 
@@ -92,5 +94,6 @@ export class ServicioClienteComponent implements OnInit {
     const mensaje = new MensajeChat(this.servicioClienteService.chatSeleccionado._id, this.servicioClienteService.nombreUsuario.split(' ')[0] + ' se ha unido al chat', '$unirChat', this.servicioClienteService.chatSeleccionado.email);
     this.servicioClienteService.chatSeleccionado.unir = true;
     this.servicioClienteService.unirseChat(mensaje);
+    this.ocultarBotonChat = true;
   }
 } 

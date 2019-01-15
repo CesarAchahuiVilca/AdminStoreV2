@@ -11,4 +11,6 @@ export class MensajeChat {
     cuerpo          : string;
     autor           : string;
     destino         : string;
+    createdAt       : Date;
+    tiempo          : number;
   }

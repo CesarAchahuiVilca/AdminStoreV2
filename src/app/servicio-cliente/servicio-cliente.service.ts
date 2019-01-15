@@ -26,7 +26,7 @@ export class ServicioClienteService {
     this.http.post(Constantes.URL_API_CHAT + '/' + data.conversacionId, data, {withCredentials: true}).subscribe( res =>{
       var jres = JSON.parse(JSON.stringify(res));
       if (jres.status){
-        this.socket.emit("chat-admin",data);
+        this.socket.emit("chat-admin",jres.data as MensajeChat);
       }
     })
   }
