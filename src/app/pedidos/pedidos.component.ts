@@ -145,7 +145,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.pedidosservice.listarpedidouni(id)
     .subscribe(res=>{
       this.listapedidouni=JSON.parse(JSON.stringify(res));
-      console.log(this.listapedidouni.EstadoEnvio);
+      console.log(this.listapedidouni);
       this.estadoenvio=this.listapedidouni.EstadoEnvio;
     });
   }
