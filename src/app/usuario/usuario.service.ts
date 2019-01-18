@@ -41,6 +41,9 @@ export class UsuarioService {
       catchError(this.handleError<any>('putUsuario'))
     );
   }
+  listarusuario(cliente:string){
+    return this.http.get(this.URL_API+'/'+cliente);
+  }
 
   private handleError<T> (operation = 'operation', result?: T){
     return (error: any): Observable<T> => {
