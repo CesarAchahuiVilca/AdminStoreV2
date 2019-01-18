@@ -26,6 +26,9 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   flag: boolean = true;
   //fin
   listapedidos: any;
+  listapedidouni:any;
+  cliente:string;
+  estadoenvio:string;
   //mensaje alert
   mensajeestado: string;
   //fin
@@ -105,7 +108,9 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     var idselect = optselect.value;
     console.log(idselect);
     document.getElementById('extadoselect').innerHTML = optselect.options[optselect.selectedIndex].text;
-    this.mensajeestado = optselect.options[optselect.selectedIndex].text;
+   this.estadoenvio=optselect.options[optselect.selectedIndex].text;
+   // this.mensajeestado = optselect.options[optselect.selectedIndex].text;
+   console.log(this.estadoenvio);
   }
   actualizar() {
     this.snackBar.open('Estado Actualizado ->>', this.mensajeestado + '🧓🏻', {
@@ -131,14 +136,17 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.usuarioservice.listarusuario(id)
     .subscribe(res=>{
       var Respuesta2 = JSON.parse(JSON.stringify(res));
-      console.log(Respuesta2.nombres);
+      this.cliente=Respuesta2.nombres;
+      //console.log(Respuesta2[0].nombres);
     });
   }
 
   recuperarpedido(id:string){
     this.pedidosservice.listarpedidouni(id)
     .subscribe(res=>{
-      console.log(res)
+      this.listapedidouni=JSON.parse(JSON.stringify(res));
+      console.log(this.listapedidouni.EstadoEnvio);
+      this.estadoenvio=this.listapedidouni.EstadoEnvio;
     });
   }
 

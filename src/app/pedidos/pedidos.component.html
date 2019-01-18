@@ -5,7 +5,7 @@
     <app-breadcrumb [migas]="migas"></app-breadcrumb>
     <div class="container-fluid">
       <div class="card" id="divnombrecliente">
-        <h2>Cliente:</h2>
+        <h2>Cliente:{{cliente}}</h2>
       </div>
       <div class="container-fluid">
         <div class="row">
@@ -149,7 +149,7 @@
               <div class="card-body">
                 <table class="table">
                   <tr>
-                    <td><label id="extadoselect" style="color:black">Estado</label></td>
+                    <td><label id="extadoselect" style="color:black">{{estadoenvio}}</label></td>
                     <td>Articulo</td>
                     <td>Fecha</td>
                   </tr>
