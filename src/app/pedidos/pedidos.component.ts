@@ -88,12 +88,16 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       this.dtTriggers.next();
     });
   }
-  cambiarvista() {
+  cambiarvista(id:string,iduser:string) {
     document.getElementById('listapedidos').hidden = true;
     document.getElementById('dettallepedido').hidden = false;
     document.getElementById('tablapedido').hidden = true;
     document.getElementById('tabladetallepedido').hidden = false;
     document.getElementById('divnombrecliente').hidden = false;
+    console.log(id);
+    console.log(iduser);
+    this.recuperarpedido(id);
+    this.recuperarnombrecliente(iduser);
   }
   cambiarestado() {
     document.getElementById('extadoselect').style.color = 'red'
@@ -120,12 +124,21 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         //   this.pedidosservice.pedidos = res as Pedidos[];
         this.listapedidos = Respuesta;
       });
-      this.recuperarnombrecliente();
+     // this.recuperarnombrecliente(Respuesta);
   }
-  recuperarnombrecliente(){
-    this.usuarioservice.listarusuario('5c2e36e7e8bfdd2fe4886b53')
+  recuperarnombrecliente(id:string){
+   // console.log(Respuesta);
+    this.usuarioservice.listarusuario(id)
     .subscribe(res=>{
-      console.log(res);
+      var Respuesta2 = JSON.parse(JSON.stringify(res));
+      console.log(Respuesta2.nombres);
+    });
+  }
+
+  recuperarpedido(id:string){
+    this.pedidosservice.listarpedidouni(id)
+    .subscribe(res=>{
+      console.log(res)
     });
   }
 

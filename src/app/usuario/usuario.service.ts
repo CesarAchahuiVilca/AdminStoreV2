@@ -42,7 +42,7 @@ export class UsuarioService {
     );
   }
   listarusuario(cliente:string){
-    return this.http.get(this.URL_API+'/'+cliente);
+    return this.http.get(this.URL_API+'/user/'+cliente);
   }
 
   private handleError<T> (operation = 'operation', result?: T){
