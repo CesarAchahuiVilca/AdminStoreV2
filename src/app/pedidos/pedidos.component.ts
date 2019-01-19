@@ -9,6 +9,8 @@ import { MatSnackBar } from '@angular/material';
 import { Miga } from '../miga';
 import { PedidosService } from './pedidos.service';
 import { Pedidos } from './pedidos';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
 @Component({
   selector: 'app-pedidos',
@@ -25,10 +27,17 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   dtTriggers2: Subject<any> = new Subject();
   flag: boolean = true;
   //fin
+  fecha = new Date(Date.now());
   listapedidos: any;
-  listapedidouni:any;
-  cliente:string;
-  estadoenvio:string;
+  listapedidouni: any;
+  arreglocliente: any;
+  cliente: string;
+  estadoenvio: string;
+  fechacompra: string;
+  fechaenvio: string;
+  estadopago: string;
+  tipopago: string;
+  nrotrans: string;
   //mensaje alert
   mensajeestado: string;
   //fin
@@ -36,10 +45,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   listadatos: string[] = ['datos1', 'datos2', 'datos3', 'datos4', 'datos5', 'dtos6', 'datos7'];
   migas = [new Miga('Pedidos', '/pedidos')];
   //fin datos temp
-  constructor(public snackBar: MatSnackBar, public http: HttpClient, public pedidosservice: PedidosService, public usuarioservice:UsuarioService) { }
+  constructor(public snackBar: MatSnackBar, public http: HttpClient, public pedidosservice: PedidosService, public usuarioservice: UsuarioService) { }
 
   ngOnInit() {
-    this.listarpedidos();
+    this.listarpedidost();
+ //   console.log(this.listapedidos);
     //datatable
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -91,7 +101,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       this.dtTriggers.next();
     });
   }
-  cambiarvista(id:string,iduser:string) {
+  cambiarvista(id: string, iduser: string) {
     document.getElementById('listapedidos').hidden = true;
     document.getElementById('dettallepedido').hidden = false;
     document.getElementById('tablapedido').hidden = true;
@@ -108,20 +118,37 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     var idselect = optselect.value;
     console.log(idselect);
     document.getElementById('extadoselect').innerHTML = optselect.options[optselect.selectedIndex].text;
-   this.estadoenvio=optselect.options[optselect.selectedIndex].text;
-   // this.mensajeestado = optselect.options[optselect.selectedIndex].text;
-   console.log(this.estadoenvio);
+    this.estadoenvio = optselect.options[optselect.selectedIndex].text;
+    // this.mensajeestado = optselect.options[optselect.selectedIndex].text;
+    console.log(this.estadoenvio);
+  }
+  cambiarestadopago() {
+    document.getElementById('extadoselect2').style.color = 'red'
+    var optselect = document.getElementById('selectestadopago') as HTMLSelectElement;
+    var idselect = optselect.value;
+    console.log(idselect);
+    document.getElementById('extadoselect2').innerHTML = optselect.options[optselect.selectedIndex].text;
+    this.estadopago = optselect.options[optselect.selectedIndex].text;
+    // this.mensajeestado = optselect.options[optselect.selectedIndex].text;
+    console.log(this.estadoenvio);
   }
   actualizar() {
-    this.snackBar.open('Estado Actualizado ->>', this.mensajeestado + '🧓🏻', {
+    this.snackBar.open('Estado Actualizado de Envio ->>', this.estadoenvio + '🧓🏻', {
       duration: 2000,
     });
     document.getElementById('extadoselect').style.color = 'black';
 
   }
+  actualizar2() {
+    this.snackBar.open('Estado Actualizado de Pago ->>', this.estadopago + '🧓🏻', {
+      duration: 2000,
+    });
+    document.getElementById('extadoselect2').style.color = 'black';
+
+  }
   //
-  listarpedidos() {
-    var Respuesta;
+  listarpedidost() {
+    var Respuesta:any;
     this.pedidosservice.listarpedidos()
       .subscribe(res => {
         this.pedidosservice.pedidos = res as Pedidos[];
@@ -129,25 +156,40 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         //   this.pedidosservice.pedidos = res as Pedidos[];
         this.listapedidos = Respuesta;
       });
-     // this.recuperarnombrecliente(Respuesta);
+    // this.recuperarnombrecliente(Respuesta);
   }
-  recuperarnombrecliente(id:string){
-   // console.log(Respuesta);
+  recuperarnombre(id: string) {
     this.usuarioservice.listarusuario(id)
-    .subscribe(res=>{
-      var Respuesta2 = JSON.parse(JSON.stringify(res));
-      this.cliente=Respuesta2.nombres;
-      //console.log(Respuesta2[0].nombres);
-    });
+      .subscribe(res => {
+        var Respuesta2 = JSON.parse(JSON.stringify(res));
+        this.cliente = Respuesta2.nombres;
+        console.log(this.cliente)//+''+Respuesta2.apellidos;
+      });
   }
 
-  recuperarpedido(id:string){
+  recuperarnombrecliente(id: string) {
+     console.log(this.listapedidos);
+    this.usuarioservice.listarusuario(id)
+      .subscribe(res => {
+        var Respuesta2 = JSON.parse(JSON.stringify(res));
+        this.cliente = Respuesta2.nombres;//+''+Respuesta2.apellidos;
+        this.arreglocliente = Respuesta2;
+        console.log(this.arreglocliente);
+      });
+  }
+
+  recuperarpedido(id: string) {
     this.pedidosservice.listarpedidouni(id)
-    .subscribe(res=>{
-      this.listapedidouni=JSON.parse(JSON.stringify(res));
-      console.log(this.listapedidouni);
-      this.estadoenvio=this.listapedidouni.EstadoEnvio;
-    });
+      .subscribe(res => {
+        this.listapedidouni = JSON.parse(JSON.stringify(res));
+        console.log(this.listapedidouni.FechaEnvio);
+        this.estadoenvio = this.listapedidouni.EstadoEnvio;
+        this.fechacompra = this.listapedidouni.FechaCompra;
+        this.fechaenvio = this.fecha.toString();
+        this.estadopago = this.listapedidouni.EstadoPago;
+        this.tipopago = this.listapedidouni.idTipoPago;
+        this.nrotrans = this.listapedidouni.NroTransaccion;
+      });
   }
 
 }

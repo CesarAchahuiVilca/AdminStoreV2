@@ -92,7 +92,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr *ngFor="let pedido of pedidosservice.pedidos" >
+                                  <tr *ngFor="let pedido of pedidosservice.pedidos">
                                     <td>{{pedido._id}}</td>
                                     <td>{{pedido.idUsuario}}</td>
                                     <td>{{pedido.EstadoEnvio}}</td>
@@ -108,7 +108,8 @@
                                     </td>
                                     <td>
                                       <div class="btn-group btn-group-sm" role="group">
-                                        <button (click)="cambiarvista(pedido._id,pedido.idUsuario)" type="button" class="btn btn-success"><i class="material-icons">zoom_in</i>VER</button>
+                                        <button (click)="cambiarvista(pedido._id,pedido.idUsuario)" type="button" class="btn btn-success"><i
+                                            class="material-icons">zoom_in</i>VER</button>
                                       </div>
                                     </td>
                                   </tr>
@@ -133,14 +134,32 @@
           <div class="col-lg-12 col-md-12 col-sm-12 portfolio-item portafolio-div1">
             <div class="card h-100">
               <div class="card-body">
-                <button class="btn btn-outline-primary" style="margin-right: 15px"><i class="material-icons" style="font-size: 18px;">print</i>&nbsp;Imprimir
+                <p>
+                  <mat-form-field>
+                    <mat-select placeholder="Tipo Documento">
+                      <mat-option value="option">Boleta</mat-option>
+                      <mat-option value="option">Factura</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" style="margin-left: 50px">
+                    <mat-label>Serie</mat-label>
+                    <input matInput placeholder="Placeholder">
+                    <mat-icon matSuffix>assignment</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" style="margin-left: 50px">
+                    <mat-label>Numero</mat-label>
+                    <input matInput placeholder="Placeholder">
+                    <mat-icon matSuffix>assignment</mat-icon>
+                  </mat-form-field>
+                </p>
+                <!--    <button class="btn btn-outline-primary" style="margin-right: 15px"><i class="material-icons" style="font-size: 18px;">print</i>&nbsp;Imprimir
                   pedido</button>
                 <button class="btn btn-outline-success"><i class="material-icons" style="font-size: 18px;">print</i>&nbsp;Imprimir
-                  fac tura</button>
+                  fac tura</button>-->
               </div>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
+          <div class="col-lg-12 col-md-6 col-sm-6 portfolio-item">
             <div class="card h-100">
               <div class="card-header" style="height: 15px;">
                 <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">assignment</i>&nbsp;Estado
@@ -149,56 +168,78 @@
               <div class="card-body">
                 <table class="table">
                   <tr>
+                    <td style="color:black">Estado de Envio</td>
                     <td><label id="extadoselect" style="color:black">{{estadoenvio}}</label></td>
-                    <td>Articulo</td>
-                    <td>Fecha</td>
+                    <td>
+                      <select style="width: 150px" id="selectestado" class="form-control" (change)="cambiarestado()">
+                        <option value="1" selected>Proceso</option>
+                        <option value="3">Enviado</option>
+                        <option value="4">Devolucion</option>
+                      </select>
+                    </td>
+                    <td>
+                      <button class="btn btn-outline-success" style="font-size: 10px" (click)="actualizar()">ACTUALIZAR
+                        ESTADO DE ENVIO</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Estado de Pago</td>
+                    <td><label id="extadoselect2" style="color:black">{{estadopago}}</label></td>
+                    <td>
+                      <select style="width: 150px" id="selectestadopago" class="form-control" (change)="cambiarestadopago()">
+                        <option value="p1" selected>Proceso</option>
+                        <option value="p2">Error de pago</option>
+                        <option value="p3">Pagado</option>
+                        <option value="p4">Reembolso</option>
+                      </select>
+                    </td>
+                    <td>
+                      <button class="btn btn-outline-success" style="font-size: 10px" (click)="actualizar2()">ACTUALIZAR
+                        ESTADO DE PAGO</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tipo de Pago</td>
+                    <td>{{tipopago}}</td>
+                    <td>N° Transaccion</td>
+                    <td>{{nrotrans}}</td>
+                  </tr>
+                  <tr>
+                    <td>Fecha de Compra</td>
+                    <td>{{fechacompra}}</td>
+                    <td>Fecha de Envio</td>
+                    <td>
+                        <mat-form-field style='margin-top: -15px'>
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="fecha">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                    </td>
                   </tr>
                 </table>
                 <div class="container-fluid ">
                   <div class="row">
                     <div class="col-lg-6">
-                      <select style="width: 200px" id="selectestado" class="form-control" (change)="cambiarestado()">
-                        <option value="1" selected>Proceso</option>
-                        <option value="2">Error de pago</option>
-                        <option value="3">Enviado</option>
-                        <option value="4">Reembolso</option>
-                      </select>
+
                     </div>
                     <div class="col-lg-4">
-                      <button class="btn btn-outline-success" style="width: 120px;font-size: 10px" (click)="actualizar()">ACTUALIZAR
-                        ESTADO</button>
+
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
-            <div class="card h-100">
-              <div class="card-header" style="height: 15px;">
-                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">person</i>&nbsp;Cliente</p>
-              </div>
-              <div class="card-body">
-                <p class="card-text">subtex1</p>
-                <!-- <div class="container-fluid">
-                  <hr>
-                  <p><i class="material-icons">
-                      local_shipping
-                      </i>Direccion</p>
-                </div>-->
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
+      <!--    <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
             <div class="card h-100">
               <div class="card-header" style="height: 15px;">
                 <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">payment</i>&nbsp;Pago</p>
               </div>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a>texto1</a>
+                  <p class="card-text">Tipo Pago</p>
+                  <p class="card-text">Estado Pago</p>
                 </h4>
-                <p class="card-text">subtex1</p>
               </div>
             </div>
           </div>
@@ -212,6 +253,16 @@
                   <a>texto1</a>
                 </h4>
                 <p class="card-text">subtex1</p>
+              </div>
+            </div>
+          </div>-->
+          <div class="col-lg-12 col-md-6 col-sm-6 portfolio-item">
+            <div class="card h-100">
+              <div class="card-header" style="height: 15px;">
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">person</i>&nbsp;Cliente</p>
+              </div>
+              <div class="card-body"  >
+               <p></p>
               </div>
             </div>
           </div>
