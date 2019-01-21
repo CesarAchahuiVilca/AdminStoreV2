@@ -1,3 +1,4 @@
+import { Respuesta } from './../usuario/respuesta';
 import { Usuario } from './../login/usuario';
 import { UsuarioService } from './../usuario/usuario.service';
 import { Component, OnInit } from '@angular/core';
@@ -32,6 +33,9 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   listapedidouni: any;
   arreglocliente: any;
   cliente: string;
+  clientesuser: string;
+  iddireccionenvio: string;
+  direccionenvio: string;
   estadoenvio: string;
   fechacompra: string;
   fechaenvio: string;
@@ -49,7 +53,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngOnInit() {
     this.listarpedidost();
- //   console.log(this.listapedidos);
+    //   console.log(this.listapedidos);
     //datatable
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -101,7 +105,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       this.dtTriggers.next();
     });
   }
-  cambiarvista(id: string, iduser: string) {
+  cambiarvista(id: string, iduser: string,iddireccion :string) {
     document.getElementById('listapedidos').hidden = true;
     document.getElementById('dettallepedido').hidden = false;
     document.getElementById('tablapedido').hidden = true;
@@ -111,6 +115,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     console.log(iduser);
     this.recuperarpedido(id);
     this.recuperarnombrecliente(iduser);
+    this.recuperardireccion(iddireccion);
   }
   cambiarestado() {
     document.getElementById('extadoselect').style.color = 'red'
@@ -148,7 +153,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   //
   listarpedidost() {
-    var Respuesta:any;
+    var Respuesta: any;
     this.pedidosservice.listarpedidos()
       .subscribe(res => {
         this.pedidosservice.pedidos = res as Pedidos[];
@@ -158,21 +163,22 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       });
     // this.recuperarnombrecliente(Respuesta);
   }
-  recuperarnombre(id: string) {
-    this.usuarioservice.listarusuario(id)
-      .subscribe(res => {
-        var Respuesta2 = JSON.parse(JSON.stringify(res));
-        this.cliente = Respuesta2.nombres;
-        console.log(this.cliente)//+''+Respuesta2.apellidos;
-      });
-  }
+  /* recuperarnombre(id: string) {
+     this.usuarioservice.listarusuario(id)
+       .subscribe(res => {
+         var Respuesta2 = JSON.parse(JSON.stringify(res));
+         this.cliente = Respuesta2.nombres;
+         console.log(this.cliente)//+''+Respuesta2.apellidos;
+       });
+   }*/
 
   recuperarnombrecliente(id: string) {
-     console.log(this.listapedidos);
+    console.log(this.listapedidos);
     this.usuarioservice.listarusuario(id)
       .subscribe(res => {
         var Respuesta2 = JSON.parse(JSON.stringify(res));
-        this.cliente = Respuesta2.nombres;//+''+Respuesta2.apellidos;
+        this.cliente = Respuesta2.nombres + ' ' + Respuesta2.apellidos;
+        this.clientesuser = Respuesta2.correo;
         this.arreglocliente = Respuesta2;
         console.log(this.arreglocliente);
       });
@@ -182,14 +188,27 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.pedidosservice.listarpedidouni(id)
       .subscribe(res => {
         this.listapedidouni = JSON.parse(JSON.stringify(res));
-        console.log(this.listapedidouni.FechaEnvio);
+        console.log(this.listapedidouni);
         this.estadoenvio = this.listapedidouni.EstadoEnvio;
         this.fechacompra = this.listapedidouni.FechaCompra;
         this.fechaenvio = this.fecha.toString();
         this.estadopago = this.listapedidouni.EstadoPago;
         this.tipopago = this.listapedidouni.idTipoPago;
         this.nrotrans = this.listapedidouni.NroTransaccion;
+        this.iddireccionenvio = this.listapedidouni.idDireccion;
+        console.log(this.listapedidouni.idDireccion);
       });
+  }
+
+  recuperardireccion(id:string){
+    console.log(id);
+    this.pedidosservice.recuperardireccion(id)
+    .subscribe(res=>{
+      console.log('entra');
+      console.log(res);
+     var Respuesta=JSON.parse(JSON.stringify(res));
+     this.direccionenvio=Respuesta.direccion; 
+    });
   }
 
 }

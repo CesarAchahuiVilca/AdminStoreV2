@@ -108,7 +108,7 @@
                                     </td>
                                     <td>
                                       <div class="btn-group btn-group-sm" role="group">
-                                        <button (click)="cambiarvista(pedido._id,pedido.idUsuario)" type="button" class="btn btn-success"><i
+                                        <button (click)="cambiarvista(pedido._id,pedido.idUsuario,pedido.idDireccion)" type="button" class="btn btn-success"><i
                                             class="material-icons">zoom_in</i>VER</button>
                                       </div>
                                     </td>
@@ -209,11 +209,11 @@
                     <td>{{fechacompra}}</td>
                     <td>Fecha de Envio</td>
                     <td>
-                        <mat-form-field style='margin-top: -15px'>
-                            <input matInput [matDatepicker]="picker" [(ngModel)]="fecha">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                          </mat-form-field>
+                      <mat-form-field style='margin-top: -15px'>
+                        <input matInput [matDatepicker]="picker" [(ngModel)]="fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
                     </td>
                   </tr>
                 </table>
@@ -230,7 +230,7 @@
               </div>
             </div>
           </div>
-      <!--    <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
+          <!--    <div class="col-lg-6 col-md-6 col-sm-6 portfolio-item">
             <div class="card h-100">
               <div class="card-header" style="height: 15px;">
                 <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">payment</i>&nbsp;Pago</p>
@@ -261,8 +261,28 @@
               <div class="card-header" style="height: 15px;">
                 <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">person</i>&nbsp;Cliente</p>
               </div>
-              <div class="card-body"  >
-               <p></p>
+              <div class="card-body">
+                <table class="table">
+                  <tr>
+                    <td style="width: 10%;">Nombre:</td>
+                    <td>{{cliente}}</td>
+                    <td style="width: 10%;">Usuario:</td>
+                    <td>{{clientesuser}}</td>
+                  </tr>
+                </table>
+                <div class="card h-100">
+                  <div class="card-header">
+                    <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">person</i>&nbsp;Direccion</p>
+                  </div>
+                  <div class="card-body">
+                    <table class="table">
+                      <tr>
+                        <td>Direccion:</td>
+                        <td>{{direccionenvio}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

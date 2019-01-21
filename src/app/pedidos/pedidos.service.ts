@@ -24,4 +24,7 @@ export class PedidosService {
   listarpedidouni(_id:string){
     return this.http.get(Constantes.URL_API_PAGO+'/'+_id);
   }
+  recuperardireccion(_id:string){
+    return this.http.get(Constantes.URL_API_DIRECCION+'/uni/'+_id);
+  }
 }
