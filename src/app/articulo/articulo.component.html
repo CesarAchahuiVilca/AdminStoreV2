@@ -111,7 +111,7 @@
                               <div class="form-group">
                                 <label style="font-weight: bold;">Cantidad</label>
                                 <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad"
-                                  class="form-control" style="border-color: rgb(114, 114, 114);" [ngModelOptions]="{standalone: true}">
+                                  class="form-control" style="border-color: rgb(114, 114, 114);" [ngModelOptions]="{standalone: true}" disabled="true">
                               </div>
                             </div>
                             <div class="col-lg-12">
@@ -128,11 +128,11 @@
                                   <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
                                     <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
                                       *ngFor="let caracteristica of listacaracteristicasarticulo ">
-                                      <div style="flex-grow: 0; width: 40%;">
-                                        <input class="form-control" style="border-color: rgb(58, 56, 56); background: rgb(216, 213, 209); color: black; font-weight: bold;"
+                                      <div style="flex-grow: 0; width: 20%;">
+                                        <input style="border-color: rgba(58, 56, 56, 0); background: rgb(255, 255, 255); color: black; font-weight: bold;"
                                           value="{{caracteristica.nombre}}" readonly>
                                       </div>
-                                      <div style="flex-grow: 0; width: 55%;">
+                                      <div style="flex-grow: 0; width: 75%;">
                                         <input type="text" class="form-control" style="border-color: rgb(114, 114, 114);"
                                           placeholder="Ingrese valor de la carcteristica" value="{{caracteristica.valor}}">
                                       </div>
@@ -151,58 +151,18 @@
                                   </div>
                                   <hr>
                                   <div>
-                                    <div style="display: flex; flex-direction: column;" id="contenido-datos-generales">
-                                      <div class="form-group">
+                                    <div style="display: flex; flex-direction: row; flex-wrap: wrap;" id="contenido-datos-generales">
+                                      <div style="width: 100%; ">
                                         <label style="font-weight: bold;">Seleccione el nombre del equipo </label>
+                                      </div>
+                                      <div  style="width: 70%;margin: 5px">                                        
                                         <select [(ngModel)]="articuloService.articuloSeleccionado.idprecio"
                                           [ngModelOptions]="{standalone: true}" (change)="buscarPlanesEquipo()" class="form-control">
-                                          <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}"><a
-                                              (click)="cambiarPlanes(equipo)">{{equipo.nombreequipo}}</a></option>
+                                          <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}"><a>{{equipo.nombreequipo}}</a></option>
                                         </select>
                                       </div>
-                                      <div style="flex-grow: 0;margin-top: 3px; width: 100%; display: flex; flex-direction: row"
-                                        class="item-datos-generales">
-                                        <div style="width: 50%;">
-                                          <table class="table table-responsive-sm table-sm">
-                                            <thead>
-                                              <tr>
-                                                <th>Tipo Plan</th>
-                                                <th></th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                              <tr *ngFor="let tipo of listaplanesequipo">
-                                                <td>{{tipo.tipoplan}}</td>
-                                                <td>
-                                                  <button style="border: 1px solid rgb(0, 139, 12); border-radius: 5px; color: white; background-color: rgb(18, 177, 52)"
-                                                    (click)="mostrarDetalleTipoPlan(tipo)"> Ver Detalle </button>
-                                                </td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                        <div class="detalletipoplan" style="width: 50%;">
-                                          <div style="width: 100%;">
-                                            <h6>{{planesseleccionada.tipoplan}} :
-                                              {{articuloService.articuloSeleccionado.idprecio}}</h6>
-                                          </div>
-                                          <div style="width: 100%;">
-                                            <table class="table table-responsive-sm table-sm">
-                                              <thead>
-                                                <tr>
-                                                  <th>Nombre Plan</th>
-                                                  <th>Precio</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr *ngFor="let plan of planesseleccionada.planes">
-                                                  <td>{{plan.nombreplan}}</td>
-                                                  <td>{{plan.precio}}</td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                        </div>
+                                      <div style="width: 20%;margin: 5px">
+                                        <button class="btn btn-info" (click)="buscarPlanesEquipo()">Ver Precios</button>
                                       </div>
                                     </div>
                                   </div>

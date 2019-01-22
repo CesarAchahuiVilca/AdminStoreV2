@@ -15,14 +15,12 @@ export class PlanesService {
 
   }
 
-  getTipoPlanes(){
+  getEquipos(){
     return this.http.get(Constantes.URL_API_PLANES, {withCredentials: true});
   }
 
-  getPlanesEquipos(){
-    return this.http.get(Constantes.URL_API_PLANES+'/planes', {withCredentials: true});
-  }
-  getPlanesEquipo(id: string){
+ 
+  getPlanesEquipo(id: String){
     return this.http.get(Constantes.URL_API_PLANES+'/planesequipo/'+id, {withCredentials: true});
   }
 

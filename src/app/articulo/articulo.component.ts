@@ -160,15 +160,8 @@ export class ArticuloComponent implements OnInit {
 
 
   obtenerListaPrecios(){
-    this.planesService.getPlanesEquipos().subscribe(res=>{
-      this.listaprecios = res as Precios[];
-      var indice = 0;
-      for(var i = 1;i<this.listaprecios.length;i++){
-        if(this.listaprecios[i].equipos.length> this.listaprecios[indice].equipos.length){
-          indice = i;
-        }
-      }
-      this.listaequipos = this.listaprecios[indice].equipos;
+    this.planesService.getEquipos().subscribe(res=>{
+      this.listaequipos = res as any[];      
     });
   }
 
@@ -177,8 +170,8 @@ export class ArticuloComponent implements OnInit {
     var cont_ante = 0;
     var mejor_nombre="";
     var arraynombres = this.articuloService.articuloSeleccionadoMysql.Descripcion.split(" ");
-    for( var i = 0; i<this.listaprecios[0].equipos.length;i++){
-      var nombre = this.listaprecios[0].equipos[i].nombreequipo;
+    for( var i = 0; i<this.listaequipos.length;i++){
+      var nombre = this.listaequipos[i].nombreequipo;
       for(var j = 0;j<arraynombres.length;j++){
         if(nombre.includes(arraynombres[j])){
           cont++;
@@ -193,18 +186,14 @@ export class ArticuloComponent implements OnInit {
       }
     }
     this.articuloService.articuloSeleccionado.idprecio = mejor_nombre;
-    this.buscarPlanesEquipo();  
+    console.log(mejor_nombre);
+    //this.buscarPlanesEquipo();  
   }
 
   buscarPlanesEquipo(){
-    this.planesseleccionada = {
-      tipoplan:"",
-      planes: new Array()
-    };
-    //console.log(this.articuloService.articuloSeleccionado.idprecio);
-    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio as string).subscribe(res=>{
-      this.listaplanesequipo = res as [];
-      //console.log(this.listaplanesequipo);
+    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio)
+    .subscribe(res=>{
+      console.log(res);
     });
   }
 
@@ -234,7 +223,9 @@ export class ArticuloComponent implements OnInit {
       this.articuloService.articuloSeleccionado.idarticulo = articulo.idArticulo;
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
       this.articuloService.articuloSeleccionadoMysql = articulo;
+      this.articuloService.articuloSeleccionado.titulo = articulo.Descripcion;
       this.buscarPreciosEquipo();      
+
     }else{
       this.vista ="1";
       this.mostrarListaArticulos = true;
