@@ -15,44 +15,40 @@ export class PlanesComponent implements OnInit {
   constructor( public planesService: PlanesService) { }
 
   ngOnInit() {
-    this.getTipoPlanes();
+    this.getPlanes();
   }
-  getTipoPlanes(){
-    this.planesService.getTipoPlanes()
+  getPlanes(){
+    this.planesService.getPlanes()
     .subscribe(res=>{
-      this.planesService.tipoplanes = res as TipoPlan[];
-      console.log(this.planesService.tipoplanes);
+      this.planesService.planes = res as Plan[];
+      console.log(this.planesService.planes);
     });
   }
-  mostrarPlanes(tipoplan){
-    this.planesService.tipoPlanSeleccionado = tipoplan;
-  }
+  
   editarPlan(plan: Plan){
     this.planesService.planSeleccionado = plan;
     console.log(this.planesService.planSeleccionado);
   }
   guardarDatosPlan(){
-
     console.log(this.planesService.planSeleccionado);
-    this.planesService.putTipoPlan()
+    this.planesService.putPlanes()
     .subscribe(res=>{
       console.log(res);
-      this.getTipoPlanes();
+      this.getPlanes();
       this.planesService.planSeleccionado = new Plan();
-      this.planesService.tipoPlanSeleccionado = new TipoPlan();
     });
 
   }
   eliminarPlan(plan: Plan){
     this.planesService.planSeleccionado = plan;
+    
   }
   procesarEliminarPlan(){
     this.planesService.deletePlan()
     .subscribe(res=>{
       console.log(res);
-      this.getTipoPlanes();
+      this.getPlanes();
       this.planesService.planSeleccionado = new Plan();
-      this.planesService.tipoPlanSeleccionado = new TipoPlan();
     });
   }
 

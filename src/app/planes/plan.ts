@@ -1,10 +1,11 @@
 export class Plan {
 
-    constructor(nombreplan = '', descripcion='') {
+    constructor(_id = null,nombreplan = '', descripcion='') {
+        this._id = _id;
         this.nombreplan = nombreplan;
-        this.descripcion = descripcion;
+        this.detalle = descripcion;
     }
-  
+    _id: string;
     nombreplan: string;
-    descripcion: string;
+    detalle: string;
   }

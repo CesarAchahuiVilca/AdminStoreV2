@@ -9,8 +9,7 @@ import { Plan} from './plan';
 })
 export class PlanesService {
 
-  tipoPlanSeleccionado : TipoPlan  = new TipoPlan();
-  tipoplanes: TipoPlan[];
+  planes: Plan[];
   planSeleccionado: Plan = new Plan();
   constructor(private http: HttpClient) { 
 
@@ -27,19 +26,15 @@ export class PlanesService {
     return this.http.get(Constantes.URL_API_PLANES+'/planesequipo/'+id, {withCredentials: true});
   }
 
-  postTipoPlan(tipoplan: TipoPlan){
-    return this.http.post(Constantes.URL_API_PLANES,tipoplan, {withCredentials: true});
-  }
-  
-  putTipoPlan(){
-    return this.http.put(Constantes.URL_API_PLANES+'/plan/'+this.tipoPlanSeleccionado.tipo,this.planSeleccionado, {withCredentials: true});
-  }
 
-  deleteTipoPlan(id: string){
-    return this.http.delete(Constantes.URL_API_PLANES+'/'+id, {withCredentials: true});
+  /* PLANES */
+  getPlanes(){
+    return this.http.get(Constantes.URL_API_PLANES+"/plan", {withCredentials: true}); 
+  }
+  putPlanes(){
+    return this.http.put(Constantes.URL_API_PLANES+'/plan/'+this.planSeleccionado._id, this.planSeleccionado);
   }
   deletePlan(){
-    return this.http.put(Constantes.URL_API_PLANES+'/plan/del/'+this.tipoPlanSeleccionado.tipo,this.planSeleccionado, {withCredentials: true});
-
+    return this.http.delete(Constantes.URL_API_PLANES+'/plan/del/'+this.planSeleccionado._id, {withCredentials: true});  
   }
 }
