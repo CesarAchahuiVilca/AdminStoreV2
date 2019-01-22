@@ -5,7 +5,8 @@
     <app-breadcrumb [migas]="migas"></app-breadcrumb>
     <div class="container-fluid">
       <div class="card" id="divnombrecliente">
-        <p (click)="cambiarvista2()" >Regresar</p>
+          <button class="btn btn-default" style="margin-right: 5px;" (click)="cambiarvista2()">
+              <i class="fa fa-angle-left"></i> Regresar</button>
         <h2>Cliente:{{cliente}}</h2>
       </div>
       <div class="container-fluid">
@@ -109,8 +110,14 @@
                                     </td>
                                     <td>
                                       <div class="btn-group btn-group-sm" role="group">
-                                        <button (click)="cambiarvista(pedido._id,pedido.idUsuario,pedido.idDireccion,pedido.PrecioTotal)"
-                                          type="button" class="btn btn-success"><i class="material-icons">zoom_in</i>VER</button>
+                                        <button *ngIf="pedido.EstadoPago=='Pagado'"  (click)="cambiarvista(pedido._id,pedido.idUsuario,pedido.idDireccion,pedido.PrecioTotal)"
+                                          type="button" class="btn btn-success" style="background-color: green"><i class="material-icons">zoom_in</i>VER</button>
+                                          <button *ngIf="pedido.EstadoPago=='Proceso'" (click)="cambiarvista(pedido._id,pedido.idUsuario,pedido.idDireccion,pedido.PrecioTotal)"
+                                          type="button" class="btn btn-success"  style="background-color: orange"><i class="material-icons">zoom_in</i>VER</button>
+                                          <button *ngIf="pedido.EstadoPago=='Reembolso'"  (click)="cambiarvista(pedido._id,pedido.idUsuario,pedido.idDireccion,pedido.PrecioTotal)"
+                                          type="button" class="btn btn-success" style="background-color: yellow"><i class="material-icons">zoom_in</i>VER</button>
+                                          <button *ngIf="pedido.EstadoPago=='Error de pago'" (click)="cambiarvista(pedido._id,pedido.idUsuario,pedido.idDireccion,pedido.PrecioTotal)"
+                                          type="button" class="btn btn-success"  style="background-color: red"><i class="material-icons">zoom_in</i>VER</button>
                                       </div>
                                     </td>
                                   </tr>
