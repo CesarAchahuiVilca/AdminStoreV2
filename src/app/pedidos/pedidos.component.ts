@@ -1,3 +1,5 @@
+import { Precios } from './../planes/precios';
+import { Articulo } from './../articulo/articulo';
 import { Respuesta } from './../usuario/respuesta';
 import { Usuario } from './../login/usuario';
 import { UsuarioService } from './../usuario/usuario.service';
@@ -13,6 +15,14 @@ import { Pedidos } from './pedidos';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
+
+
+export interface temdoc {
+  Tipo: String,
+  Serie: String,
+  Numero: String,
+}
+
 @Component({
   selector: 'app-pedidos',
   templateUrl: './pedidos.component.html',
@@ -20,6 +30,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
   providers: [PedidosService]
 })
 export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
+  idPedido: string = '';
   //datatable
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
@@ -31,10 +42,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   fecha = new Date(Date.now());
   listapedidos: any;
   listapedidouni: any;
+  Articuloarreglo = new Array();
   arreglocliente: any;
   cliente: string;
   clientesuser: string;
-  iddireccionenvio: string;
+  listadireccion: any;
   direccionenvio: string;
   estadoenvio: string;
   fechacompra: string;
@@ -42,9 +54,17 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   estadopago: string;
   tipopago: string;
   nrotrans: string;
+  preciototal: number = 0;
+  tipodoc: string = '';
+  seriedoc: string = '';
+  numerodoc: string = '';
   //mensaje alert
   mensajeestado: string;
+  DocumentoAct: temdoc[] = [{ Tipo: 'BBV', Serie: '1', Numero: '0001' }];
   //fin
+  // tabla material
+
+  //
   //datos temp
   listadatos: string[] = ['datos1', 'datos2', 'datos3', 'datos4', 'datos5', 'dtos6', 'datos7'];
   migas = [new Miga('Pedidos', '/pedidos')];
@@ -52,8 +72,10 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   constructor(public snackBar: MatSnackBar, public http: HttpClient, public pedidosservice: PedidosService, public usuarioservice: UsuarioService) { }
 
   ngOnInit() {
+    document.getElementById('dettallepedido').hidden = true;
+    document.getElementById('tabladetallepedido').hidden = true;
+    document.getElementById('divnombrecliente').hidden = true;
     this.listarpedidost();
-    //   console.log(this.listapedidos);
     //datatable
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -81,9 +103,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         }
       }
     };
-    document.getElementById('dettallepedido').hidden = true;
-    document.getElementById('tabladetallepedido').hidden = true;
-    document.getElementById('divnombrecliente').hidden = true;
+
   }
   /* data table*/
   ngAfterViewInit(): void {
@@ -105,17 +125,24 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       this.dtTriggers.next();
     });
   }
-  cambiarvista(id: string, iduser: string,iddireccion :string) {
+  cambiarvista(id: string, iduser: string, iddireccion: string, preciot: number) {
     document.getElementById('listapedidos').hidden = true;
     document.getElementById('dettallepedido').hidden = false;
     document.getElementById('tablapedido').hidden = true;
     document.getElementById('tabladetallepedido').hidden = false;
     document.getElementById('divnombrecliente').hidden = false;
-    console.log(id);
-    console.log(iduser);
     this.recuperarpedido(id);
     this.recuperarnombrecliente(iduser);
     this.recuperardireccion(iddireccion);
+    this.preciototal = preciot;
+    this.idPedido = id;
+  }
+  cambiarvista2() {
+    document.getElementById('listapedidos').hidden = false;
+    document.getElementById('dettallepedido').hidden = true;
+    document.getElementById('tablapedido').hidden = false;
+    document.getElementById('tabladetallepedido').hidden = true;
+    document.getElementById('divnombrecliente').hidden = true;
   }
   cambiarestado() {
     document.getElementById('extadoselect').style.color = 'red'
@@ -125,17 +152,14 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     document.getElementById('extadoselect').innerHTML = optselect.options[optselect.selectedIndex].text;
     this.estadoenvio = optselect.options[optselect.selectedIndex].text;
     // this.mensajeestado = optselect.options[optselect.selectedIndex].text;
-    console.log(this.estadoenvio);
   }
   cambiarestadopago() {
     document.getElementById('extadoselect2').style.color = 'red'
     var optselect = document.getElementById('selectestadopago') as HTMLSelectElement;
     var idselect = optselect.value;
-    console.log(idselect);
     document.getElementById('extadoselect2').innerHTML = optselect.options[optselect.selectedIndex].text;
     this.estadopago = optselect.options[optselect.selectedIndex].text;
     // this.mensajeestado = optselect.options[optselect.selectedIndex].text;
-    console.log(this.estadoenvio);
   }
   actualizar() {
     this.snackBar.open('Estado Actualizado de Envio ->>', this.estadoenvio + '🧓🏻', {
@@ -153,13 +177,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   //
   listarpedidost() {
-    var Respuesta: any;
     this.pedidosservice.listarpedidos()
       .subscribe(res => {
         this.pedidosservice.pedidos = res as Pedidos[];
-        Respuesta = JSON.parse(JSON.stringify(res));
+        this.listapedidos = JSON.parse(JSON.stringify(res));
         //   this.pedidosservice.pedidos = res as Pedidos[];
-        this.listapedidos = Respuesta;
       });
     // this.recuperarnombrecliente(Respuesta);
   }
@@ -173,14 +195,12 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
    }*/
 
   recuperarnombrecliente(id: string) {
-    console.log(this.listapedidos);
     this.usuarioservice.listarusuario(id)
       .subscribe(res => {
         var Respuesta2 = JSON.parse(JSON.stringify(res));
         this.cliente = Respuesta2.nombres + ' ' + Respuesta2.apellidos;
         this.clientesuser = Respuesta2.correo;
         this.arreglocliente = Respuesta2;
-        console.log(this.arreglocliente);
       });
   }
 
@@ -188,27 +208,51 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.pedidosservice.listarpedidouni(id)
       .subscribe(res => {
         this.listapedidouni = JSON.parse(JSON.stringify(res));
-        console.log(this.listapedidouni);
         this.estadoenvio = this.listapedidouni.EstadoEnvio;
         this.fechacompra = this.listapedidouni.FechaCompra;
         this.fechaenvio = this.fecha.toString();
         this.estadopago = this.listapedidouni.EstadoPago;
         this.tipopago = this.listapedidouni.idTipoPago;
         this.nrotrans = this.listapedidouni.NroTransaccion;
-        this.iddireccionenvio = this.listapedidouni.idDireccion;
-        console.log(this.listapedidouni.idDireccion);
+        this.Articuloarreglo = this.listapedidouni.Articulo;
+        this.tipodoc = this.listapedidouni.Documento[0].Tipo;
+        this.seriedoc = this.listapedidouni.Documento[0].Serie;
+        this.numerodoc = this.listapedidouni.Documento[0].Numero;
+        //  this.listararticulos();
+      });
+  }//944091466
+
+  recuperardireccion(id: string) {
+    this.pedidosservice.recuperardireccion(id)
+      .subscribe(res => {
+        this.listadireccion = JSON.parse(JSON.stringify(res));
+        this.direccionenvio = this.listadireccion.direccion;
       });
   }
-
-  recuperardireccion(id:string){
+  actualizarpago() {
+    var id = this.listapedidouni._id;
+    this.DocumentoAct[0].Tipo = this.tipodoc;
+    this.DocumentoAct[0].Serie = this.seriedoc;
+    this.DocumentoAct[0].Numero = this.numerodoc;
+    this.listapedidouni.Documento = this.DocumentoAct;
+    this.listapedidouni.EstadoPago = this.estadopago;
+    this.listapedidouni.EstadoEnvio = this.estadoenvio;
+    /* this.pedidosservice.pedidoselec.Documento=this.DocumentoAct;
+     this.pedidosservice.pedidoselec.EstadoPago=this.estadopago;
+     this.pedidosservice.pedidoselec.EstadoEnvio=this.estadoenvio;*/
+    this.pedidosservice.actualizarpedido(this.listapedidouni)
+      .subscribe(res => {
+        console.log(res);
+      });
     console.log(id);
-    this.pedidosservice.recuperardireccion(id)
-    .subscribe(res=>{
-      console.log('entra');
-      console.log(res);
-     var Respuesta=JSON.parse(JSON.stringify(res));
-     this.direccionenvio=Respuesta.direccion; 
-    });
+    this.recuperarpedido(id);
   }
+
+  /*listararticulos() {
+    console.log('entraaa');
+    for (var j = 0; j < this.Articuloarreglo.length; j++) {
+      this.preciototal=this.preciototal+this.Articuloarreglo[j].precio
+    }
+  }*/
 
 }

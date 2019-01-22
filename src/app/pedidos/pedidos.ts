@@ -26,7 +26,7 @@ export interface temdoc {
     Numero: String,
 }
 export class Pedidos {
-    constructor(_id = null, idUsuario = '', Articulo = null, FechaCompra = new Date(), EstadoPago = '', idDireccion = '', idTipoPago = '', Mensaje = '', EstadoEnvio = '', FechaEnvio = new Date(), FechaEntrega = new Date(), PrecioTotal = '', NroTransaccion = '', Documento = null, idVendedor = '') {
+    constructor(_id = '', idUsuario = '', Articulo = null, FechaCompra = new Date(), EstadoPago = '', idDireccion = '', idTipoPago = '', Mensaje = '', EstadoEnvio = '', FechaEnvio = new Date(), FechaEntrega = new Date(), PrecioTotal = '', NroTransaccion = '', Documento = null, idVendedor = '') {
         this._id = _id;
         this.idUsuario = idUsuario;
         this.Articulo = Articulo;

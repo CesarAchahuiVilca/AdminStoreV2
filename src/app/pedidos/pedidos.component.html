@@ -5,6 +5,7 @@
     <app-breadcrumb [migas]="migas"></app-breadcrumb>
     <div class="container-fluid">
       <div class="card" id="divnombrecliente">
+        <p (click)="cambiarvista2()" >Regresar</p>
         <h2>Cliente:{{cliente}}</h2>
       </div>
       <div class="container-fluid">
@@ -17,7 +18,7 @@
                     <th><i class="material-icons" style="color: chartreuse">
                         attach_money
                       </i>
-                      <label style="font-weight: normal">Valor promedio de los pedidos: 0</label></th>
+                      <label style="font-weight: normal">Valor promedio de los pedidos:</label></th>
                     <th><i class="material-icons" style="color: yellow">
                         shopping_cart
                       </i>
@@ -39,7 +40,7 @@
                     <th><i class="material-icons" style="color: rgb(21, 240, 39)">
                         attach_money
                       </i>
-                      <label style="font-weight: normal">Total</label>
+                      <label style="font-weight: normal">Total: {{preciototal}}</label>
                     </th>
                     <th><i class="material-icons" style="color: red">
                         chat
@@ -92,7 +93,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr *ngFor="let pedido of pedidosservice.pedidos">
+                                  <tr *ngFor="let pedido of pedidosservice.pedidos" id="{{pedido._id}}">
                                     <td>{{pedido._id}}</td>
                                     <td>{{pedido.idUsuario}}</td>
                                     <td>{{pedido.EstadoEnvio}}</td>
@@ -108,8 +109,8 @@
                                     </td>
                                     <td>
                                       <div class="btn-group btn-group-sm" role="group">
-                                        <button (click)="cambiarvista(pedido._id,pedido.idUsuario,pedido.idDireccion)" type="button" class="btn btn-success"><i
-                                            class="material-icons">zoom_in</i>VER</button>
+                                        <button (click)="cambiarvista(pedido._id,pedido.idUsuario,pedido.idDireccion,pedido.PrecioTotal)"
+                                          type="button" class="btn btn-success"><i class="material-icons">zoom_in</i>VER</button>
                                       </div>
                                     </td>
                                   </tr>
@@ -136,19 +137,19 @@
               <div class="card-body">
                 <p>
                   <mat-form-field>
-                    <mat-select placeholder="Tipo Documento">
-                      <mat-option value="option">Boleta</mat-option>
-                      <mat-option value="option">Factura</mat-option>
+                    <mat-select placeholder="Tipo Documento" [(value)]="tipodoc">
+                      <mat-option value="BBV">Boleta</mat-option>
+                      <mat-option value="FFV">Factura</mat-option>
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field appearance="outline" style="margin-left: 50px">
                     <mat-label>Serie</mat-label>
-                    <input matInput placeholder="Placeholder">
+                    <input matInput placeholder="Placeholder" [(ngModel)]="seriedoc">
                     <mat-icon matSuffix>assignment</mat-icon>
                   </mat-form-field>
                   <mat-form-field appearance="outline" style="margin-left: 50px">
                     <mat-label>Numero</mat-label>
-                    <input matInput placeholder="Placeholder">
+                    <input matInput placeholder="Placeholder" [(ngModel)]="numerodoc">
                     <mat-icon matSuffix>assignment</mat-icon>
                   </mat-form-field>
                 </p>
@@ -292,10 +293,33 @@
                 <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">shopping_cart</i>&nbsp;Productos</p>
               </div>
               <div class="card-body">
-                <h4 class="card-title">
-                  <a>texto1</a>
-                </h4>
-                <p class="card-text">subtex1</p>
+                <table class="table" style="font-size: 12px;">
+                  <tr>
+                    <th>Articulo</th>
+                    <th>Linea</th>
+                    <th>Plan</th>
+                    <th>Nombre Plan</th>
+                    <th>Precio</th>
+
+                  </tr>
+                  <tr *ngFor="let articulo of Articuloarreglo">
+                    <td>{{articulo.titulo}}</td>
+                    <td>{{articulo.tipolinea}}</td>
+                    <td>{{articulo.tipoplan}}</td>
+                    <td>{{articulo.nombreplan}}</td>
+                    <td>s/. {{articulo.precio}}</td>
+                  </tr>
+                  <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>s/. {{preciototal}}</td>
+                  </tr>
+                </table>
+                <div>
+                  <button mat-stroked-button color="primary" (click)="actualizarpago()">FINALIZAR VENTA</button>
+                </div>
               </div>
             </div>
           </div>

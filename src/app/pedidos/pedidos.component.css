@@ -5,3 +5,21 @@
 .portafolio-div1{
     height: 100px;
 }
+/*tabla angular*/
+.example-container {
+    height: 270px;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  tr.mat-footer-row {
+    font-weight: bold;
+  }
+  
+  .mat-table-sticky {
+    border-top: 1px solid #e0e0e0;
+  }
+/**/
