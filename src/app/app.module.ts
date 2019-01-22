@@ -12,7 +12,6 @@ import { RouterModule, Route } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { CategoriaComponent } from './categoria/categoria.component';
 import { HttpClientModule } from '@angular/common/http';
-import { NgFlashMessagesModule } from 'ng-flash-messages';
 import { CaracteristicasComponent } from './caracteristicas/caracteristicas.component';
 import { DetallemarcaComponent } from './detallemarca/detallemarca.component';
 import { UsuarioComponent } from './usuario/usuario.component';
@@ -77,7 +76,6 @@ const routes: Route[] = [
     MaterialModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
-    NgFlashMessagesModule.forRoot(),
     HttpClientModule,
     DataTablesModule,
     QuillModule,

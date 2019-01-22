@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CaracteristicaService } from './caracteristica.service';
-import { NgFlashMessageService }  from 'ng-flash-messages';
 import { Caracteristica } from './caracteristica';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
@@ -23,11 +22,7 @@ export class CaracteristicasComponent implements OnInit {
   public indice : number;
   public migas = [ new Miga('Características','/caracteristicas')];
 
-  constructor(
-    public caracteristicaService: CaracteristicaService,
-    public flashMessage: NgFlashMessageService) {
-        
-     }
+  constructor(public caracteristicaService: CaracteristicaService) {}
 
   ngOnInit() {
     this.dtOptions = {
@@ -113,7 +108,7 @@ export class CaracteristicasComponent implements OnInit {
   }
 
   mostrarCaracteristica(mensaje: string, tipo: string){
-    this.flashMessage.showFlashMessage({messages: [mensaje], timeout: 5000, dismissible: true, type: tipo});
+    //this.flashMessage.showFlashMessage({messages: [mensaje], timeout: 5000, dismissible: true, type: tipo});
   }
 
   resetForm(form?: NgForm){

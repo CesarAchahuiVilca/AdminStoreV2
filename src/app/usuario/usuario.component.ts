@@ -5,7 +5,6 @@ import { Direccion } from './direccion';
 import { DireccionService } from './direccion.service';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Miga } from '../miga';
-import { NgFlashMessageService } from 'ng-flash-messages';
 import { NgForm } from '@angular/forms';
 import { Provincia } from '../region/provincia';
 import { Region } from '../region/region';
@@ -50,7 +49,6 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   tiposVivienda                     : string[] = [ 'Casa', 'Oficina', 'Departamento', 'Edificio', 'Condominio', 'Otro'];
   usuario_header                    : string;
   usuarioService                    : UsuarioService;
-  flashMessage                      : NgFlashMessageService;
   direccionService                  : DireccionService;
   regionService                     : RegionService;
   //migas : [new Miga('usuarios','/usuarios')];
@@ -62,10 +60,9 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param direccionService 
    * @param regionService 
    */
-  constructor(public adapter: DateAdapter<any>, usuarioService : UsuarioService, flashMessage : NgFlashMessageService, direccionService : DireccionService, regionService : RegionService) {
+  constructor(public adapter: DateAdapter<any>, usuarioService : UsuarioService, direccionService : DireccionService, regionService : RegionService) {
       this.adapter.setLocale('es');
       this.usuarioService     = usuarioService;
-      this.flashMessage       = flashMessage;
       this.direccionService   = direccionService;
       this.regionService      = regionService;
      }
@@ -184,11 +181,11 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
           .subscribe(res => {
             var jres = JSON.parse(JSON.stringify(res));
             if(jres.status){
-              this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+              //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
               this.resetForm(form);
               this.getUsuarios();
             }else{
-              this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000, dismissible: true, type: 'danger'})
+              //this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000, dismissible: true, type: 'danger'})
             }        
           });
       } else {
@@ -197,16 +194,16 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
         .subscribe(res => {
           var jres = JSON.parse(JSON.stringify(res));
           if(jres.status){
-            this.flashMessage.showFlashMessage({messages: [ jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+            //this.flashMessage.showFlashMessage({messages: [ jres.msg], timeout: 5000, dismissible: true, type: 'success'});
             this.getUsuarios();
             this.resetForm(form);
           } else {
-            this.flashMessage.showFlashMessage({messages: [ jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+            //this.flashMessage.showFlashMessage({messages: [ jres.error], timeout: 5000,dismissible: true, type: 'danger'});
           }
         });
       }  
     } else {
-      this.flashMessage.showFlashMessage({messages: [mensaje], timeout: 5000, dismissible: true, type : 'warning'});
+      //this.flashMessage.showFlashMessage({messages: [mensaje], timeout: 5000, dismissible: true, type : 'warning'});
     }
   }
 
@@ -301,7 +298,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param tipo 
    */
   mostrarMensaje(mensaje: string, tipo: string){
-    this.flashMessage.showFlashMessage({messages: [mensaje],dismissible: true, timeout: 5000, type: tipo});
+    //this.flashMessage.showFlashMessage({messages: [mensaje],dismissible: true, timeout: 5000, type: tipo});
   }
 
   /**

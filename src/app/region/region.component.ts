@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFlashMessageService } from 'ng-flash-messages';
 import { NgForm } from '@angular/forms';
 import { Provincia } from './provincia';
 import { Region } from './region';
@@ -24,9 +23,7 @@ export class RegionComponent implements OnInit {
   migas = [new Miga('Locales', '/region')];
 
   constructor(
-    public regionService : RegionService,
-    public flashMessage : NgFlashMessageService
-    ) { }
+    public regionService : RegionService) { }
 
   ngOnInit() { 
     this.provSelected = new Provincia(undefined,'',[]);
@@ -73,7 +70,7 @@ export class RegionComponent implements OnInit {
     this.regionService.deleteRegion(this.depSelected._id).subscribe(res =>{
       var jres = JSON.parse(JSON.stringify(res));
         if(jres.status){
-          this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+          //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
           this.getRegiones();
           this.lblDepartamento = 'Nuevo Departamento';
           document.getElementById('btnDepartamento').innerHTML = '<i class="fa fa-plus"></i>';
@@ -81,7 +78,7 @@ export class RegionComponent implements OnInit {
           document.getElementById('spanDepartamento').hidden = true;
           this.depSelected = new Region(null,'',[this.provSelected]);
         }else{
-          this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+          //this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
         }
     });
   }
@@ -129,7 +126,7 @@ export class RegionComponent implements OnInit {
       this.regionService.putRegion(form.value).subscribe(res =>{
         var jres = JSON.parse(JSON.stringify(res));
         if(jres.status){
-          this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+          //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
           this.getRegiones();
           this.lblDepartamento = 'Nuevo Departamento';
           document.getElementById('btnDepartamento').innerHTML = '<i class="fa fa-plus"></i>';
@@ -137,7 +134,7 @@ export class RegionComponent implements OnInit {
           document.getElementById('spanDepartamento').hidden = true;
           form.reset();
         }else{
-          this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+          //this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
         }
       })
 
@@ -145,11 +142,11 @@ export class RegionComponent implements OnInit {
       this.regionService.postRegion(form.value).subscribe(res =>{
         var jres = JSON.parse(JSON.stringify(res));
         if(jres.status){
-          this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+          //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
           this.getRegiones();
           form.reset();
         }else{
-          this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+          //this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
         }
       });
     }  
@@ -187,9 +184,9 @@ export class RegionComponent implements OnInit {
     this.regionService.putRegion(region).subscribe(res =>{
       var jres = JSON.parse(JSON.stringify(res));
       if(jres.status){
-        this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+        //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
       }else{
-        this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+       // this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
       }
     });
   }
