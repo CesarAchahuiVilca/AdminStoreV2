@@ -13,7 +13,7 @@ export class LoginService {
 
   readonly URL_API = Constantes.URL_API_USUARIO;
 
-  constructor(private http: HttpClient) { 
+  constructor(public http: HttpClient) { 
     this.usuarioSeleccionado = new Usuario();
   }
 

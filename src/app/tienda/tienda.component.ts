@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Miga } from '../miga';
 import { NgForm } from '@angular/forms';
-import { NgFlashMessageService } from 'ng-flash-messages';
 import { Tienda } from './tienda';
 import { TiendaService } from './tienda.service';
 
@@ -14,7 +13,6 @@ import { TiendaService } from './tienda.service';
 export class TiendaComponent implements OnInit {
   botonAccion     : string = "Agregar";
   mostrarTienda   : boolean;
-  flashMessage    : NgFlashMessageService;
   tiendaService   : TiendaService;
   displayedColumns: string[] = ['nombre', 'latitud', 'longitud', 'edit'];
   dataSource              : MatTableDataSource<Tienda>; // = new MatTableDataSource(ELEMENT_DATA);
@@ -23,8 +21,7 @@ export class TiendaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(tiendaService: TiendaService, flashMessage: NgFlashMessageService) {
-    this.flashMessage = flashMessage;
+  constructor(tiendaService: TiendaService) {
     this.tiendaService = tiendaService;
     this.mostrarTienda = true;
    }
@@ -82,7 +79,7 @@ export class TiendaComponent implements OnInit {
   }
 
   mostrarMensaje(mensaje: string, tipo: string){
-    this.flashMessage.showFlashMessage({messages: [mensaje], dismissible: true, timeout: 5000, type: 'tipo'});
+    //this.flashMessage.showFlashMessage({messages: [mensaje], dismissible: true, timeout: 5000, type: 'tipo'});
   }
 
   nuevaTienda(form?: NgForm){
