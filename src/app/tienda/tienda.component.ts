@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Miga } from '../miga';
 import { NgForm } from '@angular/forms';
+import { Respuesta } from '../usuario/respuesta';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 import { Tienda } from './tienda';
 import { TiendaService } from './tienda.service';
 
@@ -13,58 +16,63 @@ import { TiendaService } from './tienda.service';
 export class TiendaComponent implements OnInit {
   botonAccion     : string = "Agregar";
   mostrarTienda   : boolean;
-  tiendaService   : TiendaService;
   displayedColumns: string[] = ['nombre', 'latitud', 'longitud', 'edit'];
-  dataSource              : MatTableDataSource<Tienda>; // = new MatTableDataSource(ELEMENT_DATA);
+  dataSource              : MatTableDataSource<Tienda>;
   migas                    = [ new Miga('Tienda','locales')];
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(tiendaService: TiendaService) {
-    this.tiendaService = tiendaService;
+  constructor(public tiendaService: TiendaService, public snackBar: MatSnackBar) {
     this.mostrarTienda = true;
    }
 
   ngOnInit() {
     this.tiendaService.getTiendas().subscribe( res => {
-      var jres = JSON.parse(JSON.stringify(res));
-      this.tiendaService.tiendas = jres.data as Tienda[];
+      const respuesta = res as Respuesta;
+      this.tiendaService.tiendas = respuesta.data as Tienda[];
       this.dataSource = new MatTableDataSource(this.tiendaService.tiendas);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
   }
 
+  /**
+   * Método para agregar la ubicación de una tienda en el mapa
+   * @param form 
+   */
   agregarTienda(form?: NgForm){
     if(this.tiendaService.tienda._id){
       this.tiendaService.putTienda(this.tiendaService.tienda).subscribe( res => {
-        var jres = JSON.parse(JSON.stringify(res));
-        if(jres.status){
+        const respuesta = res as Respuesta;
+        if(respuesta.status){
           this.mostrarTienda = this.mostrarTienda ? false : true;
           form.resetForm();
-          this.mostrarMensaje(jres.msg, 'success');
+          this.openSnackBar(respuesta.status, respuesta.msg);
         } else {
-          this.mostrarMensaje(jres.error,'danger');
+          this.openSnackBar(respuesta.status, respuesta.error);
         }
       });
     } else {
       this.tiendaService.postTienda(this.tiendaService.tienda).subscribe( res => {
-        var jres = JSON.parse(JSON.stringify(res));
-        if(jres.status){
-          this.mostrarMensaje(jres.msg, 'success');
+        const respuesta = res as Respuesta;
+        if(respuesta.status){
+          this.openSnackBar(respuesta.status, respuesta.msg);
           this.tiendaService.tienda = new Tienda();
           this.mostrarTienda = this.mostrarTienda ? false : true;
           form.resetForm();
-          this.tiendaService.tiendas.push(jres.data as Tienda);
+          this.tiendaService.tiendas.push(respuesta.data as Tienda);
           this.dataSource.sort = this.sort;
         } else {
-          this.mostrarMensaje(jres.error, 'danger');
+          this.openSnackBar(respuesta.status, respuesta.error);
         }
       });
     }
   }
 
+  /**
+   * Método para filtrar la tabla de datos
+   * @param filtro 
+   */
   aplicarFiltro(filtro: string){
     this.dataSource.filter = filtro.trim().toLowerCase();
     if (this.dataSource.paginator) {
@@ -72,21 +80,37 @@ export class TiendaComponent implements OnInit {
     }
   }
 
+  /**
+   * Método que permite editar la ubicación de una tienda
+   * @param tienda : datos de la tienda
+   */
   editarTienda(tienda: Tienda){
     this.tiendaService.tienda = tienda;
     this.mostrarTienda = this.mostrarTienda ? false : true;
     this.botonAccion = 'MODIFICAR TIENDA';
   }
 
-  mostrarMensaje(mensaje: string, tipo: string){
-    //this.flashMessage.showFlashMessage({messages: [mensaje], dismissible: true, timeout: 5000, type: 'tipo'});
-  }
-
+  /**
+   * Método para agregar una nueva tienda
+   * @param form : datos de la tienda
+   */
   nuevaTienda(form?: NgForm){
     this.tiendaService.tienda = new Tienda();
     this.botonAccion = 'AGREGAR TIENDA';
     form.resetForm();
     this.mostrarTienda = this.mostrarTienda ? false : true;
+  }
+
+  /**
+   * Método que muestra un Bar temporal para confirmar los mensajes de éxito y de error
+   */
+  openSnackBar(status: boolean, mensaje: string): void {
+    var clase = status ? 'exito' : 'error';
+    this.snackBar.openFromComponent(SnackBarComponent, {
+      duration: 3000,
+      panelClass: [clase],
+      data: mensaje
+    });
   }
 
 }

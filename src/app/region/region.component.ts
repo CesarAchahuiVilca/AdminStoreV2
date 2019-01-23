@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
+import { Miga } from '../miga';
 import { NgForm } from '@angular/forms';
 import { Provincia } from './provincia';
 import { Region } from './region';
 import { RegionService } from './region.service';
-import { Miga } from '../miga';
+import { Respuesta } from '../usuario/respuesta';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 
 @Component({
   selector: 'app-region',
@@ -22,8 +25,7 @@ export class RegionComponent implements OnInit {
   lblProvincia : string;
   migas = [new Miga('Locales', '/region')];
 
-  constructor(
-    public regionService : RegionService) { }
+  constructor(public regionService : RegionService, public snackBar: MatSnackBar) { }
 
   ngOnInit() { 
     this.provSelected = new Provincia(undefined,'',[]);
@@ -41,6 +43,10 @@ export class RegionComponent implements OnInit {
     document.getElementById('spanDistrito').hidden = true;
   }
 
+  /**
+   * Método para seleccionar un departamento
+   * @param departamento : nombre del departamento
+   */
   dep_selected(departamento : string){
     var i : number = 0;
     while(this.regionService.regiones[i].departamento != departamento){
@@ -62,15 +68,22 @@ export class RegionComponent implements OnInit {
     this.lblProvincia = 'Nueva Provincia';
   }
 
+  /**
+   * Método que selecciona un distrito
+   * @param distrito : nombre del distrito
+   */
   distSelected(distrito : string){
     document.getElementById('spanDistrito').hidden = false;
   }
 
+  /**
+   * Método para eliminar el departamento seleccionado, sus provincias y distritos
+   */
   eliminarDepartamento(){
     this.regionService.deleteRegion(this.depSelected._id).subscribe(res =>{
-      var jres = JSON.parse(JSON.stringify(res));
-        if(jres.status){
-          //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+      const respuesta = res as Respuesta;
+        if(respuesta.status){
+          this.openSnackBar(respuesta.status, respuesta.msg);
           this.getRegiones();
           this.lblDepartamento = 'Nuevo Departamento';
           document.getElementById('btnDepartamento').innerHTML = '<i class="fa fa-plus"></i>';
@@ -78,11 +91,15 @@ export class RegionComponent implements OnInit {
           document.getElementById('spanDepartamento').hidden = true;
           this.depSelected = new Region(null,'',[this.provSelected]);
         }else{
-          //this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+          this.openSnackBar(respuesta.status, respuesta.error);
         }
     });
   }
 
+  /**
+   * Método para eliminar un distrito de la provincia seleccionada
+   * @param distrito : nombre del distrito
+   */
   eliminarDistrito(distrito: string){
     var i : number = 0;
     while(this.provSelected.distritos[i] != distrito ){
@@ -93,6 +110,10 @@ export class RegionComponent implements OnInit {
     this.regionService.distritoSelected = '';
   }
 
+  /**
+   * Método para eliminar la provincia seleccionada y sus distritos
+   * @param provincia : nombre de la provincia
+   */
   eliminarProvincia(provincia : string){
     var i : number = 0;
     while(this.depSelected.provincias[i].provincia != provincia){
@@ -103,12 +124,19 @@ export class RegionComponent implements OnInit {
     this.regionService.provinciaSelected = new Provincia(undefined,'',[]);
   }
 
+  /**
+   * Método para obtener todas las regiones o departamentos
+   */
   getRegiones() {
     this.regionService.getRegiones().subscribe(res => {
       this.regionService.regiones = res as Region[];
     })
   }
 
+  /**
+   * Método para crear una nueva provincia en el departamento seleccionado
+   * @param form 
+   */
   nuevaProvincia(form?: NgForm){
     if(!form.value._id) {
       this.depSelected.provincias.push(form.value);
@@ -121,12 +149,16 @@ export class RegionComponent implements OnInit {
     this.lblProvincia = 'Nueva Provincia';
   }
 
+  /**
+   * Método para guardar los datos de un nuevo departamento o actualizar un departamento seleccionado
+   * @param form : datos del departamento
+   */
   nuevoDepartamento(form?: NgForm) {
     if(form.value._id) {
       this.regionService.putRegion(form.value).subscribe(res =>{
-        var jres = JSON.parse(JSON.stringify(res));
-        if(jres.status){
-          //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+        const respuesta = res as Respuesta;
+        if(respuesta.status){
+          this.openSnackBar(respuesta.status, respuesta.msg);
           this.getRegiones();
           this.lblDepartamento = 'Nuevo Departamento';
           document.getElementById('btnDepartamento').innerHTML = '<i class="fa fa-plus"></i>';
@@ -134,30 +166,37 @@ export class RegionComponent implements OnInit {
           document.getElementById('spanDepartamento').hidden = true;
           form.reset();
         }else{
-          //this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+          this.openSnackBar(respuesta.status, respuesta.error);
         }
       })
-
     }else {
       this.regionService.postRegion(form.value).subscribe(res =>{
-        var jres = JSON.parse(JSON.stringify(res));
-        if(jres.status){
-          //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+        const respuesta = res as Respuesta;
+        if(respuesta.status){
+          this.openSnackBar(respuesta.status, respuesta.msg);
           this.getRegiones();
           form.reset();
         }else{
-          //this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+          this.openSnackBar(respuesta.status, respuesta.error);
         }
       });
     }  
   }
 
+  /**
+   * Método para agregar un distrito a la provincia seleccionada
+   * @param form : datos del nuevo distrito
+   */
   nuevoDistrito(form? :NgForm){
     this.provSelected.distritos.push(form.value.distrito);
     this.updateRegion(this.depSelected);
     form.reset();
   }
 
+  /**
+   * Método que selecciona una provincia como provincia seleccionada
+   * @param provincia : nombre de la provincia
+   */
   prov_selected(provincia : string){ 
     var i : number = 0;
     while(this.depSelected.provincias[i].provincia != provincia){
@@ -173,6 +212,10 @@ export class RegionComponent implements OnInit {
     this.lblProvincia = 'Editar Provincia';
   }
 
+  /**
+   * Método que limpia el formulario de la región
+   * @param form 
+   */
   resetForm(form?: NgForm) {
     if(form) {
       this.regionService.departamentoSelected = new Region();
@@ -180,14 +223,32 @@ export class RegionComponent implements OnInit {
     }
   }
 
+  /**
+   * Método para actualizar los datos de una región
+   * @param region : datos de la región
+   */
   updateRegion(region : Region){
     this.regionService.putRegion(region).subscribe(res =>{
-      var jres = JSON.parse(JSON.stringify(res));
-      if(jres.status){
-        //this.flashMessage.showFlashMessage({messages: [jres.msg], timeout: 5000, dismissible: true, type: 'success'});
+      const respuesta = res as Respuesta;
+      if(respuesta.status){
+        this.openSnackBar(respuesta.status, respuesta.msg);
       }else{
-       // this.flashMessage.showFlashMessage({messages: [jres.error], timeout: 5000,dismissible: true, type: 'danger'});
+        this.openSnackBar(respuesta.status, respuesta.error);
       }
+    });
+  }
+
+  /**
+   * Método para abrir un bar que muestra un mensaje de confirmación
+   * @param status : para definir el color del mensaje
+   * @param mensaje : mensaje a mostrar
+   */
+  openSnackBar(status: boolean, mensaje: string): void {
+    var clase = status ? 'exito' : 'error';
+    this.snackBar.openFromComponent(SnackBarComponent, {
+      duration: 3000,
+      panelClass: [clase],
+      data: mensaje
     });
   }
 }

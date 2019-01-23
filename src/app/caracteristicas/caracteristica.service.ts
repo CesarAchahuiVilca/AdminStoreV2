@@ -1,13 +1,9 @@
 import { Constantes } from '../constantes';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { Caracteristica } from './caracteristica';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type' : 'application/json'})
-};
 
 @Injectable({
   providedIn: 'root'
@@ -16,40 +12,65 @@ export class CaracteristicaService {
 
   caracteristicaSelected: Caracteristica;
   caracteristicas: Caracteristica[];
-  readonly URL_API = Constantes.URL_API_CARACTERISTICA;
 
-  constructor(private http: HttpClient) {
+  constructor(public http: HttpClient) {
     this.caracteristicaSelected = new Caracteristica();
-   }
+  }
 
-   postCaracteristica(caracteristica: Caracteristica): Observable<Caracteristica> {
-     return this.http.post<Caracteristica>(this.URL_API, caracteristica, {withCredentials: true}).pipe(
-       catchError(this.handleError<Caracteristica>('postUsuario'))
-     );
-   }
+  /**
+   * Método para agregar una nueva característica
+   * @param caracteristica : datos de la característica
+   */
+  postCaracteristica(caracteristica: Caracteristica): Observable < any > {
+    return this.http.post < Caracteristica > (Constantes.URL_API_CARACTERISTICA, caracteristica, {
+      withCredentials: true
+    }).pipe(
+      catchError(this.handleError < Caracteristica > ('postUsuario'))
+    );
+  }
 
-   getCaracteristicas() : Observable<Caracteristica[]> {
-     return this.http.get<Caracteristica[]>(this.URL_API).pipe(
-       catchError(this.handleError('getCaracteristicas',[]))
-     );
-   }
+  /**
+   * Método para obtener todas las características
+   */
+  getCaracteristicas(): Observable < any > {
+    return this.http.get < Caracteristica[] > (Constantes.URL_API_CARACTERISTICA).pipe(
+      catchError(this.handleError('getCaracteristicas', []))
+    );
+  }
 
-   putCaracteristica(caracteristica: Caracteristica): Observable<any> {
-     return this.http.put(this.URL_API + `/${caracteristica._id}`,caracteristica, {withCredentials: true}).pipe(
-       catchError(this.handleError<any>('putUsuario'))
-     );
-   }
+  /**
+   * Método para modificar los datos de una característica
+   * @param caracteristica : datos de la característica
+   */
+  putCaracteristica(caracteristica: Caracteristica): Observable < any > {
+    return this.http.put(Constantes.URL_API_CARACTERISTICA + `/${caracteristica._id}`, caracteristica, {
+      withCredentials: true
+    }).pipe(
+      catchError(this.handleError < any > ('putUsuario'))
+    );
+  }
 
-   deleteCaracteristica(caracteristica: Caracteristica): Observable<Caracteristica> {
-     return this.http.delete<Caracteristica>(this.URL_API + `/${caracteristica._id}`, {withCredentials: true}).pipe(
-       catchError(this.handleError<Caracteristica>('deleteCaracteristica'))
-     );
-   }
+  /**
+   * Método para eliminar una característíca
+   * @param caracteristica : datos de la característica
+   */
+  deleteCaracteristica(caracteristica: Caracteristica): Observable < any > {
+    return this.http.delete < Caracteristica > (Constantes.URL_API_CARACTERISTICA + `/${caracteristica._id}`, {
+      withCredentials: true
+    }).pipe(
+      catchError(this.handleError < Caracteristica > ('deleteCaracteristica'))
+    );
+  }
 
-   private handleError<T> (operation = 'operation', result?: T){
-     return (error: any): Observable<T> => {
-       console.error(error);
-       return of(result as T)
-     };
-   }
+  /**
+   * Manejador de errores
+   * @param operation 
+   * @param result 
+   */
+  private handleError < T > (operation = 'operation', result ? : T) {
+    return (error: any): Observable < T > => {
+      console.error(error);
+      return of(result as T)
+    };
+  }
 }

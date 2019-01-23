@@ -11,36 +11,55 @@ import { Tienda } from './tienda';
 export class TiendaService {
   tiendas          : Tienda[]   = [];
   tienda           : Tienda;
-  private URL      : string     = Constantes.URL_API_TIENDA;
 
-  constructor(private http: HttpClient) { 
+  constructor(public http: HttpClient) { 
     this.tienda = new Tienda();
   }
 
-  postTienda(tienda: Tienda): Observable<Tienda>{
-    return this.http.post<Tienda>(this.URL, tienda, {withCredentials: true}).pipe(
+  /**
+   * Método para agregar una nueva tienda
+   * @param tienda : datos de la tienda
+   */
+  postTienda(tienda: Tienda): Observable<any>{
+    return this.http.post<Tienda>(Constantes.URL_API_TIENDA, tienda, {withCredentials: true}).pipe(
       catchError(this.manejarError<Tienda>('postTienda'))
     );
   }
 
-  getTiendas() : Observable<Tienda[]>{
-    return this.http.get<Tienda[]>(this.URL, {withCredentials: true}).pipe(
+  /**
+   * Método que obtiene todas las tiendas de la base de datos
+   */
+  getTiendas() : Observable<any>{
+    return this.http.get<Tienda[]>(Constantes.URL_API_TIENDA, {withCredentials: true}).pipe(
       catchError(this.manejarError('getTiendas',[]))
     );
   }
 
-  putTienda(tienda: Tienda): Observable<Tienda>{
-    return this.http.put<Tienda>(this.URL + `/${tienda._id}`, tienda, {withCredentials: true}).pipe(
+  /**
+   * Método para actualizar los datos de una tienda
+   * @param tienda : datos de la tienda
+   */
+  putTienda(tienda: Tienda): Observable<any>{
+    return this.http.put<Tienda>(Constantes.URL_API_TIENDA + `/${tienda._id}`, tienda, {withCredentials: true}).pipe(
       catchError(this.manejarError<any>('putTienda'))
     );
   }
 
+  /**
+   * Método para eliminar una tienda
+   * @param _id : identificador de la tienda
+   */
   deleteTienda(_id: string): Observable<Tienda>{
-    return this.http.delete<Tienda>(this.URL +  `/${_id}`, {withCredentials: true}).pipe(
+    return this.http.delete<Tienda>(Constantes.URL_API_TIENDA +  `/${_id}`, {withCredentials: true}).pipe(
       catchError(this.manejarError<any>('deleteTienda'))
     );
   }
 
+  /**
+   * Manejador de las operaciones
+   * @param operacion 
+   * @param resultado 
+   */
   private manejarError<T> (operacion = 'operacion', resultado?: T){
     return (error: any): Observable<T> => {
       console.error(error);

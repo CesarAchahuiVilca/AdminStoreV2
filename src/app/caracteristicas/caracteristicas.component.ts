@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { CaracteristicaService } from './caracteristica.service';
 import { Caracteristica } from './caracteristica';
+import { CaracteristicaService } from './caracteristica.service';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
 import { Miga } from '../miga'
+import { NgForm } from '@angular/forms';
+import { Respuesta } from '../usuario/respuesta';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-caracteristicas',
@@ -22,7 +25,7 @@ export class CaracteristicasComponent implements OnInit {
   public indice : number;
   public migas = [ new Miga('Características','/caracteristicas')];
 
-  constructor(public caracteristicaService: CaracteristicaService) {}
+  constructor(public caracteristicaService: CaracteristicaService, public snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.dtOptions = {
@@ -82,24 +85,34 @@ export class CaracteristicasComponent implements OnInit {
     });
   }
 
+  /**
+   * Métodod que elimina la característica seleccionada
+   */
   deleteCaracteristica(){
     this.caracteristicaService.deleteCaracteristica(this.caracteristicaService.caracteristicaSelected).subscribe(res=> {
-      var jres = JSON.parse(JSON.stringify(res));
-      if(jres.status) {
-        this.mostrarCaracteristica(jres.msg, 'success');
+      const respuesta = res as Respuesta;
+      if(respuesta.status) {
+        this.openSnackBar(respuesta.status, respuesta.msg);
         this.caracteristicaService.caracteristicaSelected = new Caracteristica();
         this.caracteristicaService.caracteristicas.splice(this.indice,1);
         this.reRender();
       }else {
-        this.mostrarCaracteristica(jres.error, 'danger');
+        this.openSnackBar(respuesta.status, respuesta.error);
       }
     })
   }
 
+  /**
+   * Método para modificar los datos de una características
+   * @param caracteristica : datos de la característica
+   */
   editarCaracteristica(caracteristica: Caracteristica){
     this.caracteristicaService.caracteristicaSelected = caracteristica;
   }
 
+  /**
+   * Método para obtener todas las características
+   */
   getCaracteristicas(){
     this.caracteristicaService.getCaracteristicas().subscribe(res =>{
       this.caracteristicaService.caracteristicas = res as Caracteristica[];
@@ -107,10 +120,10 @@ export class CaracteristicasComponent implements OnInit {
     })
   }
 
-  mostrarCaracteristica(mensaje: string, tipo: string){
-    //this.flashMessage.showFlashMessage({messages: [mensaje], timeout: 5000, dismissible: true, type: tipo});
-  }
-
+  /**
+   * Método para limpiar el formulario
+   * @param form : datos del formulario
+   */
   resetForm(form?: NgForm){
     if(form) {
       this.caracteristicaService.caracteristicaSelected = new Caracteristica();
@@ -118,46 +131,73 @@ export class CaracteristicasComponent implements OnInit {
     }
   }
 
+  /**
+   * Método para guardar los datos de una características
+   * @param form : datos de la característica
+   */
   saveCaracteristica(form?: NgForm){
     if(form.value._id) {
       this.caracteristicaService.putCaracteristica(form.value).subscribe(res => {
-        var jres = JSON.parse(JSON.stringify(res));
-        if(jres.status) {
-          this.mostrarCaracteristica(jres.msg, 'success');
+        const respuesta = res as Respuesta;
+        if(respuesta.status) {
+          this.openSnackBar(respuesta.status, respuesta.msg);
           this.resetForm(form);
         }else {
-          this.mostrarCaracteristica(jres.error, 'danger');
+          this.openSnackBar(respuesta.status, respuesta.error);
         }
       })
     }else {
       this.caracteristicaService.postCaracteristica(form.value).subscribe(res => {
-        var jres = JSON.parse(JSON.stringify(res));
-        if(jres.status){
-          this.mostrarCaracteristica(jres.msg,'success');
+        const respuesta = res as Respuesta;
+        if(respuesta.status){
+          this.openSnackBar(respuesta.status, respuesta.msg);
           this.resetForm(form);
           this.getCaracteristicas();
         }else {
-          this.mostrarCaracteristica(jres.error, 'danger');
+          this.openSnackBar(respuesta.status, respuesta.error);
         }
       })
     }
   }
 
+  /**
+   * Método que selecciona una característica
+   * @param caracteristica : datos de la característica
+   * @param i : índice de la característica
+   */
   selectCaracteristica(caracteristica: Caracteristica, i: number){
     this.caracteristicaService.caracteristicaSelected = caracteristica;
     this.indice = i;
   }
 
+  /**
+   * Método para actualizar los datos de una característica
+   * @param caracteristica : datos de la característica seleccionada
+   */
   updateCaracteristica(caracteristica: Caracteristica){
     this.caracteristicaService.putCaracteristica(caracteristica).subscribe(res =>{
-      var jres = JSON.parse(JSON.stringify(res));
-      if (jres.status){
-        this.mostrarCaracteristica(jres.msg, 'success');
+      const respuesta = res as Respuesta;
+      if (respuesta.status){
+        this.openSnackBar(respuesta.status, respuesta.msg);
         this.getCaracteristicas();
       }else {
-        this.mostrarCaracteristica(jres.error, 'danger');
+        this.openSnackBar(respuesta.status, respuesta.error);
       }
     })
+  }
+
+  /**
+   * Método para abrir un bar que muestra un mensaje de confirmación
+   * @param status : para definir el color del mensaje
+   * @param mensaje : mensaje a mostrar
+   */
+  openSnackBar(status: boolean, mensaje: string): void {
+    var clase = status ? 'exito' : 'error';
+    this.snackBar.openFromComponent(SnackBarComponent, {
+      duration: 3000,
+      panelClass: [clase],
+      data: mensaje
+    });
   }
   
 }

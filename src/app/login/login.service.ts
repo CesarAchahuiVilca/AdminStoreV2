@@ -10,14 +10,12 @@ import { Usuario } from './usuario';
 export class LoginService {
 
   public usuarioSeleccionado : Usuario;
-
-  readonly URL_API = Constantes.URL_API_USUARIO;
-
+  
   constructor(public http: HttpClient) { 
     this.usuarioSeleccionado = new Usuario();
   }
 
   login(user : Usuario){
-    return this.http.post(this.URL_API+ '/adminLogin', user, {withCredentials: true});
+    return this.http.post(Constantes.URL_API_USUARIO+ '/adminLogin', user, {withCredentials: true});
   }
 }
