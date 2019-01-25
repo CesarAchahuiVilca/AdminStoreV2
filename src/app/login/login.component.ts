@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
       if(respuesta.status){
         this.openSnackBar(respuesta.status, respuesta.msg);
         this.router.navigate(['/menu']);
+        location.reload();
       } else {
         this.openSnackBar(respuesta.status, respuesta.error);
         this.resetForm(form)
