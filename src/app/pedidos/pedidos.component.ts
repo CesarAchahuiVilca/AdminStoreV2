@@ -119,33 +119,33 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     document.getElementById('divnombrecliente').hidden = true;
     this.listarpedidost();
     //datatable
-   /* this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ elementos",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "Primero",
-          previous: "Anterior",
-          next: "Siguiente",
-          last: "Último"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
-    this.applyFilter('');*/
+    /* this.dtOptions = {
+       pagingType: 'full_numbers',
+       pageLength: 10,
+       language: {
+         processing: "Procesando...",
+         search: "Buscar:",
+         lengthMenu: "Mostrar _MENU_ elementos",
+         info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+         infoEmpty: "Mostrando ningún elemento.",
+         infoFiltered: "(filtrado _MAX_ elementos total)",
+         infoPostFix: "",
+         loadingRecords: "Cargando registros...",
+         zeroRecords: "No se encontraron registros",
+         emptyTable: "No hay datos disponibles en la tabla",
+         paginate: {
+           first: "Primero",
+           previous: "Anterior",
+           next: "Siguiente",
+           last: "Último"
+         },
+         aria: {
+           sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+           sortDescending: ": Activar para ordenar la tabla en orden descendente"
+         }
+       }
+     };
+     this.applyFilter('');*/
   }
   //table material
   applyFilter(filterValue: string) {
@@ -158,23 +158,23 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   //
   /* data table*/
   ngAfterViewInit(): void {
-   /* this.dtTriggers.next();
-    this.dtTriggers2.next();*/
+    /* this.dtTriggers.next();
+     this.dtTriggers2.next();*/
     //console.log(this.pedidosservice.pedidos);
   }
 
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
-   /* this.dtTriggers.unsubscribe();
-    this.dtTriggers2.unsubscribe();*/
+    /* this.dtTriggers.unsubscribe();
+     this.dtTriggers2.unsubscribe();*/
   }
 
- /* rerender(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.dtTriggers.next();
-    });
-  }*/
+  /* rerender(): void {
+     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+       dtInstance.destroy();
+       this.dtTriggers.next();
+     });
+   }*/
   cambiarvista(id: string, iduser: string, iddireccion: string, preciot: number) {
     document.getElementById('listapedidos').hidden = true;
     document.getElementById('dettallepedido').hidden = false;
@@ -324,37 +324,37 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   funcionprueba() {
     var arr = new Array(),//[2, 1, 3, 2, 8, 9, 1, 3, 1, 1, 1, 2, 24, 25, 67, 10, 54, 2, 1, 9, 8, 1],
-      sortedArr = [],
+      ArrOrdenado = [],
       count = 1;
-      for(var k=0;k<this.listpedidos.length;k++){
-        arr.push(this.listpedidos[k].estado);
-      }
-      console.log(arr);
-    sortedArr = arr.sort(function (a, b) {
+    for (var k = 0; k < this.listpedidos.length; k++) {
+      arr.push(this.listpedidos[k].estado);
+    }
+    console.log(arr);
+    ArrOrdenado = arr.sort(function (a, b) {
       return a - b
     });
-    for (var i = 0; i < sortedArr.length; i = i + count) {
+    for (var i = 0; i < ArrOrdenado.length; i = i + count) {
       count = 1;
-      for (var j = i + 1; j < sortedArr.length; j++) {
-        if (sortedArr[i] === sortedArr[j])
+      for (var j = i + 1; j < ArrOrdenado.length; j++) {
+        if (ArrOrdenado[i] === ArrOrdenado[j])
           count++;
       }
-      console.log(sortedArr[i] + " = " + count);
-      if(sortedArr[i]=='Pagado'){
-        console.log(sortedArr[i] + " = " + count);
-        this.carPagados=count;
+      console.log(ArrOrdenado[i] + " = " + count);
+      if (ArrOrdenado[i] == 'Pagado') {
+        console.log(ArrOrdenado[i] + " = " + count);
+        this.carPagados = count;
       }
-      if(sortedArr[i]=='Proceso'){
-        console.log(sortedArr[i] + " = " + count);
-        this.carProceso=count;
+      if (ArrOrdenado[i] == 'Proceso') {
+        console.log(ArrOrdenado[i] + " = " + count);
+        this.carProceso = count;
       }
-      if(sortedArr[i]=='Reembolso'){
-        console.log(sortedArr[i] + " = " + count);
-        this.carReembolso=count;
+      if (ArrOrdenado[i] == 'Reembolso') {
+        console.log(ArrOrdenado[i] + " = " + count);
+        this.carReembolso = count;
       }
-      if(sortedArr[i]=='Error de pago'){
-        console.log(sortedArr[i] + " = " + count);
-        this.carErrorPago=count;
+      if (ArrOrdenado[i] == 'Error de pago') {
+        console.log(ArrOrdenado[i] + " = " + count);
+        this.carErrorPago = count;
       }
     }
   }
