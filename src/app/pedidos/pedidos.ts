@@ -44,7 +44,6 @@ export class Pedidos {
         this.idVendedor = idVendedor;
     }
     _id: string;
-    idCarrito: string;
     idUsuario: string;
     Articulo: temarti[];
     FechaCompra: Date;

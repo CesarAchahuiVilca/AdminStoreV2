@@ -14,7 +14,19 @@ import { PedidosService } from './pedidos.service';
 import { Pedidos } from './pedidos';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
 
+export interface PedidosData {
+  _id: string;
+  idUsuario: string;
+  entrega: string;
+  fecha: string;
+  pago: string;
+  total: string;
+  estado: string;
+  direccion: string;
+}
 
 
 export interface temdoc {
@@ -30,14 +42,23 @@ export interface temdoc {
   providers: [PedidosService]
 })
 export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
+  router: Router;
   idPedido: string = '';
+  textofiltro: string = '';
+  //table 2
+  displayedColumns: string[] = ['_id', 'idUsuario', 'entrega', 'fecha', 'pago', 'total', 'estado', 'btn'];
+  dataSource: MatTableDataSource<PedidosData>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  //
   //datatable
-  @ViewChild(DataTableDirective)
+  /*@ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
   dtTriggers2: Subject<any> = new Subject();
-  flag: boolean = true;
+  flag: boolean = true;*/
   //fin
   fecha = new Date(Date.now());
   listapedidos: any;
@@ -55,6 +76,12 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   tipopago: string;
   nrotrans: string;
   preciototal: number = 0;
+  preciototalcarritos: number = 0;
+  totalcarritos: number = 0;
+  carPagados: number = 0;
+  carProceso: number = 0;
+  carReembolso: number = 0;
+  carErrorPago: number = 0;
   tipodoc: string = '';
   seriedoc: string = '';
   numerodoc: string = '';
@@ -63,21 +90,36 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   DocumentoAct: temdoc[] = [{ Tipo: 'BBV', Serie: '1', Numero: '0001' }];
   //fin
   // tabla material
-
+  listpedidos: any[] = new Array();/* [
+    { numeroped: '12', cliente: 'paul', entrega: '57%', fecha: '2019-01-12', pago: 'proceso', total: '1250', estado: 'yellow' },
+    { numeroped: '12', cliente: 'paul', entrega: '57%', fecha: '2019-01-12', pago: 'proceso', total: '1250', estado: 'yellow' }
+  ];*/
   //
   //datos temp
   listadatos: string[] = ['datos1', 'datos2', 'datos3', 'datos4', 'datos5', 'dtos6', 'datos7'];
   migas = [new Miga('Pedidos', '/pedidos')];
   //fin datos temp
-  constructor(public snackBar: MatSnackBar, public http: HttpClient, public pedidosservice: PedidosService, public usuarioservice: UsuarioService) { }
+  constructor(public snackBar: MatSnackBar, public http: HttpClient, public pedidosservice: PedidosService, public usuarioservice: UsuarioService) {
+    //table material
+    // Assign the data to the data source for the table to render   JSON.parse(JSON.stringify(this.listpedidos))
+    //  console.log(datos);
+    //console.log(JSON.parse(JSON.stringify(this.listpedidos)));
+    this.dataSource = new MatTableDataSource(this.listpedidos);
+    //
+  }
 
   ngOnInit() {
+    document.getElementById('tablapedidos').focus();
+    //table material
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    //
     document.getElementById('dettallepedido').hidden = true;
     document.getElementById('tabladetallepedido').hidden = true;
     document.getElementById('divnombrecliente').hidden = true;
     this.listarpedidost();
     //datatable
-    this.dtOptions = {
+   /* this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       language: {
@@ -103,28 +145,36 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         }
       }
     };
-
+    this.applyFilter('');*/
   }
+  //table material
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+  //
   /* data table*/
   ngAfterViewInit(): void {
-    this.dtTriggers.next();
-    this.dtTriggers2.next();
+   /* this.dtTriggers.next();
+    this.dtTriggers2.next();*/
+    //console.log(this.pedidosservice.pedidos);
   }
 
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
-    this.dtTriggers.unsubscribe();
-    this.dtTriggers2.unsubscribe();
+   /* this.dtTriggers.unsubscribe();
+    this.dtTriggers2.unsubscribe();*/
   }
 
-  rerender(): void {
+ /* rerender(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
       dtInstance.destroy();
-      // Call the dtTrigger to rerender again
       this.dtTriggers.next();
     });
-  }
+  }*/
   cambiarvista(id: string, iduser: string, iddireccion: string, preciot: number) {
     document.getElementById('listapedidos').hidden = true;
     document.getElementById('dettallepedido').hidden = false;
@@ -181,9 +231,15 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       .subscribe(res => {
         this.pedidosservice.pedidos = res as Pedidos[];
         this.listapedidos = JSON.parse(JSON.stringify(res));
-        //   this.pedidosservice.pedidos = res as Pedidos[];
+        this.totalcarritos = this.pedidosservice.pedidos.length;
+        for (var j = 0; j < this.pedidosservice.pedidos.length; j++) {
+          this.preciototalcarritos = this.preciototalcarritos + Number(this.pedidosservice.pedidos[j].PrecioTotal)
+          this.listpedidos.push({ _id: this.pedidosservice.pedidos[j]._id, idUsuario: this.pedidosservice.pedidos[j].idUsuario, entrega: this.pedidosservice.pedidos[j].EstadoEnvio, fecha: this.pedidosservice.pedidos[j].FechaCompra, pago: this.pedidosservice.pedidos[j].idTipoPago, total: this.pedidosservice.pedidos[j].PrecioTotal, estado: this.pedidosservice.pedidos[j].EstadoPago, direccion: this.pedidosservice.pedidos[j].idDireccion });
+        }
+        // this.dataSource = new MatTableDataSource(this.listpedidos);
+        this.filtrarCarritos('1');
+        this.funcionprueba();
       });
-    // this.recuperarnombrecliente(Respuesta);
   }
   /* recuperarnombre(id: string) {
      this.usuarioservice.listarusuario(id)
@@ -237,22 +293,73 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.listapedidouni.Documento = this.DocumentoAct;
     this.listapedidouni.EstadoPago = this.estadopago;
     this.listapedidouni.EstadoEnvio = this.estadoenvio;
-    /* this.pedidosservice.pedidoselec.Documento=this.DocumentoAct;
-     this.pedidosservice.pedidoselec.EstadoPago=this.estadopago;
-     this.pedidosservice.pedidoselec.EstadoEnvio=this.estadoenvio;*/
     this.pedidosservice.actualizarpedido(this.listapedidouni)
       .subscribe(res => {
         console.log(res);
       });
-    console.log(id);
-    this.recuperarpedido(id);
+    this.snackBar.open('Pago Guardado', '🧓🏻', {
+      duration: 2000,
+    });
+    location.reload();
   }
 
-  /*listararticulos() {
-    console.log('entraaa');
-    for (var j = 0; j < this.Articuloarreglo.length; j++) {
-      this.preciototal=this.preciototal+this.Articuloarreglo[j].precio
+  filtrarCarritos(id: string) {
+    if (id == '1') {
+      this.applyFilter('');
     }
-  }*/
+    if (id == '2') {
+      this.applyFilter('Pagado');
+    }
+    if (id == '3') {
+      this.applyFilter('Proceso');
+    }
+    if (id == '4') {
+      this.applyFilter('Reembolso');
+    }
+    if (id == '5') {
+      this.applyFilter('Error de Pago');
+    }
+  }
 
+
+  funcionprueba() {
+    var arr = new Array(),//[2, 1, 3, 2, 8, 9, 1, 3, 1, 1, 1, 2, 24, 25, 67, 10, 54, 2, 1, 9, 8, 1],
+      sortedArr = [],
+      count = 1;
+      for(var k=0;k<this.listpedidos.length;k++){
+        arr.push(this.listpedidos[k].estado);
+      }
+      console.log(arr);
+    sortedArr = arr.sort(function (a, b) {
+      return a - b
+    });
+    for (var i = 0; i < sortedArr.length; i = i + count) {
+      count = 1;
+      for (var j = i + 1; j < sortedArr.length; j++) {
+        if (sortedArr[i] === sortedArr[j])
+          count++;
+      }
+      console.log(sortedArr[i] + " = " + count);
+      if(sortedArr[i]=='Pagado'){
+        console.log(sortedArr[i] + " = " + count);
+        this.carPagados=count;
+      }
+      if(sortedArr[i]=='Proceso'){
+        console.log(sortedArr[i] + " = " + count);
+        this.carProceso=count;
+      }
+      if(sortedArr[i]=='Reembolso'){
+        console.log(sortedArr[i] + " = " + count);
+        this.carReembolso=count;
+      }
+      if(sortedArr[i]=='Error de pago'){
+        console.log(sortedArr[i] + " = " + count);
+        this.carErrorPago=count;
+      }
+    }
+  }
 }
+
+
+
+//table 
