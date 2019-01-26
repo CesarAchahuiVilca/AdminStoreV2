@@ -46,7 +46,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   idPedido: string = '';
   textofiltro: string = '';
   //table 2
-  displayedColumns: string[] = ['_id', 'idUsuario', 'entrega', 'fecha', 'pago', 'total', 'estado', 'btn'];
+  displayedColumns: string[] = ['_id', 'Correocliente', 'entrega', 'fecha', 'pago', 'total', 'estado', 'btn'];
   dataSource: MatTableDataSource<PedidosData>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -234,7 +234,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.totalcarritos = this.pedidosservice.pedidos.length;
         for (var j = 0; j < this.pedidosservice.pedidos.length; j++) {
           this.preciototalcarritos = this.preciototalcarritos + Number(this.pedidosservice.pedidos[j].PrecioTotal)
-          this.listpedidos.push({ _id: this.pedidosservice.pedidos[j]._id, idUsuario: this.pedidosservice.pedidos[j].idUsuario, entrega: this.pedidosservice.pedidos[j].EstadoEnvio, fecha: this.pedidosservice.pedidos[j].FechaCompra, pago: this.pedidosservice.pedidos[j].idTipoPago, total: this.pedidosservice.pedidos[j].PrecioTotal, estado: this.pedidosservice.pedidos[j].EstadoPago, direccion: this.pedidosservice.pedidos[j].idDireccion });
+          this.listpedidos.push({ _id: this.pedidosservice.pedidos[j]._id, Correocliente: this.pedidosservice.pedidos[j].Correocliente, entrega: this.pedidosservice.pedidos[j].EstadoEnvio, fecha: this.pedidosservice.pedidos[j].FechaCompra, pago: this.pedidosservice.pedidos[j].idTipoPago, total: this.pedidosservice.pedidos[j].PrecioTotal, estado: this.pedidosservice.pedidos[j].EstadoPago, idUsuario: this.pedidosservice.pedidos[j].idUsuario, direccion: this.pedidosservice.pedidos[j].idDireccion });
         }
         // this.dataSource = new MatTableDataSource(this.listpedidos);
         this.filtrarCarritos('1');
