@@ -8,16 +8,24 @@ import { Categoria } from '../categoria/categoria';
 import { CategoriaService } from '../categoria/categoria.service';
 import { Component, OnInit } from '@angular/core';
 import { Constantes } from '../constantes';
-import { DataTableDirective } from 'angular-datatables';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Marca } from '../marcadistri/marca';
 import { MarcaService} from '../marcadistri/marca.service';
 import { Miga } from '../miga';
 import { NgForm } from '@angular/forms';
-import { Subject } from 'rxjs';
 import { ViewChild } from '@angular/core';
 import { PlanesService} from '../planes/planes.service';
 import { Precios} from '../planes/precios';
+import {MatPaginator, MatSort, MatTableDataSource, MatTable} from '@angular/material';
+
+export interface articuloData {
+  id: string;
+  nombre: string;
+  categoria: string;
+  cantidad: Number;
+  estado: string;
+}
+
 
 @Component({
   selector: 'app-articulo',
@@ -26,13 +34,8 @@ import { Precios} from '../planes/precios';
   providers: [ArticuloService]
 })
 
-
 export class ArticuloComponent implements OnInit {
 
-  @ViewChild(DataTableDirective)
-  dtElement               : DataTableDirective;
-  dtOptions               : DataTables.Settings   = {};
-  dtTriggers              : Subject<any>          = new Subject();
   flag                    : boolean               = true;
   itemsDatosGenerales     : [number, string][]    = new Array();
   contador_datos_generales                        = 1;
@@ -97,45 +100,28 @@ export class ArticuloComponent implements OnInit {
        }
   };
 
+  // DATA TABLE ANGULAR MATERIAL  
+  displayedColumns: string[] = ['idArticulo', 'Descripcion', 'Cantidad', 'Categoria', 'Estado','editar'];
+  dataSource: MatTableDataSource<ArticuloMysql>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   constructor(public http: HttpClient, 
               public articuloService: ArticuloService,
               public categoriaService: CategoriaService,
               public caracteristicaService: CaracteristicaService,
               public marcaService: MarcaService,
-              public planesService: PlanesService) { }
+              public planesService: PlanesService) { 
+                this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
+
+              }
 
   ngOnInit() {
     this.itemsDatosGenerales.push([1,""]);
     this.itemsCaracteristicas.push(1);
     this.itemsImagenes.push("imagen-1");   
     this.listacaracteristicas = new Array();
-    this.getArticulosMysql();
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ elementos",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "Primero",
-          previous: "Anterior",
-          next: "Siguiente",
-          last: "Último"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }      
-    };
+    this.getArticulosMysql();    
     this.getCategorias();    
     this.getMarcas();
     this.obtenerListaPrecios();
@@ -238,19 +224,13 @@ export class ArticuloComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.dtTriggers.next();
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnDestroy(): void {
-    this.dtTriggers.unsubscribe();
   }
 
-  rerender(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.dtTriggers.next();
-    });
-  }
 
   getArticulosMysql(){
     this.mostrarCarga = true;
@@ -260,8 +240,10 @@ export class ArticuloComponent implements OnInit {
       this.articuloService.articulosMysql = res as ArticuloMysql[];
       if(this.articuloService.articulosMysql.length > 0){
         this.mostrarListaArticulos = true;
-      }   
-      this.rerender();
+      }
+      this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);   
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
       this.mostrarCarga = false;
     });
   }
@@ -513,6 +495,14 @@ export class ArticuloComponent implements OnInit {
           console.log(respuesta.mensaje);
         }           
       });
+    }
+  }
+  /// aplicar filtro en el data table de material
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 }

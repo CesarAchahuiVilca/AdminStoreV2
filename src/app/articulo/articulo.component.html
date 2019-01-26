@@ -23,49 +23,76 @@
                     <div class="col-lg-12">
                       <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
                         <img src="assets/imagenes/carga.gif"> Cargando Datos
+                      </div>                      
+                      <div class="datatable-example" style="width: 100%;" [hidden]="!mostrarListaArticulos">
+                          <mat-form-field>
+                              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                            </mat-form-field>
+                            
+                            <div class="mat-elevation-z2">
+                              <table mat-table [dataSource]="dataSource" matSort>
+                            
+                                <!-- ID Column -->
+                                <ng-container matColumnDef="idArticulo">
+                                  <th style="width: 20%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArticulo </th>
+                                  <td style="width: 20%;" mat-cell *matCellDef="let row"> {{row.idArticulo}} </td>
+                                </ng-container>
+                            
+                                <!-- Progress Column -->
+                                <ng-container matColumnDef="Descripcion">
+                                  <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </th>
+                                  <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row.Descripcion}} </td>
+                                </ng-container>
+                            
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="Cantidad">
+                                  <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                                  <td style="width: 10%;" mat-cell *matCellDef="let row"> {{row.Cantidad}} </td>
+                                </ng-container>
+                            
+                                <!-- Color Column -->
+                                <ng-container matColumnDef="Categoria">
+                                  <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Categoria </th>
+                                  <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row.Categoria}} </td>
+                                </ng-container>
+                                <!-- Color Column -->
+                                <ng-container matColumnDef="Estado">
+                                    <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                                    <td style="width: 25%;" mat-cell *matCellDef="let row">
+                                        <button *ngIf="row.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary"
+                                        (click)="cambiarvista(row,articuloForm)">Completar Registro
+                                        </button>
+                                      <i style="color: green;margin-left: 5%;" *ngIf="row.Estado == '1'" class="fa fa-check"></i>
+                                      <i style="color: green;margin-left: 5%;" *ngIf="row.Estado == '2'" class="fa fa-check"></i>
+                                   
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="editar">
+                                    <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                    <td style="width: 25%;" mat-cell *matCellDef="let row">
+                                        <div style="margin-left: 0px; display: flex; flex-direction: row;">
+                                            <div style="flex-grow: 0;margin-right: 2px;">
+                                              <button type="button" *ngIf="row.Estado == '0'" class="btn btn-pill btn-block btn-success"
+                                                style="width: 40px; height: 40px;" (click)="editarArticulo(row)"
+                                                data-toggle="modal" data-target="#modalcategoria" disabled><i class="fa fa-edit"></i></button>
+                                              <button type="button" *ngIf="row.Estado == '1'" class="btn btn-pill btn-block btn-success"
+                                                style="width: 40px; height: 40px;" (click)="editarArticulo(row)"
+                                                data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit"></i></button>
+                                            </div>
+                                          </div>
+                                    </td>
+                                </ng-container>
+                            
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                                </tr>
+                              </table>
+                            
+                              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                            </div>
+
                       </div>
-                      <div [hidden]="!mostrarListaArticulos">
-                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-sm table-striped table-hover"
-                          id="tabla_categoria">
-                          <thead>
-                            <tr>
-                              <th style="width: 8%;">Id Articulo</th>
-                              <th style="width: 30%">Descripcion</th>
-                              <th style="width: 20%">Categoria</th>
-                              <th style="width: 5%">Cantidad</th>
-                              <th style="width: 10%;">Estado</th>
-                              <th style="width: 5%;"></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let articulomysql of articuloService.articulosMysql">
-                              <td>{{articulomysql.idArticulo}}</td>
-                              <td>{{articulomysql.Descripcion}}</td>
-                              <td>{{articulomysql.Categoria}}</td>
-                              <td style="text-align: center;">{{articulomysql.Cantidad}}</td>
-                              <td style="text-align: center;">
-                                <button *ngIf="articulomysql.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary"
-                                  (click)="cambiarvista(articulomysql,articuloForm)">Completar Registro
-                                  {{articulomysql.Estado}}</button>
-                                <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '1'" class="fa fa-check"></i>
-                                <i style="color: green;margin-left: 5%;" *ngIf="articulomysql.Estado == '2'" class="fa fa-check"></i>
-                              </td>
-                              <td style="text-align: center;">
-                                <div style="margin-left: 0px; display: flex; flex-direction: row;">
-                                  <div style="flex-grow: 0;margin-right: 2px;">
-                                    <button type="button" *ngIf="articulomysql.Estado == '0'" class="btn btn-pill btn-block btn-success"
-                                      style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql)"
-                                      data-toggle="modal" data-target="#modalcategoria" disabled><i class="fa fa-edit"></i></button>
-                                    <button type="button" *ngIf="articulomysql.Estado == '1'" class="btn btn-pill btn-block btn-success"
-                                      style="width: 40px; height: 40px;" (click)="editarArticulo(articulomysql)"
-                                      data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit"></i></button>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+
                       <div [hidden]="!mostrarFormularioArticulo">
                         <form #articuloForm="ngForm">
                           <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="articuloService.articuloSeleccionado._id"
