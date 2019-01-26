@@ -1,5 +1,5 @@
 import { Constantes } from '../constantes';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CategoriaService } from './categoria.service';
 import { CaracteristicaService } from '../caracteristicas/caracteristica.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
@@ -9,11 +9,12 @@ import { Caracteristica }  from '../caracteristicas/caracteristica';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import { formDirectiveProvider } from '@angular/forms/src/directives/reactive_directives/form_group_directive';
 import { Miga } from '../miga';
+import {MatPaginator, MatSort, MatTableDataSource, MatTable} from '@angular/material';
 
 @Component({
   selector: 'app-categoria',
   templateUrl: './categoria.component.html',
-  styles: [''],
+  styleUrls: ['./categoria.component.css'],
   providers: [CategoriaService]
 })
 export class CategoriaComponent implements OnInit {
@@ -29,6 +30,12 @@ export class CategoriaComponent implements OnInit {
   caracteristicas         : Caracteristica[];
   mostrarCarga            : boolean = false;
   migas                   : Miga[] = [];
+
+  // DATA TABLE ANGULAR MATERIAL  
+  displayedColumns: string[] = ['irsubcategoria', 'nombre', 'descripcion', 'opciones'];
+  dataSource: MatTableDataSource<Categoria>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor( 
     public http: HttpClient, 
@@ -166,6 +173,9 @@ export class CategoriaComponent implements OnInit {
     .subscribe(res=>{
       this.todasCategorias = res as Categoria[];  
       this.mostrarCarga = false;
+      this.dataSource = new MatTableDataSource(this.todasCategorias);   
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
 
@@ -184,7 +194,10 @@ export class CategoriaComponent implements OnInit {
          document.getElementById("mensaje").innerHTML = "NO SE ENCONTRARON DATOS.";
       }else{
         document.getElementById("mensaje").innerHTML = "";
-      }     
+      }    
+      this.dataSource = new MatTableDataSource(this.categoriaService.categorias);   
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort; 
     });    
   }
   irASubCategoria(categoria: Categoria){
@@ -260,6 +273,14 @@ export class CategoriaComponent implements OnInit {
     for(var i = 0; i < this.caracteristicas.length; i++){
       var check = document.getElementById(this.caracteristicas[i].nombre) as HTMLInputElement;
       check.checked = false;
+    }
+  }
+  /// aplicar filtro en el data table de material
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 }
