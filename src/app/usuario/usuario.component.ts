@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
-import { DataTableDirective } from 'angular-datatables';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { DataTableDirective } from 'angular-datatables';
 import { Direccion } from './direccion';
 import { DireccionService } from './direccion.service';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatPaginator, MatSort, MatTableDataSource, MatTable } from '@angular/material';
 import { Miga } from '../miga';
 import { NgForm } from '@angular/forms';
 import { Provincia } from '../region/provincia';
@@ -26,11 +26,11 @@ import { UsuarioService } from './usuario.service';
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS} ]
 })
 
-export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
+export class UsuarioComponent implements  OnInit {
 
-  @ViewChild(DataTableDirective) dtElement  : DataTableDirective; 
-  dtOptions                                 : DataTables.Settings = {};
-  dtTriggers                                : Subject<any> = new Subject();
+  //@ViewChild(DataTableDirective) dtElement  : DataTableDirective; 
+  //dtOptions                                 : DataTables.Settings = {};
+  //dtTriggers                                : Subject<any> = new Subject();
   boton_accion                      : string;
   boton_direccion                   : string;
   direccion_header                  : string;
@@ -51,6 +51,15 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   tiposDocumento                    : string[];
   tiposVivienda                     : string[] = [ 'Casa', 'Oficina', 'Departamento', 'Edificio', 'Condominio', 'Otro'];
   usuario_header                    : string;
+  usuarioDataSource                 : MatTableDataSource<Usuario>;
+  direccionDataSource               : MatTableDataSource<Direccion>;
+  @ViewChild(MatPaginator) upaginator: MatPaginator;
+  @ViewChild(MatSort) usort         : MatSort;
+  @ViewChild(MatPaginator) dpaginator: MatPaginator;
+  @ViewChild(MatSort) dsort         : MatSort;
+  @ViewChild(MatTable) table        : MatTable<any>;
+  usuarioColumns: string[] = ['correo', 'nombres', 'documento', 'afiliacion', 'edit'];
+  direccionColumns: string[] = ['direccion', 'departamento', 'provincia', 'distrito'];
   
   /**
    * Constructor del componente Usuario
@@ -67,7 +76,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
    * Método que se ejecuta al iniciar el componente
    */
   ngOnInit() {
-    this.dtOptions = {
+    /*this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       language: {
@@ -92,7 +101,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
           sortDescending: ": Activar para ordenar la tabla en orden descendente"
         }
       }
-    };
+    };*/
     this.tiposDocumento = ['DNI'];
     this.getUsuarios();
     this.mostrarCarga = false;
@@ -101,26 +110,26 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   /**
    * Método que se ejecuta despues de cargar la vista del componente
    */
-  ngAfterViewInit() : void {
+  /*ngAfterViewInit() : void {
     this.dtTriggers.next();
-  }
+  }*/
 
   /**
    * Método que se ejecuta al destruir el datatable
    */
-  ngOnDestroy() : void {
+  /*ngOnDestroy() : void {
     this.dtTriggers.unsubscribe();
-  }
+  }*/
 
   /**
    * Método que se ejecuta para revisualizar el datatable
    */
-  reRender() : void {
+  /*reRender() : void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
       this.dtTriggers.next();
     });
-  }
+  }*/
 
   /**
    * Método que agrega una nueva dirección a un usuario
@@ -202,6 +211,17 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   /**
+   * Método para filtrar la tabla de datos
+   * @param filtro 
+   */
+  aplicarFiltro(filtro: string){
+    this.usuarioDataSource.filter = filtro.trim().toLowerCase();
+    if (this.usuarioDataSource.paginator) {
+      this.usuarioDataSource.paginator.firstPage();
+    }
+  }
+
+  /**
    * Método que selecciona un departamento 
    * @param departamento 
    */
@@ -262,6 +282,13 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   getDirecciones(correo: string) {
     this.direccionService.getDirecciones(correo).subscribe(res => {
       this.direccionService.direcciones = res as Direccion[];
+      //this.direccionDataSource.data.concat(this.direccionService.direcciones);
+      //this.direccionDataSource = new MatTableDataSource<Direccion>(this.direccionService.direcciones);
+      //console.log(this.direccionDataSource.data);
+      this.direccionDataSource = new MatTableDataSource(this.direccionService.direcciones);
+      this.direccionDataSource.paginator = this.dpaginator;
+      this.direccionDataSource.sort = this.dsort;
+      console.log(this.direccionDataSource.data);
     })
   }
 
@@ -277,7 +304,10 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.mostrarListaDirecciones = false;
     this.usuarioService.getUsuarios().subscribe(res => {
       this.usuarioService.usuarios = res as Usuario[];
-      this.reRender();
+      this.usuarioDataSource = new MatTableDataSource(this.usuarioService.usuarios);
+      this.usuarioDataSource.paginator = this.upaginator;
+      this.usuarioDataSource.sort = this.usort;
+      //this.reRender();
     });
   }
 

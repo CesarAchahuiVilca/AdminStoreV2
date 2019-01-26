@@ -17,3 +17,7 @@
 #provincia, #departamento, #distrito {
   width: 33%;
 }
+
+table{
+  width: 100%;
+}
