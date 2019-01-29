@@ -1,4 +1,10 @@
-
 .btn-opcion:hover{
     cursor: pointer !important; 
+}
+.btn-imagen{
+    color: gray; 
+    font-size: 100px;
+}
+.btn-imagen:hover{
+    cursor: pointer;
 }
