@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import { DataTableDirective } from 'angular-datatables';
 import { Direccion } from './direccion';
 import { DireccionService } from './direccion.service';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -12,14 +11,13 @@ import { Region } from '../region/region';
 import { RegionService } from '../region/region.service';
 import { Respuesta } from '../usuario/respuesta';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
-import { Subject } from 'rxjs';
 import { Usuario } from './usuario';
 import { UsuarioService } from './usuario.service';
 
 @Component({
   selector: 'app-usuario',
   templateUrl: './usuario.component.html',
-  styleUrls: ['./usuario.component.css'],
+  styleUrls: ['./usuario.component.scss'],
   providers: [ UsuarioService, 
     {provide: MAT_DATE_LOCALE, useValue: 'es-PE'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
@@ -28,29 +26,14 @@ import { UsuarioService } from './usuario.service';
 
 export class UsuarioComponent implements  OnInit {
 
-  //@ViewChild(DataTableDirective) dtElement  : DataTableDirective; 
-  //dtOptions                                 : DataTables.Settings = {};
-  //dtTriggers                                : Subject<any> = new Subject();
-  boton_accion                      : string;
-  boton_direccion                   : string;
-  direccion_header                  : string;
-  flag                              : boolean = true;
-  habilitarCorreo                   : boolean = true;
+  step                              : number = 1;
   migas                             = [new Miga('Clientes','usuarios')]
-  mostrarBotonDireccion             : boolean = false;
-  mostrarBotonLimpiar               : boolean = true;
-  mostrarBotonNuevo                 : boolean = false;
-  mostrarBotonVolver                : boolean = false;
-  mostrarCarga                      : boolean = true;
   mostrarDireccion                  : boolean = false;
-  mostrarFechaAfiliacion            : boolean = false;
   mostrarListaDirecciones           : boolean = false;
-  mostrarListaUsuarios              : boolean = false;
   mostrarMensajeCliente             : boolean = false;
   mostrarUsuarioForm                : boolean = false;
   tiposDocumento                    : string[];
   tiposVivienda                     : string[] = [ 'Casa', 'Oficina', 'Departamento', 'Edificio', 'Condominio', 'Otro'];
-  usuario_header                    : string;
   usuarioDataSource                 : MatTableDataSource<Usuario>;
   direccionDataSource               : MatTableDataSource<Direccion>;
   @ViewChild(MatPaginator) upaginator: MatPaginator;
@@ -59,7 +42,8 @@ export class UsuarioComponent implements  OnInit {
   @ViewChild(MatSort) dsort         : MatSort;
   @ViewChild(MatTable) table        : MatTable<any>;
   usuarioColumns: string[] = ['correo', 'nombres', 'documento', 'afiliacion', 'edit'];
-  direccionColumns: string[] = ['direccion', 'departamento', 'provincia', 'distrito'];
+  direccionColumns: string[] = ['direccion', 'departamento', 'provincia', 'distrito', 'edit'];
+  modificar : boolean = false;
   
   /**
    * Constructor del componente Usuario
@@ -76,60 +60,9 @@ export class UsuarioComponent implements  OnInit {
    * Método que se ejecuta al iniciar el componente
    */
   ngOnInit() {
-    /*this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ elementos",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "Primero",
-          previous: "Anterior",
-          next: "Siguiente",
-          last: "Último"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };*/
     this.tiposDocumento = ['DNI'];
     this.getUsuarios();
-    this.mostrarCarga = false;
   }
-
-  /**
-   * Método que se ejecuta despues de cargar la vista del componente
-   */
-  /*ngAfterViewInit() : void {
-    this.dtTriggers.next();
-  }*/
-
-  /**
-   * Método que se ejecuta al destruir el datatable
-   */
-  /*ngOnDestroy() : void {
-    this.dtTriggers.unsubscribe();
-  }*/
-
-  /**
-   * Método que se ejecuta para revisualizar el datatable
-   */
-  /*reRender() : void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.dtTriggers.next();
-    });
-  }*/
 
   /**
    * Método que agrega una nueva dirección a un usuario
@@ -239,8 +172,6 @@ export class UsuarioComponent implements  OnInit {
    * @param direccion 
    */
   editarDireccion(direccion: Direccion) {
-    this.boton_direccion = "EDITAR DIRECCIÓN";
-    this.direccion_header = "MODIFICAR DIRECCIÓN";
     var i = 0;
     while (this.regionService.regiones[i].departamento != direccion.departamento) {
       i++
@@ -260,19 +191,12 @@ export class UsuarioComponent implements  OnInit {
    * @param usuario 
    */
   editarUsuario(usuario: Usuario) {
-    this.usuario_header = "MODIFICAR USUARIO";
-    this.boton_accion = "GUARDAR CAMBIOS";
     this.usuarioService.usuarioSeleccionado = usuario;
     this.mostrarUsuarioForm = true;
-    this.mostrarListaUsuarios = false;
-    this.mostrarBotonLimpiar = false;
-    this.mostrarBotonNuevo = false;
-    this.mostrarBotonVolver = true;
     this.mostrarListaDirecciones = true;
-    this.mostrarBotonDireccion = true;
-    this.habilitarCorreo = false;
     this.getDirecciones(this.usuarioService.usuarioSeleccionado._id);
     this.getRegiones();
+    this.step = 0;
   }
 
   /**
@@ -282,13 +206,9 @@ export class UsuarioComponent implements  OnInit {
   getDirecciones(correo: string) {
     this.direccionService.getDirecciones(correo).subscribe(res => {
       this.direccionService.direcciones = res as Direccion[];
-      //this.direccionDataSource.data.concat(this.direccionService.direcciones);
-      //this.direccionDataSource = new MatTableDataSource<Direccion>(this.direccionService.direcciones);
-      //console.log(this.direccionDataSource.data);
       this.direccionDataSource = new MatTableDataSource(this.direccionService.direcciones);
       this.direccionDataSource.paginator = this.dpaginator;
       this.direccionDataSource.sort = this.dsort;
-      console.log(this.direccionDataSource.data);
     })
   }
 
@@ -297,9 +217,6 @@ export class UsuarioComponent implements  OnInit {
    */
   getUsuarios() {
     this.mostrarUsuarioForm = false;
-    this.mostrarListaUsuarios = true;
-    this.mostrarBotonNuevo = true;
-    this.mostrarBotonVolver = false;
     this.mostrarDireccion = false;
     this.mostrarListaDirecciones = false;
     this.usuarioService.getUsuarios().subscribe(res => {
@@ -307,7 +224,6 @@ export class UsuarioComponent implements  OnInit {
       this.usuarioDataSource = new MatTableDataSource(this.usuarioService.usuarios);
       this.usuarioDataSource.paginator = this.upaginator;
       this.usuarioDataSource.sort = this.usort;
-      //this.reRender();
     });
   }
 
@@ -328,23 +244,13 @@ export class UsuarioComponent implements  OnInit {
   nueva_direccion(form ? : NgForm, usuario ? : string) {
     this.direccionService.dirSelected = new Direccion();
     this.resetDireccionForm(form);
-    this.direccion_header = "NUEVA DIRECCIÓN";
-    this.boton_direccion = "GUARDAR NUEVA DIRECCIÓN";
     this.mostrarDireccion = true;
     this.direccionService.dirSelected.usuario = usuario;
   }
 
-  /**
-   * Método que muestra el formulario para un nuevo usuario
-   * @param form 
-   */
-  nuevo_usuario(form ? : NgForm) {
-    this.usuario_header = "NUEVO USUARIO";
-    this.boton_accion = "CREAR USUARIO";
-    this.mostrarUsuarioForm = true;
-    this.mostrarListaUsuarios = false;
-    this.mostrarBotonNuevo = false;
-    this.mostrarBotonVolver = true;
+  nuevoUsuario(step: number){
+    this.step = 0;
+    this.usuarioService.usuarioSeleccionado = new Usuario();
   }
 
   /**
@@ -391,6 +297,14 @@ export class UsuarioComponent implements  OnInit {
       this.usuarioService.usuarioSeleccionado = new Usuario();
       form.reset();
     }
+  }
+
+  /**
+   * Cambia el panel a mostrar
+   * @param step : número del panel
+   */
+  setStep(step: number){
+    this.step = step;
   }
 
 }

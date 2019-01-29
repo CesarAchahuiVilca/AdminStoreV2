@@ -3,81 +3,82 @@
 <div class="app-body">
   <main class="main">
     <app-breadcrumb [migas]="migas"></app-breadcrumb>
-    <div class="container-fluid">
-      <div class="animated fadeIn">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-header">
-                <button class="btn btn-md btn-link" type="button" (click)="getCaracteristicas()"><i class="fa fa-align-justify"></i></button>
-                &nbsp;CARACTERÍSTICAS
-              </div>
-              <div class="card-body">
-                <div class="row col-form-label">
-                </div>
-                <form form #caracteristicaForm="ngForm" class="card form-horizontal" (ngSubmit)="saveCaracteristica(caracteristicaForm)">
-                  <div class="card-header">
-                    {{caracteristicaHeader}}
-                  </div>
-                  <div class="card-body">
-                    <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected._id">
-                    <div class="form-group row">
-                      <label class="col-md-2 col-form-label" for="nombres">Nombre de la Característica</label>
-                      <div class="col-md-4">
-                        <input class="form-control" id="nombre" type="text" name="nombre" #nombre="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected.nombre"
-                          required>
-                        <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
-                          <div *ngIf="nombre.errors.required">
-                            El nombre de la característica es obligatorio.
-                          </div>
-                        </div>
-                      </div>
-                      <label class="col-md-2 col-form-label" for="medida">Unidad de Medida</label>
-                      <div class="col-md-4">
-                        <input class="form-control" id="medida" type="text" name="medida" #medida="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected.medida">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-footer">
-                    <div id="botones" class="col-md-6 col-form-label">
-                      <button class="btn btn-md btn-success" type="submit">
-                        {{accionBoton}}</button>
-                      <button id="limpiar" class="btn btn-md btn-danger" type="button" (click)="resetForm(caracteristicaForm)">Limpiar</button>
-                    </div>
-                  </div>
-                </form>
-                <div>
-                  <div id="carga" style="width: 100%;text-align: center;">
-                    <img src="assets/imagenes/carga.gif"> Cargando Datos
-                  </div>
-                  <table id="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggers" class="table table-responsive-sm table-bordered table-striped table-sm">
-                    <thead>
-                      <tr>
-                        <th width="50%">NOMBRE</th>
-                        <th width="30%">MEDIDA</th>
-                        <th width="10%">EDITAR</th>
-                        <th width="10%">ELIMINAR</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let caracteristica of caracteristicaService.caracteristicas; index as i">
-                        <td>{{caracteristica.nombre}}</td>
-                        <td>{{caracteristica.medida}}</td>
-                        <td><button class="btn btn-pill btn-info" type="button" (click)="editarCaracteristica(caracteristica)"><i
-                              class="fa fa-edit"></i></button>
-                        </td>
-                        <td><button class="btn btn-pill btn-danger" type="button" data-toggle="modal" data-target="#modalEliminar"
-                            (click)="selectCaracteristica(caracteristica, i)"><i class="fa fa-close"></i></button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+    <mat-card id="cardCaracteristica">
+      <mat-card-header>
+        <mat-card-title>CARACTERÍSTICAS</mat-card-title>
+        <button mat-mini-fab color="primary" id="iconNuevo" (click)="nuevaCaracteristica()">
+          <mat-icon aria-label="Nueva Característica">add_circle</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="step == 0" (opened)="setStep(0)" (closed)="nuevaCaracteristica()">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Característica</mat-panel-title>
+              <mat-panel-description>Datos de una característica</mat-panel-description>
+            </mat-expansion-panel-header>
+            <form #caracteristicaForm="ngForm" (ngSubmit)="saveCaracteristica(caracteristicaForm)">
+              <mat-card>
+                <mat-card-title>Característica</mat-card-title>
+                <mat-card-content>
+                  <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected._id">
+                  <mat-form-field id="nombre">
+                    <input matInput name="nombre" #nombre="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected.nombre"
+                      placeholder="Nombre de la Característica" required>
+                    <mat-error *ngIf="nombre.invalid && (nombre.dirty || nombre.touched) && nombre.errors.required">El
+                      nombre es obligatorio.</mat-error>
+                  </mat-form-field>
+                  <mat-form-field id="medida">
+                    <input matInput name="medida" #medida="ngModel" [(ngModel)]="caracteristicaService.caracteristicaSelected.medida"
+                      placeholder="Medida de la característica">
+                  </mat-form-field>
+                </mat-card-content>
+                <mat-card-actions>
+                  <button mat-raised-button color="primary" type="submit">{{accionBoton}}</button>
+                </mat-card-actions>
+              </mat-card>
+            </form>
+          </mat-expansion-panel>
+          <mat-expansion-panel [expanded]="step == 1" (opened)="setStep(1)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Características</mat-panel-title>
+              <mat-panel-description>Lista de las caracteristicas</mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="datos" matSort>
+                <ng-container matColumnDef="nombre">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                  <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                </ng-container>
+                <ng-container matColumnDef="medida">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Medida </th>
+                  <td mat-cell *matCellDef="let element"> {{element.medida}} </td>
+                </ng-container>
+                <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef>Editar</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button color="accent">
+                      <mat-icon aria-label="Editar" (click)="editarCaracteristica(element)">create</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="delete">
+                  <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button color="warn">
+                      <mat-icon aria-label="Eliminar" (click)="selectCaracteristica(element)">create</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="caracteristicasCol"></tr>
+                <tr mat-row *matRowDef="let row; columns: caracteristicasCol;"></tr>
+              </table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card-content>
+    </mat-card>
   </main>
 </div>
 

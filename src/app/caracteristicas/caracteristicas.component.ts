@@ -1,13 +1,12 @@
 import { Caracteristica } from './caracteristica';
 import { CaracteristicaService } from './caracteristica.service';
 import { Component, OnInit, ViewChild} from '@angular/core';
-import { DataTableDirective } from 'angular-datatables';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { Miga } from '../miga'
 import { NgForm } from '@angular/forms';
 import { Respuesta } from '../usuario/respuesta';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-caracteristicas',
@@ -17,72 +16,22 @@ import { Subject } from 'rxjs';
 })
 export class CaracteristicasComponent implements OnInit {
  
-  @ViewChild(DataTableDirective) dtElement : DataTableDirective; 
-  public dtOptions: DataTables.Settings = {};
-  public dtTriggers: Subject<any> = new Subject();
   public caracteristicaHeader: string;
   public accionBoton: string = 'GUARDAR';
   public indice : number;
   public migas = [ new Miga('Características','/caracteristicas')];
+  @ViewChild(MatPaginator) paginador: MatPaginator;
+  @ViewChild(MatSort) ordenar: MatSort;
+  caracteristicasCol: string[] = ['nombre', 'medida', 'edit', 'delete'];
+  datos              : MatTableDataSource<Caracteristica>;
+  step : number = 1;
 
   constructor(public caracteristicaService: CaracteristicaService, public snackBar: MatSnackBar) {}
 
   ngOnInit() {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ elementos",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "Primero",
-          previous: "Anterior",
-          next: "Siguiente",
-          last: "Último"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }  
-    };
     this.caracteristicaHeader = 'NUEVA CARACTERÍSTICA';
     this.accionBoton = 'Guardar';   
-    document.getElementById('carga').hidden = false;
     this.getCaracteristicas();
-    document.getElementById('carga').hidden = true; 
-  }
-
-  /**
-   * Método que se ejecuta despues de cargar la vista del componente
-   */
-  ngAfterViewInit() : void {
-    this.dtTriggers.next();
-  }
-
-  /**
-   * Método que se ejecuta al destruir el datatable
-   */
-  ngOnDestroy() : void {
-    this.dtTriggers.unsubscribe();
-  }
-
-  /**
-   * Método que se ejecuta para revisualizar el datatable
-   */
-  reRender() : void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.dtTriggers.next();
-    });
   }
 
   /**
@@ -95,7 +44,6 @@ export class CaracteristicasComponent implements OnInit {
         this.openSnackBar(respuesta.status, respuesta.msg);
         this.caracteristicaService.caracteristicaSelected = new Caracteristica();
         this.caracteristicaService.caracteristicas.splice(this.indice,1);
-        this.reRender();
       }else {
         this.openSnackBar(respuesta.status, respuesta.error);
       }
@@ -108,6 +56,8 @@ export class CaracteristicasComponent implements OnInit {
    */
   editarCaracteristica(caracteristica: Caracteristica){
     this.caracteristicaService.caracteristicaSelected = caracteristica;
+    this.step = 0;
+    console.log('Hola');
   }
 
   /**
@@ -116,8 +66,15 @@ export class CaracteristicasComponent implements OnInit {
   getCaracteristicas(){
     this.caracteristicaService.getCaracteristicas().subscribe(res =>{
       this.caracteristicaService.caracteristicas = res as Caracteristica[];
-      this.reRender();
+      this.datos = new MatTableDataSource(this.caracteristicaService.caracteristicas);
+      this.datos.paginator = this.paginador;
+      this.datos.sort = this.ordenar;
     })
+  }
+
+  nuevaCaracteristica(){
+    this.caracteristicaService.caracteristicaSelected = new Caracteristica();
+    this.step = 0;
   }
 
   /**
@@ -165,9 +122,9 @@ export class CaracteristicasComponent implements OnInit {
    * @param caracteristica : datos de la característica
    * @param i : índice de la característica
    */
-  selectCaracteristica(caracteristica: Caracteristica, i: number){
+  selectCaracteristica(caracteristica: Caracteristica){
     this.caracteristicaService.caracteristicaSelected = caracteristica;
-    this.indice = i;
+    //this.indice = i;
   }
 
   /**
@@ -198,6 +155,10 @@ export class CaracteristicasComponent implements OnInit {
       panelClass: [clase],
       data: mensaje
     });
+  }
+
+  setStep(step : number){
+    this.step = step;
   }
   
 }

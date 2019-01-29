@@ -2,3 +2,22 @@
   margin-left: .25rem;
   margin-right: .25rem;
 }
+
+#iconNuevo {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+#cardCaracteristica {
+  margin: 10px;
+}
+
+#nombre, #medida {
+  width: 50%;
+  padding: 0px 15px;
+}
+
+table {
+  width: 100%;
+}
