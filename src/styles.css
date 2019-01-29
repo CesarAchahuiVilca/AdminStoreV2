@@ -3,8 +3,13 @@
 
 .exito {
     background-color: #2ECC71;
+    z-index: 9999;
 }
 
 .error {
     background-color: #E74C3C;
+    z-index: 9999;
+}
+.cdk-overlay-container{
+    z-index: 9999;
 }

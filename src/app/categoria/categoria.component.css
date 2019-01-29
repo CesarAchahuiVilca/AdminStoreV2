@@ -8,3 +8,20 @@
 .btn-imagen:hover{
     cursor: pointer;
 }
+.imagen-cat{
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 178px;
+}
+.btn-cancel-img{
+    position: absolute; 
+    background-color:transparent;
+    top: 0; 
+    right: 0;
+    color: black;
+    font-weight: bold;
+}
+.btn-cancel-img:hover{
+    cursor: pointer;
+}

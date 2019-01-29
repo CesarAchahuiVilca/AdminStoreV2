@@ -7,277 +7,90 @@
       <div class="animated fadeIn">
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="card" style="width: 100%;">
-              <div class="card-header">
-                <strong>Lista de Categorias</strong>
-              </div>
-              <div class="card-body">
+            <mat-card style="width: 100%;">
+                <mat-card-header>
+                    <mat-card-title>Categorias</mat-card-title>
+                  </mat-card-header>
+                  <mat-divider></mat-divider>
+                  <br>
                 <div class="row">
-                  <div class="col-md-8">
-                    <div class="breadcrum-categorias row" style="margin-left: 5px;">
-                      <i class="fa fa-home"> </i>
-                      <div class="item-breadcrumb-categorias" *ngFor="let categoria of breadcrumb_categorias" style="margin-top: -3px;">
-                        <a class="item-breadcrumb-categoria" (click)="irASubCategoria(categoria)">{{categoria.nombre}}</a>/
+                    <div class="col-md-8">
+                      <div class="breadcrum-categorias row" style="margin-left: 5px;">
+                        <i class="fa fa-home"> </i>
+                        <div class="item-breadcrumb-categorias" *ngFor="let categoria of breadcrumb_categorias" style="margin-top: -3px;">
+                          <a class="item-breadcrumb-categoria" (click)="irASubCategoria(categoria)">{{categoria.nombre}}</a>/
+                        </div>
                       </div>
+                      <br>
                     </div>
                     <br>
-                  </div>
-                  <br>
-                  <div class="col-md-12">
-                    <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
-                      <img src="assets/imagenes/carga.gif"> Cargando Datos
-                    </div>
-                    <div id="contenido_lista_categorias">                   
-                      <div class="campo-busqueda" style="display:flex; flex-direction:row; justify-content: flex-start;">
-                        <div style="margin-right: 5px;">
-                      <button mat-raised-button (click)="limpiarform(categoriaForm)" data-toggle="modal" data-target="#modalcategoria2"><i class="fa fa-plus"></i> Agregar Categoria</button>
-                        </div>
-                        <div class="mat-elevation-z2" style="width: 40%; ;width: 100%; margin-left: 5px;padding-left: 10px;">
-                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" style="height: 100%; width: 100%;">
-                        </div>                        
-                      </div>                      
-                      <br>
-                      <div class="mat-elevation-z2">
-                        <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
-                      
-                          <!-- icono + -->
-                          <ng-container matColumnDef="irsubcategoria">
-                            <th style="width: 5%;" mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
-                            <td style="width: 5%;" mat-cell *matCellDef="let row"> 
-                              <i class="fa fa-plus"
-                              title="Ver Sub Categorias" (click)="mostrarSubCategorias(row)"></i> </td>
-                          </ng-container>
-                      
-                          <!-- nombre categoria -->
-                          <ng-container matColumnDef="nombre">
-                            <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                            <td style="width: 30%;" mat-cell *matCellDef="let row"> {{row.nombre}} </td>
-                          </ng-container>
-                      
-                          <!-- Name Column -->
-                          <ng-container matColumnDef="descripcion">
-                            <th style="width: 50%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </th>
-                            <td style="width: 50%;" mat-cell *matCellDef="let row"> {{row.descripcion}} </td>
-                          </ng-container>
-                      
-                          <!-- Color Column -->
-                          <ng-container matColumnDef="opciones">
-                            <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> </th>
-                            <td style="width: 15%;" mat-cell *matCellDef="let row">
-                              <!--<div style="margin-left: 0px; display: flex; flex-direction: row;">
-                                <div style="flex-grow: 0;margin-right: 2px;">
-                                  <button type="button" class="btn btn-pill btn-block btn-success" style="width: 40px; height: 40px;"
-                                    (click)="editarCategoria(row)" data-toggle="modal" data-target="#modalcategoria"><i
-                                      class="fa fa-edit"></i></button>
-                                </div>
-                                <div style="flex-grow: 1;">
-                                  <button type="button" class="btn btn-pill btn-block btn-danger" style="width: 40px;height: 40px;"
-                                    (click)="eliminarCategoria(row._id)"><i class="fa fa-trash"></i></button>
-                                </div>
-                              </div>-->
-                              <div>
-                                <mat-icon class="btn-opcion" aria-label="Example icon-button with a heart icon"  (click)="editarCategoria(row)" data-toggle="modal" data-target="#modalcategoria2" color="primary">edit</mat-icon>
-                              
-                                <mat-icon class="btn-opcion" aria-label="Example icon-button with a heart icon"(click)="eliminarCategoria(row._id)" color="warn" >delete</mat-icon>
-                              </div>
-                             </td>
-                          </ng-container>
-                      
-                          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-                          </tr>
-                        </table>
-                      
-                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    <div class="col-md-12">
+                      <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
+                        <img src="assets/imagenes/carga.gif"> Cargando Datos
                       </div>
-
-
-
+                      <div id="contenido_lista_categorias">                   
+                        <div class="campo-busqueda" style="display:flex; flex-direction:row; justify-content: flex-start;">
+                          <div style="margin-right: 5px;">
+                        <button mat-raised-button (click)="limpiarform()" data-toggle="modal" data-target="#modalcategoria2"><i class="fa fa-plus"></i> Agregar Categoria</button>
+                          </div>
+                          <div class="mat-elevation-z2" style="width: 40%; ;width: 100%; margin-left: 5px;padding-left: 10px;">
+                              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" style="height: 100%; width: 100%;">
+                          </div>                        
+                        </div>                      
+                        <br>
+                        <div class="mat-elevation-z2">
+                          <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
+                        
+                            <!-- icono + -->
+                            <ng-container matColumnDef="irsubcategoria">
+                              <th style="width: 5%;" mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+                              <td style="width: 5%;" mat-cell *matCellDef="let row"> 
+                                <i class="fa fa-plus"
+                                title="Ver Sub Categorias" (click)="mostrarSubCategorias(row)"></i> </td>
+                            </ng-container>
+                        
+                            <!-- nombre categoria -->
+                            <ng-container matColumnDef="nombre">
+                              <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                              <td style="width: 30%;" mat-cell *matCellDef="let row"> {{row.nombre}} </td>
+                            </ng-container>
+                        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="descripcion">
+                              <th style="width: 50%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </th>
+                              <td style="width: 50%;" mat-cell *matCellDef="let row"> {{row.descripcion}} </td>
+                            </ng-container>
+                        
+                            <!-- Color Column -->
+                            <ng-container matColumnDef="opciones">
+                              <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+                              <td style="width: 15%;" mat-cell *matCellDef="let row">
+                                <div>
+                                  <mat-icon class="btn-opcion" aria-label="Example icon-button with a heart icon"  (click)="editarCategoria(row)" data-toggle="modal" data-target="#modalcategoria2" color="primary">edit</mat-icon>
+                                
+                                  <mat-icon class="btn-opcion" aria-label="Example icon-button with a heart icon"(click)="eliminarCategoria(row._id)" color="warn" >delete</mat-icon>
+                                </div>
+                               </td>
+                            </ng-container>
+                        
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                            </tr>
+                          </table>
+                        
+                          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                        </div>
+                      </div>
+                      <div id="mensaje"></div>
                     </div>
-                    <div id="mensaje"></div>
                   </div>
-                </div>
-              </div>
-            </div>
+            </mat-card>
           </div>
         </div>
       </div>
     </div>
   </main>
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="modalcategoria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document" id="modalcategoriacontenido">
-    <div class="modal-content">
-      <div class="modal-header" style="background-color: orange; color: white;">
-        <h5 class="modal-title" id="titulomodal"><i class="fa fa-plus"></i> Nueva Categoria</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
-          <i class="fa fa-close"></i>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form #categoriaForm="ngForm" (ngSubmit)="guardarCategoria(categoriaForm)">
-          <div class="row">
-            <div class="col-lg-5">
-              <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada._id"
-                name="_id" type="text" placeholder="ID CATEGORIA" style="display: none;">
-              <div class="form-group">
-                <label for="name">Nombre</label>
-                <input class="form-control" id="nombre" #nombre="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.nombre"
-                  name="nombre" type="text" placeholder="Ingrese nombre de la categoria" required>
-                <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
-                  <div *ngIf="nombre.errors.required">
-                    El campo Nombre es requerido
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="name">Descripción</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" #descripcion="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.descripcion"
-                  rows="3" placeholder="Ingrese descripcion de la categoria" required></textarea>
-                <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="alert alert-danger">
-                  <div *ngIf="descripcion.errors.required">
-                    El campo Descripcion es requerido
-                  </div>
-                </div>
-              </div>
-              <input type="text" name="imagen" id="imagen" #imagen="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.imagen"
-                style="display: none;" required>
-              <div class="form-group">
-                <label for="name">Categoria Padre</label>
-                <select class="form-control" id="padre" name="padre" #padre="ngModel" [(ngModel)]="categoriaService.categoriaSeleccionada.padre">
-                  <option value="root">Principal</option>
-                  <option *ngFor="let catpadre of todasCategorias" value="{{catpadre._id}}">{{catpadre.nombre}}</option>
-                </select>
-                <div *ngIf="padre.invalid && (padre.dirty || padre.touched)" class="alert alert-danger" required>
-                  <div *ngIf="padre.errors.required">
-                    El campo Padre es requerido
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="caracteristicas">Características</label>
-                <div class="col-form-label">
-                  <div class="form-check checkbox" *ngFor="let caracteristica of caracteristicas">
-                    <input id="{{caracteristica.nombre}}" type="checkbox" class="form-check-input" value="{{caracteristica.nombre}}"
-                      (click)="checkCaracteristica(caracteristica)">
-                    <label for="{{caracteristica.nombre}}" class="form-check-label">{{caracteristica.nombre}}</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-7">
-              <div class="row">
-                <div class="col-lg-12">
-                  <label>Imagen de portada de la categoria</label>
-                </div>
-                <div class="col-lg-12">
-                  <div style="display:flex; flex-direction: row; width: 100%; ">
-                    <div style="flex-grow: 0;margin-right: 2px;">
-                      <span class="btn btn-primary" style="background-color: orange; border: 1px solid gray;" (click)="clearProgress()">
-                        <i class="fa fa-search"></i> <input type="file" hidden="true" (change)="onFileSelected($event)"
-                          id="archivo">
-                      </span>
-                    </div>
-                    <div style="flex-grow: 0;margin-right: 2px; width: 50%;">
-                      <div class="progress" style="height: 35px;">
-                        <label id="nombrearchivo"></label>
-                        <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                          aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: orange; float: left;"></div>
-                      </div>
-                    </div>
-                    <div style="flex-grow: 0;margin-right: 2px;">
-                      <button class="btn btn-success input-group-btn" style="background-color: dimgrey;" (click)="onUpload($event)"><i
-                          class="fa fa-upload"></i> Subir</button>
-                    </div>
-                  </div>
-                </div>
-                <div *ngIf="imagen.invalid && (padre.dirty || imagen.touched)" class="alert alert-danger">
-                  <div *ngIf="imagen.errors.required">
-                    Debe elegir y subir una imagen para la categoria
-                  </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="cont-imagen">
-                    <img src="" style="width: 100%; height: auto;" id="imagen-select">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-12" style="text-align: right">
-              <hr>
-              <button type="button" class="btn btn-default" (click)="limpiarform(categoriaForm)"><i class="fa fa-trash"></i>
-                Limpiar</button>
-              <button type="submit" class="btn btn-success" style="margin-left: 10px;"> <i class="fa fa-save"></i>
-                Guardar</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<button id="btnmensajeexito" style="display: none" data-toggle="modal" data-target="#modalmensajeexito"></button>
-<button id="btnmensajeerror" style="display: none" data-toggle="modal" data-target="#modalmensajeerror"></button>
-
-<!-- Modal mensajes-->
-<div class="modal fade" id="modalmensajeerror" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document" style="margin-top: 15%; ">
-    <div class="modal-content" style="border:3px solid  rgb(150, 65, 44) !important; background-color: rgb(255, 255, 255);"
-      id="contenedor-mensaje">
-      <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
-          <i class="fa fa-close"></i>
-        </button>
-        <br>
-        <div style="display: flex; flex-direction: row;">
-          <div style="flex-grow: 0">
-            <img src="assets/imagenes/error.png" alt="" id="imagen-respuesta">
-          </div>
-          <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
-            <label id="resultadoerror"></label>
-          </div>
-        </div>
-        <div style="width: 100%; text-align: right;">
-          <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal"> Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal mensajes-->
-<div class="modal fade" id="modalmensajeexito" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document" style="margin-top: 15%; ">
-    <div class="modal-content" style="border:3px solid  rgb(5, 173, 41) !important; background-color: rgb(255, 255, 255);"
-      id="contenedor-mensaje">
-      <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModalMensaje">
-          <i class="fa fa-close"></i>
-        </button>
-        <br>
-        <div style="display: flex; flex-direction: row;">
-          <div style="flex-grow: 0">
-            <img src="assets/imagenes/checked.png" alt="">
-          </div>
-          <div style="flex-grow: 0; margin-top: auto; margin-bottom: auto; margin-left: 3px;">
-            <label id="resultadoexito"></label>
-          </div>
-        </div>
-        <div style="width: 100%; text-align: right;">
-          <button class="btn btn-danger" style="background-color: orange;color: white;" data-dismiss="modal"> Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 <!-- MODAL CATATEGORIAS MATERIAL -->
 <div class="modal fade" id="modalcategoria2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
   <div class="modal-dialog modal-lg" role="document" id="modalcategoriacontenido" style="display: flex; align-items: center; justify-content: center;">
@@ -291,17 +104,22 @@
                   <mat-divider></mat-divider>
                   <mat-card-content style="display:flex;flex-direction: column; ">
                     <div style="display:flex;flex-direction: row; flex-wrap: wrap;" >
-                        <div class="cont-img-cat" style="width: 50%; margin-top: 10px;">
+                        <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">
                             <h6>Imagen de Portada </h6>
-                            <mat-card style="width: 100%; height: 180px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;">
-                                <i class="material-icons btn-imagen" (click)="abrirDialogoImagen()">add_photo_alternate</i>                        
+                            <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">
+                            <mat-card style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
+                                <i  [hidden]="mostrarImagen" class="material-icons btn-imagen" (click)="abrirInputFile()">add_photo_alternate</i>     
+                                <img  [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">     
+                                <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>          
                             </mat-card>
                           </div>
                           
-                          <div class="inputs-categoria" style="width: 45%; display: flex; flex-direction: column; margin-left: 5px; align-items: center;">
+                          <div class="inputs-categoria" style="width: 50%; display: flex; flex-direction: column; margin-left: 5px; align-items: center;">
                             <br>  
+                              <input type="text" name="imagen" id="imagen" [(ngModel)]="categoriaService.categoriaSeleccionada.imagen" style="display: none;" required>
+                              <input class="form-control" id="_id" [(ngModel)]="categoriaService.categoriaSeleccionada._id" name="_id" type="text" placeholder="ID CATEGORIA" style="display: none;">
                               <mat-form-field class="example-full-width" style="width: 80%;">
-                                <input matInput placeholder="Nombre Categoria">
+                                <input matInput placeholder="Nombre Categoria" id="nombre" [(ngModel)]="categoriaService.categoriaSeleccionada.nombre">
                               </mat-form-field>
                               <mat-form-field style="width: 80%;">
                                 <select matNativeControl  placeholder = "Categoria Padre" [(ngModel)]="categoriaService.categoriaSeleccionada.padre">
@@ -310,12 +128,12 @@
                                 </select>
                               </mat-form-field >                 
                               <mat-form-field style="width: 80%;">
-                                <textarea matInput placeholder="Descripción" rows="4"></textarea>
+                                <textarea matInput placeholder="Descripción" rows="4" id="descripcion" name="descripcion" [(ngModel)]="categoriaService.categoriaSeleccionada.descripcion"></textarea>
                               </mat-form-field>
                           </div>
-                    </div>
-                    
-                    <div >
+                    </div>                    
+                    <div>
+                      <br>
                       <mat-card style="display: flex; width: 100%; flex-direction: row; flex-wrap: wrap; ">
                           <div style="width: 100%;">
                               <h6 style="font-weight: 600">Caracteristicas</h6>
@@ -326,22 +144,16 @@
                               <label for="{{caracteristica.nombre}}" class="form-check-label">{{caracteristica.nombre}}</label>
                             </div>
                       </mat-card>               
-                    </div>
-                    
+                    </div>                    
                   </mat-card-content>
                   <mat-divider></mat-divider>
-                  <mat-card-actions>                      
-                      <button mat-raised-button color="primary"><i class="material-icons">
-                          save
-                          </i>Guardar</button>
-                      <button mat-raised-button><i class="material-icons">
-                          cancel
-                          </i>Salir</button>
+                  <mat-card-actions style="display: flex; flex-direction: row; align-items: flex-end;justify-content: flex-end;">                      
+                      <button mat-raised-button color="primary"(click)="guardarCategoria()"><i class="material-icons">save</i>Guardar</button>
+                      <button mat-raised-button data-dismiss="modal" aria-label="Close" id="btnCerrarModal"><i class="material-icons">cancel</i>Salir</button>
                   </mat-card-actions>
                 </mat-card>
           </div>
-        </div>
-        
+        </div>        
       </div>
     </div>
   </div>

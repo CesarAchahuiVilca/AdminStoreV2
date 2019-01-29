@@ -9,7 +9,8 @@ import { Caracteristica }  from '../caracteristicas/caracteristica';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import { formDirectiveProvider } from '@angular/forms/src/directives/reactive_directives/form_group_directive';
 import { Miga } from '../miga';
-import {MatPaginator, MatSort, MatTableDataSource, MatTable} from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource, MatTable, MatSnackBar} from '@angular/material';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 
 @Component({
   selector: 'app-categoria',
@@ -30,6 +31,7 @@ export class CategoriaComponent implements OnInit {
   caracteristicas         : Caracteristica[];
   mostrarCarga            : boolean = false;
   migas                   : Miga[] = [];
+  mostrarImagen           : boolean = false;
 
   // DATA TABLE ANGULAR MATERIAL  
   displayedColumns: string[] = ['irsubcategoria', 'nombre', 'descripcion', 'opciones'];
@@ -40,12 +42,12 @@ export class CategoriaComponent implements OnInit {
   constructor( 
     public http: HttpClient, 
     public categoriaService: CategoriaService,
-    public caracteristicasService: CaracteristicaService
+    public caracteristicasService: CaracteristicaService,
+    public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
-    var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
+  
     var cat = new Categoria();
     cat.nombre = "Categorias";
     cat._id = "root";
@@ -57,19 +59,17 @@ export class CategoriaComponent implements OnInit {
     this.migas.push(new Miga('Categorias', 'categorias'));
   }
   
-  limpiarform(form?: NgForm){    
-    if(form){      
+  limpiarform(){        
       this.categoriaService.categoriaSeleccionada = new Categoria();   
-     this.categoriaService.categoriaSeleccionada.padre  = this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]._id;
-      //console.log("padre es: "+this.categoriaService.categoriaSeleccionada.padre);
-      document.getElementById("titulomodal").innerHTML='<i class="fa fa-plus"></i> Agregar Categoria';
-      var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-      imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
-      var progreso = document.getElementById("progreso") as HTMLDivElement;
-      progreso.innerHTML = "";
-      progreso.style.width = "0%";   
+      this.categoriaService.categoriaSeleccionada.padre  = this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]._id;
       this.limpiarChecks();     
-    }
+      this.mostrarImagen = false;
+      this.limpiarImagen();
+    
+  }
+  limpiarImagen(){
+    this.categoriaService.categoriaSeleccionada.imagen = "sinImagen.jpg";
+    this.mostrarImagen = false;
   }
 
   clearProgress(){
@@ -79,6 +79,11 @@ export class CategoriaComponent implements OnInit {
     var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
     inputfile.style.display = "block";
     progreso.innerHTML = "";
+    var archivoinput = document.getElementById("archivo") as HTMLInputElement;
+    archivoinput.click();
+  }
+
+  abrirInputFile(){
     var archivoinput = document.getElementById("archivo") as HTMLInputElement;
     archivoinput.click();
   }
@@ -95,24 +100,26 @@ export class CategoriaComponent implements OnInit {
     }
   }
 
-  guardarCategoria(form?: NgForm){
+  guardarCategoria(){
     //console.log(this.categoriaService.categoriaSeleccionada);
     var btncerrarmodal = document.getElementById("btnCerrarModal");
-    if(form.value._id){
+    if(this.categoriaService.categoriaSeleccionada._id){
       this.categoriaService.putCategoria(this.categoriaService.categoriaSeleccionada)
       .subscribe(res=>{
         this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
         var respuesta = JSON.parse(JSON.stringify(res));
         if(respuesta.estado == "0"){    
           console.log("OCURRIO UN ERROR ESTADO 0");
-          this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+          //this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+          
         }else{
-          this.limpiarform(form);
+          this.limpiarform();
           btncerrarmodal.click();
           this.getCategorias();
           console.log("TODO ESTA CORRECTO");
-          this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
-        }           
+          //this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+        }   
+        this.openSnackBar(respuesta.estado, respuesta.mensaje);        
       }); 
     }else{
       this.categoriaService.postCategoria(this.categoriaService.categoriaSeleccionada)
@@ -121,14 +128,15 @@ export class CategoriaComponent implements OnInit {
         var respuesta = JSON.parse(JSON.stringify(res));
         if(respuesta.estado == "0"){   
         //console.log("OCURRIO UN ERROR ESTADO 0:"+cat.nombre+" - "+cat.padre);
-          this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+         // this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
         }else{
-          this.limpiarform(form);
+          this.limpiarform();
           btncerrarmodal.click();
           this.getCategorias();
           console.log("TODO ESTA CORRECTO");
-          this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
-        }          
+        //  this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+        }
+        this.openSnackBar(respuesta.estado, respuesta.mensaje);          
       });
     }
   }
@@ -136,12 +144,12 @@ export class CategoriaComponent implements OnInit {
   editarCategoria(categoria: Categoria){  
     this.categoriaService.categoriaSeleccionada = categoria;
     //console.log(categoria);
-    var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src =this.URL_IMAGES+"/tmp/"+categoria.imagen;
+   /* var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+    imagen.src =this.URL_IMAGES+"/tmp/"+categoria.imagen;*/
     //var imagenInput  = document.getElementById("imagen") as HTMLInputElement;
-    var inputfile = document.getElementById("nombrearchivo") as HTMLLabelElement;
-    inputfile.innerHTML = this.categoriaService.categoriaSeleccionada.imagen;
-    document.getElementById("titulomodal").innerHTML='<i class="fa fa-edit"></i> Editar Categoria: '+categoria.nombre;   
+   // var inputfile = document.getElementById("nombrearchivo") as HTMLLabelElement;
+  //  inputfile.innerHTML = this.categoriaService.categoriaSeleccionada.imagen;
+    //document.getElementById("titulomodal").innerHTML='<i class="fa fa-edit"></i> Editar Categoria: '+categoria.nombre;   
     this.limpiarChecks();
     //console.log(this.caracteristicas);
     for(var i = 0; i < this.categoriaService.categoriaSeleccionada.caracteristicas.length; i++){
@@ -153,6 +161,9 @@ export class CategoriaComponent implements OnInit {
       var check = document.getElementById(this.caracteristicas[j].nombre) as HTMLInputElement;
       check.checked = true;
     }
+    var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+    imagen.src =this.URL_IMAGES+"/tmp/"+this.categoriaService.categoriaSeleccionada.imagen;  
+    this.mostrarImagen = true;
   }
 
   eliminarCategoria(idCategoria){
@@ -161,8 +172,9 @@ export class CategoriaComponent implements OnInit {
       this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
       //console.log(res);
       var respuesta = JSON.parse(JSON.stringify(res));
-      this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+     // this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
       this.getCategorias();
+      this.openSnackBar(respuesta.estado, respuesta.mensaje);
     });
     //console.log(idCategoria);
   }
@@ -173,9 +185,7 @@ export class CategoriaComponent implements OnInit {
     .subscribe(res=>{
       this.todasCategorias = res as Categoria[];  
       this.mostrarCarga = false;
-      this.dataSource = new MatTableDataSource(this.todasCategorias);   
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+     
     });
   }
 
@@ -211,16 +221,35 @@ export class CategoriaComponent implements OnInit {
   }
 
   onFileSelected(event){
-    var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
-    var file = document.getElementById("archivo") as HTMLInputElement;
-    inputfile.innerHTML = file.value;
-    this.selectedFile  = <File> event.target.files[0];
-    //console.log(event);
+    console.log(event.target.files[0].name);
+    this.selectedFile = event.target.files[0];
+    const fd = new FormData();
+    fd.append('image',this.selectedFile, this.selectedFile.name);
+    this.http.post(Constantes.URL_API_IMAGEN + '/subir',fd,{
+      reportProgress: true,
+      observe: 'events'
+    })
+    .subscribe(event=>{
+        if(event.type === HttpEventType.UploadProgress){
+          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");          
+          if(Math.round(event.loaded/event.total*100) == 100){
+            console.log("termino subir la imagen");
+          }        
+        }else{
+          if(event.type === HttpEventType.Response){
+            var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+            imagen.src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;            
+            this.categoriaService.categoriaSeleccionada.imagen = this.selectedFile.name;
+            this.mostrarImagen = true;
+          }
+        }
+      }
+    );
   }
 
   onUpload(evento){
     evento.preventDefault()
-    var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
+   /* var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
     var progreso = document.getElementById("progreso") as HTMLDivElement;
     inputfile.innerHTML="";
     const fd = new FormData();
@@ -253,7 +282,7 @@ export class CategoriaComponent implements OnInit {
           }
         }
       }
-    );
+    );*/
   }
 
   checkCaracteristica(caracteristica : Caracteristica){
@@ -270,6 +299,7 @@ export class CategoriaComponent implements OnInit {
   }
 
   limpiarChecks(){
+    console.log("LIMPIANDO CHECKS");
     for(var i = 0; i < this.caracteristicas.length; i++){
       var check = document.getElementById(this.caracteristicas[i].nombre) as HTMLInputElement;
       check.checked = false;
@@ -282,5 +312,13 @@ export class CategoriaComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  openSnackBar(status: boolean, mensaje: string): void {
+    var clase = status ? 'exito' : 'error';
+    this.snackBar.openFromComponent(SnackBarComponent, {
+      duration: 3000,
+      panelClass: [clase],
+      data: mensaje
+    });
   }
 }
