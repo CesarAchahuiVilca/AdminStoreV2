@@ -1,12 +1,13 @@
 import { Caracteristica } from './caracteristica';
 import { CaracteristicaService } from './caracteristica.service';
 import { Component, OnInit, ViewChild} from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { Miga } from '../miga'
 import { NgForm } from '@angular/forms';
 import { Respuesta } from '../usuario/respuesta';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { DialogoCaracteristicaComponent } from './dialogo-caracteristica/dialogo-caracteristica.component';
 
 @Component({
   selector: 'app-caracteristicas',
@@ -16,9 +17,7 @@ import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 })
 export class CaracteristicasComponent implements OnInit {
  
-  public caracteristicaHeader: string;
   public accionBoton: string = 'GUARDAR';
-  public indice : number;
   public migas = [ new Miga('Características','/caracteristicas')];
   @ViewChild(MatPaginator) paginador: MatPaginator;
   @ViewChild(MatSort) ordenar: MatSort;
@@ -26,12 +25,16 @@ export class CaracteristicasComponent implements OnInit {
   datos              : MatTableDataSource<Caracteristica>;
   step : number = 1;
 
-  constructor(public caracteristicaService: CaracteristicaService, public snackBar: MatSnackBar) {}
+  constructor(public caracteristicaService: CaracteristicaService, public snackBar: MatSnackBar, public dialog : MatDialog) {}
 
   ngOnInit() {
-    this.caracteristicaHeader = 'NUEVA CARACTERÍSTICA';
     this.accionBoton = 'Guardar';   
-    this.getCaracteristicas();
+    this.caracteristicaService.getCaracteristicas().subscribe(res =>{
+      this.caracteristicaService.caracteristicas = res as Caracteristica[];
+      this.datos = new MatTableDataSource(this.caracteristicaService.caracteristicas);
+      this.datos.paginator = this.paginador;
+      this.datos.sort = this.ordenar;
+    });
   }
 
   /**
@@ -42,8 +45,9 @@ export class CaracteristicasComponent implements OnInit {
       const respuesta = res as Respuesta;
       if(respuesta.status) {
         this.openSnackBar(respuesta.status, respuesta.msg);
+        this.caracteristicaService.caracteristicas.splice(this.caracteristicaService.caracteristicas.indexOf(this.caracteristicaService.caracteristicaSelected),1);
         this.caracteristicaService.caracteristicaSelected = new Caracteristica();
-        this.caracteristicaService.caracteristicas.splice(this.indice,1);
+        this.datos.data = this.caracteristicaService.caracteristicas;
       }else {
         this.openSnackBar(respuesta.status, respuesta.error);
       }
@@ -57,7 +61,6 @@ export class CaracteristicasComponent implements OnInit {
   editarCaracteristica(caracteristica: Caracteristica){
     this.caracteristicaService.caracteristicaSelected = caracteristica;
     this.step = 0;
-    console.log('Hola');
   }
 
   /**
@@ -66,12 +69,13 @@ export class CaracteristicasComponent implements OnInit {
   getCaracteristicas(){
     this.caracteristicaService.getCaracteristicas().subscribe(res =>{
       this.caracteristicaService.caracteristicas = res as Caracteristica[];
-      this.datos = new MatTableDataSource(this.caracteristicaService.caracteristicas);
-      this.datos.paginator = this.paginador;
-      this.datos.sort = this.ordenar;
+      this.datos.data = this.caracteristicaService.caracteristicas;
     })
   }
 
+  /**
+   * Método para limpiar el formulario y poder ingresar una nueva característica
+   */
   nuevaCaracteristica(){
     this.caracteristicaService.caracteristicaSelected = new Caracteristica();
     this.step = 0;
@@ -83,8 +87,8 @@ export class CaracteristicasComponent implements OnInit {
    */
   resetForm(form?: NgForm){
     if(form) {
-      this.caracteristicaService.caracteristicaSelected = new Caracteristica();
       form.reset();
+      this.caracteristicaService.caracteristicaSelected = new Caracteristica();
     }
   }
 
@@ -120,11 +124,9 @@ export class CaracteristicasComponent implements OnInit {
   /**
    * Método que selecciona una característica
    * @param caracteristica : datos de la característica
-   * @param i : índice de la característica
    */
   selectCaracteristica(caracteristica: Caracteristica){
     this.caracteristicaService.caracteristicaSelected = caracteristica;
-    //this.indice = i;
   }
 
   /**
@@ -157,6 +159,22 @@ export class CaracteristicasComponent implements OnInit {
     });
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogoCaracteristicaComponent, {
+      width: '250px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.deleteCaracteristica();
+      }
+    });
+  }
+
+  /**
+   * Método que cambia el panel de expansión
+   * @param step : número del panel de expansión
+   */
   setStep(step : number){
     this.step = step;
   }

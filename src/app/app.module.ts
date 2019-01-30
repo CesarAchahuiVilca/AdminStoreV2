@@ -30,6 +30,7 @@ import { SesionComponent } from './sesion/sesion.component';
 import { PrincipalComponent } from './principal/principal.component';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
+import { DialogoCaracteristicaComponent } from './caracteristicas/dialogo-caracteristica/dialogo-caracteristica.component';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -70,7 +71,8 @@ const routes: Route[] = [
     PlanesComponent,
     SesionComponent,
     PrincipalComponent,
-    SnackBarComponent
+    SnackBarComponent,
+    DialogoCaracteristicaComponent
   ],
   imports: [
     BrowserModule,
