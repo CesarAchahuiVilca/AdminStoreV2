@@ -8,18 +8,24 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="card" style="width: 100%;">
-                <div class="card-header" id="titulo-card"> <i class="fa fa-list"></i>
-                  <strong>Lista de Articulos</strong>
-                </div>
-                <div class="card-body">
+              <mat-card  style="width: 100%;">
+                  <mat-card-header>                      
+                      <mat-card-title style="margin: 0px !important;" [hidden]="mostrarBotonOpcion">Articulos</mat-card-title>
+                      <mat-card-title style="margin: 0px !important;" [hidden]="!mostrarBotonOpcion" style="display: flex; align-items: center; justify-content: center; flex-direction: row; width: 100%;">
+                        <div style="display: flex; align-items: center; justify-content: flex-start; width: 50%">
+                            <i class="material-icons">stay_primary_portrait</i> {{articuloService.articuloSeleccionadoMysql.Descripcion}}
+                        </div>
+                        <div style="display: flex;width: 50%; justify-content: flex-end">
+                            <button mat-button  (click)="cambiarvista()"><i class="material-icons">close</i> Cerrar</button>
+                            
+                        </div>
+                      </mat-card-title>
+                    </mat-card-header>
+                    <mat-divider></mat-divider>
+                    <br>
+                <div>
                   <div class="row">
-                    <div class="col-lg-6" style="text-align: left !important;">
-                      <button class="btn btn-block btn-link" type="button" (click)="cambiarvista()" style="color: black; width: auto;"
-                        id="btnOpcion" [hidden]="!mostrarBotonOpcion"><i class="fa fa-plus"></i> Agregar Articulos</button><br>
-                    </div>
-                    <div class="col-lg-6">
-                    </div>
+                    
                     <div class="col-lg-12">
                       <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
                         <img src="assets/imagenes/carga.gif"> Cargando Datos
@@ -58,13 +64,9 @@
                                 <!-- Color Column -->
                                 <ng-container matColumnDef="Estado">
                                     <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
-                                    <td style="width: 25%;" mat-cell *matCellDef="let row">
-                                        <button *ngIf="row.Estado == '0'" type="button" class="btn btn-pill btn-block btn-primary"
-                                        (click)="cambiarvista(row,articuloForm)">Completar Registro
-                                        </button>
-                                      <i style="color: green;margin-left: 5%;" *ngIf="row.Estado == '1'" class="fa fa-check"></i>
-                                      <i style="color: green;margin-left: 5%;" *ngIf="row.Estado == '2'" class="fa fa-check"></i>
-                                   
+                                    <td style="width: 25%;" mat-cell *matCellDef="let row" style="text-align: center;">
+                                      <button *ngIf="row.Estado == '0'" mat-raised-button  (click)="cambiarvista(row,articuloForm)">Completar Registro</button>
+                                      <i class="material-icons"  style="color: green;" *ngIf="row.Estado == '1'">check</i>
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="editar">
@@ -72,12 +74,15 @@
                                     <td style="width: 25%;" mat-cell *matCellDef="let row">
                                         <div style="margin-left: 0px; display: flex; flex-direction: row;">
                                             <div style="flex-grow: 0;margin-right: 2px;">
-                                              <button type="button" *ngIf="row.Estado == '0'" class="btn btn-pill btn-block btn-success"
+                                             <!-- <button type="button" *ngIf="row.Estado == '0'" class="btn btn-pill btn-block btn-success"
                                                 style="width: 40px; height: 40px;" (click)="editarArticulo(row)"
                                                 data-toggle="modal" data-target="#modalcategoria" disabled><i class="fa fa-edit"></i></button>
                                               <button type="button" *ngIf="row.Estado == '1'" class="btn btn-pill btn-block btn-success"
                                                 style="width: 40px; height: 40px;" (click)="editarArticulo(row)"
                                                 data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit"></i></button>
+                                             -->
+                                                <button *ngIf="row.Estado == '0'" mat-button disabled  (click)="editarArticulo(row)"><i class="material-icons">edit</i></button>
+                                                <button *ngIf="row.Estado == '1'" mat-button (click)="editarArticulo(row)"><i class="material-icons">edit</i></button>
                                             </div>
                                           </div>
                                     </td>
@@ -257,7 +262,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </mat-card>
             </div>
           </div>
         </div>

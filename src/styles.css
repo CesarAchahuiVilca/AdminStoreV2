@@ -13,3 +13,7 @@
 .cdk-overlay-container{
     z-index: 9999;
 }
+.mat-card-header-text{
+    margin:0px !important;
+    width: 100% !important;
+}

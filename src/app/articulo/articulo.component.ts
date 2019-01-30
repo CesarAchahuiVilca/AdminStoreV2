@@ -200,25 +200,18 @@ export class ArticuloComponent implements OnInit {
     if(this.vista == "1"){
       this.vista ="2";
       this.mostrarListaArticulos = false;
-      this.mostrarFormularioArticulo = true;
-      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
-      botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
+      this.mostrarFormularioArticulo = true;     
       this.mostrarBotonOpcion = true;
-      document.getElementById("titulo-card").innerHTML = "Completar Registro para el articulo : " + articulo.Descripcion;
       this.limpiarFormulario();
       this.articuloService.articuloSeleccionado.idarticulo = articulo.idArticulo;
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
       this.articuloService.articuloSeleccionadoMysql = articulo;
       this.articuloService.articuloSeleccionado.titulo = articulo.Descripcion;
       this.buscarPreciosEquipo();      
-
     }else{
       this.vista ="1";
       this.mostrarListaArticulos = true;
-      this.mostrarFormularioArticulo = false;
-      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
-      botones.innerHTML='<i class="fa fa-plus" ></i> Agregar Articulo';
-      document.getElementById("titulo-card").innerHTML = "Lista de Articulos";
+      this.mostrarFormularioArticulo = false;     
       this.mostrarBotonOpcion = false;
     }
   }
@@ -292,6 +285,7 @@ export class ArticuloComponent implements OnInit {
       this.vista = "2";
       this.mostrarListaArticulos = false;
       this.mostrarFormularioArticulo = true;
+      this.mostrarBotonOpcion = true;
       //this.buscarPreciosEquipo();
       var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
       botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
