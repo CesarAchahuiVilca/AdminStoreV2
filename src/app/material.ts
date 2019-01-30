@@ -15,10 +15,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
-    imports: [MatButtonModule,MatSnackBarModule, MatCheckboxModule, MatTabsModule, MatIconModule, MatMenuModule, MatTableModule, MatInputModule, MatCardModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatListModule, MatPaginatorModule, MatSortModule, MatExpansionModule, MatDialogModule],
-    exports: [MatButtonModule,MatSnackBarModule, MatCheckboxModule, MatTabsModule, MatIconModule, MatMenuModule, MatTableModule, MatInputModule, MatCardModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatListModule, MatPaginatorModule, MatSortModule, MatExpansionModule, MatDialogModule],
+    imports: [MatButtonModule,MatSnackBarModule, MatCheckboxModule, MatTabsModule, MatIconModule, MatMenuModule, MatTableModule, MatInputModule, MatCardModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatListModule, MatPaginatorModule, MatSortModule, MatExpansionModule, MatDialogModule, MatGridListModule],
+    exports: [MatButtonModule,MatSnackBarModule, MatCheckboxModule, MatTabsModule, MatIconModule, MatMenuModule, MatTableModule, MatInputModule, MatCardModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatListModule, MatPaginatorModule, MatSortModule, MatExpansionModule, MatDialogModule, MatGridListModule],
     providers: [{ provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl}]
   })
   export class MaterialModule { }

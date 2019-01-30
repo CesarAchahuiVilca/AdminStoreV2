@@ -7,7 +7,7 @@ import { Miga } from '../miga'
 import { NgForm } from '@angular/forms';
 import { Respuesta } from '../usuario/respuesta';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
-import { DialogoCaracteristicaComponent } from './dialogo-caracteristica/dialogo-caracteristica.component';
+import { DialogoComponent } from '../dialogo/dialogo.component';
 
 @Component({
   selector: 'app-caracteristicas',
@@ -127,6 +127,7 @@ export class CaracteristicasComponent implements OnInit {
    */
   selectCaracteristica(caracteristica: Caracteristica){
     this.caracteristicaService.caracteristicaSelected = caracteristica;
+    this.openDialog();
   }
 
   /**
@@ -159,9 +160,16 @@ export class CaracteristicasComponent implements OnInit {
     });
   }
 
+  /**
+   * Método que abre un diálogo de confirmación de eliminación
+   */
   openDialog(): void {
-    const dialogRef = this.dialog.open(DialogoCaracteristicaComponent, {
-      width: '250px'
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Mensaje de Confirmación',
+        mensaje: '¿Esta seguro de que desea eliminar esta característica?'
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {

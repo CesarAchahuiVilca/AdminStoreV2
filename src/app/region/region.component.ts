@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { Miga } from '../miga';
 import { NgForm } from '@angular/forms';
 import { Provincia } from './provincia';
@@ -7,6 +7,7 @@ import { Region } from './region';
 import { RegionService } from './region.service';
 import { Respuesta } from '../usuario/respuesta';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { DialogoComponent } from '../dialogo/dialogo.component';
 
 @Component({
   selector: 'app-region',
@@ -23,9 +24,9 @@ export class RegionComponent implements OnInit {
   distritos : string[];
   lblDepartamento : string;
   lblProvincia : string;
-  migas = [new Miga('Locales', '/region')];
+  migas = [new Miga('Lugares de Envío', '/region')];
 
-  constructor(public regionService : RegionService, public snackBar: MatSnackBar) { }
+  constructor(public regionService : RegionService, public snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   ngOnInit() { 
     this.provSelected = new Provincia(undefined,'',[]);
@@ -249,6 +250,25 @@ export class RegionComponent implements OnInit {
       duration: 3000,
       panelClass: [clase],
       data: mensaje
+    });
+  }
+
+  /**
+   * Método que abre un diálogo de confirmación de eliminación
+   */
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Mensaje de Confirmación',
+        mensaje: '¿Esta seguro de que desea eliminar este departamento y sus provincias?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.eliminarDepartamento();
+      }
     });
   }
 }

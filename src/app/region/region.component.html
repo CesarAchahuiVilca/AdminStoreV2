@@ -3,91 +3,79 @@
 <div class="app-body">
   <main class="main">
     <app-breadcrumb [migas]="migas"></app-breadcrumb>
-    <div class="container-fluid">
-      <div class="animated fadeIn">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-header">
-                <i class="fa fa-align-justify"></i>
-                &nbsp;LUGARES DE ENVÍO
-              </div>
+    <mat-card id="cardRegiones">
+      <mat-card-header>
+        <mat-card-title>LUGARES DE ENVÍO</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-grid-list cols="3" rowHeight="1:1.5">
+          <mat-grid-tile>
+            <form id="divDepartamento" class="card" #depForm="ngForm" (ngSubmit)="nuevoDepartamento(depForm)">
+              <div class="card-header">DEPARTAMENTO <span id="spanDepartamento" class="badge badge-danger float-right"><i
+                    class="fa fa-remove" data-toggle="modal" data-target="#modalEliminar"></i></span></div>
               <div class="card-body">
-                <div class="row col-form-label">
-                </div>
-                <div id="nuevo_usuario" class="card">
-                  <div class="card-header">
-                    DEPARTAMENTO
-                  </div>
-                  <div class="card-body">
-                    <div class="form-group row col-md-12">
-                      <form id="divDepartamento" class="col-md-4 card" #depForm="ngForm" (ngSubmit)="nuevoDepartamento(depForm)">
-                        <div class="card-header">DEPARTAMENTO <span id="spanDepartamento" class="badge badge-danger float-right"><i
-                              class="fa fa-remove" data-toggle="modal" data-target="#modalEliminar"></i></span></div>
-                        <div class="card-body">
-                          <select class="col-md-12" size="10" multiple="">
-                            <option *ngFor="let dep of regionService.regiones" [value]="dep.departamento" (click)="dep_selected($event.target.value)">{{dep.departamento}}
-                            </option>
-                          </select>
-                        </div>
-                        <div class="card-footer">
-                          <label for="newDepartamento">{{lblDepartamento}}</label>
-                          <div class="input-group">
-                            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="regionService.departamentoSelected._id">
-                            <input class="form-control" type="text" id="newDepartamento" name="departamento"
-                              #departamento="ngModel" [(ngModel)]="regionService.departamentoSelected.departamento">
-                            <span class="input-group-append">
-                              <button id="btnDepartamento" class="btn btn-info" type="submit"></button>
-                            </span>
-                          </div>
-                        </div>
-                      </form>
-                      <form id="divProvincia" class="col-md-4 card" #provForm="ngForm" (ngSubmit)="nuevaProvincia(provForm)">
-                        <div class="card-header"> PROVINCIA <span id="spanProvincia" class="badge badge-danger float-right"><i
-                              class="fa fa-remove" (click)="eliminarProvincia(regionService.provinciaSelected.provincia)"></i></span></div>
-                        <div class="card-body">
-                          <select class="col-md-12" size="10" multiple="">
-                            <option *ngFor="let prov of depSelected.provincias" [value]="prov.provincia" (click)="prov_selected($event.target.value)">{{prov.provincia}}</option>
-                          </select>
-                        </div>
-                        <div class="card-footer">
-                          <label for="newProvincia">{{lblProvincia}}</label>
-                          <div class="input-group">
-                            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="regionService.provinciaSelected._id">
-                            <input class="form-control" type="text" name="provincia" #provincia="ngModel" [(ngModel)]="regionService.provinciaSelected.provincia">
-                            <span class="input-group-append">
-                              <button id="btnProvincia" class="btn btn-info" type="submit"></button>
-                            </span>
-                          </div>
-                        </div>
-                      </form>
-                      <form id="divDistrito" class="col-md-4 card" #distForm="ngForm" (ngSubmit)="nuevoDistrito(distForm)">
-                        <div class="card-header">DISTRITO <span id="spanDistrito" class="badge badge-danger float-right"><i
-                              class="fa fa-remove" (click)="eliminarDistrito(regionService.distritoSelected)"></i></span></div>
-                        <div class="card-body">
-                          <select class="col-md-12" size="10" multiple="">
-                            <option *ngFor="let dis of provSelected.distritos" [value]="dis" (click)="distSelected($event.target.value)">{{dis}}</option>
-                          </select>
-                        </div>
-                        <div class="card-footer">
-                          <label for="newDistrito">Nuevo Distrito</label>
-                          <div class="input-group">
-                            <input class="form-control" type="text" name="distrito" #distrito="ngModel" [(ngModel)]="regionService.distritoSelected">
-                            <span class="input-group-append">
-                              <button class="btn btn-info" type="submit"><i class="fa fa-plus"></i></button>
-                            </span>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
+                <select class="col-md-12" size="10" multiple="">
+                  <option *ngFor="let dep of regionService.regiones" [value]="dep.departamento" (click)="dep_selected($event.target.value)">{{dep.departamento}}
+                  </option>
+                </select>
+              </div>
+              <div class="card-footer">
+                <label for="newDepartamento">{{lblDepartamento}}</label>
+                <div class="input-group">
+                  <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="regionService.departamentoSelected._id">
+                  <input class="form-control" type="text" id="newDepartamento" name="departamento" #departamento="ngModel"
+                    [(ngModel)]="regionService.departamentoSelected.departamento">
+                  <span class="input-group-append">
+                    <button id="btnDepartamento" class="btn btn-info" type="submit"></button>
+                  </span>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </form>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <form id="divProvincia" class="card" #provForm="ngForm" (ngSubmit)="nuevaProvincia(provForm)">
+              <div class="card-header"> PROVINCIA <span id="spanProvincia" class="badge badge-danger float-right"><i
+                    class="fa fa-remove" (click)="eliminarProvincia(regionService.provinciaSelected.provincia)"></i></span></div>
+              <div class="card-body">
+                <select class="col-md-12" size="10" multiple="">
+                  <option *ngFor="let prov of depSelected.provincias" [value]="prov.provincia" (click)="prov_selected($event.target.value)">{{prov.provincia}}</option>
+                </select>
+              </div>
+              <div class="card-footer">
+                <label for="newProvincia">{{lblProvincia}}</label>
+                <div class="input-group">
+                  <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="regionService.provinciaSelected._id">
+                  <input class="form-control" type="text" name="provincia" #provincia="ngModel" [(ngModel)]="regionService.provinciaSelected.provincia">
+                  <span class="input-group-append">
+                    <button id="btnProvincia" class="btn btn-info" type="submit"></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <form id="divDistrito" class="card" #distForm="ngForm" (ngSubmit)="nuevoDistrito(distForm)">
+              <div class="card-header">DISTRITO <span id="spanDistrito" class="badge badge-danger float-right"><i class="fa fa-remove"
+                    (click)="eliminarDistrito(regionService.distritoSelected)"></i></span></div>
+              <div class="card-body">
+                <select class="col-md-12" size="10" multiple="">
+                  <option *ngFor="let dis of provSelected.distritos" [value]="dis" (click)="distSelected($event.target.value)">{{dis}}</option>
+                </select>
+              </div>
+              <div class="card-footer">
+                <label for="newDistrito">Nuevo Distrito</label>
+                <div class="input-group">
+                  <input class="form-control" type="text" name="distrito" #distrito="ngModel" [(ngModel)]="regionService.distritoSelected">
+                  <span class="input-group-append">
+                    <button class="btn btn-info" type="submit"><i class="fa fa-plus"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-content>
+    </mat-card>
   </main>
 </div>
 
