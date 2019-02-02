@@ -1,3 +1,4 @@
+import { Constantes } from './../constantes';
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
@@ -19,8 +20,6 @@ import { Miga } from '../miga';
 
 export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
  //datos temp
-  readonly URL_API = 'http://localhost:3000/api/imagenes/subir';
-  readonly URL_IMAGES = 'http://localhost:3000/imagenes';
   selectedFile: File = null;
   todasMarcas: Marca[];
   idm:string='';
@@ -132,7 +131,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     inputfile.innerHTML="";
     const fd = new FormData();
     fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(this.URL_API,fd,{
+    this.http.post(Constantes.URL_API_IMAGEN,fd,{
       reportProgress: true,
       observe: 'events'
     })
@@ -153,7 +152,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
           if(event.type === HttpEventType.Response){
             console.log(event.body);
             var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;
+            imagen.src =Constantes.URL_IMAGENES+"/md/"+this.selectedFile.name;
             progreso.style.backgroundColor = "green";
             progreso.innerHTML = "Completado.";   
             this.marcaService.marcaselect.imagen=this.selectedFile.name;                 
