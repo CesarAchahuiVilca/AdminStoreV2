@@ -131,7 +131,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     inputfile.innerHTML="";
     const fd = new FormData();
     fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(Constantes.URL_API_IMAGEN,fd,{
+    this.http.post(Constantes.URL_API_IMAGEN+'/subir',fd,{
       reportProgress: true,
       observe: 'events'
     })
