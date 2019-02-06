@@ -3,6 +3,7 @@ import { HttpClient} from '@angular/common/http'
 import { Constantes} from '../constantes'
 import { Articulo } from './articulo';
 import { ArticuloMysql } from './articuloMysql';
+import { Equipo } from './equipo';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class ArticuloService {
   articuloSeleccionadoMysql: ArticuloMysql = new ArticuloMysql();
   articuloSeleccionado: Articulo = new Articulo();
   articulosMysql: ArticuloMysql[];
+  equipos: Equipo[] = new Array();
 
   constructor(private http: HttpClient) {
     this.articuloSeleccionadoMysql = new ArticuloMysql();
@@ -29,6 +31,9 @@ export class ArticuloService {
   }
   getPreciosArticulo(idarticulo: string){
    // return this.http.get(Constantes.URL_API_PRECIOS+"/"+idarticulo)
+  }
+  getEquiposArticulo(){
+    return this.http.get(Constantes.URL_API_ARTICULO+"/equipos/"+this.articuloSeleccionado.idarticulo,{withCredentials:true});
   }
   postArticulo(articulo: Articulo){
     return this.http.post(Constantes.URL_API_ARTICULO,articulo, {withCredentials: true});

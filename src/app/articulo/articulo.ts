@@ -1,11 +1,9 @@
-import { CaracteristicaItem} from './caracteristica'
-interface PrecioArticulo {
-    tipo: string;
-    nombreequipo: string;
-  }
+import { CaracteristicaItem} from './caracteristica';
+import { Equipo }  from './equipo';
+
 export class Articulo {
 
-    constructor( _id=null,idarticulo = '', titulo = '',url='', categoria = '',marca='',cantidad=0, idprecio = '', caracteristicas= [], imagenes=[], descripcion='', garantias=[]) {
+    constructor( _id=null,idarticulo = '', titulo = '',url='', categoria = '',marca='',cantidad=0, idprecio = '', caracteristicas= [], imagenes=[], descripcion='', garantias=[], equipos=[], palabrasclaves='') {
         this.idarticulo = idarticulo;
         this.titulo = titulo;
         this.url = url;
@@ -16,6 +14,8 @@ export class Articulo {
         this.descripcion = descripcion;
         this.garantias = garantias;
         this.marca = marca;
+        this.equipos = equipos;
+        this.palabrasclaves = palabrasclaves;
     }
   
     _id: string;
@@ -31,4 +31,6 @@ export class Articulo {
     imagenes: string[];
     descripcion: string;
     garantias: string[];
+    equipos: Equipo[];
+    palabrasclaves: string;
   }

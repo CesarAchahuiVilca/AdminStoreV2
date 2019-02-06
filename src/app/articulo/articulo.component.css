@@ -43,7 +43,27 @@ table {
     font-size: 14px;
     width: 100%;
   }  
- 
+.imagen-cat{
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 180px;
+}
+.btn-imagen{
+    color: gray; 
+    font-size: 100px;
+}
+.btn-imagen:hover{
+    cursor: pointer;
+}
+.btn-cancel-img{
+    position: absolute; 
+    background-color:transparent;
+    top: 0; 
+    right: 0;
+    color: black;
+    font-weight: bold;
+}
 
 @media (min-width: 360px) {
     #modalarticulocontenido {

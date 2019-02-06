@@ -174,6 +174,73 @@
                               </div>
                             </div>
                             <div class="col-lg-12">
+                                <mat-card class="example-card">
+                                  <mat-card-header>
+                                    <div mat-card-avatar class="example-header-image"></div>
+                                    <mat-card-title>Equipos </mat-card-title>
+                                  </mat-card-header>
+                                  <mat-divider></mat-divider>
+                                  <mat-card-content>
+                                      <div class="datatable-example" style="width: 100%;">
+                                          <mat-form-field>
+                                              <input matInput (keyup)="applyFilterEquipo($event.target.value)" placeholder="Buscar">
+                                            </mat-form-field>
+                                            
+                                            <div class="mat-elevation-z2">
+                                              <table mat-table [dataSource]="dataSourceEquipos" matSort>
+                                            
+                                                <!-- ID Column -->
+                                                <ng-container matColumnDef="idArticulo">
+                                                  <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArticulo </th>
+                                                  <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">{{i}} -  {{equipo.idequipo}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- Progress Column -->
+                                                <ng-container matColumnDef="Descripcion">
+                                                  <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </th>
+                                                  <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.descripcion}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- Name Column -->
+                                                <ng-container matColumnDef="Cantidad">
+                                                  <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                                                  <td style="width: 10%;" mat-cell *matCellDef="let equipo"> {{equipo.cantidad}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- Color Column -->
+                                                <ng-container matColumnDef="Color">
+                                                  <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
+                                                  <td style="width: 15%;" mat-cell *matCellDef="let equipo"> {{equipo.color}} </td>
+                                                </ng-container>
+                                                <!-- Color Column -->
+                                                <ng-container matColumnDef="Detalle">
+                                                  <th style="width: 35%;" mat-header-cell *matHeaderCellDef mat-sort-header> Detalle </th>
+                                                  <td style="width: 35%;" mat-cell *matCellDef="let equipo"> {{equipo.detalle}} </td>
+                                                </ng-container> 
+                                                <ng-container matColumnDef="Editar">
+                                                  <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                                  <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i=index;"> 
+                                                    <button  mat-button (click)="editarEquipo(i)" data-toggle="modal" data-target="#modalequipo"><i class="material-icons">edit</i></button>
+                                                  </td>
+                                                </ng-container>                                             
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></tr>
+                                                <tr mat-row *matRowDef="let equipo; columns: displayedColumnsEquipos;">
+                                                </tr>
+                                              </table>
+                                            
+                                              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                                            </div>
+                
+                                      </div>
+
+
+                                  </mat-card-content>
+                                  <mat-card-actions>
+                                  </mat-card-actions>
+                                </mat-card>
+
+                            </div>
+                            <div class="col-lg-12">
                               <div class="card" style="border-color: rgb(114, 114, 114);">
                                 <div class="card-body">
                                   <div style="display: flex; flex-direction: row;">
@@ -418,6 +485,66 @@
           <button class="btn btn-default btn-pill" data-dismiss="modal" (click)="agregarImagenEditor()"> Cerrar</button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal detalle equipo -->
+<div class="modal fade" id="modalequipo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" >
+      <div class="modal-header">
+        <h6 class="modal-title" id="titulomodal">{{descripcionEquipoSeleccionado}}</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto;display: flex; flex-direction: row; flex-wrap: wrap;">
+        
+          <mat-card class="example-card" style="margin: 5px; width: 100%;">      
+              <mat-card-header>
+                  <mat-card-title>Datos del equipo </mat-card-title>
+                </mat-card-header>
+
+            <mat-card-content style="display: flex; flex-direction: row; flex-wrap: wrap;">
+                <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">                  
+                    <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">
+                    <mat-card style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
+                        <i  [hidden]="mostrarImagen" class="material-icons btn-imagen" (click)="abrirInputFile()">add_photo_alternate</i>     
+                        <img  [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">     
+                        <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>          
+                    </mat-card>
+                </div>   
+              <div style="display: flex; flex-direction: column; width: 60%; align-items: center; margin-top: 10px; padding-left: 10px;">
+                <div style="display: flex; flex-direction: row; width: 100%; ">
+                    <div style="width: 60%; margin: 5px;">
+                        <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Nombre del color" [(ngModel)]="nombreColor" >
+                        </mat-form-field>
+                      </div>
+                      <div style="width: 30%; margin: 5px;margin-top: 15px;">
+                        <input matInput placeholder="seleccione color" type="color" style="height: 35px;" [(ngModel)]="codigoColor">                   
+                      </div> 
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                    <div style="width: 100%; margin: 5px;">
+                        <mat-form-field class="example-full-width">
+                          <textarea matInput placeholder="Informacion adicinal del equipo"  rows="7" [(ngModel)]="detallesEquipo"></textarea>
+                        </mat-form-field>
+                      </div>
+                </div>
+                                   
+              </div> 
+                          
+            </mat-card-content>
+          </mat-card>
+          
+        <div style="text-align: right; width: 100%;">
+          <button mat-raised-button data-dismiss="modal" (click)="guardarDatosEquipo()">Aceptar</button>
+        </div>
+      </div>
+      
     </div>
   </div>
 </div>

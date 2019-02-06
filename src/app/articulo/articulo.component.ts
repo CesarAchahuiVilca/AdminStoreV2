@@ -17,6 +17,7 @@ import { ViewChild } from '@angular/core';
 import { PlanesService} from '../planes/planes.service';
 import { Precios} from '../planes/precios';
 import {MatPaginator, MatSort, MatTableDataSource, MatTable} from '@angular/material';
+import { Equipo } from './equipo';
 
 export interface articuloData {
   id: string;
@@ -73,6 +74,7 @@ export class ArticuloComponent implements OnInit {
   listaprecios                : Precios[] = new Array();
   listaequipos                = new Array();
   listaplanesequipo           = new Array();
+  mostrarImagen           : boolean = false;
   planesseleccionada = {
     tipoplan:"",
     planes: new Array()
@@ -105,6 +107,15 @@ export class ArticuloComponent implements OnInit {
   dataSource: MatTableDataSource<ArticuloMysql>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  displayedColumnsEquipos: string[] = ['idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','Editar'];
+  dataSourceEquipos: MatTableDataSource<Equipo>;
+  @ViewChild(MatPaginator) paginator2: MatPaginator;
+  @ViewChild(MatSort) sort2: MatSort;
+  indiceEquipo = 0;
+  nombreColor = "";
+  codigoColor = "";
+  detallesEquipo = "";
+  descripcionEquipoSeleccionado="";
 
   constructor(public http: HttpClient, 
               public articuloService: ArticuloService,
@@ -125,6 +136,7 @@ export class ArticuloComponent implements OnInit {
     this.getCategorias();    
     this.getMarcas();
     this.obtenerListaPrecios();
+    this.articuloService.articuloSeleccionado.equipos.push(new Equipo("","",0,"","",""));
   }
 
   created(editorInstance: any) {
@@ -148,6 +160,17 @@ export class ArticuloComponent implements OnInit {
   obtenerListaPrecios(){
     this.planesService.getEquipos().subscribe(res=>{
       this.listaequipos = res as any[];      
+    });
+  }
+
+
+  obtenerEquiposArticulo(){
+    this.articuloService.articuloSeleccionado.equipos = new Array();
+    this.articuloService.getEquiposArticulo().subscribe(res=>{
+      this.articuloService.articuloSeleccionado.equipos = res as Equipo[];
+      this.dataSourceEquipos = new MatTableDataSource(this.articuloService.articuloSeleccionado.equipos);   
+      this.dataSourceEquipos.paginator = this.paginator2;
+      this.dataSourceEquipos.sort = this.sort2;
     });
   }
 
@@ -207,13 +230,23 @@ export class ArticuloComponent implements OnInit {
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
       this.articuloService.articuloSeleccionadoMysql = articulo;
       this.articuloService.articuloSeleccionado.titulo = articulo.Descripcion;
-      this.buscarPreciosEquipo();      
+      this.buscarPreciosEquipo();     
+      this.buscarEquiposArticulo(); 
+      this.obtenerEquiposArticulo();
+
     }else{
       this.vista ="1";
       this.mostrarListaArticulos = true;
       this.mostrarFormularioArticulo = false;     
       this.mostrarBotonOpcion = false;
+      this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);   
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     }
+  }
+
+  buscarEquiposArticulo(){
+    
   }
 
   ngAfterViewInit(): void {
@@ -278,6 +311,7 @@ export class ArticuloComponent implements OnInit {
       this.imagenesSeleccionadas  = this.articuloService.articuloSeleccionado.imagenes;
       this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
       this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
+      this.obtenerEquiposArticulo();
       if(this.listacaracteristicasarticulo.length == 0){
         this.getCaracteristicas();
       }
@@ -370,6 +404,11 @@ export class ArticuloComponent implements OnInit {
 
   agregarImagenes(){
 
+  }
+
+  editarEquipo(i){
+    this.indiceEquipo = i;
+    this.descripcionEquipoSeleccionado = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].descripcion;
   }
 
   subirImagen(evento){
@@ -498,5 +537,51 @@ export class ArticuloComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  applyFilterEquipo(filterValue: string) {
+    this.dataSourceEquipos.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSourceEquipos.paginator) {
+      this.dataSourceEquipos.paginator.firstPage();
+    }
+  }
+  abrirInputFile(){
+    var archivoinput = document.getElementById("archivo") as HTMLInputElement;
+    archivoinput.click();
+  }
+  limpiarImagen(){
+    this.categoriaService.categoriaSeleccionada.imagen = "sinImagen.jpg";
+    this.mostrarImagen = false;
+  }
+  onFileSelected(event){
+    console.log(event.target.files[0].name);
+    this.selectedFile = event.target.files[0];
+    const fd = new FormData();
+    fd.append('image',this.selectedFile, this.selectedFile.name);
+    this.http.post(Constantes.URL_API_IMAGEN + '/subir',fd,{
+      reportProgress: true,
+      observe: 'events'
+    })
+    .subscribe(event=>{
+        if(event.type === HttpEventType.UploadProgress){
+          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");          
+          if(Math.round(event.loaded/event.total*100) == 100){
+            console.log("termino subir la imagen");
+          }        
+        }else{
+          if(event.type === HttpEventType.Response){
+            var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+            imagen.src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;            
+            this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = this.selectedFile.name;
+            this.mostrarImagen = true;
+          }
+        }
+      }
+    );
+  }
+  guardarDatosEquipo(){
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color = this.nombreColor;
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle = this.detallesEquipo;
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor = this.codigoColor;
   }
 }
