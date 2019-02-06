@@ -1,0 +1,70 @@
+<app-header></app-header>
+<app-menu></app-menu>
+<div class="app-body">
+  <main class="main">
+    <app-breadcrumb [migas]="migas"></app-breadcrumb>
+    <mat-card style="margin: 10px;">
+      <mat-card-header>
+        <mat-card-title>Menú Principal de Inicio</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <h3 mat-subheader>Carteles pequeños</h3>
+          <mat-list-item>
+            <mat-icon mat-list-icon>dock</mat-icon>
+            <mat-form-field style="margin: 5px 10px;">
+              <mat-select placeholder="Equipo a mostrar">
+                <mat-option value="1">1</mat-option>
+                <mat-option value="1">1</mat-option>
+                <mat-option value="1">1</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-mini-fab>
+              <mat-icon aria-label="Seleccionar imagen">insert_photo</mat-icon>
+            </button>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <h3 mat-subheader>Cartél plan</h3>
+          <mat-list-item>
+            <mat-icon mat-list-icon>folder</mat-icon>
+            <h4 mat-line>Imagen 1</h4>
+            <p mat-line> Hola mundo </p>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <h3 mat-subheader>Carteles de accesorios</h3>
+          <mat-list-item>
+            <mat-icon mat-list-icon>folder</mat-icon>
+            <h4 mat-line>Imagen 1</h4>
+            <p mat-line> Hola mundo </p>
+          </mat-list-item>
+        </mat-list>
+        <!--
+        <mat-card style="margin: 10px 0px;">
+          <mat-card-header>
+            <mat-card-title>Carteles pequeños</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+
+          </mat-card-content>
+        </mat-card>
+        <mat-card style="margin: 10px 0px;">
+          <mat-card-header>
+            <mat-card-title>Cartél Plan</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+
+          </mat-card-content>
+        </mat-card>
+        <mat-card style="margin: 10px 0px;">
+          <mat-card-header>
+            <mat-card-title>Cartél de Accesorios</mat-card-title>
+          </mat-card-header>
+          <mat-card-content></mat-card-content>
+        </mat-card>-->
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary">GUARDAR</button>
+      </mat-card-actions>
+    </mat-card>
+  </main>
+</div>

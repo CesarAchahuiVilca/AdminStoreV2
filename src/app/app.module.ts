@@ -31,6 +31,7 @@ import { PrincipalComponent } from './principal/principal.component';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
 import { DialogoComponent } from './dialogo/dialogo.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -46,7 +47,8 @@ const routes: Route[] = [
   {path: 'precios', component: PreciosComponent},
   {path: 'region', component: RegionComponent},
   {path: 'servicio-cliente',component:ServicioClienteComponent},
-  {path: 'usuarios', component: UsuarioComponent}
+  {path: 'usuarios', component: UsuarioComponent},
+  {path: 'imagenes-inicio', component: HomeComponent}
 ];
 
 @NgModule({
@@ -72,7 +74,8 @@ const routes: Route[] = [
     SesionComponent,
     PrincipalComponent,
     SnackBarComponent,
-    DialogoComponent
+    DialogoComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
