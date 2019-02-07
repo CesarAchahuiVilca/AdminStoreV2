@@ -32,6 +32,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
 import { DialogoComponent } from './dialogo/dialogo.component';
 import { HomeComponent } from './home/home.component';
+import { ImagenCartelComponent } from './home/imagen-cartel/imagen-cartel.component';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -75,7 +76,8 @@ const routes: Route[] = [
     PrincipalComponent,
     SnackBarComponent,
     DialogoComponent,
-    HomeComponent
+    HomeComponent,
+    ImagenCartelComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +92,7 @@ const routes: Route[] = [
     MatMomentDateModule, 
     ScrollDispatchModule
   ],
-  entryComponents: [SnackBarComponent, DialogoComponent],
+  entryComponents: [SnackBarComponent, DialogoComponent, ImagenCartelComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

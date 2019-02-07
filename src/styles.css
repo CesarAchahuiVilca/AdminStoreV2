@@ -17,3 +17,7 @@
     margin:0px !important;
     width: 100% !important;
 }
+
+.dialog {
+    position: relative !important;
+}

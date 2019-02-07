@@ -1,0 +1,54 @@
+<button mat-mini-fab color="primary" id="iconCerrar" (click)="cerrar()">
+    <mat-icon aria-label="Cerrar dialogo">cancel</mat-icon>
+  </button>
+<mat-card>
+    
+  <mat-card-header>
+    <mat-card-title>Galería de Imágenes</mat-card-title>
+    <input type="file" name="file" id="file" (change)="subirImagen($event)" class="inputFile">
+    <label for="file">
+      <mat-icon color="primary">add_photo_alternate</mat-icon>
+    </label>
+  </mat-card-header>
+  <mat-card-content>
+    <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
+      <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
+        <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
+          *ngFor="let img of listaImagenes">
+          <img src="{{urlImagen}}/md/{{img}}" class="imagen-item-articulo">
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+
+<div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document" id="modalarticulocontenido">
+    <div class="modal-content">
+      <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
+        <div class="row">
+          <div class="col-lg-4 col-sm-12">
+            <h4> Elija Imagenes para el Articulo</h4>
+          </div>
+          <div class="col-lg-8 col-sm-12">
+            <div class="row">
+              <div class="col-lg-4" style="text-align: center;">
+                <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
+                  Subir Imagen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+
+        <div style="text-align: right;">
+          <br>
+          <button class="btn btn-success btn-success btn-pill" data-dismiss="modal"><i class="fa fa-check"></i>
+            Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
