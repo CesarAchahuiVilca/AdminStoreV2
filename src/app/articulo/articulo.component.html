@@ -107,22 +107,22 @@
                           <div class="row">
                             <div class="col-lg-12">
                               <div class="form-group">
-                                <label style="font-weight: bold;">Titulo del Articulo</label>
+                                  <h5>Titulo del Articulo</h5>
                                 <input class="form-control" id="titulo" name="titulo" #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo"
-                                  type="text" placeholder="Ingrese Titulo del Articulos" required style="border-color: rgb(114, 114, 114);"
+                                  type="text" placeholder="Ingrese Titulo del Articulos" required style="border-color: rgb(167, 167, 167);"
                                   (change)="generarURL()">
                               </div>
                             </div>
                             <div class="col-lg-12">
                               <div class="form-group">
-                                <label style="font-weight: bold;">URL del Articulo</label>
+                                <h5>URL del Articulo</h5>
                                 <input class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.url"
                                   type="text" placeholder="URL del articulo" required style="border-color: rgb(114, 114, 114);">
                               </div>
                             </div>
                             <div class="col-lg-5">
                               <div class="form-group">
-                                <label style="font-weight: bold;">Categoria</label>
+                                <h5>Categoria</h5>
                                 <select class="form-control" id="categoria" #categoria="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.categoria"
                                   name="categoria" style="border-color: rgb(114, 114, 114);" (change)="getCaracteristicas()">
                                   <option> Seleccione Categoria </option>
@@ -132,7 +132,7 @@
                             </div>
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label style="font-weight: bold;">Marca</label>
+                                <h5>Marca</h5>
                                 <select class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"
                                   style="border-color: rgb(114, 114, 114);">
                                   <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>
@@ -141,7 +141,7 @@
                             </div>
                             <div class="col-lg-3">
                               <div class="form-group">
-                                <label style="font-weight: bold;">Cantidad</label>
+                                <h5>Cantidad</h5>
                                 <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad"
                                   class="form-control" style="border-color: rgb(114, 114, 114);" [ngModelOptions]="{standalone: true}" disabled="true">
                               </div>
@@ -188,11 +188,20 @@
                                             
                                             <div class="mat-elevation-z2">
                                               <table mat-table [dataSource]="dataSourceEquipos" matSort>
+
+                                                <!-- ID Column -->
+                                                <ng-container matColumnDef="Imagen">
+                                                    <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                                    <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">
+                                                      <img *ngIf="equipo.imagen == ''" src="./assets/images/sinimagen.jpg">
+                                                      <img *ngIf="equipo.imagen != ''" src="{{URL_IMAGES}}/sm/{{equipo.imagen}}">
+                                                    </td>
+                                                  </ng-container>
                                             
                                                 <!-- ID Column -->
                                                 <ng-container matColumnDef="idArticulo">
                                                   <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArticulo </th>
-                                                  <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">{{i}} -  {{equipo.idequipo}} </td>
+                                                  <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">{{equipo.idequipo}} </td>
                                                 </ng-container>
                                             
                                                 <!-- Progress Column -->
@@ -214,8 +223,8 @@
                                                 </ng-container>
                                                 <!-- Color Column -->
                                                 <ng-container matColumnDef="Detalle">
-                                                  <th style="width: 35%;" mat-header-cell *matHeaderCellDef mat-sort-header> Detalle </th>
-                                                  <td style="width: 35%;" mat-cell *matCellDef="let equipo"> {{equipo.detalle}} </td>
+                                                  <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header> Detalle </th>
+                                                  <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.detalle}} </td>
                                                 </ng-container> 
                                                 <ng-container matColumnDef="Editar">
                                                   <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
@@ -290,7 +299,7 @@
                                       *ngFor="let item of imagenesSeleccionadas ">
                                       <img style="position: absolute; right: -10px;top: -10px;" src="assets/imagenes/close.png"
                                         width="20px" height="20px" (click)="eliminarItemImagen(item)">
-                                      <img src="" class="imagen-item-articulo" src="{{URL_IMAGES}}/tmp/{{item}}">
+                                      <img src="" class="imagen-item-articulo" src="{{URL_IMAGES}}/md/{{item}}">
                                     </div>
                                   </div>
                                 </div>
@@ -307,12 +316,28 @@
                                   <hr>
                                   <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-detalle">
                                     <div style="width: 100%;" class="row">
-                                      <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor"
+                                      <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor" 
                                         (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}"></quill-editor>
                                     </div>
                                   </div>
                                 </div>
                               </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <mat-card class="example-card">
+                                  <mat-card-header>
+                                    <mat-card-title>Palabras claves
+                                        <button mat-raised-button (click)="buscarPalabrasClaves()">Buscar palabras claves</button>
+
+                                    </mat-card-title>
+
+                                  </mat-card-header>
+                                  <mat-card-content>
+                                      <div class="mat-elevation-z3" style="padding: 5px;border: 1px solid rgb(231, 225, 225);">
+                                          <textarea matInput [(ngModel)] = "articuloService.articuloSeleccionado.palabrasclaves" [ngModelOptions]="{standalone: true}"></textarea>
+                                      </div>
+                                  </mat-card-content>
+                                </mat-card>
                             </div>
                             <div class="col-lg-12" style="text-align: right;">
                               <hr>

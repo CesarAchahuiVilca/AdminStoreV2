@@ -9,7 +9,7 @@ import { CategoriaService } from '../categoria/categoria.service';
 import { Component, OnInit } from '@angular/core';
 import { Constantes } from '../constantes';
 import { HttpClient, HttpEventType } from '@angular/common/http';
-import { Marca } from '../marcadistri/marca';
+import { Marca } from './marca';
 import { MarcaService} from '../marcadistri/marca.service';
 import { Miga } from '../miga';
 import { NgForm } from '@angular/forms';
@@ -107,7 +107,7 @@ export class ArticuloComponent implements OnInit {
   dataSource: MatTableDataSource<ArticuloMysql>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumnsEquipos: string[] = ['idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','Editar'];
+  displayedColumnsEquipos: string[] = ['Imagen','idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','Editar'];
   dataSourceEquipos: MatTableDataSource<Equipo>;
   @ViewChild(MatPaginator) paginator2: MatPaginator;
   @ViewChild(MatSort) sort2: MatSort;
@@ -115,6 +115,7 @@ export class ArticuloComponent implements OnInit {
   nombreColor = "";
   codigoColor = "";
   detallesEquipo = "";
+  imagenEquipo="";
   descripcionEquipoSeleccionado="";
 
   constructor(public http: HttpClient, 
@@ -166,6 +167,7 @@ export class ArticuloComponent implements OnInit {
 
   obtenerEquiposArticulo(){
     this.articuloService.articuloSeleccionado.equipos = new Array();
+    this.articuloService.articuloSeleccionado.equipos.push(new Equipo("","",0,"","",""));
     this.articuloService.getEquiposArticulo().subscribe(res=>{
       this.articuloService.articuloSeleccionado.equipos = res as Equipo[];
       this.dataSourceEquipos = new MatTableDataSource(this.articuloService.articuloSeleccionado.equipos);   
@@ -233,6 +235,7 @@ export class ArticuloComponent implements OnInit {
       this.buscarPreciosEquipo();     
       this.buscarEquiposArticulo(); 
       this.obtenerEquiposArticulo();
+      this.generarURL();
 
     }else{
       this.vista ="1";
@@ -321,10 +324,7 @@ export class ArticuloComponent implements OnInit {
       this.mostrarFormularioArticulo = true;
       this.mostrarBotonOpcion = true;
       //this.buscarPreciosEquipo();
-      var botones = document.getElementById("btnOpcion") as HTMLButtonElement;
-      botones.innerHTML='<i class="fa fa-angle-left" ></i> Regresar';
       this.mostrarBotonOpcion = true;
-      document.getElementById("titulo-card").innerHTML = "Editar articulo  : "+this.articuloService.articuloSeleccionadoMysql.Descripcion;
     });
   } 
   
@@ -378,7 +378,8 @@ export class ArticuloComponent implements OnInit {
     for(var i = 0;i<titulo.length;i++){
       titulo= titulo.replace(" ","-");
     }
-    this.articuloService.articuloSeleccionado.url = titulo;   
+    this.articuloService.articuloSeleccionado.url = titulo.toLowerCase();   
+    //console.log(this.articuloService.articuloSeleccionado.url);
   }
 
   elegirImagen(nombre: string){
@@ -408,7 +409,15 @@ export class ArticuloComponent implements OnInit {
 
   editarEquipo(i){
     this.indiceEquipo = i;
+    this.imagenEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
     this.descripcionEquipoSeleccionado = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].descripcion;
+    this.nombreColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color;
+    this.codigoColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor;
+    this.detallesEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle;
+    var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+    imagen.src =this.URL_IMAGES+"/md/"+this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;    
+    this.mostrarImagen = true;
+    
   }
 
   subirImagen(evento){
@@ -501,6 +510,8 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.imagenes = this.imagenesSeleccionadas;
     this.articuloService.articuloSeleccionado.descripcion = this.contenidoEditor;
     //console.log(this.articuloService.articuloSeleccionado);
+    console.log("lista de eequipos");
+    console.log(this.articuloService.articuloSeleccionado.equipos);
 
     
     //guardar datos
@@ -550,7 +561,7 @@ export class ArticuloComponent implements OnInit {
     archivoinput.click();
   }
   limpiarImagen(){
-    this.categoriaService.categoriaSeleccionada.imagen = "sinImagen.jpg";
+    //this.articuloService.articuloSeleccionado.imagen = "sinImagen.jpg";
     this.mostrarImagen = false;
   }
   onFileSelected(event){
@@ -571,9 +582,10 @@ export class ArticuloComponent implements OnInit {
         }else{
           if(event.type === HttpEventType.Response){
             var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;            
+            imagen.src =this.URL_IMAGES+"/md/"+this.selectedFile.name;            
             this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = this.selectedFile.name;
             this.mostrarImagen = true;
+            this.imagenEquipo = this.selectedFile.name;
           }
         }
       }
@@ -583,5 +595,35 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color = this.nombreColor;
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle = this.detallesEquipo;
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor = this.codigoColor;
+    this.imagenEquipo = ""
+    //console.log(this.articuloService.articuloSeleccionado.equipos);
+  }
+  buscarPalabrasClaves(){
+    var palabras = this.articuloService.articuloSeleccionado.titulo;
+    for(var i=0;i<this.listacategorias.length;i++){
+      if(this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id){
+        palabras += " "+this.listacategorias[i].nombre;
+        break;
+      }
+    }
+    for(var i=0;i<this.listamarcas.length;i++){
+      if(this.articuloService.articuloSeleccionado.marca == this.listamarcas[i]._id){
+        palabras += " "+this.listamarcas[i].nombremarca;
+        console.log(this.listamarcas);
+        break;
+      }
+    }
+    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");  
+    var caracteristicas = datoscaracteristicas.getElementsByClassName("item-caracteristicas");
+    for(var i=0;i<caracteristicas.length ;i++){
+      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value,caracteristicas[i].getElementsByTagName("input")[1].value);    
+      palabras += " "+ c.nombre+" "+c.valor;
+    }
+    for(var i=0;i<this.articuloService.articuloSeleccionado.equipos.length;i++){
+      if(this.articuloService.articuloSeleccionado.equipos[i].cantidad>0)
+      palabras += " "+this.articuloService.articuloSeleccionado.equipos[i].color + " "+this.articuloService.articuloSeleccionado.equipos[i].detalle;
+    }
+    this.articuloService.articuloSeleccionado.palabrasclaves = palabras.toLowerCase();
+
   }
 }
