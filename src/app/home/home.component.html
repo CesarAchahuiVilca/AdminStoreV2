@@ -12,58 +12,34 @@
       </mat-card-header>
       <mat-card-content>
         <mat-list>
-          <h3 mat-subheader>Carteles pequeños</h3>
-          <mat-list-item>
+          <h3 mat-subheader>Carteles para equipos en el HOME</h3>
+          <mat-list-item *ngFor="let cardItem of cartelesEquipos; let i = index;">
             <mat-icon mat-list-icon>dock</mat-icon>
-            <mat-form-field style="margin: 5px 10px;">
+            <mat-form-field style="margin: 5px 10px; width: 300px;">
               <mat-select placeholder="Equipo a mostrar">
-                <mat-option value="1">1</mat-option>
-                <mat-option value="1">1</mat-option>
-                <mat-option value="1">1</mat-option>
+                <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art.titulo">{{art.titulo}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <button mat-mini-fab>
-              <mat-icon aria-label="Seleccionar imagen">insert_photo</mat-icon>
+            <button mat-mini-fab style="margin: 5px 15px;">
+              <mat-icon aria-label="Seleccionar imagen" (click)="seleccionarImagen(i)">insert_photo</mat-icon>
             </button>
+            <label *ngIf="cardItem">{{cardItem.urlImagen}}</label>
           </mat-list-item>
           <mat-divider></mat-divider>
-          <h3 mat-subheader>Cartél plan</h3>
+          <h3 mat-subheader>Cartél para equipo con plan en HOME</h3>
           <mat-list-item>
             <mat-icon mat-list-icon>folder</mat-icon>
             <h4 mat-line>Imagen 1</h4>
             <p mat-line> Hola mundo </p>
           </mat-list-item>
           <mat-divider></mat-divider>
-          <h3 mat-subheader>Carteles de accesorios</h3>
+          <h3 mat-subheader>Carteles para accesorios en el HOME</h3>
           <mat-list-item>
             <mat-icon mat-list-icon>folder</mat-icon>
             <h4 mat-line>Imagen 1</h4>
             <p mat-line> Hola mundo </p>
           </mat-list-item>
         </mat-list>
-        <!--
-        <mat-card style="margin: 10px 0px;">
-          <mat-card-header>
-            <mat-card-title>Carteles pequeños</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-
-          </mat-card-content>
-        </mat-card>
-        <mat-card style="margin: 10px 0px;">
-          <mat-card-header>
-            <mat-card-title>Cartél Plan</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-
-          </mat-card-content>
-        </mat-card>
-        <mat-card style="margin: 10px 0px;">
-          <mat-card-header>
-            <mat-card-title>Cartél de Accesorios</mat-card-title>
-          </mat-card-header>
-          <mat-card-content></mat-card-content>
-        </mat-card>-->
       </mat-card-content>
       <mat-card-actions>
         <button mat-raised-button color="primary">GUARDAR</button>

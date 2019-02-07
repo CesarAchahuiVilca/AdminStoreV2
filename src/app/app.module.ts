@@ -33,6 +33,7 @@ import { SnackBarComponent } from './snack-bar/snack-bar.component';
 import { DialogoComponent } from './dialogo/dialogo.component';
 import { HomeComponent } from './home/home.component';
 import { ImagenCartelComponent } from './home/imagen-cartel/imagen-cartel.component';
+import { SelectImagenComponent } from './home/select-imagen/select-imagen.component';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -77,7 +78,8 @@ const routes: Route[] = [
     SnackBarComponent,
     DialogoComponent,
     HomeComponent,
-    ImagenCartelComponent
+    ImagenCartelComponent,
+    SelectImagenComponent
   ],
   imports: [
     BrowserModule,
@@ -92,7 +94,7 @@ const routes: Route[] = [
     MatMomentDateModule, 
     ScrollDispatchModule
   ],
-  entryComponents: [SnackBarComponent, DialogoComponent, ImagenCartelComponent],
+  entryComponents: [SnackBarComponent, DialogoComponent, ImagenCartelComponent, SelectImagenComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,34 +1,38 @@
-.item-imagen{
-    display: flex; 
-    flex-direction: row; 
+.item-imagen {
+    display: flex;
+    flex-direction: row;
     flex-grow: 0;
-    margin: 3px; 
-    border: 2px dotted rgb(63, 63, 63); 
-    width: auto; 
+    margin: 3px;
+    border: 2px dotted rgb(63, 63, 63);
+    width: auto;
     height: 150px;
     background-color: rgb(199, 199, 199);
     cursor: pointer;
     min-width: 150px;
 }
-.item-imagen:hover{
+
+.item-imagen:hover {
     background-color: rgba(131, 130, 128, 0.918);
 
 }
-.item-datos-generales .card{
+
+.item-datos-generales .card {
     margin-bottom: 0px !important;
 }
-.imagen-item-articulo{
+
+.imagen-item-articulo {
     display: block;
-  width: auto;
-  height: 100%;
+    width: auto;
+    height: 100%;
 }
-.item-imagen-list{
-    display: flex; 
-    flex-direction: row; 
+
+.item-imagen-list {
+    display: flex;
+    flex-direction: row;
     flex-grow: 0;
-    margin: 3px; 
-    border: 2px solid orange; 
-    width: auto; 
+    margin: 3px;
+    border: 2px solid orange;
+    width: auto;
     height: 150px;
     background-color: rgb(199, 199, 199);
     cursor: pointer;
@@ -37,29 +41,33 @@
 
 table {
     width: 100%;
-  }
-  
-  .mat-form-field {
+}
+
+.mat-form-field {
     font-size: 14px;
     width: 100%;
-  }  
-.imagen-cat{
+}
+
+.imagen-cat {
     max-width: 100%;
     width: auto;
     height: auto;
     max-height: 180px;
 }
-.btn-imagen{
-    color: gray; 
+
+.btn-imagen {
+    color: gray;
     font-size: 100px;
 }
-.btn-imagen:hover{
+
+.btn-imagen:hover {
     cursor: pointer;
 }
-.btn-cancel-img{
-    position: absolute; 
-    background-color:transparent;
-    top: 0; 
+
+.btn-cancel-img {
+    position: absolute;
+    background-color: transparent;
+    top: 0;
     right: 0;
     color: black;
     font-weight: bold;
@@ -67,21 +75,24 @@ table {
 
 @media (min-width: 360px) {
     #modalarticulocontenido {
-        max-width: 100% !important; 
+        max-width: 100% !important;
         max-height: 100% !important;
     }
+
     #modalarticulocontenidoeditor {
-        max-width: 100% !important; 
+        max-width: 100% !important;
         max-height: 100% !important;
     }
 }
+
 @media (min-width: 768px) {
-    #modalarticulocontenido{
-        max-width: 80% !important; 
+    #modalarticulocontenido {
+        max-width: 80% !important;
         max-height: 100% !important;
     }
-    #modalarticulocontenidoeditor{
-        max-width: 80% !important; 
+
+    #modalarticulocontenidoeditor {
+        max-width: 80% !important;
         max-height: 100% !important;
     }
 }
