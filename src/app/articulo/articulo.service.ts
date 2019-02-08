@@ -30,14 +30,18 @@ export class ArticuloService {
   getArticulo(idarticulo: string){
     return this.http.get(Constantes.URL_API_ARTICULO+'/'+idarticulo, {withCredentials: true});
   }
-  getPreciosArticulo(idarticulo: string){
-   // return this.http.get(Constantes.URL_API_PRECIOS+"/"+idarticulo)
+  getPreciosArticulo(nombreequipo: string,linea:string,tipoplan:string,cuotas:string){
+    return this.http.get(Constantes.URL_API_PLANES +'/planesequipo/'+nombreequipo +'/'+linea+'/'+tipoplan+'/'+cuotas, {withCredentials: true});
   }
   getEquiposArticulo(){
     return this.http.get(Constantes.URL_API_ARTICULO+"/equipos/"+this.articuloSeleccionado.idarticulo,{withCredentials:true});
   }
   postArticulo(articulo: Articulo){
     return this.http.post(Constantes.URL_API_ARTICULO,articulo, {withCredentials: true});
+  }
+
+  postCarteles(carteles){
+    return this.http.post(Constantes.URL_API_ARTICULO + '/cartel', {cards: carteles}, {withCredentials: true});
   }
   
   putArticulo(articulo: Articulo){

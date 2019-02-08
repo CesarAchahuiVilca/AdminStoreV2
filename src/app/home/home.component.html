@@ -15,34 +15,54 @@
           <h3 mat-subheader>Carteles para equipos en el HOME</h3>
           <mat-list-item *ngFor="let cardItem of cartelesEquipos; let i = index;">
             <mat-icon mat-list-icon>dock</mat-icon>
-            <mat-form-field style="margin: 5px 10px; width: 300px;">
-              <mat-select placeholder="Equipo a mostrar">
-                <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art.titulo">{{art.titulo}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <button mat-mini-fab style="margin: 5px 15px;">
+            <mat-select placeholder="Equipo a mostrar" (selectionChange)="seleccionarCard(i, $event.value)">
+              <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
+            </mat-select>
+            <button mat-mini-fab style="margin: 5px 15px;" *ngIf="cardItem.idEquipo">
               <mat-icon aria-label="Seleccionar imagen" (click)="seleccionarImagen(i)">insert_photo</mat-icon>
             </button>
-            <label *ngIf="cardItem">{{cardItem.urlImagen}}</label>
+            <label *ngIf="cardItem.idEquipo && cardItem.urlImagen">{{cardItem.urlImagen}}</label>
           </mat-list-item>
           <mat-divider></mat-divider>
           <h3 mat-subheader>Cartél para equipo con plan en HOME</h3>
-          <mat-list-item>
-            <mat-icon mat-list-icon>folder</mat-icon>
-            <h4 mat-line>Imagen 1</h4>
-            <p mat-line> Hola mundo </p>
+          <mat-list-item *ngFor="let cardPlan of cartelPlan">
+            <mat-icon mat-list-icon>phonelink_setup</mat-icon>
+            <mat-select placeholder="Equipo a mostrar" (selectionChange)="(seleccionarCardPlan($event.value))">
+              <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
+            </mat-select>
+            <mat-select placeholder="Linea del articulo" *ngIf="cardPlan.idEquipo" (selectionChange)="seleccionarLinea($event.value)">
+              <mat-option *ngFor="let linea of listaLineas" [value]="linea.valor">{{linea.nombre}}</mat-option>
+            </mat-select>
+            <mat-select placeholder="Tipo de Plan" *ngIf="cardPlan.linea && (cardPlan.linea == 'POSTPAGO')" (selectionChange)="seleccionarTipoPlan($event.value)">
+              <mat-option *ngFor="let tipoPlan of listaTipoPlanes" [value]="tipoPlan.valor">{{tipoPlan.nombre}}</mat-option>
+            </mat-select>
+            <mat-select placeholder="Cuotas" *ngIf="cardPlan.tipoPlan && (cardPlan.linea == 'POSTPAGO')" (selectionChange)="seleccionarCuota($event.value)">
+              <mat-option *ngFor="let cuota of listaCuotas" [value]="cuota.valor">{{cuota.nombre}}</mat-option>
+            </mat-select>
+            <mat-select placeholder="Plan a mostrar" *ngIf="cardPlan.tipoPlan || (cardPlan.linea == 'PREPAGO')" (selectionChange)="seleccionarPlan($event.value)">
+              <mat-option *ngFor="let plan of listaPreciosFiltro" [value]="plan.nombreplan">{{plan.nombreplan}}</mat-option>
+            </mat-select>
+            <button mat-mini-fab style="margin: 5px 15px;" *ngIf=cardPlan.linea>
+              <mat-icon aria-label="Seleccionar imagen" (click)="seleccionarImagen(6)">insert_photo</mat-icon>
+            </button>
+            <label *ngIf="cardPlan.urlImagen">{{cardPlan.urlImagen}}</label>
           </mat-list-item>
           <mat-divider></mat-divider>
           <h3 mat-subheader>Carteles para accesorios en el HOME</h3>
-          <mat-list-item>
-            <mat-icon mat-list-icon>folder</mat-icon>
-            <h4 mat-line>Imagen 1</h4>
-            <p mat-line> Hola mundo </p>
+          <mat-list-item *ngFor="let cardAcc of cartelesAccesorios; let j = index">
+            <mat-icon mat-list-icon>devices</mat-icon>
+            <mat-select placeholder="Accesorio a mostrar" (selectionChange)="seleccionarAccesorio(j, $event.value)">
+              <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
+            </mat-select>
+            <button mat-mini-fab style="margin: 5px 15px;" *ngIf="cardAcc.idEquipo">
+              <mat-icon aria-label="Seleccionar imagen" (click)="seleccionarImagen(j+7)">insert_photo</mat-icon>
+            </button>
+            <label *ngIf="cardAcc.idEquipo">{{cardAcc.urlImagen}}</label>
           </mat-list-item>
         </mat-list>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button color="primary">GUARDAR</button>
+        <button mat-raised-button color="primary" (click)="guardarCarteles()">GUARDAR</button>
       </mat-card-actions>
     </mat-card>
   </main>
