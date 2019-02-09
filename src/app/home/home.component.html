@@ -15,7 +15,7 @@
           <h3 mat-subheader>Carteles para equipos en el HOME</h3>
           <mat-list-item *ngFor="let cardItem of cartelesEquipos; let i = index;">
             <mat-icon mat-list-icon>dock</mat-icon>
-            <mat-select placeholder="Equipo a mostrar" (selectionChange)="seleccionarCard(i, $event.value)">
+            <mat-select placeholder="Equipo a mostrar" [(ngModel)]="listaArticulos[i]" (selectionChange)="seleccionarCard(i, $event.value)">
               <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
             </mat-select>
             <button mat-mini-fab style="margin: 5px 15px;" *ngIf="cardItem.idEquipo">
@@ -27,19 +27,19 @@
           <h3 mat-subheader>Cartél para equipo con plan en HOME</h3>
           <mat-list-item *ngFor="let cardPlan of cartelPlan">
             <mat-icon mat-list-icon>phonelink_setup</mat-icon>
-            <mat-select placeholder="Equipo a mostrar" (selectionChange)="(seleccionarCardPlan($event.value))">
+            <mat-select placeholder="Equipo a mostrar" [(ngModel)]="listaArticulos[6]" (selectionChange)="(seleccionarCardPlan($event.value))">
               <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
             </mat-select>
-            <mat-select placeholder="Linea del articulo" *ngIf="cardPlan.idEquipo" (selectionChange)="seleccionarLinea($event.value)">
+            <mat-select placeholder="Linea del articulo" [(ngModel)]="cardPlan.linea" *ngIf="cardPlan.idEquipo" (selectionChange)="seleccionarLinea($event.value)">
               <mat-option *ngFor="let linea of listaLineas" [value]="linea.valor">{{linea.nombre}}</mat-option>
             </mat-select>
-            <mat-select placeholder="Tipo de Plan" *ngIf="cardPlan.linea && (cardPlan.linea == 'POSTPAGO')" (selectionChange)="seleccionarTipoPlan($event.value)">
+            <mat-select placeholder="Tipo de Plan" [(ngModel)]="cardPlan.tipoPlan" *ngIf="cardPlan.linea && (cardPlan.linea == 'POSTPAGO')" (selectionChange)="seleccionarTipoPlan($event.value)">
               <mat-option *ngFor="let tipoPlan of listaTipoPlanes" [value]="tipoPlan.valor">{{tipoPlan.nombre}}</mat-option>
             </mat-select>
-            <mat-select placeholder="Cuotas" *ngIf="cardPlan.tipoPlan && (cardPlan.linea == 'POSTPAGO')" (selectionChange)="seleccionarCuota($event.value)">
+            <mat-select placeholder="Cuotas" [(ngModel)]="cardPlan.cuotas" *ngIf="cardPlan.tipoPlan && (cardPlan.linea == 'POSTPAGO')" (selectionChange)="seleccionarCuota($event.value)">
               <mat-option *ngFor="let cuota of listaCuotas" [value]="cuota.valor">{{cuota.nombre}}</mat-option>
             </mat-select>
-            <mat-select placeholder="Plan a mostrar" *ngIf="cardPlan.tipoPlan || (cardPlan.linea == 'PREPAGO')" (selectionChange)="seleccionarPlan($event.value)">
+            <mat-select placeholder="Plan a mostrar" [(ngModel)]="planCardPlan" *ngIf="cardPlan.tipoPlan || (cardPlan.linea == 'PREPAGO')" (selectionChange)="seleccionarPlan($event.value)">
               <mat-option *ngFor="let plan of listaPreciosFiltro" [value]="plan.nombreplan">{{plan.nombreplan}}</mat-option>
             </mat-select>
             <button mat-mini-fab style="margin: 5px 15px;" *ngIf=cardPlan.linea>
@@ -51,7 +51,7 @@
           <h3 mat-subheader>Carteles para accesorios en el HOME</h3>
           <mat-list-item *ngFor="let cardAcc of cartelesAccesorios; let j = index">
             <mat-icon mat-list-icon>devices</mat-icon>
-            <mat-select placeholder="Accesorio a mostrar" (selectionChange)="seleccionarAccesorio(j, $event.value)">
+            <mat-select placeholder="Accesorio a mostrar" [(ngModel)]="listaArticulos[j+7]" (selectionChange)="seleccionarAccesorio(j, $event.value)">
               <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
             </mat-select>
             <button mat-mini-fab style="margin: 5px 15px;" *ngIf="cardAcc.idEquipo">

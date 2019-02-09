@@ -51,4 +51,8 @@ export class ArticuloService {
   getArticulos(){
     return this.http.get(Constantes.URL_API_ARTICULO + '/mongo/', {withCredentials: true});
   }
+
+  getCarteles(){
+    return this.http.get(Constantes.URL_API_ARTICULO + '/cartel',{withCredentials: true});
+  }
 }
