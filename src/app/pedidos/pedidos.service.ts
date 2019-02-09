@@ -27,4 +27,7 @@ export class PedidosService {
   recuperardireccion(_id:string){
     return this.http.get(Constantes.URL_API_DIRECCION+'/uni/'+_id);
   }
+  recuperarserielocal(){
+    return this.http.get(Constantes.URL_API_PAGO+'/serielocal/');
+  }
 }

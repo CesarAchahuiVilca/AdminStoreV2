@@ -146,6 +146,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
        }
      };
      this.applyFilter('');*/
+     
   }
   //table material
   applyFilter(filterValue: string) {
@@ -186,6 +187,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.recuperardireccion(iddireccion);
     this.preciototal = preciot;
     this.idPedido = id;
+    //this.recuperarserie();
   }
   cambiarvista2() {
     document.getElementById('listapedidos').hidden = false;
@@ -226,6 +228,15 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   //
+  recuperarserie(){
+    console.log('serie');
+    this.pedidosservice.recuperarserielocal()
+    .subscribe(res=>{
+     // this.seriedoc=JSON.parse(JSON.stringify(res));
+      console.log(res);
+      //console.log(this.seriedoc);
+    });
+  }
   listarpedidost() {
     this.pedidosservice.listarpedidos()
       .subscribe(res => {
