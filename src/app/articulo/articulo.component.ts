@@ -456,8 +456,23 @@ export class ArticuloComponent implements OnInit {
           inputcheck.hidden = true;
 
         }
-      }
+      }  
     
+  }
+  buscarImagenesFiltroEditor(){
+    var input  = document.getElementById("input-busqueda-imagenes-articulo-editor") as HTMLInputElement;
+    //this.pararbusquedaanterior = true;
+      this.listaimagenesfiltro = new Array();
+      for(var i=0;i<this.listaimagenes.length;i++){
+        var inputcheck = document.getElementById(this.listaimagenes[i]+"editor") as HTMLDivElement;
+        if(this.listaimagenes[i].includes(input.value)){
+          
+          inputcheck.hidden = false;
+        }else{
+          inputcheck.hidden = true;
+
+        }
+      }  
     
   }
 
