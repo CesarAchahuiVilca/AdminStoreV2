@@ -125,6 +125,7 @@ export class HomeComponent implements OnInit {
     this.cartelesEquipos[indice].link = evento.url;
     this.cartelesEquipos[indice].activo = true;
     this.cartelesEquipos[indice].titulo = evento.titulo
+    this.cartelesEquipos[indice].idPrecio = evento.idprecio;
   }
 
   seleccionarCardPlan(articulo: any){
@@ -142,6 +143,7 @@ export class HomeComponent implements OnInit {
     this.cartelesAccesorios[j].activo= true;
     this.cartelesAccesorios[j].link = accesorio.url;
     this.cartelesAccesorios[j].titulo = accesorio.titulo;
+    this.cartelesAccesorios[j].idPrecio = accesorio.idprecio;
   }
 
   seleccionarLinea(linea: string){

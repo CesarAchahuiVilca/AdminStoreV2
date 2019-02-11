@@ -48,7 +48,9 @@ export class ServicioClienteComponent implements OnInit {
       if(mensaje.cuerpo == '$desconectar$'){
         this.agregarMensaje(new MensajeChat('','Esta sesión ha terminado', '$desconectar','admin'));
       }else {
-        this.agregarMensaje(mensaje);
+        if(mensaje.conversacionId == this.servicioClienteService.chatSeleccionado._id){
+          this.agregarMensaje(mensaje);
+        }
       }     
     });
   }
