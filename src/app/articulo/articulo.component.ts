@@ -117,6 +117,8 @@ export class ArticuloComponent implements OnInit {
   detallesEquipo = "";
   imagenEquipo="";
   descripcionEquipoSeleccionado="";
+  palabraImagenesbuscar="";
+  listaimagenesfiltro           : string[];
 
   constructor(public http: HttpClient, 
               public articuloService: ArticuloService,
@@ -138,6 +140,7 @@ export class ArticuloComponent implements OnInit {
     this.getMarcas();
     this.obtenerListaPrecios();
     this.articuloService.articuloSeleccionado.equipos.push(new Equipo("","",0,"","",""));
+    this.getListaImagenes();
   }
 
   created(editorInstance: any) {
@@ -312,6 +315,20 @@ export class ArticuloComponent implements OnInit {
     .subscribe(res=>{      
       this.articuloService.articuloSeleccionado = res[0] as Articulo;
       this.imagenesSeleccionadas  = this.articuloService.articuloSeleccionado.imagenes;
+      try{
+        for(var i=0;i<this.imagenesSeleccionadas.length;i++){
+       
+          this.imagenesSeleccionadas.splice(i,1);
+          var inputcheck = document.getElementById(this.imagenesSeleccionadas[i]) as HTMLInputElement;
+          inputcheck.checked = true;
+        
+          }
+      }catch(e){
+        console.log(e);
+      }
+
+      
+
       this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
       this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
       this.obtenerEquiposArticulo();
@@ -342,6 +359,7 @@ export class ArticuloComponent implements OnInit {
   }
  
   eliminarItemImagen(id:string){
+    this.listaimagenesfiltro = this.listaimagenes;
     for(var i=0;i<this.imagenesSeleccionadas.length;i++){
       if(this.imagenesSeleccionadas[i] == id){
         this.imagenesSeleccionadas.splice(i,1);
@@ -349,6 +367,9 @@ export class ArticuloComponent implements OnInit {
         inputcheck.checked = false;
         //console.log(inputcheck);
         //console.log(id);
+      }else{
+        var inputcheck = document.getElementById(id) as HTMLInputElement;
+        inputcheck.checked = true;
       }
     }
   }
@@ -361,10 +382,12 @@ export class ArticuloComponent implements OnInit {
   }
 
   getListaImagenes(){
+
     this.articuloService.getImagenes()
       .subscribe(res=>{
         console.log(res);
         this.listaimagenes = res as string[];
+        this.listaimagenesfiltro = this.listaimagenes;
       });
   }
 
@@ -387,7 +410,7 @@ export class ArticuloComponent implements OnInit {
   }
   agregarImagenEditor(){
     const range = this.editorInstance.getSelection();
-    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES+"/tmp/"+this.imageneditorseleccionada);
+    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES+"/lg/"+this.imageneditorseleccionada);
   }
 
   agregarImagenesArticulo(nombre: string){
@@ -419,13 +442,35 @@ export class ArticuloComponent implements OnInit {
     this.mostrarImagen = true;
     
   }
+  //pararbusquedaanterior = false;
+  buscarImagenesFiltro(event){
+    var input  = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
+    //this.pararbusquedaanterior = true;
+      this.listaimagenesfiltro = new Array();
+      for(var i=0;i<this.listaimagenes.length;i++){
+        var inputcheck = document.getElementById(this.listaimagenes[i]+"itemimg") as HTMLDivElement;
+        if(this.listaimagenes[i].includes(input.value)){
+          
+          inputcheck.hidden = false;
+        }else{
+          inputcheck.hidden = true;
+
+        }
+      }
+    
+    
+  }
 
   subirImagen(evento){
     this.selectedFile  = <File> evento.target.files[0];
     //evento.preventDefault();
+    let headers = new Headers();
+    headers.append('Content-Type','multipart/form-data');
+    headers.append('nombre','nuevonombre.webp');
     const fd = new FormData();
+   
     fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(this.URL_API,fd,{
+    this.http.post(this.URL_API,fd,{      
       reportProgress: true,
       observe: 'events'
     })
@@ -581,11 +626,13 @@ export class ArticuloComponent implements OnInit {
           }        
         }else{
           if(event.type === HttpEventType.Response){
+            console.log(event.body);
+            var res = JSON.parse(JSON.stringify(event.body));
             var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src =this.URL_IMAGES+"/md/"+this.selectedFile.name;            
-            this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = this.selectedFile.name;
+            imagen.src =this.URL_IMAGES+"/md/"+res.imagen;            
+            this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = res.imagen;
             this.mostrarImagen = true;
-            this.imagenEquipo = this.selectedFile.name;
+            this.imagenEquipo = this.selectedFile.name+".webp";
           }
         }
       }
