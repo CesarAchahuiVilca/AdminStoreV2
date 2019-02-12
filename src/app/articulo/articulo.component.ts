@@ -75,6 +75,7 @@ export class ArticuloComponent implements OnInit {
   listaequipos                = new Array();
   listaplanesequipo           = new Array();
   mostrarImagen           : boolean = false;
+  mostrarListaImgenesEquipo : boolean = false;
   planesseleccionada = {
     tipoplan:"",
     planes: new Array()
@@ -119,6 +120,7 @@ export class ArticuloComponent implements OnInit {
   descripcionEquipoSeleccionado="";
   palabraImagenesbuscar="";
   listaimagenesfiltro           : string[];
+  agregarEn = "equipo"; // o editor
 
   constructor(public http: HttpClient, 
               public articuloService: ArticuloService,
@@ -318,7 +320,7 @@ export class ArticuloComponent implements OnInit {
       try{
         for(var i=0;i<this.imagenesSeleccionadas.length;i++){
        
-          this.imagenesSeleccionadas.splice(i,1);
+          //this.imagenesSeleccionadas.splice(i,1);
           var inputcheck = document.getElementById(this.imagenesSeleccionadas[i]) as HTMLInputElement;
           inputcheck.checked = true;
         
@@ -378,7 +380,27 @@ export class ArticuloComponent implements OnInit {
     document.getElementById("imageninput").click();
   }
   buscaNuevaImagenEditor(){
+    this.agregarEn = "editor";
     document.getElementById("btnimageneditor").click();
+  }
+
+  abrirImagenes(){
+    this.agregarEn = "equipo";
+    this.mostrarListaImgenesEquipo = true;
+  }
+  abrirFormularioEquipo(){
+    this.mostrarListaImgenesEquipo = false;
+  }
+  elegirImagenEquipo(img){
+    this.imagenEquipo = img;
+  }
+  agregarImagenEquipo(){
+    var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+    imagen.src =this.URL_IMAGES+"/md/"+this.imagenEquipo;            
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = this.imagenEquipo;
+    this.mostrarImagen = true;
+    this.abrirFormularioEquipo();
+
   }
 
   getListaImagenes(){
@@ -465,6 +487,22 @@ export class ArticuloComponent implements OnInit {
       this.listaimagenesfiltro = new Array();
       for(var i=0;i<this.listaimagenes.length;i++){
         var inputcheck = document.getElementById(this.listaimagenes[i]+"editor") as HTMLDivElement;
+        if(this.listaimagenes[i].includes(input.value)){
+          
+          inputcheck.hidden = false;
+        }else{
+          inputcheck.hidden = true;
+
+        }
+      }  
+    
+  }
+  buscarImagenesFiltroEquipo(){
+    var input  = document.getElementById("input-busqueda-imagenes-equipo") as HTMLInputElement;
+    //this.pararbusquedaanterior = true;
+      this.listaimagenesfiltro = new Array();
+      for(var i=0;i<this.listaimagenes.length;i++){
+        var inputcheck = document.getElementById(this.listaimagenes[i]+"equipo") as HTMLDivElement;
         if(this.listaimagenes[i].includes(input.value)){
           
           inputcheck.hidden = false;
