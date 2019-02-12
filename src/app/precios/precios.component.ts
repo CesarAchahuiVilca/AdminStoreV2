@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Miga } from '../miga';
+import { Constantes } from '../constantes';
 
 @Component({
   selector: 'app-precios',
@@ -8,7 +9,7 @@ import { Miga } from '../miga';
   styleUrls: ['./precios.component.css']
 })
 export class PreciosComponent implements OnInit {
-  readonly URL_API = 'http://localhost:3000/api/precio/subir';
+  readonly URL_API = Constantes.URL_API_PLANES+"/subir";
 
   mensajeestado = "";
   selectedFile: File = null;
