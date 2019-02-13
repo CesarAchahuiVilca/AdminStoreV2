@@ -30,4 +30,7 @@ export class PedidosService {
   recuperarserielocal(){
     return this.http.get(Constantes.URL_API_PAGO+'/serielocal/');
   }
+  recuperarseriesart(idarti:string){
+    return this.http.get(Constantes.URL_API_PAGO+'/artic/series/'+ idarti);
+  }
 }

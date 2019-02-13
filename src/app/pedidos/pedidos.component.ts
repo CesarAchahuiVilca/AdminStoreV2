@@ -64,6 +64,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   listapedidos: any;
   listapedidouni: any;
   Articuloarreglo = new Array();
+  temarticuloarreglo:any; //= new Array();
   arreglocliente: any;
   cliente: string;
   clientesuser: string;
@@ -146,7 +147,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
        }
      };
      this.applyFilter('');*/
-     
+
   }
   //table material
   applyFilter(filterValue: string) {
@@ -228,14 +229,14 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   //
-  recuperarserie(){
+  recuperarserie() {
     console.log('serie');
     this.pedidosservice.recuperarserielocal()
-    .subscribe(res=>{
-     // this.seriedoc=JSON.parse(JSON.stringify(res));
-      console.log(res);
-      //console.log(this.seriedoc);
-    });
+      .subscribe(res => {
+        // this.seriedoc=JSON.parse(JSON.stringify(res));
+        console.log(res);
+        //console.log(this.seriedoc);
+      });
   }
   listarpedidost() {
     this.pedidosservice.listarpedidos()
@@ -281,7 +282,9 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.estadopago = this.listapedidouni.EstadoPago;
         this.tipopago = this.listapedidouni.idTipoPago;
         this.nrotrans = this.listapedidouni.NroTransaccion;
+        //this.temarticuloarreglo = this.listapedidouni.Articulo;
         this.Articuloarreglo = this.listapedidouni.Articulo;
+        console.log(this.Articuloarreglo);
         this.tipodoc = this.listapedidouni.Documento[0].Tipo;
         this.seriedoc = this.listapedidouni.Documento[0].Serie;
         this.numerodoc = this.listapedidouni.Documento[0].Numero;
@@ -373,4 +376,4 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
 
 
 
-//table 
+//table 609

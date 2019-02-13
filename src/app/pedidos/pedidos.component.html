@@ -19,9 +19,11 @@
                     <th style="width: 8%"><i class="material-icons" style="color: chartreuse">
                         attach_money
                       </i>
-                      <label style="font-weight: normal;font-size: 10px">Valor de los pedidos: s/.{{preciototalcarritos}}</label>
+                      <label style="font-weight: normal;font-size: 10px">Valor de los pedidos:
+                        s/.{{preciototalcarritos}}</label>
                     </th>
-                    <th (click)="filtrarCarritos('1')" style="width: 8%"><i class="material-icons" style="color: yellow">
+                    <th (click)="filtrarCarritos('1')" style="width: 8%"><i class="material-icons"
+                        style="color: yellow">
                         shopping_cart
                       </i>
                       <label style="font-weight: normal;font-size: 10px">Total de carritos: {{totalcarritos}}</label>
@@ -31,21 +33,25 @@
                       </i>
                       <label style="font-weight: normal;font-size: 10px">Carritos Pagados: {{carPagados}}</label>
                     </th>
-                    <th (click)="filtrarCarritos('3')" style="width: 8%"><i class="material-icons" style="color: orange">
+                    <th (click)="filtrarCarritos('3')" style="width: 8%"><i class="material-icons"
+                        style="color: orange">
                         shopping_cart
                       </i>
                       <label style="font-weight: normal;font-size: 10px">Carritos en Proceso: {{carProceso}}</label>
                     </th>
-                    <th (click)="filtrarCarritos('4')" style="width: 8%"><i class="material-icons" style="color: orangered">
-                      shopping_cart
-                    </i>
-                    <label style="font-weight: normal;font-size: 10px">Carritos con Reembolso: {{carReembolso}}</label>
-                  </th>
+                    <th (click)="filtrarCarritos('4')" style="width: 8%"><i class="material-icons"
+                        style="color: orangered">
+                        shopping_cart
+                      </i>
+                      <label style="font-weight: normal;font-size: 10px">Carritos con Reembolso:
+                        {{carReembolso}}</label>
+                    </th>
                     <th (click)="filtrarCarritos('5')" style="width: 8%"><i class="material-icons" style="color: red">
-                      shopping_cart
-                    </i>
-                    <label style="font-weight: normal;font-size: 10px">Carritos con Error de Pago: {{carErrorPago}}</label>
-                  </th>
+                        shopping_cart
+                      </i>
+                      <label style="font-weight: normal;font-size: 10px">Carritos con Error de Pago:
+                        {{carErrorPago}}</label>
+                    </th>
                     <!--  <th><i class="material-icons" style="color: red">
                         remove_shopping_cart
                       </i>
@@ -166,8 +172,8 @@
 
                                     <!-- Progress Column -->
                                     <ng-container matColumnDef="Correocliente">
-                                      <th  mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
-                                      <td  mat-cell *matCellDef="let row" style="font-size: 12px"> {{row.Correocliente}}
+                                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+                                      <td mat-cell *matCellDef="let row" style="font-size: 12px"> {{row.Correocliente}}
                                       </td>
                                     </ng-container>
                                     <!-- ID Column -->
@@ -200,8 +206,10 @@
                                     <ng-container matColumnDef="btn">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header>-- </th>
                                       <td mat-cell *matCellDef="let row" style="font-size: 12px">
-                                        <button mat-raised-button *ngIf="row.estado=='Pagado'" color="primary" (click)="cambiarvista(row._id,row.idUsuario,row.direccion,row.total)">VER</button>
-                                        <button mat-raised-button *ngIf="row.estado=='Proceso'" (click)="cambiarvista(row._id,row.idUsuario,row.direccion,row.total)">VER</button>
+                                        <button mat-raised-button *ngIf="row.estado=='Pagado'" color="primary"
+                                          (click)="cambiarvista(row._id,row.idUsuario,row.direccion,row.total)">VER</button>
+                                        <button mat-raised-button *ngIf="row.estado=='Proceso'"
+                                          (click)="cambiarvista(row._id,row.idUsuario,row.direccion,row.total)">VER</button>
                                         <button mat-raised-button *ngIf="row.estado=='Reembolso'" color="accent"
                                           (click)="cambiarvista(row._id,row.idUsuario,row.direccion,row.total)">VER</button>
                                         <button mat-raised-button *ngIf="row.estado=='Error de pago'" color="warn"
@@ -277,7 +285,8 @@
           <div class="col-lg-12 col-md-6 col-sm-6 portfolio-item">
             <div class="card h-100">
               <div class="card-header" style="height: 15px;">
-                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">assignment</i>&nbsp;Estado
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"
+                    style="font-size:20px;">assignment</i>&nbsp;Estado
                   del pedido</p>
               </div>
               <div class="card-body">
@@ -301,7 +310,8 @@
                     <td>Estado de Pago</td>
                     <td><label id="extadoselect2" style="color:black">{{estadopago}}</label></td>
                     <td>
-                      <select style="width: 150px" id="selectestadopago" class="form-control" (change)="cambiarestadopago()">
+                      <select style="width: 150px" id="selectestadopago" class="form-control"
+                        (change)="cambiarestadopago()">
                         <option value="p1" selected>Proceso</option>
                         <option value="p2">Error de pago</option>
                         <option value="p3">Pagado</option>
@@ -374,7 +384,8 @@
           <div class="col-lg-12 col-md-6 col-sm-6 portfolio-item">
             <div class="card h-100">
               <div class="card-header" style="height: 15px;">
-                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">person</i>&nbsp;Cliente</p>
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"
+                    style="font-size:20px;">person</i>&nbsp;Cliente</p>
               </div>
               <div class="card-body">
                 <table class="table">
@@ -387,7 +398,8 @@
                 </table>
                 <div class="card h-100">
                   <div class="card-header">
-                    <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">person</i>&nbsp;Direccion</p>
+                    <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"
+                        style="font-size:20px;">person</i>&nbsp;Direccion</p>
                   </div>
                   <div class="card-body">
                     <table class="table">
@@ -404,7 +416,8 @@
           <div class="col-lg-12 col-md-6 col-sm-3 portfolio-item">
             <div class="card h-100">
               <div class="card-header" style="height: 15px;">
-                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons" style="font-size:20px;">shopping_cart</i>&nbsp;Productos</p>
+                <p class="card-tittle" style="font-size:15px;margin-top: -13px"><i class="material-icons"
+                    style="font-size:20px;">shopping_cart</i>&nbsp;Productos</p>
               </div>
               <div class="card-body">
                 <table class="table" style="font-size: 12px;">
@@ -414,7 +427,8 @@
                     <th>Plan</th>
                     <th>Nombre Plan</th>
                     <th>Precio</th>
-
+                    <th>IDArticulo</th>
+                    <th>Serie</th>
                   </tr>
                   <tr *ngFor="let articulo of Articuloarreglo">
                     <td>{{articulo.titulo}}</td>
@@ -422,6 +436,12 @@
                     <td>{{articulo.tipoplan}}</td>
                     <td>{{articulo.nombreplan}}</td>
                     <td>s/. {{articulo.precio}}</td>
+                    <td>{{articulo.idarticulo}}</td>
+                    <td>
+                        <mat-form-field appearance="legacy" style="font-size: 10px" >
+                            <input matInput placeholder="Ingresar Serie de Articulo">
+                          </mat-form-field>
+                    </td>
                   </tr>
                   <tr>
                     <td>Total</td>
@@ -429,6 +449,8 @@
                     <td></td>
                     <td></td>
                     <td>s/. {{preciototal}}</td>
+                    <td></td>
+                    <td></td>
                   </tr>
                 </table>
                 <div>
