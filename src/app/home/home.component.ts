@@ -53,10 +53,23 @@ export class HomeComponent implements OnInit {
       this.articuloService.getCarteles().subscribe( res => {
         const rspta = res as Respuesta;
         if(rspta.status){
-          this.listaCarteles = rspta.data as Cartel[];
-          this.completarRegistros(this.listaCarteles);
-          this.openSnackBar(rspta.status, rspta.msg);
-        } else {
+          if(rspta.data.length == 0){
+            this.openSnackBar(rspta.status, rspta.msg);
+            this.cartelesEquipos.length = 6;
+            for(var i = 0; i < this.cartelesEquipos.length; i++){
+              this.cartelesEquipos[i] = new Cartel();
+            }
+            this.cartelPlan.length = 1;
+            this.cartelPlan[0] = new Cartel();
+            this.cartelesAccesorios.length = 2;
+            this.cartelesAccesorios[0] = new Cartel();
+            this.cartelesAccesorios[1] = new Cartel();
+          } else {
+            this.listaCarteles = rspta.data as Cartel[];
+            this.completarRegistros(this.listaCarteles);
+            this.openSnackBar(rspta.status, rspta.msg);
+          }
+        } else  {
           this.openSnackBar(rspta.status, rspta.error);
           this.cartelesEquipos.length = 6;
           for(var i = 0; i < this.cartelesEquipos.length; i++){
