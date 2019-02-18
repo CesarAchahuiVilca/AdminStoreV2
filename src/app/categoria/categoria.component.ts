@@ -11,6 +11,7 @@ import { formDirectiveProvider } from '@angular/forms/src/directives/reactive_di
 import { Miga } from '../miga';
 import {MatPaginator, MatSort, MatTableDataSource, MatTable, MatSnackBar} from '@angular/material';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { IconsMaterial } from '../material_icons';
 
 @Component({
   selector: 'app-categoria',
@@ -33,11 +34,15 @@ export class CategoriaComponent implements OnInit {
   migas                   : Miga[] = [];
   mostrarImagen           : boolean = false;
 
+  lista_iconos = IconsMaterial.lista_icons;
+  noMostrarIcons = true;
+
   // DATA TABLE ANGULAR MATERIAL  
   displayedColumns: string[] = ['irsubcategoria', 'nombre', 'descripcion', 'opciones'];
   dataSource: MatTableDataSource<Categoria>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  iconoSeleccionado = "";
 
   constructor( 
     public http: HttpClient, 
@@ -70,6 +75,14 @@ export class CategoriaComponent implements OnInit {
   limpiarImagen(){
     this.categoriaService.categoriaSeleccionada.imagen = "sinImagen.jpg";
     this.mostrarImagen = false;
+  }
+  mostrarMaterialIcons(){
+    this.noMostrarIcons = false;
+  }
+  asignarIcon(icon){
+    this.iconoSeleccionado = icon;
+    this.noMostrarIcons = true;
+    this.categoriaService.categoriaSeleccionada.icono = icon;
   }
 
   clearProgress(){

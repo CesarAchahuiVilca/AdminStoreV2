@@ -25,3 +25,20 @@
 .btn-cancel-img:hover{
     cursor: pointer;
 }
+.item-icon-material{
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center; 
+    align-content: center;
+    width: auto; 
+    margin: 10px; 
+    border: 1px solid rgba(226, 220, 220, 0);
+    transform: 0.2s;
+}
+.item-icon-material:hover{
+    border: 1px solid orange;
+    transform: scale(1.2);
+    cursor: pointer;
+
+}

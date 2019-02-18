@@ -103,51 +103,77 @@
                   </mat-card-header>
                   <mat-divider></mat-divider>
                   <mat-card-content style="display:flex;flex-direction: column; ">
-                    <div style="display:flex;flex-direction: row; flex-wrap: wrap;" >
-                        <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">
-                            <h6>Imagen de Portada </h6>
-                            <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">
-                            <mat-card style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
-                                <i  [hidden]="mostrarImagen" class="material-icons btn-imagen" (click)="abrirInputFile()">add_photo_alternate</i>     
-                                <img  [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">     
-                                <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>          
-                            </mat-card>
-                          </div>
+                    <div [hidden]="!noMostrarIcons">
+                        <div style="display:flex;flex-direction: row; flex-wrap: wrap;" >
+                            <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">
+                                <h6>Imagen de Portada </h6>
+                                <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">
+                                <mat-card style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
+                                    <i  [hidden]="mostrarImagen" class="material-icons btn-imagen" (click)="abrirInputFile()">add_photo_alternate</i>     
+                                    <img  [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">     
+                                    <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>          
+                                </mat-card>
+                              </div>
+                              
+                              <div class="inputs-categoria" style="width: 50%; display: flex; flex-direction: column; margin-left: 5px; align-items: center;">
+                                <br>  
+                                  <input type="text" name="imagen" id="imagen" [(ngModel)]="categoriaService.categoriaSeleccionada.imagen" style="display: none;" required>
+                                  <input class="form-control" id="_id" [(ngModel)]="categoriaService.categoriaSeleccionada._id" name="_id" type="text" placeholder="ID CATEGORIA" style="display: none;">
+                                  <div class="icono-categoria" style="width: 100%; display: flex; flex-direction: row; justify-content: flex-start; padding-left: 20px; align-items: center;  ">
+                                      <button mat-raised-button (click)="mostrarMaterialIcons()">Seleccionar Icono</button>
+                                      <div>
+                                          <i class="material-icons" style="width: 50px; height: auto; font-size: 40px; width: auto;">{{categoriaService.categoriaSeleccionada.icono}}</i>
+                                      </div>
+                                      <br>
+    
+                                  </div>
+                                  <mat-form-field class="example-full-width" style="width: 80%;">
+                                    <input matInput placeholder="Nombre Categoria" id="nombre" [(ngModel)]="categoriaService.categoriaSeleccionada.nombre">
+                                  </mat-form-field>
+                                  <mat-form-field style="width: 80%;">
+                                    <select matNativeControl  placeholder = "Categoria Padre" [(ngModel)]="categoriaService.categoriaSeleccionada.padre">
+                                      <option value="root">Principal</option>
+                                      <option  *ngFor="let catpadre of todasCategorias" value="{{catpadre._id}}">{{catpadre.nombre}}</option>
+                                    </select>
+                                  </mat-form-field >                 
+                                  <mat-form-field style="width: 80%;">
+                                    <textarea matInput placeholder="Descripción" rows="4" id="descripcion" name="descripcion" [(ngModel)]="categoriaService.categoriaSeleccionada.descripcion"></textarea>
+                                  </mat-form-field>
+                              </div>
+                             
+                        </div>                    
+                        <div>
+                          <br>
+                          <mat-card style="display: flex; width: 100%; flex-direction: row; flex-wrap: wrap; ">
+                              <div style="width: 100%;">
+                                  <h6 style="font-weight: 600">Caracteristicas</h6>
+                              </div>
+                              <div class="form-check checkbox" *ngFor="let caracteristica of caracteristicas" style="margin: 10px;">
+                                  <input id="{{caracteristica.nombre}}" type="checkbox" class="form-check-input" value="{{caracteristica.nombre}}"
+                                    (click)="checkCaracteristica(caracteristica)">
+                                  <label for="{{caracteristica.nombre}}" class="form-check-label">{{caracteristica.nombre}}</label>
+                                </div>
+                          </mat-card>               
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 100%;" [hidden]="noMostrarIcons">
+                      <div>
+                        <br>
+                        <h5>Seleccione icono para la categoria</h5>
+                      </div>
+                        <div class="list-icons-material" style="display: flex;flex-direction: row; flex-wrap: wrap; height: 450px; overflow:auto; width: 100%;">
+                      
+                            <div class="item-icon-material" *ngFor=" let icon of lista_iconos" (click)="asignarIcon(icon)">
+                                <i class="material-icons" style="width: 50px; height: auto; font-size: 40px;">{{icon}}</i>
+                                <div style="font-size: small;">{{icon.split(' ')[0]}}</div>
                           
-                          <div class="inputs-categoria" style="width: 50%; display: flex; flex-direction: column; margin-left: 5px; align-items: center;">
-                            <br>  
-                              <input type="text" name="imagen" id="imagen" [(ngModel)]="categoriaService.categoriaSeleccionada.imagen" style="display: none;" required>
-                              <input class="form-control" id="_id" [(ngModel)]="categoriaService.categoriaSeleccionada._id" name="_id" type="text" placeholder="ID CATEGORIA" style="display: none;">
-                              <mat-form-field class="example-full-width" style="width: 80%;">
-                                <input matInput placeholder="Nombre Categoria" id="nombre" [(ngModel)]="categoriaService.categoriaSeleccionada.nombre">
-                              </mat-form-field>
-                              <mat-form-field style="width: 80%;">
-                                <select matNativeControl  placeholder = "Categoria Padre" [(ngModel)]="categoriaService.categoriaSeleccionada.padre">
-                                  <option value="root">Principal</option>
-                                  <option  *ngFor="let catpadre of todasCategorias" value="{{catpadre._id}}">{{catpadre.nombre}}</option>
-                                </select>
-                              </mat-form-field >                 
-                              <mat-form-field style="width: 80%;">
-                                <textarea matInput placeholder="Descripción" rows="4" id="descripcion" name="descripcion" [(ngModel)]="categoriaService.categoriaSeleccionada.descripcion"></textarea>
-                              </mat-form-field>
-                          </div>
-                    </div>                    
-                    <div>
-                      <br>
-                      <mat-card style="display: flex; width: 100%; flex-direction: row; flex-wrap: wrap; ">
-                          <div style="width: 100%;">
-                              <h6 style="font-weight: 600">Caracteristicas</h6>
-                          </div>
-                          <div class="form-check checkbox" *ngFor="let caracteristica of caracteristicas" style="margin: 10px;">
-                              <input id="{{caracteristica.nombre}}" type="checkbox" class="form-check-input" value="{{caracteristica.nombre}}"
-                                (click)="checkCaracteristica(caracteristica)">
-                              <label for="{{caracteristica.nombre}}" class="form-check-label">{{caracteristica.nombre}}</label>
                             </div>
-                      </mat-card>               
-                    </div>                    
+                          </div>  
+                    </div>
+                                   
                   </mat-card-content>
                   <mat-divider></mat-divider>
-                  <mat-card-actions style="display: flex; flex-direction: row; align-items: flex-end;justify-content: flex-end;">                      
+                  <mat-card-actions  [hidden]="!noMostrarIcons" style="display: flex; flex-direction: row; align-items: flex-end;justify-content: flex-end;">                      
                       <button mat-raised-button color="primary"(click)="guardarCategoria()"><i class="material-icons">save</i>Guardar</button>
                       <button mat-raised-button data-dismiss="modal" aria-label="Close" id="btnCerrarModal"><i class="material-icons">cancel</i>Salir</button>
                   </mat-card-actions>
