@@ -64,7 +64,13 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   listapedidos: any;
   listapedidouni: any;
   Articuloarreglo = new Array();
-  temarticuloarreglo:any; //= new Array();
+  tempoidarti:string='';
+  textseries:string='';
+  lisraseries: any; //= new Array();
+  listaseries2 = new Array();
+  temguardarserie=new Array();
+  guardarseries=new Array();
+  listpruebaseries=new Array();
   arreglocliente: any;
   cliente: string;
   clientesuser: string;
@@ -86,6 +92,32 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   tipodoc: string = '';
   seriedoc: string = '';
   numerodoc: string = '';
+
+  indiceArt:number=0;
+  serieselec: string;
+
+  onSelection(e, v) {
+    this.serieselec = e.option.value;
+  //  console.log(e.option.value)
+    this.temguardarserie.push(this.serieselec);
+  }
+  cancelarseries(){
+    this.temguardarserie=[];
+    this.guardarseries=[];
+  }
+  guardarSeries(){
+    this.guardarseries=[];
+    this.guardarseries=this.temguardarserie;
+    this.temguardarserie=[];
+  //  console.log(this.guardarseries);
+    //var modal=document.getElementById('exampleModal');
+    this.textseries= this.guardarseries.join('-'); 
+    console.log(this.textseries);
+    document.getElementById('btncerrar').click();
+    this.listpruebaseries[this.indiceArt]=this.textseries;
+  }
+
+
   //mensaje alert
   mensajeestado: string;
   DocumentoAct: temdoc[] = [{ Tipo: 'BBV', Serie: '1', Numero: '0001' }];
@@ -243,6 +275,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       .subscribe(res => {
         this.pedidosservice.pedidos = res as Pedidos[];
         this.listapedidos = JSON.parse(JSON.stringify(res));
+        console.log(this.listapedidos);
         this.totalcarritos = this.pedidosservice.pedidos.length;
         for (var j = 0; j < this.pedidosservice.pedidos.length; j++) {
           this.preciototalcarritos = this.preciototalcarritos + Number(this.pedidosservice.pedidos[j].PrecioTotal)
@@ -273,25 +306,41 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   recuperarpedido(id: string) {
+    console.log(id);
     this.pedidosservice.listarpedidouni(id)
       .subscribe(res => {
+        console.log(res);
         this.listapedidouni = JSON.parse(JSON.stringify(res));
-        this.estadoenvio = this.listapedidouni.EstadoEnvio;
-        this.fechacompra = this.listapedidouni.FechaCompra;
+        console.log(this.listapedidouni);
+        this.estadoenvio = this.listapedidouni[0].EstadoEnvio;
+        this.fechacompra = this.listapedidouni[0].FechaCompra;
         this.fechaenvio = this.fecha.toString();
-        this.estadopago = this.listapedidouni.EstadoPago;
-        this.tipopago = this.listapedidouni.idTipoPago;
-        this.nrotrans = this.listapedidouni.NroTransaccion;
-        //this.temarticuloarreglo = this.listapedidouni.Articulo;
-        this.Articuloarreglo = this.listapedidouni.Articulo;
-        console.log(this.Articuloarreglo);
-        this.tipodoc = this.listapedidouni.Documento[0].Tipo;
-        this.seriedoc = this.listapedidouni.Documento[0].Serie;
-        this.numerodoc = this.listapedidouni.Documento[0].Numero;
+        this.estadopago = this.listapedidouni[0].EstadoPago;
+        this.tipopago = this.listapedidouni[0].idTipoPago;
+        this.nrotrans = this.listapedidouni[0].NroTransaccion;
+        this.Articuloarreglo = this.listapedidouni[0].Articulo;
+        this.listpruebaseries=new Array(this.Articuloarreglo.length).fill(' ');
+        this.tipodoc = this.listapedidouni[0].Documento[0].Tipo;
+        this.seriedoc = this.listapedidouni[0].Documento[0].Serie;
+        this.numerodoc = this.listapedidouni[0].Documento[0].Numero;
         //  this.listararticulos();
       });
   }//944091466
-
+  recuperarseries(id: string,ind:number) {
+    this.tempoidarti=id;
+    this.indiceArt=ind;
+    this.listaseries2=[];
+    this.pedidosservice.recuperarseriesart(id)
+      .subscribe(res => {
+        this.lisraseries = JSON.parse(JSON.stringify(res));
+        console.log(this.lisraseries);
+        for (var i = 0; i < Object.keys(res).length; i++) {
+          this.listaseries2.push(this.lisraseries[i].serie);
+        }
+        console.log(this.listaseries2);
+      });
+      
+  }
   recuperardireccion(id: string) {
     this.pedidosservice.recuperardireccion(id)
       .subscribe(res => {

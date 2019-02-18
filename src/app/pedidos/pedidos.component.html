@@ -429,8 +429,9 @@
                     <th>Precio</th>
                     <th>IDArticulo</th>
                     <th>Serie</th>
+                    <th>Agregar Serie</th>
                   </tr>
-                  <tr *ngFor="let articulo of Articuloarreglo">
+                  <tr *ngFor="let articulo of Articuloarreglo; let i = index">
                     <td>{{articulo.titulo}}</td>
                     <td>{{articulo.tipolinea}}</td>
                     <td>{{articulo.tipoplan}}</td>
@@ -438,10 +439,14 @@
                     <td>s/. {{articulo.precio}}</td>
                     <td>{{articulo.idarticulo}}</td>
                     <td>
-                        <mat-form-field appearance="legacy" style="font-size: 10px" >
-                            <input matInput placeholder="Ingresar Serie de Articulo">
-                          </mat-form-field>
+                     <!-- <mat-form-field appearance="legacy" style="font-size: 10px">
+                        <input id="listser{{articulo.idarticulo}}" matInput placeholder="Ingresar Serie de Articulo">
+                      </mat-form-field>-->
+                      <label>{{listpruebaseries[i]}}</label>
                     </td>
+                    <td> <button id="articulo.idarticulo" mat-raised-button color="accent" data-toggle="modal"
+                        data-target="#exampleModal" (click)="recuperarseries(articulo.idarticulo,i)">Agregar
+                        Serie</button></td>
                   </tr>
                   <tr>
                     <td>Total</td>
@@ -449,6 +454,7 @@
                     <td></td>
                     <td></td>
                     <td>s/. {{preciototal}}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                   </tr>
@@ -464,3 +470,42 @@
     </div>
   </main>
 </div>
+
+<!--MODAL SERIES-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button id='btncerrar' type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <mat-selection-list #listaseries (selectionChange)="onSelection($event, listaseries.selectedOptions)" >
+              <mat-list-option *ngFor="let serie of listaseries2" [value]='serie'>
+                {{serie}}
+              </mat-list-option>
+            </mat-selection-list>
+            <p>
+                Serie Seleccionada: {{ serieselec }}
+              </p>
+            <p>
+              N° de series seleccionadas: {{listaseries.selectedOptions.selected.length}}
+            </p>
+            <p>Series Seleccioandas:</p>
+            <ul>
+              <li *ngFor="let i of listaseries.selectedOptions.selected">
+                {{ i.value }}
+              </li>
+            </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelarseries()" >Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="guardarSeries()" >Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--FIN MODAL-->
