@@ -16,7 +16,7 @@ export class PedidosService {
     return this.http.get(Constantes.URL_API_PAGO);
   }
   actualizarpedido(pedido:Pedidos){
-    return this.http.put(Constantes.URL_API_PAGO + `/${pedido._id}`,pedido);
+    return this.http.put(Constantes.URL_API_PAGO + `/${pedido[0]._id}`,pedido);
   }
   eliminarpedido(_id:string){
     return this.http.delete(Constantes.URL_API_PAGO  + `/${_id}`);

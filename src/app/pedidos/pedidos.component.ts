@@ -405,9 +405,10 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.DocumentoAct[0].Serie = this.seriedoc;
     this.DocumentoAct[0].Numero = this.numerodoc;
     this.listapedidouni.Documento = this.DocumentoAct;
+    console.log(this.DocumentoAct);
     this.listapedidouni.EstadoPago = this.estadopago;
     this.listapedidouni.EstadoEnvio = this.estadoenvio;
-    this.guardarmyql()
+    this.guardarmyql();
     this.pedidosservice.actualizarpedido(this.listapedidouni)
       .subscribe(res => {
         console.log(res);

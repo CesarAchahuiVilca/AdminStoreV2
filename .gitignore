@@ -39,3 +39,4 @@ testem.log
 Thumbs.db
 .editorconfig
 package-lock.json
+src/app/constantes.ts
