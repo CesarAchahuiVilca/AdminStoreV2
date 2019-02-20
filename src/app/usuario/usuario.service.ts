@@ -56,6 +56,10 @@ export class UsuarioService {
     return this.http.get(Constantes.URL_API_USUARIO+'/user/'+cliente);
   }
 
+  recuperardoccliente(id:string){
+    return this.http.get(Constantes.URL_API_USUARIO+'/clien/doc/'+id);
+  }
+
   /**
    * Manejador de métodos
    * @param operation 

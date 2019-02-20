@@ -35,6 +35,45 @@ export interface temdoc {
   Numero: String,
 }
 
+export interface datosventamysql {
+  tipocomprobante: string,
+  seriecomprobante: string,
+  pNroComprobante: string,
+  pFechaVenta: string,
+  pFechaRegistro: string,
+  pEsVentaAlContad: number,
+  pIdEmpleado: string,
+  pIdLocal: string,
+  pIdCliente: string,
+  pEsCancelad: number,
+  pImprimirGui: number,
+  pMontoPagado: any,
+  pPrecioVentaTotal: any,
+  pIGVTotal: any,
+  pRedondeo: any,
+  pIdNivelCliente: string,
+  pIdLineaProducto: string,
+  pUsarNivel: number,
+  pObservacion: string,
+  pMontoPagadoReal: any
+}
+
+export interface detalleventamysql {
+  pIdLocal: string,
+  pTipoComprobante: string,
+  pSerieComprobante: string,
+  pNroComprobante: string,
+  pIdArticulo: string,
+  pIdNroSerieArticulo: string,
+  pCantidad: number,
+  pPrecioVenta: any,
+  pDsctoCliente: any,
+  pIdDsctoEspecial: string,
+  pDsctoEspecial: any,
+  pDsctoNivel4: any,
+  pIdTipoPlan: string
+}
+
 @Component({
   selector: 'app-pedidos',
   templateUrl: './pedidos.component.html',
@@ -64,16 +103,17 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   listapedidos: any;
   listapedidouni: any;
   Articuloarreglo = new Array();
-  tempoidarti:string='';
-  textseries:string='';
+  tempoidarti: string = '';
+  textseries: string = '';
   lisraseries: any; //= new Array();
   listaseries2 = new Array();
-  temguardarserie=new Array();
-  guardarseries=new Array();
-  listpruebaseries=new Array();
+  temguardarserie = new Array();
+  guardarseries = new Array();
+  listpruebaseries = new Array();
   arreglocliente: any;
   cliente: string;
   clientesuser: string;
+  doccliente: string;
   listadireccion: any;
   direccionenvio: string;
   estadoenvio: string;
@@ -92,29 +132,32 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   tipodoc: string = '';
   seriedoc: string = '';
   numerodoc: string = '';
-
-  indiceArt:number=0;
+  //arreglo para guardar en mysql
+  arreglomysql: datosventamysql[];
+  detalleventmysql: detalleventamysql[];
+  //
+  indiceArt: number = 0;
   serieselec: string;
 
   onSelection(e, v) {
     this.serieselec = e.option.value;
-  //  console.log(e.option.value)
+    //  console.log(e.option.value)
     this.temguardarserie.push(this.serieselec);
   }
-  cancelarseries(){
-    this.temguardarserie=[];
-    this.guardarseries=[];
+  cancelarseries() {
+    this.temguardarserie = [];
+    this.guardarseries = [];
   }
-  guardarSeries(){
-    this.guardarseries=[];
-    this.guardarseries=this.temguardarserie;
-    this.temguardarserie=[];
-  //  console.log(this.guardarseries);
+  guardarSeries() {
+    this.guardarseries = [];
+    this.guardarseries = this.temguardarserie;
+    this.temguardarserie = [];
+    //  console.log(this.guardarseries);
     //var modal=document.getElementById('exampleModal');
-    this.textseries= this.guardarseries.join('-'); 
+    this.textseries = this.guardarseries.join('-');
     console.log(this.textseries);
     document.getElementById('btncerrar').click();
-    this.listpruebaseries[this.indiceArt]=this.textseries;
+    this.listpruebaseries[this.indiceArt] = this.textseries;
   }
 
 
@@ -302,6 +345,14 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.cliente = Respuesta2.nombres + ' ' + Respuesta2.apellidos;
         this.clientesuser = Respuesta2.correo;
         this.arreglocliente = Respuesta2;
+        this.recuperarnrodocCliente(id);
+      });
+  }
+  recuperarnrodocCliente(id: string) {
+    this.usuarioservice.recuperardoccliente(id)
+      .subscribe(res => {
+        this.doccliente = JSON.parse(JSON.stringify(res));
+        console.log('cliente n°: ' + this.doccliente);
       });
   }
 
@@ -319,17 +370,17 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.tipopago = this.listapedidouni[0].idTipoPago;
         this.nrotrans = this.listapedidouni[0].NroTransaccion;
         this.Articuloarreglo = this.listapedidouni[0].Articulo;
-        this.listpruebaseries=new Array(this.Articuloarreglo.length).fill(' ');
+        this.listpruebaseries = new Array(this.Articuloarreglo.length).fill(' ');
         this.tipodoc = this.listapedidouni[0].Documento[0].Tipo;
         this.seriedoc = this.listapedidouni[0].Documento[0].Serie;
         this.numerodoc = this.listapedidouni[0].Documento[0].Numero;
         //  this.listararticulos();
       });
   }//944091466
-  recuperarseries(id: string,ind:number) {
-    this.tempoidarti=id;
-    this.indiceArt=ind;
-    this.listaseries2=[];
+  recuperarseries(id: string, ind: number) {
+    this.tempoidarti = id;
+    this.indiceArt = ind;
+    this.listaseries2 = [];
     this.pedidosservice.recuperarseriesart(id)
       .subscribe(res => {
         this.lisraseries = JSON.parse(JSON.stringify(res));
@@ -339,7 +390,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         }
         console.log(this.listaseries2);
       });
-      
+
   }
   recuperardireccion(id: string) {
     this.pedidosservice.recuperardireccion(id)
@@ -356,14 +407,87 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.listapedidouni.Documento = this.DocumentoAct;
     this.listapedidouni.EstadoPago = this.estadopago;
     this.listapedidouni.EstadoEnvio = this.estadoenvio;
+    this.guardarmyql()
     this.pedidosservice.actualizarpedido(this.listapedidouni)
       .subscribe(res => {
         console.log(res);
+        this.pedidosservice.GuardarPagomysql(this.arreglomysql)
+          .subscribe(res => {
+            console.log(res);
+            this.guardarmysqldetalle();
+          });
       });
     this.snackBar.open('Pago Guardado', '🧓🏻', {
       duration: 2000,
     });
-    location.reload();
+  }
+  guardarmyql() {
+    console.log('entra mysql');
+    var hoy = new Date();
+    var dia = hoy.getDate();
+    var mes = hoy.getMonth() + 1;
+    var anio = hoy.getFullYear();
+    var fecha_actual = String(anio + "-" + mes + "-" + dia);
+    var fecha_actual2 = new Date(fecha_actual);
+    this.arreglomysql = [{
+      tipocomprobante: this.tipodoc,
+      seriecomprobante: this.seriedoc,
+      pNroComprobante: this.numerodoc,
+      pFechaVenta: fecha_actual,
+      pFechaRegistro: fecha_actual,
+      pEsVentaAlContad: 1,
+      pIdEmpleado: 'root',
+      pIdLocal: '609',
+      pIdCliente: this.doccliente,
+      pEsCancelad: 1,
+      pImprimirGui: 0,
+      pMontoPagado: 12,
+      pPrecioVentaTotal: 12,
+      pIGVTotal: 12,
+      pRedondeo: 12,
+      pIdNivelCliente: '6',
+      pIdLineaProducto: '5',
+      pUsarNivel: 0,
+      pObservacion: ' ',
+      pMontoPagadoReal: 0
+    }];
+  }
+  guardarmysqldetalle() {
+    /*console.log('seriessss');
+    console.log( this.listpruebaseries);
+    console.log(this.Articuloarreglo);*/
+    //this.Articuloarreglo
+    for (var i = 0; i < this.Articuloarreglo.length; i++) {
+      var idart = this.Articuloarreglo[i].idarticulo;
+      var precio = this.Articuloarreglo[i].precio;
+      var arreglotem = this.listpruebaseries[i];
+      var arregloseries = arreglotem.split('-');
+      // console.log(arregloseries);
+      for (var j = 0; j < arregloseries.length; j++) {
+        this.detalleventmysql = [{
+          pIdLocal: '609',
+          pTipoComprobante: this.tipodoc,
+          pSerieComprobante: this.seriedoc,
+          pNroComprobante: this.numerodoc,
+          pIdArticulo: idart,
+          pIdNroSerieArticulo: arregloseries[j],
+          pCantidad: 1,
+          pPrecioVenta: precio,
+          pDsctoCliente: 0,
+          pIdDsctoEspecial: 'DSCTONULO',
+          pDsctoEspecial: 0,
+          pDsctoNivel4: 5,
+          pIdTipoPlan: '1',
+        }];
+        console.log('arreglo detalle');
+        console.log(this.detalleventmysql);
+        this.pedidosservice.GuardarDetallemysql(this.detalleventmysql)
+          .subscribe(res => {
+            console.log(res);
+          });
+      }
+    }
+
   }
 
   filtrarCarritos(id: string) {

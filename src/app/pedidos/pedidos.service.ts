@@ -33,4 +33,10 @@ export class PedidosService {
   recuperarseriesart(idarti:string){
     return this.http.get(Constantes.URL_API_PAGO+'/artic/series/'+ idarti);
   }
+  GuardarPagomysql(pago:any){
+    return this.http.post(Constantes.URL_API_PAGO+'/pagomysql/',pago, {withCredentials: true});
+  }
+  GuardarDetallemysql(pagodell:any){
+    return this.http.post(Constantes.URL_API_PAGO+'/detalle/',pagodell, {withCredentials: true});
+  }
 }
