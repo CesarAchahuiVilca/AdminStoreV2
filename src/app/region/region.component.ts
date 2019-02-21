@@ -131,6 +131,7 @@ export class RegionComponent implements OnInit {
   getRegiones() {
     this.regionService.getRegiones().subscribe(res => {
       this.regionService.regiones = res as Region[];
+      console.log(this.regionService.regiones);
     })
   }
 
@@ -247,7 +248,7 @@ export class RegionComponent implements OnInit {
   openSnackBar(status: boolean, mensaje: string): void {
     var clase = status ? 'exito' : 'error';
     this.snackBar.openFromComponent(SnackBarComponent, {
-      duration: 3000,
+      duration: 5000,
       panelClass: [clase],
       data: mensaje
     });

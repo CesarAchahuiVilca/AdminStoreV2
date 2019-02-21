@@ -1,6 +1,6 @@
 export class Provincia {
 
-  constructor(_id = '', provincia = '', distritos = []){
+  constructor(_id = null, provincia = '', distritos = []){
     this._id = _id;
     this.provincia = provincia;
     this.distritos = distritos;

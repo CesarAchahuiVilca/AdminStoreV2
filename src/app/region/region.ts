@@ -2,7 +2,7 @@ import {Provincia} from './provincia';
 
 export class Region {
   
-  constructor(_id = '', departamento = '', provincias = []){
+  constructor(_id = null, departamento = '', provincias = []){
     this._id = _id;
     this.departamento = departamento;
     this.provincias = provincias;
