@@ -65,6 +65,10 @@ export class ServicioClienteService {
     return observable;
   }
 
+  obtenerConversacionesEntre(dia: string, mes: string, anio: string){
+    return this.http.get(Constantes.URL_API_CHAT + '/' + dia + '/' + mes + '/' + anio, {withCredentials: true});
+  }
+
   obtenerConversaciones(){
     return this.http.get(Constantes.URL_API_CHAT,{withCredentials: true});
   }

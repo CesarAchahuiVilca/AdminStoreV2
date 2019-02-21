@@ -18,6 +18,12 @@ export class ServicioClienteComponent implements OnInit {
   constructor(public servicioClienteService: ServicioClienteService) { }
 
   ngOnInit() {
+    this.servicioClienteService.obtenerConversacionesEntre(
+      new Date().getDate().toString().length == 2 ? new Date().getDate().toString() : '0' + new Date().getDate().toString(), 
+      new Date().getMonth().toString().length == 2 ? new Date().getMonth().toString() : '0' + new Date().getMonth().toString(), 
+      new Date().getFullYear().toString()).subscribe( res => {
+      console.log(res);
+    })
     this.servicioClienteService.obtenerConversaciones().subscribe( res => {
       var jres = JSON.parse(JSON.stringify(res));
       if (jres.status){
