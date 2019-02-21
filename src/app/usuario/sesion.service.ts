@@ -19,6 +19,12 @@ export class SesionService {
     );
   }
 
+  getNotificaciones(){
+    return this.http.get<any>(Constantes.URL_API + 'sesion/notificaciones', {withCredentials: true}).pipe(
+      catchError(this.handleError<any>('getNotificaciones'))
+    );
+  }
+
   getSesiones(){
     return this.http.get<any>(Constantes.URL_API_SESION + '/sesiones', {withCredentials: true}).pipe(
       catchError(this.handleError<any>('getSesiones'))

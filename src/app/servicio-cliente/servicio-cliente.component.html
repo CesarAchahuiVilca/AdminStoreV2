@@ -6,39 +6,26 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-4">
-                    <mat-card>
+                    <mat-card style="min-height: 400px;">
                         <mat-card-header>
                             <mat-card-title>Lista de Conversaciones</mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
-
+                            <mat-list *ngFor="let listaChat of servicioClienteService.listaConversaciones">
+                                <h3 mat-subheader>{{listaChat.fecha | date}}</h3>
+                                <mat-list-item *ngFor="let conversacion of listaChat.conversaciones" [style.background-color]="conversacion.concluido == true ? 'red' : 'white'" (click)="mostrarMensajes(conversacion)" style="cursor: pointer;">
+                                    <mat-icon mat-list-icon>person_pin</mat-icon>
+                                    <h4 mat-line>{{conversacion.nombreCliente}}</h4>
+                                    <p mat-line>{{conversacion.tipoConsulta}}</p>
+                                    <p mat-line style="font-size: 12px; font-family:'Courier New', Courier, monospace;">{{conversacion.consulta}}</p>
+                                </mat-list-item>
+                                <mat-divider></mat-divider>
+                            </mat-list>
                         </mat-card-content>
+                        <mat-card-footer style="position: absolute; bottom: 0px; width: 100%">
+                            <button mat-raised-button color="accent" style="width: 100%;" (click)="obtenerChats()">Obtener mas chats</button>
+                        </mat-card-footer>
                     </mat-card>
-                    <div class="card" style="width: 100%; min-height: 450px; ">
-                        <div class="card-body" style="padding: 0px;">
-                            <!--<div class="cont-busqueda">
-                                <input class="form-control" type="text" placeholder="Buscar" style="margin:5px;width: 95%;">
-                            </div>-->
-                            <div class="contenido-clientes" style="overflow: auto;height: 400px;">
-                                <div *ngFor="let conversacion of servicioClienteService.conversaciones">
-                                    <hr style="padding: 0px; margin: 0px;cursor:pointer;">
-                                    <div class="item-cliente" style="cursor:pointer;" (click)="mostrarMensajes(conversacion)"
-                                        [style.background-color]="conversacion.concluido == true ? 'red' : 'whitesmoke'">
-                                        <div style="flex-grow: 0;cursor:pointer;">
-                                            <img src="./assets/imagenes/avatar-user.png" alt="" style="border-radius: 50%;"
-                                                width="40px" height="40px">
-                                        </div>
-                                        <div style="display: flex;flex-direction: column;cursor:pointer;">
-                                            <label style="margin-left: 5px;">Cliente: {{conversacion.nombreCliente}}</label>
-                                            <label style="margin-left: 5px;">Asunto: {{conversacion.tipoConsulta}}</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="footer-clientes" style="width: 100%; min-height: 50px; display: flex; flex-direction: row;padding: 10px; background-color: rgb(233, 223, 223);">
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="card" style="width: 100%; min-height: 450px;">

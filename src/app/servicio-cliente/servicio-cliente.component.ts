@@ -14,23 +14,22 @@ export class ServicioClienteComponent implements OnInit {
   listaMensajesChat : MensajeChat[] = new Array();
   ocultarBotonChat  : boolean       = true;
   ocultarEnviarMensaje : boolean    = true;
+  fecha  = new Date();
 
   constructor(public servicioClienteService: ServicioClienteService) { }
 
   ngOnInit() {
     this.servicioClienteService.obtenerConversacionesEntre(
-      new Date().getDate().toString().length == 2 ? new Date().getDate().toString() : '0' + new Date().getDate().toString(), 
-      new Date().getMonth().toString().length == 2 ? new Date().getMonth().toString() : '0' + new Date().getMonth().toString(), 
-      new Date().getFullYear().toString()).subscribe( res => {
-      console.log(res);
-    })
-    this.servicioClienteService.obtenerConversaciones().subscribe( res => {
-      var jres = JSON.parse(JSON.stringify(res));
-      if (jres.status){
-        this.servicioClienteService.conversaciones = jres.data as Conversacion[];
-        this.servicioClienteService.nombreUsuario = jres.usuario;
-        this.servicioClienteService.tipoUsuario = jres.tipoUsuario;
-        this.servicioClienteService.idUsuario = jres.idUsuario;
+      this.fecha.getDate().toString().length == 2 ? this.fecha.getDate().toString() : '0' + this.fecha.getDate().toString(), 
+      this.fecha.getMonth().toString().length == 2 ? this.fecha.getMonth().toString() : '0' + this.fecha.getMonth().toString(), 
+      this.fecha.getFullYear().toString()).subscribe( res => {
+      const rspta = JSON.parse(JSON.stringify(res));
+      if (rspta.status) {
+        this.servicioClienteService.agregarLista(this.fecha, rspta.data as Conversacion[]);
+        this.servicioClienteService.conversaciones = rspta.data  as Conversacion[];
+        this.servicioClienteService.nombreUsuario = rspta.usuario;
+        this.servicioClienteService.tipoUsuario = rspta.tipoUsuario;
+        this.servicioClienteService.idUsuario = rspta.idUsuario;
         for(var i = 0; i < this.servicioClienteService.conversaciones.length; i++){
           if(this.servicioClienteService.conversaciones[i].participantes.includes(this.servicioClienteService.idUsuario)){
             this.servicioClienteService.conversaciones[i].unir = true;
@@ -95,6 +94,19 @@ export class ServicioClienteComponent implements OnInit {
 
   MoverScroll(chatPrincipal: HTMLDivElement) {
     chatPrincipal.scrollTop = chatPrincipal.scrollHeight;
+  }
+
+  obtenerChats(){
+    this.fecha = new Date(this.fecha.getTime() - 24 * 60 * 60 * 1000);
+    this.servicioClienteService.obtenerConversacionesEntre(
+      this.fecha.getDate().toString().length == 2 ? this.fecha.getDate().toString() : '0' + this.fecha.getDate().toString(), 
+      this.fecha.getMonth().toString().length == 2 ? this.fecha.getMonth().toString() : '0' + this.fecha.getMonth().toString(), 
+      this.fecha.getFullYear().toString()).subscribe( res => {
+      const rspta = JSON.parse(JSON.stringify(res));
+      if (rspta.status) {
+        this.servicioClienteService.agregarLista(this.fecha, rspta.data as Conversacion[]);
+      }
+    });
   }
 
   unirseChat(){

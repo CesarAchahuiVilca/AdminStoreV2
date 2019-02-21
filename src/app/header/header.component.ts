@@ -8,20 +8,21 @@ import { SesionService } from '../usuario/sesion.service';
   styles: ['']
 })
 export class HeaderComponent implements OnInit {
-  router        : Router;
-  sesionService : SesionService;
+  mensajes : number = 0;
 
-  constructor(sesionService: SesionService, router: Router) {
-    this.router = router;
-    this.sesionService = sesionService;
-  }
+  constructor(public sesionService: SesionService,public router: Router) {}
 
   ngOnInit() {
+    this.sesionService.getNotificaciones().subscribe(res => {
+      const rspta = JSON.parse(JSON.stringify(res));
+      if( rspta.status) {
+        this.mensajes = rspta.data;
+      }
+    })
   }
 
   cerrarSesion(){
     this.sesionService.cerrarSesion().subscribe(res => {
-      console.log(res);
       var jres = JSON.parse(JSON.stringify(res));
       if( jres.status ){
         this.router.navigate(['/']);

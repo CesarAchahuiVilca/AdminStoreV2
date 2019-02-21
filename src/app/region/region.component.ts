@@ -131,7 +131,6 @@ export class RegionComponent implements OnInit {
   getRegiones() {
     this.regionService.getRegiones().subscribe(res => {
       this.regionService.regiones = res as Region[];
-      console.log(this.regionService.regiones);
     })
   }
 

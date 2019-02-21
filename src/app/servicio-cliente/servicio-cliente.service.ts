@@ -7,6 +7,16 @@ import { Usuario } from '../usuario/usuario';
 import { HttpClient } from '@angular/common/http';
 import { MensajeChat } from './mensaje-chat';
 
+export class listaConversacion {
+  fecha: Date;
+  conversaciones : Conversacion[];
+
+  public listaConversacion(fecha: Date, conversaciones: Conversacion[]){
+    this.fecha = fecha;
+    this.conversaciones = conversaciones;
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,8 +29,17 @@ export class ServicioClienteService {
   idUsuario             : string;
   conversaciones        : Conversacion[] = [];
   chatSeleccionado      : Conversacion;
+  masConversaciones     : Conversacion[] = [];
+  listaConversaciones   : listaConversacion[] = [];
 
   constructor(public http: HttpClient) { }
+
+  agregarLista(fecha: Date, conversaciones: Conversacion[]){
+    const chat = new listaConversacion();
+    chat.fecha = fecha;
+    chat.conversaciones = conversaciones;
+    this.listaConversaciones.push(chat);
+  }
 
   enviarMensaje(data: MensajeChat){
     this.http.post(Constantes.URL_API_CHAT + '/' + data.conversacionId, data, {withCredentials: true}).subscribe( res =>{
