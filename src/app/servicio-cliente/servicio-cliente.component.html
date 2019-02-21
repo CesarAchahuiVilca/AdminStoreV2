@@ -6,11 +6,19 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-4">
+                    <mat-card>
+                        <mat-card-header>
+                            <mat-card-title>Lista de Conversaciones</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+
+                        </mat-card-content>
+                    </mat-card>
                     <div class="card" style="width: 100%; min-height: 450px; ">
                         <div class="card-body" style="padding: 0px;">
-                            <div class="cont-busqueda">
+                            <!--<div class="cont-busqueda">
                                 <input class="form-control" type="text" placeholder="Buscar" style="margin:5px;width: 95%;">
-                            </div>
+                            </div>-->
                             <div class="contenido-clientes" style="overflow: auto;height: 400px;">
                                 <div *ngFor="let conversacion of servicioClienteService.conversaciones">
                                     <hr style="padding: 0px; margin: 0px;cursor:pointer;">
