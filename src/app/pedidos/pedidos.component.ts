@@ -135,6 +135,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   //arreglo para guardar en mysql
   arreglomysql: datosventamysql[];
   detalleventmysql: detalleventamysql[];
+  mensajemysql: string = 'HECHO';
   //
   indiceArt: number = 0;
   serieselec: string;
@@ -409,18 +410,19 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.listapedidouni.EstadoPago = this.estadopago;
     this.listapedidouni.EstadoEnvio = this.estadoenvio;
     this.guardarmyql();
-    this.pedidosservice.actualizarpedido(this.listapedidouni)
+    this.pedidosservice.GuardarPagomysql(this.arreglomysql)
       .subscribe(res => {
+        var tempo = JSON.parse(JSON.stringify(res));
         console.log(res);
-        this.pedidosservice.GuardarPagomysql(this.arreglomysql)
-          .subscribe(res => {
-            console.log(res);
-            this.guardarmysqldetalle();
-          });
+        this.mensajemysql = tempo[0][0].Mensaje;
+        console.log(this.mensajemysql);
+        if (this.mensajemysql == 'HECHO') {
+          this.guardarmysqldetalle();
+        }
+        /*   
+           */
       });
-    this.snackBar.open('Pago Guardado', '🧓🏻', {
-      duration: 2000,
-    });
+    /* */
   }
   guardarmyql() {
     console.log('entra mysql');
@@ -485,6 +487,17 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.pedidosservice.GuardarDetallemysql(this.detalleventmysql)
           .subscribe(res => {
             console.log(res);
+            var tempo = JSON.parse(JSON.stringify(res));
+            this.mensajemysql = tempo[0][0].Mensaje;
+            if (this.mensajemysql == 'HECHO') {
+              this.pedidosservice.actualizarpedido(this.listapedidouni)
+                .subscribe(res => {
+                  console.log(res);
+                  this.snackBar.open('Pago Guardado', '🧓🏻', {
+                    duration: 2000,
+                  });
+                });
+            }
           });
       }
     }
