@@ -419,6 +419,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         if (this.mensajemysql == 'HECHO') {
           this.guardarmysqldetalle();
         }
+        else{
+          this.snackBar.open('Error!!'+ res, '🧓🏻', {
+            duration: 2000,
+          });
+        }
         /*   
            */
       });
@@ -497,6 +502,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
                     duration: 2000,
                   });
                 });
+            }
+            else{
+              this.snackBar.open('Error!!'+ res, '🧓🏻', {
+                duration: 2000,
+              });
             }
           });
       }
