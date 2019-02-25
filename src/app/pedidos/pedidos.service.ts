@@ -39,4 +39,7 @@ export class PedidosService {
   GuardarDetallemysql(pagodell:any){
     return this.http.post(Constantes.URL_API_PAGO+'/detalle/',pagodell, {withCredentials: true});
   }
+  recuperarsesion(){
+    return this.http.get(Constantes.URL_API_SESION+'/admin', {withCredentials: true});
+  }
 }

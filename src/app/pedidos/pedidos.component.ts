@@ -223,7 +223,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
        }
      };
      this.applyFilter('');*/
-
+    /* this.pedidosservice.recuperarsesion()
+     .subscribe(res=>{
+       console.log('usuario');
+       console.log(res);
+     });*/
   }
   //table material
   applyFilter(filterValue: string) {
