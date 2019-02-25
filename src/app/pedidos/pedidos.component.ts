@@ -436,12 +436,16 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     var mes = hoy.getMonth() + 1;
     var anio = hoy.getFullYear();
     var fecha_actual = String(anio + "-" + mes + "-" + dia);
-    var fecha_actual2 = new Date(fecha_actual);
+    var fechacom= new Date(this.fechacompra);
+    var compradia=fechacom.getDate();
+    var comprames=fechacom.getMonth()+1;
+    var compraanio=fechacom.getFullYear();
+    var fecha_compra=String(compraanio+"-"+comprames+"-"+compradia);
     this.arreglomysql = [{
       tipocomprobante: this.tipodoc,
       seriecomprobante: this.seriedoc,
       pNroComprobante: this.numerodoc,
-      pFechaVenta: fecha_actual,
+      pFechaVenta: fecha_compra,
       pFechaRegistro: fecha_actual,
       pEsVentaAlContad: 1,
       pIdEmpleado: 'root',
@@ -449,15 +453,15 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       pIdCliente: this.doccliente,
       pEsCancelad: 1,
       pImprimirGui: 0,
-      pMontoPagado: 12,
-      pPrecioVentaTotal: 12,
-      pIGVTotal: 12,
-      pRedondeo: 12,
+      pMontoPagado: this.preciototal,
+      pPrecioVentaTotal: this.preciototal,
+      pIGVTotal: (this.preciototal-(this.preciototal/1.18)),
+      pRedondeo: this.preciototal,
       pIdNivelCliente: '6',
       pIdLineaProducto: '5',
       pUsarNivel: 0,
       pObservacion: ' ',
-      pMontoPagadoReal: 0
+      pMontoPagadoReal: this.preciototal
     }];
   }
   guardarmysqldetalle() {
