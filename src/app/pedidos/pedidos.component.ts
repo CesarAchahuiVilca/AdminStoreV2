@@ -99,6 +99,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   dtTriggers2: Subject<any> = new Subject();
   flag: boolean = true;*/
   //fin
+  idempleado: string = '';
   fecha = new Date(Date.now());
   listapedidos: any;
   listapedidouni: any;
@@ -223,12 +224,12 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
        }
      };
      this.applyFilter('');*/
-     this.pedidosservice.recuperarsesion()
-     .subscribe(res=>{
-       console.log('usuario');
-       var resp=JSON.parse(JSON.stringify(res));
-       console.log(resp);
-     });
+    this.pedidosservice.recuperarsesion()
+      .subscribe(res => {
+        var resp = JSON.parse(JSON.stringify(res));
+        //console.log(resp.dato);
+        this.idempleado = resp.dato;
+      });
   }
   //table material
   applyFilter(filterValue: string) {
@@ -407,32 +408,31 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   actualizarpago() {
     var id = this.listapedidouni._id;
-    this.DocumentoAct[0].Tipo = this.tipodoc;
+ /*   this.DocumentoAct[0].Tipo = this.tipodoc;
     this.DocumentoAct[0].Serie = this.seriedoc;
     this.DocumentoAct[0].Numero = this.numerodoc;
     this.listapedidouni.Documento = this.DocumentoAct;
-    console.log(this.DocumentoAct);
-    this.listapedidouni.EstadoPago = this.estadopago;
-    this.listapedidouni.EstadoEnvio = this.estadoenvio;
+    console.log(this.DocumentoAct);*/
+    this.listapedidouni[0].EstadoPago = this.estadopago;
+    this.listapedidouni[0].EstadoEnvio = this.estadoenvio;
     this.guardarmyql();
-    this.pedidosservice.GuardarPagomysql(this.arreglomysql)
-      .subscribe(res => {
-        var tempo = JSON.parse(JSON.stringify(res));
-        console.log(res);
-        this.mensajemysql = tempo[0][0].Mensaje;
-        console.log(this.mensajemysql);
-        if (this.mensajemysql == 'HECHO') {
-          this.guardarmysqldetalle();
-        }
-        else{
-          this.snackBar.open('Error!!'+ res, '🧓🏻', {
-            duration: 2000,
-          });
-        }
-        /*   
-           */
-      });
-    /* */
+    /*guardar mysql-mongo */
+     this.pedidosservice.GuardarPagomysql(this.arreglomysql)
+       .subscribe(res => {
+         var tempo = JSON.parse(JSON.stringify(res));
+         console.log(res);
+         this.mensajemysql = tempo[0][0].Mensaje;
+         console.log(this.mensajemysql);
+         if (this.mensajemysql == 'HECHO') {
+           this.guardarmysqldetalle();
+         }
+         else{
+           this.snackBar.open('Error!!'+ this.mensajemysql, '🧓🏻', {
+             duration: 2000,
+           });
+         }
+       });
+    /*fin guardar*/
   }
   guardarmyql() {
     console.log('entra mysql');
@@ -441,11 +441,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     var mes = hoy.getMonth() + 1;
     var anio = hoy.getFullYear();
     var fecha_actual = String(anio + "-" + mes + "-" + dia);
-    var fechacom= new Date(this.fechacompra);
-    var compradia=fechacom.getDate();
-    var comprames=fechacom.getMonth()+1;
-    var compraanio=fechacom.getFullYear();
-    var fecha_compra=String(compraanio+"-"+comprames+"-"+compradia);
+    var fechacom = new Date(this.fechacompra);
+    var compradia = fechacom.getDate();
+    var comprames = fechacom.getMonth() + 1;
+    var compraanio = fechacom.getFullYear();
+    var fecha_compra = String(compraanio + "-" + comprames + "-" + compradia);
     this.arreglomysql = [{
       tipocomprobante: this.tipodoc,
       seriecomprobante: this.seriedoc,
@@ -453,14 +453,14 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       pFechaVenta: fecha_compra,
       pFechaRegistro: fecha_actual,
       pEsVentaAlContad: 1,
-      pIdEmpleado: 'root',
+      pIdEmpleado: this.idempleado,
       pIdLocal: '609',
       pIdCliente: this.doccliente,
       pEsCancelad: 1,
       pImprimirGui: 0,
       pMontoPagado: this.preciototal,
       pPrecioVentaTotal: this.preciototal,
-      pIGVTotal: (this.preciototal-(this.preciototal/1.18)),
+      pIGVTotal: (this.preciototal - (this.preciototal / 1.18)),
       pRedondeo: this.preciototal,
       pIdNivelCliente: '6',
       pIdLineaProducto: '5',
@@ -468,6 +468,8 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       pObservacion: ' ',
       pMontoPagadoReal: this.preciototal
     }];
+    console.log('arreglo mysql');
+    console.log(this.arreglomysql);
   }
   guardarmysqldetalle() {
     /*console.log('seriessss');
@@ -512,8 +514,8 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
                   });
                 });
             }
-            else{
-              this.snackBar.open('Error!!'+ res, '🧓🏻', {
+            else {
+              this.snackBar.open('Error!!' + res, '🧓🏻', {
                 duration: 2000,
               });
             }
