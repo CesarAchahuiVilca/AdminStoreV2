@@ -26,6 +26,7 @@ export interface PedidosData {
   total: string;
   estado: string;
   direccion: string;
+  Colorfila:string;
 }
 
 
@@ -328,12 +329,26 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         console.log(this.listapedidos);
         this.totalcarritos = this.pedidosservice.pedidos.length;
         for (var j = 0; j < this.pedidosservice.pedidos.length; j++) {
+          /*color */
+          var color='white';
+          if(this.pedidosservice.pedidos[j].EstadoEnvio=='Proceso'){
+            color='white';
+          }
+          if(this.pedidosservice.pedidos[j].EstadoEnvio=='Enviado'){
+            color='#CEF6CE';
+          }
+          if(this.pedidosservice.pedidos[j].EstadoEnvio=='Devolucion'){
+            color='#F6CECE';
+          }
+          //console.log(color);
+          /*fin color */
           this.preciototalcarritos = this.preciototalcarritos + Number(this.pedidosservice.pedidos[j].PrecioTotal)
-          this.listpedidos.push({ _id: this.pedidosservice.pedidos[j]._id, Correocliente: this.pedidosservice.pedidos[j].Correocliente, entrega: this.pedidosservice.pedidos[j].EstadoEnvio, fecha: this.pedidosservice.pedidos[j].FechaCompra, pago: this.pedidosservice.pedidos[j].idTipoPago, total: this.pedidosservice.pedidos[j].PrecioTotal, estado: this.pedidosservice.pedidos[j].EstadoPago, idUsuario: this.pedidosservice.pedidos[j].idUsuario, direccion: this.pedidosservice.pedidos[j].idDireccion });
+          this.listpedidos.push({ _id: this.pedidosservice.pedidos[j]._id, Correocliente: this.pedidosservice.pedidos[j].Correocliente, entrega: this.pedidosservice.pedidos[j].EstadoEnvio, fecha: this.pedidosservice.pedidos[j].FechaCompra, pago: this.pedidosservice.pedidos[j].idTipoPago, total: this.pedidosservice.pedidos[j].PrecioTotal, estado: this.pedidosservice.pedidos[j].EstadoPago, idUsuario: this.pedidosservice.pedidos[j].idUsuario, direccion: this.pedidosservice.pedidos[j].idDireccion, Colorfila:color });
         }
         // this.dataSource = new MatTableDataSource(this.listpedidos);
         this.filtrarCarritos('1');
         this.funcionprueba();
+        console.log(this.listpedidos)
       });
   }
   /* recuperarnombre(id: string) {

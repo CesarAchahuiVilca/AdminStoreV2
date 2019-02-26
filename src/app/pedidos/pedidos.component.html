@@ -64,18 +64,18 @@
                     <th><i class="material-icons" style="color: rgb(255, 0, 242);">
                         date_range
                       </i>
-                      <label style="font-weight: normal">Fecha</label>
+                      <label style="font-weight: normal;font-size: 12px">Fecha: {{fechacompra}}</label>
                     </th>
                     <th><i class="material-icons" style="color: rgb(21, 240, 39)">
                         attach_money
                       </i>
                       <label style="font-weight: normal">Total: {{preciototal}}</label>
                     </th>
-                    <th><i class="material-icons" style="color: red">
+                    <!--<th><i class="material-icons" style="color: red">
                         chat
                       </i>
                       <label style="font-weight: normal">Mensajes</label>
-                    </th>
+                    </th>-->
                     <th><i class="material-icons" style="color: rgb(0, 140, 255)">
                         library_books
                       </i>
@@ -167,45 +167,45 @@
                                     <!-- ID Column -->
                                     <ng-container matColumnDef="_id">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Numero Pedido </th>
-                                      <td mat-cell *matCellDef="let row" style="font-size: 12px"> {{row._id}} </td>
+                                      <td mat-cell *matCellDef="let row" style="font-size: 12px" [style.background-color]="row.Colorfila"> {{row._id}} </td>
                                     </ng-container>
 
                                     <!-- Progress Column -->
                                     <ng-container matColumnDef="Correocliente">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
-                                      <td mat-cell *matCellDef="let row" style="font-size: 12px"> {{row.Correocliente}}
+                                      <td mat-cell *matCellDef="let row" style="font-size: 12px" [style.background-color]="row.Colorfila"> {{row.Correocliente}}
                                       </td>
                                     </ng-container>
                                     <!-- ID Column -->
                                     <ng-container matColumnDef="entrega">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado Entrega </th>
-                                      <td mat-cell *matCellDef="let row" style="font-size: 12px"> {{row.entrega}} </td>
+                                      <td mat-cell *matCellDef="let row"  style="font-size: 12px" [style.background-color]="row.Colorfila"> {{row.entrega}} </td>
                                     </ng-container>
 
                                     <!-- Progress Column -->
                                     <ng-container matColumnDef="fecha">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Compra </th>
-                                      <td mat-cell *matCellDef="let row" style="font-size: 12px"> {{row.fecha}} </td>
+                                      <td mat-cell *matCellDef="let row" style="font-size: 12px" [style.background-color]="row.Colorfila"> {{row.fecha}} </td>
                                     </ng-container>
                                     <!-- ID Column -->
                                     <ng-container matColumnDef="pago">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Pago </th>
-                                      <td mat-cell *matCellDef="let row" style="font-size: 12px"> {{row.pago}} </td>
+                                      <td mat-cell *matCellDef="let row" style="font-size: 12px" [style.background-color]="row.Colorfila"> {{row.pago}} </td>
                                     </ng-container>
 
                                     <!-- Progress Column -->
                                     <ng-container matColumnDef="total">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Total </th>
-                                      <td mat-cell *matCellDef="let row" style="font-size: 12px"> {{row.total}} </td>
+                                      <td mat-cell *matCellDef="let row" style="font-size: 12px" [style.background-color]="row.Colorfila"> {{row.total}} </td>
                                     </ng-container>
                                     <!-- Progress Column -->
                                     <ng-container matColumnDef="estado">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado de Pago </th>
-                                      <td mat-cell *matCellDef="let row" style="font-size: 12px"> {{row.estado}} </td>
+                                      <td mat-cell *matCellDef="let row" style="font-size: 12px" [style.background-color]="row.Colorfila"> {{row.estado}} </td>
                                     </ng-container>
                                     <ng-container matColumnDef="btn">
                                       <th mat-header-cell *matHeaderCellDef mat-sort-header>-- </th>
-                                      <td mat-cell *matCellDef="let row" style="font-size: 12px">
+                                      <td mat-cell *matCellDef="let row" style="font-size: 12px" [style.background-color]="row.Colorfila">
                                         <button mat-raised-button *ngIf="row.estado=='Pagado'" color="primary"
                                           (click)="cambiarvista(row._id,row.idUsuario,row.direccion,row.total)">VER</button>
                                         <button mat-raised-button *ngIf="row.estado=='Proceso'"
@@ -247,7 +247,7 @@
                 <div class="container">
                   <div class="row">
                     <div class="col-lg-4">
-                      <mat-form-field>
+                      <mat-form-field style="width: 50%">
                         <mat-select placeholder="Tipo Documento" [(value)]="tipodoc">
                           <mat-option value="BBV">Boleta</mat-option>
                           <mat-option value="FFV">Factura</mat-option>
@@ -255,14 +255,14 @@
                       </mat-form-field>
                     </div>
                     <div class="col-lg-4">
-                      <mat-form-field appearance="outline" style="margin-left: 50px">
+                      <mat-form-field appearance="outline"  style="width: 50%">
                         <mat-label>Serie</mat-label>
                         <input matInput placeholder="Placeholder" [(ngModel)]="seriedoc">
                         <mat-icon matSuffix>assignment</mat-icon>
                       </mat-form-field>
                     </div>
                     <div class="col-lg-4">
-                      <mat-form-field appearance="outline" style="margin-left: 50px">
+                      <mat-form-field appearance="outline"  style="width: 50%">
                         <mat-label>Numero</mat-label>
                         <input matInput placeholder="Placeholder" [(ngModel)]="numerodoc">
                         <mat-icon matSuffix>assignment</mat-icon>
@@ -312,9 +312,9 @@
                     <td>
                       <select style="width: 150px" id="selectestadopago" class="form-control"
                         (change)="cambiarestadopago()">
-                        <option value="p1" selected>Proceso</option>
+                        <option value="p1">Proceso</option>
                         <option value="p2">Error de pago</option>
-                        <option value="p3">Pagado</option>
+                        <option value="p3" selected>Pagado</option>
                         <option value="p4">Reembolso</option>
                       </select>
                     </td>
@@ -453,7 +453,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>s/. {{preciototal}}</td>
+                    <td style="color: red">s/. {{preciototal}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
