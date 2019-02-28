@@ -26,7 +26,7 @@ export interface temdoc {
     Numero: String,
 }
 export class Pedidos {
-    constructor(_id = '', idUsuario = '',Correocliente='', Articulo = null, FechaCompra = new Date(), EstadoPago = '', idDireccion = '', idTipoPago = '', Mensaje = '', EstadoEnvio = '', FechaEnvio = new Date(), FechaEntrega = new Date(), PrecioTotal = '', NroTransaccion = '', Documento = null, idVendedor = '') {
+    constructor(_id = '', idUsuario = '',Correocliente='', Articulo = null, FechaCompra = new Date(), EstadoPago = '', idDireccion = '', idTipoPago = '', NroPedido = '', EstadoEnvio = '', FechaEnvio = new Date(), FechaEntrega = new Date(), PrecioTotal = '', NroTransaccion = '', Documento = null, idVendedor = '') {
         this._id = _id;
         this.idUsuario = idUsuario;
         this.Correocliente=Correocliente;
@@ -35,7 +35,7 @@ export class Pedidos {
         this.EstadoPago = EstadoPago;
         this.idDireccion = idDireccion;
         this.idTipoPago = idTipoPago;
-        this.Mensaje = Mensaje;
+        this.NroPedido = NroPedido;
         this.EstadoEnvio = EstadoEnvio;
         this.FechaEnvio = FechaEnvio;
         this.FechaEntrega = FechaEntrega;
@@ -52,7 +52,7 @@ export class Pedidos {
     EstadoPago: string;
     idDireccion: string;
     idTipoPago: string;
-    Mensaje: string;
+    NroPedido: string;
     EstadoEnvio: string;
     FechaEnvio: Date;
     FechaEntrega: Date;
