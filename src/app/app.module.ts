@@ -51,7 +51,8 @@ const routes: Route[] = [
   {path: 'region', component: RegionComponent},
   {path: 'servicio-cliente',component:ServicioClienteComponent},
   {path: 'usuarios', component: UsuarioComponent},
-  {path: 'imagenes-inicio', component: HomeComponent}
+  {path: 'imagenes-inicio', component: HomeComponent},
+  {path: 'seguimiento', component:SeguimientoComponent}
 ];
 
 @NgModule({
