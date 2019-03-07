@@ -34,6 +34,7 @@ import { DialogoComponent } from './dialogo/dialogo.component';
 import { HomeComponent } from './home/home.component';
 import { ImagenCartelComponent } from './home/imagen-cartel/imagen-cartel.component';
 import { SelectImagenComponent } from './home/select-imagen/select-imagen.component';
+import { SeguimientoComponent } from './seguimiento/seguimiento.component';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -79,7 +80,8 @@ const routes: Route[] = [
     DialogoComponent,
     HomeComponent,
     ImagenCartelComponent,
-    SelectImagenComponent
+    SelectImagenComponent,
+    SeguimientoComponent
   ],
   imports: [
     BrowserModule,
