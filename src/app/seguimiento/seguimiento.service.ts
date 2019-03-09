@@ -15,4 +15,7 @@ export class SeguimientoService {
   recuperarpedidoscorreo(correo:string){
     return this.http.get(Constantes.URL_API_PAGO+'/pedidos/cliente/'+correo);
   }
+  recuperarpedidonro(num:string){
+    return this.http.get(Constantes.URL_API_PAGO+'/consul/ped/'+num);
+  }
 }

@@ -50,7 +50,7 @@
                     <td>{{pedidos.FechaEnvio}}</td>
                     <td>{{pedidos.FechaEntrega}}</td>
                     <td>{{pedidos.EstadoEnvio}}</td>
-                    <td>{{pedidos.EstadoEnvio}}</td>
+                    <td><button (click)="verartic(i)" data-toggle="modal" data-target="#ArticuloModal">Ver</button></td>
                     <td><mat-form-field>
                         <mat-select id="{{pedidos.NroPedido}}"  [(value)]="estadoenv">
                           <mat-option value="Proceso">Proceso</mat-option>
@@ -70,4 +70,38 @@
       </div>
     </mat-card>
   </main>
+</div>
+
+<!--MODAL-->
+<!-- Modal -->
+<div class="modal fade" id="ArticuloModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Articulos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Articulo</th>
+              <th>Precio</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let articulos of arregloarti" >
+            <tr>
+              <td>{{articulos.titulo}}</td>
+              <td>{{articulos.precio}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
 </div>

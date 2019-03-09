@@ -19,7 +19,7 @@ export class PedidosService {
     return this.http.put(Constantes.URL_API_PAGO + `/${pedido[0]._id}`, pedido);
   }
   actualizarpedido2(pedido: Pedidos) {
-    return this.http.put(Constantes.URL_API_PAGO + `/${pedido._id}`, pedido);
+    return this.http.put(Constantes.URL_API_PAGO + "/actu2" + `/${pedido._id}`, pedido);
   }
   eliminarpedido(_id: string) {
     return this.http.delete(Constantes.URL_API_PAGO + `/${_id}`);
@@ -43,6 +43,6 @@ export class PedidosService {
     return this.http.post(Constantes.URL_API_PAGO + '/detalle/', pagodell, { withCredentials: true });
   }
   recuperarsesion() {
-    return this.http.get(Constantes.URL_API_SESION , { withCredentials: true });
+    return this.http.get(Constantes.URL_API_SESION, { withCredentials: true });
   }
 }

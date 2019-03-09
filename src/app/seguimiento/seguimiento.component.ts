@@ -1,3 +1,4 @@
+import { Articulo } from './../articulo/articulo';
 import { Component, OnInit } from '@angular/core';
 import { SeguimientoService } from './seguimiento.service';
 import { Pedidos } from '../pedidos/pedidos';
@@ -12,6 +13,7 @@ export class SeguimientoComponent implements OnInit {
   datcorreo: string = '';
   datnroped: string = '';
   arreglopedidos: any;
+  arregloarti:any;
   estadoenv: string = '';
 
   constructor(public seguimientoservice: SeguimientoService, public pedidosservice: PedidosService) { }
@@ -29,7 +31,7 @@ export class SeguimientoComponent implements OnInit {
       if (this.datnroped != '') {
         console.log(this.datnroped);
         document.getElementById('datosSeg').hidden = false;
-        this.consultapornroped();
+        this.consultapornroped(this.datnroped);
       }
       else {
         alert('NO SE INGRESO NINGUN DATO !!!!')
@@ -44,8 +46,14 @@ export class SeguimientoComponent implements OnInit {
       });
 
   }
-  consultapornroped() {
-
+  consultapornroped(num:string) {
+    console.log('entra');
+    this.seguimientoservice.recuperarpedidonro(num)
+    .subscribe(res=>{
+      console.log(res);
+      this.arreglopedidos = JSON.parse(JSON.stringify(res));
+        document.getElementById('datosSeg').hidden = false;
+    });
   }
   actualizar(i: number) {
     console.log(this.estadoenv);
@@ -55,6 +63,12 @@ export class SeguimientoComponent implements OnInit {
       .subscribe(res => {
         console.log(res);
       });
+  }
+
+  verartic(id:string){
+    console.log(id);
+    this.arregloarti=this.arreglopedidos[id].Articulo;
+    console.log(this.arregloarti);
   }
 
 }
