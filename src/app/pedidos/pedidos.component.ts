@@ -335,6 +335,9 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
             color='white';
           }
           if(this.pedidosservice.pedidos[j].EstadoEnvio=='Enviado'){
+            color='#F3F293';
+          }
+          if(this.pedidosservice.pedidos[j].EstadoEnvio=='Entregado'){
             color='#CEF6CE';
           }
           if(this.pedidosservice.pedidos[j].EstadoEnvio=='Devolucion'){
