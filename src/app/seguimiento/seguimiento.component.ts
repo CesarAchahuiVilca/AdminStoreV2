@@ -58,6 +58,7 @@ export class SeguimientoComponent implements OnInit {
   actualizar(i: number) {
     console.log(this.estadoenv);
     this.arreglopedidos[i].EstadoEnvio = this.estadoenv;
+    this.arreglopedidos[i].FechaEntrega=new Date();
     console.log(this.arreglopedidos[i]);
     this.pedidosservice.actualizarpedido2(this.arreglopedidos[i])
       .subscribe(res => {
