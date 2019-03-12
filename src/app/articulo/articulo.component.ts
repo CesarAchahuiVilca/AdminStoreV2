@@ -630,7 +630,7 @@ export class ArticuloComponent implements OnInit {
       .subscribe(res=>{      
         var respuesta = JSON.parse(JSON.stringify(res));
         if(respuesta.estado == "0"){   
-          console.log("ERROR "+respuesta.mesanje);
+          console.log("ERROR "+respuesta.mensaje);
         }else{        
           this.cambiarvista();
           this.getArticulosMysql();
