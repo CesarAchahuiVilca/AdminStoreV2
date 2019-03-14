@@ -3,13 +3,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CategoriaService } from './categoria.service';
 import { CaracteristicaService } from '../caracteristicas/caracteristica.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
-import { NgForm } from '@angular/forms';
 import { Categoria } from './categoria';
 import { Caracteristica }  from '../caracteristicas/caracteristica';
-import { variable } from '@angular/compiler/src/output/output_ast';
-import { formDirectiveProvider } from '@angular/forms/src/directives/reactive_directives/form_group_directive';
 import { Miga } from '../miga';
-import {MatPaginator, MatSort, MatTableDataSource, MatTable, MatSnackBar} from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatTable, MatSnackBar} from '@angular/material';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 import { IconsMaterial } from '../material_icons';
 
@@ -52,7 +49,6 @@ export class CategoriaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  
     var cat = new Categoria();
     cat.nombre = "Categorias";
     cat._id = "root";
@@ -72,13 +68,16 @@ export class CategoriaComponent implements OnInit {
       this.limpiarImagen();
     
   }
+
   limpiarImagen(){
     this.categoriaService.categoriaSeleccionada.imagen = "sinImagen.jpg";
     this.mostrarImagen = false;
   }
+
   mostrarMaterialIcons(){
     this.noMostrarIcons = false;
   }
+
   asignarIcon(icon){
     this.iconoSeleccionado = icon;
     this.noMostrarIcons = true;
@@ -114,7 +113,6 @@ export class CategoriaComponent implements OnInit {
   }
 
   guardarCategoria(){
-    //console.log(this.categoriaService.categoriaSeleccionada);
     var btncerrarmodal = document.getElementById("btnCerrarModal");
     if(this.categoriaService.categoriaSeleccionada._id){
       this.categoriaService.putCategoria(this.categoriaService.categoriaSeleccionada)
@@ -122,17 +120,13 @@ export class CategoriaComponent implements OnInit {
         this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
         var respuesta = JSON.parse(JSON.stringify(res));
         if(respuesta.estado == "0"){    
-          console.log("OCURRIO UN ERROR ESTADO 0");
-          //this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
-          
+          this.openSnackBar(false, "Ocurrió un error estado 0");
         }else{
           this.limpiarform();
           btncerrarmodal.click();
           this.getCategorias();
-          console.log("TODO ESTA CORRECTO");
-          //this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+          this.openSnackBar(true, 'Todo está correcto')
         }   
-        this.openSnackBar(respuesta.estado, respuesta.mensaje);        
       }); 
     }else{
       this.categoriaService.postCategoria(this.categoriaService.categoriaSeleccionada)
@@ -140,31 +134,20 @@ export class CategoriaComponent implements OnInit {
         this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
         var respuesta = JSON.parse(JSON.stringify(res));
         if(respuesta.estado == "0"){   
-        //console.log("OCURRIO UN ERROR ESTADO 0:"+cat.nombre+" - "+cat.padre);
-         // this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+          this.openSnackBar(false, "Ocurrio un error: estado 0");
         }else{
           this.limpiarform();
           btncerrarmodal.click();
           this.getCategorias();
-          console.log("TODO ESTA CORRECTO");
-        //  this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
+          this.openSnackBar(true, 'Todo está correcto');
         }
-        this.openSnackBar(respuesta.estado, respuesta.mensaje);          
       });
     }
   }
   
   editarCategoria(categoria: Categoria){  
     this.categoriaService.categoriaSeleccionada = categoria;
-    //console.log(categoria);
-   /* var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src =this.URL_IMAGES+"/tmp/"+categoria.imagen;*/
-    //var imagenInput  = document.getElementById("imagen") as HTMLInputElement;
-   // var inputfile = document.getElementById("nombrearchivo") as HTMLLabelElement;
-  //  inputfile.innerHTML = this.categoriaService.categoriaSeleccionada.imagen;
-    //document.getElementById("titulomodal").innerHTML='<i class="fa fa-edit"></i> Editar Categoria: '+categoria.nombre;   
     this.limpiarChecks();
-    //console.log(this.caracteristicas);
     for(var i = 0; i < this.categoriaService.categoriaSeleccionada.caracteristicas.length; i++){
       var j = 0;
       while(this.categoriaService.categoriaSeleccionada.caracteristicas[i]._id != this.caracteristicas[j]._id)
@@ -183,13 +166,10 @@ export class CategoriaComponent implements OnInit {
     this.categoriaService.deleteCategoria(idCategoria)
     .subscribe(res=>{
       this.irASubCategoria(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]);
-      //console.log(res);
       var respuesta = JSON.parse(JSON.stringify(res));
-     // this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
       this.getCategorias();
       this.openSnackBar(respuesta.estado, respuesta.mensaje);
     });
-    //console.log(idCategoria);
   }
 
   getCategorias(){
@@ -224,7 +204,6 @@ export class CategoriaComponent implements OnInit {
     });    
   }
   irASubCategoria(categoria: Categoria){
-    //console.log("");
     while(this.breadcrumb_categorias[this.breadcrumb_categorias.length-1].nombre != categoria.nombre){
       this.breadcrumb_categorias.pop();
     }
@@ -234,7 +213,6 @@ export class CategoriaComponent implements OnInit {
   }
 
   onFileSelected(event){
-    console.log(event.target.files[0].name);
     this.selectedFile = event.target.files[0];
     const fd = new FormData();
     fd.append('image',this.selectedFile, this.selectedFile.name);
@@ -244,9 +222,9 @@ export class CategoriaComponent implements OnInit {
     })
     .subscribe(event=>{
         if(event.type === HttpEventType.UploadProgress){
-          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");          
+          this.openSnackBar(true, "Subiendo "+ Math.round(event.loaded/event.total*100)+" %");
           if(Math.round(event.loaded/event.total*100) == 100){
-            console.log("termino subir la imagen");
+            this.openSnackBar(true, 'Se subió la imagen con éxito');
           }        
         }else{
           if(event.type === HttpEventType.Response){
@@ -262,44 +240,9 @@ export class CategoriaComponent implements OnInit {
 
   onUpload(evento){
     evento.preventDefault()
-   /* var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
-    var progreso = document.getElementById("progreso") as HTMLDivElement;
-    inputfile.innerHTML="";
-    const fd = new FormData();
-    fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(this.URL_API,fd,{
-      reportProgress: true,
-      observe: 'events'
-    })
-    .subscribe(event=>{
-        if(event.type === HttpEventType.UploadProgress){
-          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");
-          progreso.style.width = Math.round(event.loaded/event.total*100)+"%";
-          progreso.innerHTML = "Subiendo "+ Math.round(event.loaded/event.total*100)+" %";
-          inputfile.style.display="none";
-          if(Math.round(event.loaded/event.total*100) == 100){
-            //console.log("termino subir la imagen");
-            //console.log("Comprimiendo imagen");
-            progreso.innerHTML = "Comprimiendo Imagen....";
-            inputfile.innerHTML = "";
-          }
-        
-        }else{
-          if(event.type === HttpEventType.Response){
-            //console.log(event.body);
-            var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;
-            progreso.style.backgroundColor = "green";
-            progreso.innerHTML = "Completado.";                    
-            this.categoriaService.categoriaSeleccionada.imagen = this.selectedFile.name;
-          }
-        }
-      }
-    );*/
   }
 
   checkCaracteristica(caracteristica : Caracteristica){
-    //console.log(this.categoriaService.categoriaSeleccionada);
     var checkButton = document.getElementById(caracteristica.nombre) as HTMLInputElement;
     if (checkButton.checked){
       this.categoriaService.categoriaSeleccionada.caracteristicas.push(caracteristica);
@@ -308,29 +251,33 @@ export class CategoriaComponent implements OnInit {
       while(this.categoriaService.categoriaSeleccionada.caracteristicas[i]._id != caracteristica._id){ i = i + 1;}
       this.categoriaService.categoriaSeleccionada.caracteristicas.splice(i,1);
     }
-    //console.log(this.categoriaService.categoriaSeleccionada.caracteristicas);
   }
 
   limpiarChecks(){
-    console.log("LIMPIANDO CHECKS");
+    this.openSnackBar(true, 'Limpiando Checks');
     for(var i = 0; i < this.caracteristicas.length; i++){
       var check = document.getElementById(this.caracteristicas[i].nombre) as HTMLInputElement;
       check.checked = false;
     }
   }
+
   /// aplicar filtro en el data table de material
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  /**
+   * Método que abre un bar que muestra un mensaje de confirmación
+   * @param status 
+   * @param mensaje 
+   */
   openSnackBar(status: boolean, mensaje: string): void {
-    var clase = status ? 'exito' : 'error';
     this.snackBar.openFromComponent(SnackBarComponent, {
       duration: 3000,
-      panelClass: [clase],
+      panelClass: [status ? 'exito' : 'error'],
       data: mensaje
     });
   }

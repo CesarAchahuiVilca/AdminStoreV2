@@ -13,8 +13,6 @@ export class BreadcrumbComponent implements OnInit {
   router : Router;
 
   constructor() {
-    //var home =  new Miga('Inicio', '');
-    //this.links = [home];
    }
 
   ngOnInit() {

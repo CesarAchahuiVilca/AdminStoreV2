@@ -16,8 +16,9 @@ import { NgForm } from '@angular/forms';
 import { ViewChild } from '@angular/core';
 import { PlanesService} from '../planes/planes.service';
 import { Precios} from '../planes/precios';
-import {MatPaginator, MatSort, MatTableDataSource, MatTable} from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar} from '@angular/material';
 import { Equipo } from './equipo';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 
 export interface articuloData {
   id: string;
@@ -63,7 +64,7 @@ export class ArticuloComponent implements OnInit {
   imagenesSeleccionadas   : string[] = new Array();
    // nombre imagen para el editor
   imageneditorseleccionada: string="";
-  migas                   : Miga[] = [new Miga('Articulo','articulos')];
+  migas                   : Miga[] = [new Miga('Artículos','articulos')];
   editorInstance          : any;
   // Property Binding
   mostrarFormularioArticulo   : boolean = false;
@@ -127,9 +128,9 @@ export class ArticuloComponent implements OnInit {
               public categoriaService: CategoriaService,
               public caracteristicaService: CaracteristicaService,
               public marcaService: MarcaService,
-              public planesService: PlanesService) { 
+              public planesService: PlanesService, 
+              public snackBar: MatSnackBar) { 
                 this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
-
               }
 
   ngOnInit() {
@@ -146,14 +147,14 @@ export class ArticuloComponent implements OnInit {
   }
 
   created(editorInstance: any) {
-   this.editorInstance = editorInstance;
+    this.editorInstance = editorInstance;
   }
 
   newHandlerImage(){
-    //console.log(this.contenidoEditor);
+    // Evento del limpiar
   }
 
-  limpiarFormulario(){
+  limpiarFormulario() {
     this.articuloService.articuloSeleccionado = new Articulo();
     this.imagenesSeleccionadas = new Array();
     this.listacaracteristicas = new Array();
@@ -163,98 +164,80 @@ export class ArticuloComponent implements OnInit {
   }
 
 
-  obtenerListaPrecios(){
-    this.planesService.getEquipos().subscribe(res=>{
-      this.listaequipos = res as any[];      
+  obtenerListaPrecios() {
+    this.planesService.getEquipos().subscribe(res => {
+      this.listaequipos = res as any[];
     });
   }
 
-
-  obtenerEquiposArticulo(){
+  obtenerEquiposArticulo() {
     this.articuloService.articuloSeleccionado.equipos = new Array();
-    this.articuloService.articuloSeleccionado.equipos.push(new Equipo("","",0,"","",""));
-    this.articuloService.getEquiposArticulo().subscribe(res=>{
+    this.articuloService.articuloSeleccionado.equipos.push(new Equipo("", "", 0, "", "", ""));
+    this.articuloService.getEquiposArticulo().subscribe(res => {
       this.articuloService.articuloSeleccionado.equipos = res as Equipo[];
-      this.dataSourceEquipos = new MatTableDataSource(this.articuloService.articuloSeleccionado.equipos);   
+      this.dataSourceEquipos = new MatTableDataSource(this.articuloService.articuloSeleccionado.equipos);
       this.dataSourceEquipos.paginator = this.paginator2;
       this.dataSourceEquipos.sort = this.sort2;
     });
   }
 
-  buscarPreciosEquipo(){
+  buscarPreciosEquipo() {
     var cont = 0;
     var cont_ante = 0;
-    var mejor_nombre="";
+    var mejor_nombre = "";
     var arraynombres = this.articuloService.articuloSeleccionadoMysql.Descripcion.split(" ");
-    for( var i = 0; i<this.listaequipos.length;i++){
+    for (var i = 0; i < this.listaequipos.length; i++) {
       var nombre = this.listaequipos[i].nombreequipo;
-      for(var j = 0;j<arraynombres.length;j++){
-        if(nombre.includes(arraynombres[j])){
+      for (var j = 0; j < arraynombres.length; j++) {
+        if (nombre.includes(arraynombres[j])) {
           cont++;
         }
       }
-      if(cont>cont_ante){
+      if (cont > cont_ante) {
         mejor_nombre = nombre;
         cont_ante = cont;
         cont = 0;
-      }else{
+      } else {
         cont = 0;
       }
     }
     this.articuloService.articuloSeleccionado.idprecio = mejor_nombre;
-    console.log(mejor_nombre);
-    //this.buscarPlanesEquipo();  
   }
 
-  buscarPlanesEquipo(){
+  buscarPlanesEquipo() {
     this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio)
-    .subscribe(res=>{
-      console.log(res);
-    });
+      .subscribe(res => {
+        console.log(res);
+      });
   }
 
-  mostrarDetalleTipoPlan(tipoplan){
+  mostrarDetalleTipoPlan(tipoplan) {
     this.planesseleccionada = tipoplan;
-    //console.log(this.planesseleccionada);
   }
 
-  cambioSelect(){
-    //console.log(this.listaequipos);
-  }
-
-  cambiarPlanes(equipo){
-    //console.log(equipo);
-  }
-
-  cambiarvista(articulo?: ArticuloMysql, form?: NgForm){
-    if(this.vista == "1"){
-      this.vista ="2";
+  cambiarvista(articulo ? : ArticuloMysql, form ? : NgForm) {
+    if (this.vista == "1") {
+      this.vista = "2";
       this.mostrarListaArticulos = false;
-      this.mostrarFormularioArticulo = true;     
+      this.mostrarFormularioArticulo = true;
       this.mostrarBotonOpcion = true;
       this.limpiarFormulario();
       this.articuloService.articuloSeleccionado.idarticulo = articulo.idArticulo;
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
       this.articuloService.articuloSeleccionadoMysql = articulo;
       this.articuloService.articuloSeleccionado.titulo = articulo.Descripcion;
-      this.buscarPreciosEquipo();     
-      this.buscarEquiposArticulo(); 
+      this.buscarPreciosEquipo();
       this.obtenerEquiposArticulo();
       this.generarURL();
-
-    }else{
-      this.vista ="1";
+    } else {
+      this.vista = "1";
       this.mostrarListaArticulos = true;
-      this.mostrarFormularioArticulo = false;     
+      this.mostrarFormularioArticulo = false;
       this.mostrarBotonOpcion = false;
-      this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);   
+      this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
-  }
-
-  buscarEquiposArticulo(){
-    
   }
 
   ngAfterViewInit(): void {
@@ -262,468 +245,426 @@ export class ArticuloComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  ngOnDestroy(): void {
-  }
-
-
-  getArticulosMysql(){
+  getArticulosMysql() {
     this.mostrarCarga = true;
     this.mostrarListaArticulos = false;
     this.articuloService.getArticulosMysql()
-    .subscribe(res=>{
-      this.articuloService.articulosMysql = res as ArticuloMysql[];
-      if(this.articuloService.articulosMysql.length > 0){
-        this.mostrarListaArticulos = true;
-      }
-      this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);   
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.mostrarCarga = false;
-    });
+      .subscribe(res => {
+        this.articuloService.articulosMysql = res as ArticuloMysql[];
+        if (this.articuloService.articulosMysql.length > 0) {
+          this.mostrarListaArticulos = true;
+        }
+        this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.mostrarCarga = false;
+      });
   }
 
-  getCategorias(){
-    this.categoriaService.getCategorias().subscribe( res => {
+  getCategorias() {
+    this.categoriaService.getCategorias().subscribe(res => {
       this.listacategorias = res as Categoria[];
     });
   }
 
-  getMarcas(){
-    this.marcaService.getMarcas().subscribe( res => {
+  getMarcas() {
+    this.marcaService.getMarcas().subscribe(res => {
       this.listamarcas = res as Marca[];
     });
   }
 
-  getCaracteristicas(){   
-    this.listacaracteristicasarticulo = new Array(); 
-    for(var i=0; i < this.listacategorias.length; i++){
-      if(this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id){
-        this.listacaracteristicas = this.listacategorias[i].caracteristicas;       
+  getCaracteristicas() {
+    this.listacaracteristicasarticulo = new Array();
+    for (var i = 0; i < this.listacategorias.length; i++) {
+      if (this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id) {
+        this.listacaracteristicas = this.listacategorias[i].caracteristicas;
       }
     }
-    for(var i=0;i<this.listacaracteristicas.length;i++){
-      this.listacaracteristicasarticulo.push(new CaracteristicaItem(this.listacaracteristicas[i].nombre,""));
+    for (var i = 0; i < this.listacaracteristicas.length; i++) {
+      this.listacaracteristicasarticulo.push(new CaracteristicaItem(this.listacaracteristicas[i].nombre, ""));
     }
   }
 
-  completaRegistro(articulomysql: ArticuloMysql){
-
-  }
-  
-  editarArticulo(art){
+  editarArticulo(art) {
     this.itemsDatosGenerales = new Array();
     this.articuloService.articuloSeleccionadoMysql = art;
     this.articuloService.getArticulo(this.articuloService.articuloSeleccionadoMysql.idArticulo)
-    .subscribe(res=>{      
-      this.articuloService.articuloSeleccionado = res[0] as Articulo;
-      this.imagenesSeleccionadas  = this.articuloService.articuloSeleccionado.imagenes;
-      try{
-        for(var i=0;i<this.imagenesSeleccionadas.length;i++){
-       
-          //this.imagenesSeleccionadas.splice(i,1);
-          var inputcheck = document.getElementById(this.imagenesSeleccionadas[i]) as HTMLInputElement;
-          inputcheck.checked = true;
-        
+      .subscribe(res => {
+        this.articuloService.articuloSeleccionado = res[0] as Articulo;
+        this.imagenesSeleccionadas = this.articuloService.articuloSeleccionado.imagenes;
+        try {
+          for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
+            var inputcheck = document.getElementById(this.imagenesSeleccionadas[i]) as HTMLInputElement;
+            inputcheck.checked = true;
           }
-      }catch(e){
-        console.log(e);
-      }
+        } catch (e) {
+          this.openSnackBar(false, e);
+        }
+        this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
+        this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
+        this.obtenerEquiposArticulo();
+        if (this.listacaracteristicasarticulo.length == 0) {
+          this.getCaracteristicas();
+        }
+        this.buscarPlanesEquipo();
+        this.vista = "2";
+        this.mostrarListaArticulos = false;
+        this.mostrarFormularioArticulo = true;
+        this.mostrarBotonOpcion = true;
+        this.mostrarBotonOpcion = true;
+      });
+  }
 
-      
-
-      this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
-      this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
-      this.obtenerEquiposArticulo();
-      if(this.listacaracteristicasarticulo.length == 0){
-        this.getCaracteristicas();
-      }
-      this.buscarPlanesEquipo(); 
-      this.vista = "2";
-      this.mostrarListaArticulos = false;
-      this.mostrarFormularioArticulo = true;
-      this.mostrarBotonOpcion = true;
-      //this.buscarPreciosEquipo();
-      this.mostrarBotonOpcion = true;
-    });
-  } 
-  
-  agregarCaractgarCaracteristica(){
-    this.contador_caracteristicas = this.contador_caracteristicas+1;
+  agregarCaractgarCaracteristica() {
+    this.contador_caracteristicas = this.contador_caracteristicas + 1;
     this.itemsCaracteristicas.push(this.contador_caracteristicas);
   }
 
-  eliminarItemCaracteristica(id:Number){
-    for(var i=0;i<this.itemsCaracteristicas.length;i++){
-      if(this.itemsCaracteristicas[i] == id){
-        this.itemsCaracteristicas.splice(i,1);
+  eliminarItemCaracteristica(id: Number) {
+    for (var i = 0; i < this.itemsCaracteristicas.length; i++) {
+      if (this.itemsCaracteristicas[i] == id) {
+        this.itemsCaracteristicas.splice(i, 1);
       }
     }
   }
- 
-  eliminarItemImagen(id:string){
+
+  eliminarItemImagen(id: string) {
     this.listaimagenesfiltro = this.listaimagenes;
-    for(var i=0;i<this.imagenesSeleccionadas.length;i++){
-      if(this.imagenesSeleccionadas[i] == id){
-        this.imagenesSeleccionadas.splice(i,1);
+    for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
+      if (this.imagenesSeleccionadas[i] == id) {
+        this.imagenesSeleccionadas.splice(i, 1);
         var inputcheck = document.getElementById(id) as HTMLInputElement;
         inputcheck.checked = false;
-        //console.log(inputcheck);
-        //console.log(id);
-      }else{
+      } else {
         var inputcheck = document.getElementById(id) as HTMLInputElement;
         inputcheck.checked = true;
       }
     }
   }
 
-  buscaNuevaImagen(){
+  buscaNuevaImagen() {
     document.getElementById("imageninput").click();
   }
-  buscaNuevaImagenEditor(){
+  buscaNuevaImagenEditor() {
     this.agregarEn = "editor";
     document.getElementById("btnimageneditor").click();
   }
 
-  abrirImagenes(){
+  abrirImagenes() {
     this.agregarEn = "equipo";
     this.mostrarListaImgenesEquipo = true;
   }
-  abrirFormularioEquipo(){
+  abrirFormularioEquipo() {
     this.mostrarListaImgenesEquipo = false;
   }
-  elegirImagenEquipo(img){
+  elegirImagenEquipo(img) {
     this.imagenEquipo = img;
   }
-  agregarImagenEquipo(){
-    var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src =this.URL_IMAGES+"/md/"+this.imagenEquipo;            
+  agregarImagenEquipo() {
+    var imagen = document.getElementById("imagen-select") as HTMLImageElement;
+    imagen.src = this.URL_IMAGES + "/md/" + this.imagenEquipo;
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = this.imagenEquipo;
     this.mostrarImagen = true;
     this.abrirFormularioEquipo();
-
   }
 
-  getListaImagenes(){
-
+  getListaImagenes() {
     this.articuloService.getImagenes()
-      .subscribe(res=>{
-        console.log(res);
+      .subscribe(res => {
         this.listaimagenes = res as string[];
         this.listaimagenesfiltro = this.listaimagenes;
       });
   }
 
-  buscarImagen(){
-    this.getListaImagenes();    
-    
+  buscarImagen() {
+    this.getListaImagenes();
   }
 
-  generarURL(){
-    var titulo= this.articuloService.articuloSeleccionado.titulo;
-    for(var i = 0;i<titulo.length;i++){
-      titulo= titulo.replace(" ","-");
+  generarURL() {
+    var titulo = this.articuloService.articuloSeleccionado.titulo;
+    for (var i = 0; i < titulo.length; i++) {
+      titulo = titulo.replace(" ", "-");
     }
-    this.articuloService.articuloSeleccionado.url = titulo.toLowerCase();   
-    //console.log(this.articuloService.articuloSeleccionado.url);
+    this.articuloService.articuloSeleccionado.url = titulo.toLowerCase();
   }
 
-  elegirImagen(nombre: string){
+  elegirImagen(nombre: string) {
     this.imageneditorseleccionada = nombre;
   }
-  agregarImagenEditor(){
+  
+  agregarImagenEditor() {
     const range = this.editorInstance.getSelection();
-    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES+"/lg/"+this.imageneditorseleccionada);
+    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES + "/lg/" + this.imageneditorseleccionada);
   }
 
-  agregarImagenesArticulo(nombre: string){
+  agregarImagenesArticulo(nombre: string) {
     var existe = false;
-    for(var i=0;i<this.imagenesSeleccionadas.length;i++){
-      if(this.imagenesSeleccionadas[i] == nombre){
-        this.imagenesSeleccionadas.splice(i,1);
-        existe = true;     
+    for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
+      if (this.imagenesSeleccionadas[i] == nombre) {
+        this.imagenesSeleccionadas.splice(i, 1);
+        existe = true;
       }
     }
-    if(!existe){
-      this.imagenesSeleccionadas.push(nombre);    
+    if (!existe) {
+      this.imagenesSeleccionadas.push(nombre);
     }
   }
 
-  agregarImagenes(){
-
-  }
-
-  editarEquipo(i){
+  editarEquipo(i) {
     this.indiceEquipo = i;
     this.imagenEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
     this.descripcionEquipoSeleccionado = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].descripcion;
     this.nombreColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color;
     this.codigoColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor;
     this.detallesEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle;
-    var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src =this.URL_IMAGES+"/md/"+this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;    
+    var imagen = document.getElementById("imagen-select") as HTMLImageElement;
+    imagen.src = this.URL_IMAGES + "/md/" + this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
     this.mostrarImagen = true;
-    
   }
+
   //pararbusquedaanterior = false;
-  buscarImagenesFiltro(event){
-    var input  = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
+  buscarImagenesFiltro(event) {
+    var input = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
     //this.pararbusquedaanterior = true;
-      this.listaimagenesfiltro = new Array();
-      for(var i=0;i<this.listaimagenes.length;i++){
-        var inputcheck = document.getElementById(this.listaimagenes[i]+"itemimg") as HTMLDivElement;
-        if(this.listaimagenes[i].includes(input.value)){
-          
-          inputcheck.hidden = false;
-        }else{
-          inputcheck.hidden = true;
+    this.listaimagenesfiltro = new Array();
+    for (var i = 0; i < this.listaimagenes.length; i++) {
+      var inputcheck = document.getElementById(this.listaimagenes[i] + "itemimg") as HTMLDivElement;
+      if (this.listaimagenes[i].includes(input.value)) {
 
-        }
-      }  
-    
+        inputcheck.hidden = false;
+      } else {
+        inputcheck.hidden = true;
+
+      }
+    }
+
   }
-  buscarImagenesFiltroEditor(){
-    var input  = document.getElementById("input-busqueda-imagenes-articulo-editor") as HTMLInputElement;
+  buscarImagenesFiltroEditor() {
+    var input = document.getElementById("input-busqueda-imagenes-articulo-editor") as HTMLInputElement;
     //this.pararbusquedaanterior = true;
-      this.listaimagenesfiltro = new Array();
-      for(var i=0;i<this.listaimagenes.length;i++){
-        var inputcheck = document.getElementById(this.listaimagenes[i]+"editor") as HTMLDivElement;
-        if(this.listaimagenes[i].includes(input.value)){
-          
-          inputcheck.hidden = false;
-        }else{
-          inputcheck.hidden = true;
+    this.listaimagenesfiltro = new Array();
+    for (var i = 0; i < this.listaimagenes.length; i++) {
+      var inputcheck = document.getElementById(this.listaimagenes[i] + "editor") as HTMLDivElement;
+      if (this.listaimagenes[i].includes(input.value)) {
 
-        }
-      }  
-    
+        inputcheck.hidden = false;
+      } else {
+        inputcheck.hidden = true;
+
+      }
+    }
+
   }
-  buscarImagenesFiltroEquipo(){
-    var input  = document.getElementById("input-busqueda-imagenes-equipo") as HTMLInputElement;
+  buscarImagenesFiltroEquipo() {
+    var input = document.getElementById("input-busqueda-imagenes-equipo") as HTMLInputElement;
     //this.pararbusquedaanterior = true;
-      this.listaimagenesfiltro = new Array();
-      for(var i=0;i<this.listaimagenes.length;i++){
-        var inputcheck = document.getElementById(this.listaimagenes[i]+"equipo") as HTMLDivElement;
-        if(this.listaimagenes[i].includes(input.value)){
-          
-          inputcheck.hidden = false;
-        }else{
-          inputcheck.hidden = true;
+    this.listaimagenesfiltro = new Array();
+    for (var i = 0; i < this.listaimagenes.length; i++) {
+      var inputcheck = document.getElementById(this.listaimagenes[i] + "equipo") as HTMLDivElement;
+      if (this.listaimagenes[i].includes(input.value)) {
 
-        }
-      }  
-    
+        inputcheck.hidden = false;
+      } else {
+        inputcheck.hidden = true;
+
+      }
+    }
+
   }
 
-  subirImagen(evento){
-    this.selectedFile  = <File> evento.target.files[0];
-    //evento.preventDefault();
+  subirImagen(evento) {
+    this.selectedFile = < File > evento.target.files[0];
     let headers = new Headers();
-    headers.append('Content-Type','multipart/form-data');
-    headers.append('nombre','nuevonombre.webp');
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('nombre', 'nuevonombre.webp');
     const fd = new FormData();
-   
-    fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(this.URL_API,fd,{      
-      reportProgress: true,
-      observe: 'events'
-    })
-    .subscribe(event=>{
-        if(event.type === HttpEventType.UploadProgress){
-          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");
-          /*progreso.style.width = Math.round(event.loaded/event.total*100)+"%";
-          progreso.innerHTML = "Subiendo "+ Math.round(event.loaded/event.total*100)+" %";
-          inputfile.style.display="none";*/
-          if(Math.round(event.loaded/event.total*100) == 100){
-            console.log("termino subir la imagen");
-            console.log("Comprimiendo imagen");
-          /*  progreso.innerHTML = "Comprimiendo Imagen....";
-            inputfile.innerHTML = "";*/
-          }     
-        }else{
-          if(event.type === HttpEventType.Response){
-            //console.log(event.body);       
-            this.getListaImagenes(); 
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+    this.http.post(this.URL_API, fd, {
+        reportProgress: true,
+        observe: 'events'
+      })
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
+          if (Math.round(event.loaded / event.total * 100) == 100) {
+            this.openSnackBar(true, "La imagén se subió al servidor con éxito");
+          }
+        } else {
+          if (event.type === HttpEventType.Response) {
+            this.getListaImagenes();
           }
         }
-      }
-    );
+      });
   }
 
-  subirImagenEditor(evento){
-    this.selectedFile  = <File> evento.target.files[0];
-    //evento.preventDefault();
+  subirImagenEditor(evento) {
+    this.selectedFile = < File > evento.target.files[0];
     const fd = new FormData();
-    fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(this.URL_API,fd,{
-      reportProgress: true,
-      observe: 'events'
-    })
-    .subscribe(event=>{
-        if(event.type === HttpEventType.UploadProgress){
-          //console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");  
-          if(Math.round(event.loaded/event.total*100) == 100){
-            //console.log("termino subir la imagen");
-            //console.log("Comprimiendo imagen");
-          /*  progreso.innerHTML = "Comprimiendo Imagen....";
-            inputfile.innerHTML = "";*/
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+    this.http.post(this.URL_API, fd, {
+        reportProgress: true,
+        observe: 'events'
+      })
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
+          if (Math.round(event.loaded / event.total * 100) == 100) {
+            this.openSnackBar(true, "La imagén se subió al servidor con éxito");
           }
-        
-        }else{
-          if(event.type === HttpEventType.Response){                  
-            this.getListaImagenes(); 
-            // var cont = document.getElementsByClassName("ql-editor")[0].innerHTML;
-            //this.contenidoEditor = this.contenidoEditor + "<img src='"+this.URL_IMAGES+"/tmp/"+this.selectedFile.name; +"'>";   
-            //console.log(this.contenidoEditor);    
-           
-            //document.getElementsByClassName("ql-editor")[0].innerHTML = cont+"<label>HOLA MUNDO FUNCIPNA</label>"
-            //console.log(cont);   
-            //console.log(this.contenidoEditor);
-
+        } else {
+          if (event.type === HttpEventType.Response) {
+            this.getListaImagenes();
           }
         }
-      }
-    );
+      });
   }
 
-  guardarDatos(){
+  guardarDatos() {
     //Obtener datos generales del articulo
     this.articuloService.articuloSeleccionado.especificaciones = new Array();
     var datosgenerales = document.getElementById("contenido-datos-generales");
     var datos = datosgenerales.getElementsByTagName("input");
-    for(var i=0;i<datos.length;i++){
+    for (var i = 0; i < datos.length; i++) {
       var dato = datos[i] as HTMLInputElement;
-      if(dato.value != ""){
+      if (dato.value != "") {
         this.articuloService.articuloSeleccionado.especificaciones.push(dato.value);
       }
     }
     //Obtener datos caracteristicas   
     this.articuloService.articuloSeleccionado.caracteristicas = new Array();
-    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");  
+    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");
     var caracteristicas = datoscaracteristicas.getElementsByClassName("item-caracteristicas");
-    for(var i=0;i<caracteristicas.length ;i++){
-      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value,caracteristicas[i].getElementsByTagName("input")[1].value);    
-      this.articuloService.articuloSeleccionado.caracteristicas.push(c);  
+    for (var i = 0; i < caracteristicas.length; i++) {
+      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value, caracteristicas[i].getElementsByTagName("input")[1].value);
+      this.articuloService.articuloSeleccionado.caracteristicas.push(c);
     }
     //Asignar imagenes
     this.articuloService.articuloSeleccionado.imagenes = this.imagenesSeleccionadas;
     this.articuloService.articuloSeleccionado.descripcion = this.contenidoEditor;
-    //console.log(this.articuloService.articuloSeleccionado);
-    console.log("lista de eequipos");
-    console.log(this.articuloService.articuloSeleccionado.equipos);
-
-    
     //guardar datos
-    if(this.articuloService.articuloSeleccionado._id){
+    if (this.articuloService.articuloSeleccionado._id) {
       this.articuloService.putArticulo(this.articuloService.articuloSeleccionado)
-      .subscribe(res=>{      
-        var respuesta = JSON.parse(JSON.stringify(res));
-        if(respuesta.estado == "0"){   
-          console.log("ERROR "+respuesta.mesanje);
-        }else{        
-          this.cambiarvista();
-          this.getArticulosMysql();
-          console.log(respuesta.mensaje);
-        }          
-      });
-    }else{
+        .subscribe(res => {
+          var respuesta = JSON.parse(JSON.stringify(res));
+          if (respuesta.estado == "0") {
+            this.openSnackBar(false, respuesta.mensaje);
+          } else {
+            this.cambiarvista();
+            this.getArticulosMysql();
+            this.openSnackBar(true, respuesta.mensaje);
+          }
+        });
+    } else {
       this.articuloService.postArticulo(this.articuloService.articuloSeleccionado)
-      .subscribe(res=>{      
-        var respuesta = JSON.parse(JSON.stringify(res));
-        if(respuesta.estado == "0"){   
-          console.log("ERROR "+respuesta.mensaje);
-        }else{        
-          this.cambiarvista();
-          this.getArticulosMysql();
-          console.log(respuesta.mensaje);
-        }           
-      });
+        .subscribe(res => {
+          var respuesta = JSON.parse(JSON.stringify(res));
+          if (respuesta.estado == "0") {
+            this.openSnackBar(false, respuesta.mensaje);
+          } else {
+            this.cambiarvista();
+            this.getArticulosMysql();
+            this.openSnackBar(true, respuesta.mensaje);
+          }
+        });
     }
   }
+
   /// aplicar filtro en el data table de material
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
+
   applyFilterEquipo(filterValue: string) {
     this.dataSourceEquipos.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSourceEquipos.paginator) {
       this.dataSourceEquipos.paginator.firstPage();
     }
   }
-  abrirInputFile(){
+
+  abrirInputFile() {
     var archivoinput = document.getElementById("archivo") as HTMLInputElement;
     archivoinput.click();
   }
-  limpiarImagen(){
-    //this.articuloService.articuloSeleccionado.imagen = "sinImagen.jpg";
+
+  limpiarImagen() {
     this.mostrarImagen = false;
   }
-  onFileSelected(event){
-    console.log(event.target.files[0].name);
+
+  onFileSelected(event) {
     this.selectedFile = event.target.files[0];
     const fd = new FormData();
-    fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(Constantes.URL_API_IMAGEN + '/subir',fd,{
-      reportProgress: true,
-      observe: 'events'
-    })
-    .subscribe(event=>{
-        if(event.type === HttpEventType.UploadProgress){
-          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");          
-          if(Math.round(event.loaded/event.total*100) == 100){
-            console.log("termino subir la imagen");
-          }        
-        }else{
-          if(event.type === HttpEventType.Response){
-            console.log(event.body);
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+    this.http.post(Constantes.URL_API_IMAGEN + '/subir', fd, {
+        reportProgress: true,
+        observe: 'events'
+      })
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
+          if (Math.round(event.loaded / event.total * 100) == 100) {
+            this.openSnackBar(true, "Se subió la imagen con éxito");
+          }
+        } else {
+          if (event.type === HttpEventType.Response) {
             var res = JSON.parse(JSON.stringify(event.body));
-            var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src =this.URL_IMAGES+"/md/"+res.imagen;            
+            var imagen = document.getElementById("imagen-select") as HTMLImageElement;
+            imagen.src = this.URL_IMAGES + "/md/" + res.imagen;
             this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = res.imagen;
             this.mostrarImagen = true;
-            this.imagenEquipo = this.selectedFile.name+".webp";
+            this.imagenEquipo = this.selectedFile.name + ".webp";
           }
         }
-      }
-    );
+      });
   }
-  guardarDatosEquipo(){
+
+  guardarDatosEquipo() {
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color = this.nombreColor;
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle = this.detallesEquipo;
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor = this.codigoColor;
     this.imagenEquipo = ""
-    //console.log(this.articuloService.articuloSeleccionado.equipos);
   }
-  buscarPalabrasClaves(){
+
+  buscarPalabrasClaves() {
     var palabras = this.articuloService.articuloSeleccionado.titulo;
-    for(var i=0;i<this.listacategorias.length;i++){
-      if(this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id){
-        palabras += " "+this.listacategorias[i].nombre;
+    for (var i = 0; i < this.listacategorias.length; i++) {
+      if (this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id) {
+        palabras += " " + this.listacategorias[i].nombre;
         break;
       }
     }
-    for(var i=0;i<this.listamarcas.length;i++){
-      if(this.articuloService.articuloSeleccionado.marca == this.listamarcas[i]._id){
-        palabras += " "+this.listamarcas[i].nombremarca;
-        console.log(this.listamarcas);
+    for (var i = 0; i < this.listamarcas.length; i++) {
+      if (this.articuloService.articuloSeleccionado.marca == this.listamarcas[i]._id) {
+        palabras += " " + this.listamarcas[i].nombremarca;
         break;
       }
     }
-    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");  
+    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");
     var caracteristicas = datoscaracteristicas.getElementsByClassName("item-caracteristicas");
-    for(var i=0;i<caracteristicas.length ;i++){
-      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value,caracteristicas[i].getElementsByTagName("input")[1].value);    
-      palabras += " "+ c.nombre+" "+c.valor;
+    for (var i = 0; i < caracteristicas.length; i++) {
+      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value, caracteristicas[i].getElementsByTagName("input")[1].value);
+      palabras += " " + c.nombre + " " + c.valor;
     }
-    for(var i=0;i<this.articuloService.articuloSeleccionado.equipos.length;i++){
-      if(this.articuloService.articuloSeleccionado.equipos[i].cantidad>0)
-      palabras += " "+this.articuloService.articuloSeleccionado.equipos[i].color + " "+this.articuloService.articuloSeleccionado.equipos[i].detalle;
+    for (var i = 0; i < this.articuloService.articuloSeleccionado.equipos.length; i++) {
+      if (this.articuloService.articuloSeleccionado.equipos[i].cantidad > 0)
+        palabras += " " + this.articuloService.articuloSeleccionado.equipos[i].color + " " + this.articuloService.articuloSeleccionado.equipos[i].detalle;
     }
     this.articuloService.articuloSeleccionado.palabrasclaves = palabras.toLowerCase();
-
   }
+
+  /**
+   * Método que muestra un Bar temporal para confirmar los mensajes de éxito y de error
+   * @param status : Determina si es un mensaje de confirmación o error
+   * @param mensaje : mensaje a enviar
+   */
+  openSnackBar(status: boolean, mensaje: string): void {
+    this.snackBar.openFromComponent(SnackBarComponent, {
+      duration: 3000,
+      panelClass: [status ? 'exito' : 'error'],
+      data: mensaje
+    });
+  }
+
 }

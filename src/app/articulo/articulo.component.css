@@ -10,11 +10,13 @@
     cursor: pointer;
     min-width: 150px;
 }
-.nombre-imagen-cont{
+
+.nombre-imagen-cont {
     background-color: rgba(0, 0, 0, 0.637);
     color: white;
-    
+
 }
+
 .item-imagen:hover {
     background-color: rgba(131, 130, 128, 0.918);
 

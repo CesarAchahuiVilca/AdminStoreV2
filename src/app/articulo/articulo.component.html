@@ -8,96 +8,77 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <mat-card  style="width: 100%;">
-                  <mat-card-header>                      
-                      <mat-card-title style="margin: 0px !important;" [hidden]="mostrarBotonOpcion">Articulos</mat-card-title>
-                      <mat-card-title style="margin: 0px !important;" [hidden]="!mostrarBotonOpcion" style="display: flex; align-items: center; justify-content: center; flex-direction: row; width: 100%;">
-                        <div style="display: flex; align-items: center; justify-content: flex-start; width: 50%">
-                            <i class="material-icons">stay_primary_portrait</i> {{articuloService.articuloSeleccionadoMysql.Descripcion}}
-                        </div>
-                        <div style="display: flex;width: 50%; justify-content: flex-end">
-                            <button mat-button  (click)="cambiarvista()"><i class="material-icons">close</i> Cerrar</button>
-                            
-                        </div>
-                      </mat-card-title>
-                    </mat-card-header>
-                    <mat-divider></mat-divider>
-                    <br>
+              <mat-card style="width: 100%;">
+                <mat-card-header>
+                  <mat-card-title style="margin: 0px !important;" [hidden]="mostrarBotonOpcion">Artículos</mat-card-title>
+                  <mat-card-title style="margin: 0px !important;" [hidden]="!mostrarBotonOpcion" style="display: flex; align-items: center; justify-content: center; flex-direction: row; width: 100%;">
+                    <div style="display: flex; align-items: center; justify-content: flex-start; width: 50%">
+                      <i class="material-icons">stay_primary_portrait</i>
+                      {{articuloService.articuloSeleccionadoMysql.Descripcion}}
+                    </div>
+                    <div style="display: flex;width: 50%; justify-content: flex-end">
+                      <button mat-button (click)="cambiarvista()"><i class="material-icons">close</i> Cerrar</button>
+                    </div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-divider></mat-divider>
+                <br>
                 <div>
                   <div class="row">
-                    
                     <div class="col-lg-12">
                       <div style="width: 100%;text-align: center;" [hidden]="!mostrarCarga">
                         <img src="assets/imagenes/carga.gif"> Cargando Datos
-                      </div>                      
-                      <div class="datatable-example" style="width: 100%;" [hidden]="!mostrarListaArticulos">
-                          <mat-form-field>
-                              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
-                            </mat-form-field>
-                            
-                            <div class="mat-elevation-z2">
-                              <table mat-table [dataSource]="dataSource" matSort>
-                            
-                                <!-- ID Column -->
-                                <ng-container matColumnDef="idArticulo">
-                                  <th style="width: 20%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArticulo </th>
-                                  <td style="width: 20%;" mat-cell *matCellDef="let row"> {{row.idArticulo}} </td>
-                                </ng-container>
-                            
-                                <!-- Progress Column -->
-                                <ng-container matColumnDef="Descripcion">
-                                  <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </th>
-                                  <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row.Descripcion}} </td>
-                                </ng-container>
-                            
-                                <!-- Name Column -->
-                                <ng-container matColumnDef="Cantidad">
-                                  <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
-                                  <td style="width: 10%;" mat-cell *matCellDef="let row"> {{row.Cantidad}} </td>
-                                </ng-container>
-                            
-                                <!-- Color Column -->
-                                <ng-container matColumnDef="Categoria">
-                                  <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Categoria </th>
-                                  <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row.Categoria}} </td>
-                                </ng-container>
-                                <!-- Color Column -->
-                                <ng-container matColumnDef="Estado">
-                                    <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
-                                    <td style="width: 25%;" mat-cell *matCellDef="let row" style="text-align: center;">
-                                      <button *ngIf="row.Estado == '0'" mat-raised-button  (click)="cambiarvista(row,articuloForm)">Completar Registro</button>
-                                      <i class="material-icons"  style="color: green;" *ngIf="row.Estado == '1'">check</i>
-                                    </td>
-                                </ng-container>
-                                <ng-container matColumnDef="editar">
-                                    <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
-                                    <td style="width: 25%;" mat-cell *matCellDef="let row">
-                                        <div style="margin-left: 0px; display: flex; flex-direction: row;">
-                                            <div style="flex-grow: 0;margin-right: 2px;">
-                                             <!-- <button type="button" *ngIf="row.Estado == '0'" class="btn btn-pill btn-block btn-success"
-                                                style="width: 40px; height: 40px;" (click)="editarArticulo(row)"
-                                                data-toggle="modal" data-target="#modalcategoria" disabled><i class="fa fa-edit"></i></button>
-                                              <button type="button" *ngIf="row.Estado == '1'" class="btn btn-pill btn-block btn-success"
-                                                style="width: 40px; height: 40px;" (click)="editarArticulo(row)"
-                                                data-toggle="modal" data-target="#modalcategoria"><i class="fa fa-edit"></i></button>
-                                             -->
-                                                <button *ngIf="row.Estado == '0'" mat-button disabled  (click)="editarArticulo(row)"><i class="material-icons">edit</i></button>
-                                                <button *ngIf="row.Estado == '1'" mat-button (click)="editarArticulo(row)"><i class="material-icons">edit</i></button>
-                                            </div>
-                                          </div>
-                                    </td>
-                                </ng-container>
-                            
-                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-                                </tr>
-                              </table>
-                            
-                              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-                            </div>
-
                       </div>
-
+                      <div class="datatable-example" style="width: 100%;" [hidden]="!mostrarListaArticulos">
+                        <mat-form-field>
+                          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                        </mat-form-field>
+                        <div class="mat-elevation-z2">
+                          <table mat-table [dataSource]="dataSource" matSort>
+                            <ng-container matColumnDef="idArticulo">
+                              <th style="width: 20%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArtículo
+                              </th>
+                              <td style="width: 20%;" mat-cell *matCellDef="let row"> {{row.idArticulo}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Descripcion">
+                              <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripción
+                              </th>
+                              <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row.Descripcion}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Cantidad">
+                              <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                              <td style="width: 10%;" mat-cell *matCellDef="let row"> {{row.Cantidad}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Categoria">
+                              <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </th>
+                              <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row.Categoria}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Estado">
+                              <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                              <td style="width: 25%;" mat-cell *matCellDef="let row" style="text-align: center;">
+                                <button *ngIf="row.Estado == '0'" mat-raised-button (click)="cambiarvista(row,articuloForm)">Completar Registro</button>
+                                <i class="material-icons" style="color: green;" *ngIf="row.Estado == '1'">check</i>
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="editar">
+                              <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                              <td style="width: 25%;" mat-cell *matCellDef="let row">
+                                <div style="margin-left: 0px; display: flex; flex-direction: row;">
+                                  <div style="flex-grow: 0;margin-right: 2px;">
+                                    <button *ngIf="row.Estado == '0'" mat-button disabled (click)="editarArticulo(row)"><i
+                                        class="material-icons">edit</i></button>
+                                    <button *ngIf="row.Estado == '1'" mat-button (click)="editarArticulo(row)"><i class="material-icons">edit</i></button>
+                                  </div>
+                                </div>
+                              </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                            </tr>
+                          </table>
+                          <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+                        </div>
+                      </div>
                       <div [hidden]="!mostrarFormularioArticulo">
                         <form #articuloForm="ngForm">
                           <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="articuloService.articuloSeleccionado._id"
@@ -107,16 +88,15 @@
                           <div class="row">
                             <div class="col-lg-12">
                               <div class="form-group">
-                                  <h5>Titulo del Articulo</h5>
-                                      <input class="form-control"  id="titulo" placeholder="Ingrese titulo del articulo" name="titulo" #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo"
-                                      type="text" required style="border-color: rgb(167, 167, 167); height: 35px;"
-                                      (change)="generarURL()">                                  
-                                
+                                <h5>Titulo del Artículo</h5>
+                                <input class="form-control" id="titulo" placeholder="Ingrese titulo del articulo" name="titulo"
+                                  #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo" type="text"
+                                  required style="border-color: rgb(167, 167, 167); height: 35px;" (change)="generarURL()">
                               </div>
                             </div>
                             <div class="col-lg-12">
                               <div class="form-group">
-                                <h5>URL del Articulo</h5>
+                                <h5>URL del Artículo</h5>
                                 <input class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.url"
                                   type="text" placeholder="URL del articulo" required style="border-color: rgb(167, 167, 167);">
                               </div>
@@ -126,7 +106,6 @@
                                 <h5>Categoria</h5>
                                 <select class="form-control" id="categoria" #categoria="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.categoria"
                                   name="categoria" style="border-color: rgb(167, 167, 167);" (change)="getCaracteristicas()">
-                                  <option> Seleccione Categoria </option>
                                   <option *ngFor="let cat of listacategorias" value="{{cat._id}}"> {{cat.nombre}}</option>
                                 </select>
                               </div>
@@ -134,199 +113,197 @@
                             <div class="col-lg-4">
                               <div class="form-group">
                                 <h5>Marca</h5>
-                                  <select class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"
-                                    style="border-color: rgb(167, 167, 167);">
-                                    <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>
-                                  </select>                       
+                                <select class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"
+                                  style="border-color: rgb(167, 167, 167);">
+                                  <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>
+                                </select>
                               </div>
                             </div>
                             <div class="col-lg-3">
                               <div class="form-group">
                                 <h5>Cantidad</h5>
-                                  <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad"
-                                  class="form-control" style="border-color: rgb(167, 167, 167);" [ngModelOptions]="{standalone: true}" disabled="true">
+                                <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad"
+                                  class="form-control" style="border-color: rgb(167, 167, 167);" [ngModelOptions]="{standalone: true}"
+                                  disabled="true">
                               </div>
                             </div>
                             <div class="col-lg-12">
                               <br>
                               <mat-card class="example-card">
                                 <mat-card-header>
-                                  <mat-card-title>Caracteristicas del Articulo</mat-card-title>
+                                  <mat-card-title>Características del Artículo</mat-card-title>
                                 </mat-card-header>
                                 <mat-card-content>
-                                    <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
-                                        <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
-                                          *ngFor="let caracteristica of listacaracteristicasarticulo ">
-                                          <div style="flex-grow: 0; width: 20%;">
-                                            <input style="border-color: rgba(255, 255, 255, 0); background: rgb(255, 255, 255); height: 35px; color: black; font-weight: bold;"
-                                              value="{{caracteristica.nombre}}" readonly>
-                                          </div>
-                                          <div style="flex-grow: 0; width: 75%;">
-                                            <input type="text" class="form-control" style="border-color: rgb(167, 167, 167);"
-                                              placeholder="Ingrese valor de la carcteristica" value="{{caracteristica.valor}}">
-                                          </div>
-                                        </div>
+                                  <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
+                                    <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
+                                      *ngFor="let caracteristica of listacaracteristicasarticulo ">
+                                      <div style="flex-grow: 0; width: 20%;">
+                                        <input style="border-color: rgba(255, 255, 255, 0); background: rgb(255, 255, 255); height: 35px; color: black; font-weight: bold;"
+                                          value="{{caracteristica.nombre}}" readonly>
                                       </div>
-                                </mat-card-content>
-                              </mat-card>                           
-                            </div>
-                            <div class="col-lg-12">
-                              <br>
-                                <mat-card class="example-card">
-                                    <mat-card-header>
-                                      <mat-card-title>Equipos </mat-card-title>
-                                    </mat-card-header>
-                                    <mat-divider></mat-divider>
-                                    <mat-card-content>
-                                        <div class="datatable-example" style="width: 100%;">
-                                            <mat-form-field>
-                                                <input matInput (keyup)="applyFilterEquipo($event.target.value)" placeholder="Buscar">
-                                              </mat-form-field>
-                                              
-                                              <div class="mat-elevation-z2">
-                                                <table mat-table [dataSource]="dataSourceEquipos" matSort>
-  
-                                                  <!-- ID Column -->
-                                                  <ng-container matColumnDef="Imagen">
-                                                      <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
-                                                      <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">
-                                                        <img *ngIf="equipo.imagen == ''" src="./assets/images/sinimagen.jpg">
-                                                        <img *ngIf="equipo.imagen != ''" src="{{URL_IMAGES}}/sm/{{equipo.imagen}}">
-                                                      </td>
-                                                    </ng-container>
-                                              
-                                                  <!-- ID Column -->
-                                                  <ng-container matColumnDef="idArticulo">
-                                                    <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArticulo </th>
-                                                    <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">{{equipo.idequipo}} </td>
-                                                  </ng-container>
-                                              
-                                                  <!-- Progress Column -->
-                                                  <ng-container matColumnDef="Descripcion">
-                                                    <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </th>
-                                                    <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.descripcion}} </td>
-                                                  </ng-container>
-                                              
-                                                  <!-- Name Column -->
-                                                  <ng-container matColumnDef="Cantidad">
-                                                    <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
-                                                    <td style="width: 10%;" mat-cell *matCellDef="let equipo"> {{equipo.cantidad}} </td>
-                                                  </ng-container>
-                                              
-                                                  <!-- Color Column -->
-                                                  <ng-container matColumnDef="Color">
-                                                    <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
-                                                    <td style="width: 15%;" mat-cell *matCellDef="let equipo"> {{equipo.color}} </td>
-                                                  </ng-container>
-                                                  <!-- Color Column -->
-                                                  <ng-container matColumnDef="Detalle">
-                                                    <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header> Detalle </th>
-                                                    <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.detalle}} </td>
-                                                  </ng-container> 
-                                                  <ng-container matColumnDef="Editar">
-                                                    <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
-                                                    <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i=index;"> 
-                                                      <button  mat-button (click)="editarEquipo(i)" data-toggle="modal" data-target="#modalequipo"><i class="material-icons">edit</i></button>
-                                                    </td>
-                                                  </ng-container>                                             
-                                                  <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></tr>
-                                                  <tr mat-row *matRowDef="let equipo; columns: displayedColumnsEquipos;">
-                                                  </tr>
-                                                </table>                                              
-                                                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-                                              </div>                  
-                                        </div>   
-                                    </mat-card-content>
-                                    <mat-card-actions>
-                                    </mat-card-actions>
-                                  </mat-card>
-                                
-                            </div>
-                            <div class="col-lg-12">
-                              <br>
-                              <mat-card class="example-card">
-                                <mat-card-header>
-                                  <mat-card-title>Precios del articulo</mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    <div style="display: flex; flex-direction: row; flex-wrap: wrap;" id="contenido-datos-generales">
-                                        <div style="width: 100%; ">
-                                          <label style="font-weight: bold;">Seleccione el nombre del equipo </label>
-                                        </div>
-                                        <div  style="width: 70%;margin: 5px">                                        
-                                          <select [(ngModel)]="articuloService.articuloSeleccionado.idprecio"
-                                            [ngModelOptions]="{standalone: true}" (change)="buscarPlanesEquipo()" class="form-control">
-                                            <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}"><a>{{equipo.nombreequipo}}</a></option>
-                                          </select>
-                                        </div>
-                                        <div style="width: 20%;margin: 5px">
-                                          <button class="btn btn-info" (click)="buscarPlanesEquipo()">Ver Precios</button>
-                                        </div>
+                                      <div style="flex-grow: 0; width: 75%;">
+                                        <input type="text" class="form-control" style="border-color: rgb(167, 167, 167);"
+                                          placeholder="Ingrese valor de la característica" value="{{caracteristica.valor}}">
                                       </div>
+                                    </div>
+                                  </div>
                                 </mat-card-content>
                               </mat-card>
                             </div>
                             <div class="col-lg-12">
                               <br>
-                                <mat-card class="example-card">
-                                  <mat-card-header>
-                                    <mat-card-title>Imagenes del articulo</mat-card-title>
-                                    <input type="file" style="display: none;" (change)="subirImagen($event)" id="imageninput">
-                                    <input type="file" style="display: none;" (change)="subirImagenEditor($event)" id="imageninputeditor">
-                                    <div style="flex-grow:0; margin-top: -5px;">
-                                        <button type="button" class="btn btn-link" style=" height: 35px;" (click)=" buscarImagen()"
-                                          data-toggle="modal" data-target="#modalimagenes"><i class="fa fa-plus"></i>
-                                          Agregar
-                                          Imagenes</button>
-                                      </div>
-                                  </mat-card-header>
-                                  <mat-card-content>
-                                      <hr>
+                              <mat-card class="example-card">
+                                <mat-card-header>
+                                  <mat-card-title>Equipos </mat-card-title>
+                                </mat-card-header>
+                                <mat-divider></mat-divider>
+                                <mat-card-content>
+                                  <div class="datatable-example" style="width: 100%;">
+                                    <mat-form-field>
+                                      <input matInput (keyup)="applyFilterEquipo($event.target.value)" placeholder="Buscar">
+                                    </mat-form-field>
+                                    <div class="mat-elevation-z2">
+                                      <table mat-table [dataSource]="dataSourceEquipos" matSort>
+                                        <ng-container matColumnDef="Imagen">
+                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                          <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">
+                                            <img *ngIf="equipo.imagen == ''" src="./assets/images/sinimagen.jpg">
+                                            <img *ngIf="equipo.imagen != ''" src="{{URL_IMAGES}}/sm/{{equipo.imagen}}">
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="idArticulo">
+                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            IdArtículo </th>
+                                          <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">{{equipo.idequipo}}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="Descripcion">
+                                          <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Descripcion </th>
+                                          <td style="width: 30%;" mat-cell *matCellDef="let equipo">
+                                            {{equipo.descripcion}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="Cantidad">
+                                          <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Cantidad </th>
+                                          <td style="width: 10%;" mat-cell *matCellDef="let equipo">
+                                            {{equipo.cantidad}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="Color">
+                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Color </th>
+                                          <td style="width: 15%;" mat-cell *matCellDef="let equipo"> {{equipo.color}}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="Detalle">
+                                          <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Detalle </th>
+                                          <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.detalle}}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="Editar">
+                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                          <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i=index;">
+                                            <button mat-button (click)="editarEquipo(i)" data-toggle="modal"
+                                              data-target="#modalequipo"><i class="material-icons">edit</i></button>
+                                          </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></tr>
+                                        <tr mat-row *matRowDef="let equipo; columns: displayedColumnsEquipos;">
+                                        </tr>
+                                      </table>
+                                      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                                    </div>
+                                  </div>
+                                </mat-card-content>
+                                <mat-card-actions>
+                                </mat-card-actions>
+                              </mat-card>
+                            </div>
+                            <div class="col-lg-12">
+                              <br>
+                              <mat-card class="example-card">
+                                <mat-card-header>
+                                  <mat-card-title>Precios del Artículo</mat-card-title>
+                                </mat-card-header>
+                                <mat-card-content>
+                                  <div style="display: flex; flex-direction: row; flex-wrap: wrap;" id="contenido-datos-generales">
+                                    <div style="width: 100%; ">
+                                      <label style="font-weight: bold;">Seleccione el nombre del equipo </label>
+                                    </div>
+                                    <div style="width: 70%;margin: 5px">
+                                      <select [(ngModel)]="articuloService.articuloSeleccionado.idprecio"
+                                        [ngModelOptions]="{standalone: true}" (change)="buscarPlanesEquipo()" class="form-control">
+                                        <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}"><a>{{equipo.nombreequipo}}</a></option>
+                                      </select>
+                                    </div>
+                                    <div style="width: 20%;margin: 5px">
+                                      <button class="btn btn-info" (click)="buscarPlanesEquipo()">Ver Precios</button>
+                                    </div>
+                                  </div>
+                                </mat-card-content>
+                              </mat-card>
+                            </div>
+                            <div class="col-lg-12">
+                              <br>
+                              <mat-card class="example-card">
+                                <mat-card-header>
+                                  <mat-card-title>Imágenes del Artículo</mat-card-title>
+                                  <input type="file" style="display: none;" (change)="subirImagen($event)" id="imageninput">
+                                  <input type="file" style="display: none;" (change)="subirImagenEditor($event)" id="imageninputeditor">
+                                  <div style="flex-grow:0; margin-top: -5px;">
+                                    <button type="button" class="btn btn-link" style=" height: 35px;" (click)=" buscarImagen()"
+                                      data-toggle="modal" data-target="#modalimagenes"><i class="fa fa-plus"></i>
+                                      Agregar
+                                      Imágenes</button>
+                                  </div>
+                                </mat-card-header>
+                                <mat-card-content>
+                                  <hr>
                                   <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-caracteristicas">
                                     <div class="item-imagen" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px;"
                                       *ngFor="let item of imagenesSeleccionadas ">
                                       <img style="position: absolute; right: -10px;top: -10px;z-index: 100;" src="assets/imagenes/close.png"
                                         width="20px" height="20px" (click)="eliminarItemImagen(item)">
-                                        <div class="nombre-imagen-cont"style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
-                                          {{item}}
-                                        </div>
+                                      <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
+                                        {{item}}
+                                      </div>
                                       <img src="" class="imagen-item-articulo" src="{{URL_IMAGES}}/md/{{item}}">
                                     </div>
                                   </div>
-                                  </mat-card-content>
-                                </mat-card>
+                                </mat-card-content>
+                              </mat-card>
                             </div>
                             <div class="col-lg-12">
                               <br>
-                                <mat-card class="example-card">
-                                  <mat-card-header>
-                                    <mat-card-title>Detalles del Articulo</mat-card-title>
-                                  </mat-card-header>
-                                  <mat-card-content>
-                                      <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;" id="contenido-datos-detalle">
-                                          <div style="width: 100%;" class="row">
-                                            <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor" 
-                                              (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}"></quill-editor>
-                                          </div>
-                                        </div>
-                                  </mat-card-content>
-                                </mat-card>
+                              <mat-card class="example-card">
+                                <mat-card-header>
+                                  <mat-card-title>Detalles del Artículo</mat-card-title>
+                                </mat-card-header>
+                                <mat-card-content>
+                                  <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;"
+                                    id="contenido-datos-detalle">
+                                    <div style="width: 100%;" class="row">
+                                      <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor"
+                                        (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}"></quill-editor>
+                                    </div>
+                                  </div>
+                                </mat-card-content>
+                              </mat-card>
                             </div>
                             <div class="col-lg-12">
                               <br>
-                                <mat-card class="example-card">
-                                  <mat-card-header>
-                                    <mat-card-title>Palabras claves
-                                        <button mat-raised-button (click)="buscarPalabrasClaves()">Buscar palabras claves</button>
-
-                                    </mat-card-title>
-
-                                  </mat-card-header>
-                                  <mat-card-content>
-                                      <textarea class="form-control" [(ngModel)] = "articuloService.articuloSeleccionado.palabrasclaves" [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(146, 146, 146);"></textarea>
-                                      
-                                  </mat-card-content>
-                                </mat-card>
+                              <mat-card class="example-card">
+                                <mat-card-header>
+                                  <mat-card-title>Palabras claves
+                                    <button mat-raised-button (click)="buscarPalabrasClaves()">Buscar palabras claves</button>
+                                  </mat-card-title>
+                                </mat-card-header>
+                                <mat-card-content>
+                                  <textarea class="form-control" [(ngModel)]="articuloService.articuloSeleccionado.palabrasclaves"
+                                    [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(146, 146, 146);"></textarea>
+                                </mat-card-content>
+                              </mat-card>
                             </div>
                             <div class="col-lg-12" style="text-align: right;">
                               <hr>
@@ -335,7 +312,7 @@
                               <button class="btn btn-danger" style="margin-right: 5px;" (click)="newHandlerImage();">
                                 <i class="fa fa-close"></i> Limpiar</button>
                               <button class="btn btn-success" (click)="guardarDatos()"> <i class="fa fa-save"></i>
-                                Guardar Articulo</button>
+                                Guardar Artículo</button>
                             </div>
                           </div>
                         </form>
@@ -352,7 +329,6 @@
   </main>
 </div>
 
-
 <!-- Modal Articulos -->
 <div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
   data-backdrop="static" data-keyboard="false">
@@ -367,7 +343,7 @@
       <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
         <div class="row">
           <div class="col-lg-4 col-sm-12">
-            <h4> Elija Imagenes para el Articulo</h4>
+            <h4> Elija Imagenes para el Artículo</h4>
           </div>
           <div class="col-lg-8 col-sm-12">
             <div class="row">
@@ -381,7 +357,8 @@
                     <label> Buscar: </label>
                   </div>
                   <div style="flex-grow: 0; width: 90%;">
-                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" (keyup)="buscarImagenesFiltro($event)" id="input-busqueda-imagenes-articulo">
+                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" (keyup)="buscarImagenesFiltro($event)"
+                      id="input-busqueda-imagenes-articulo">
                   </div>
                 </div>
               </div>
@@ -395,9 +372,9 @@
               *ngFor="let img of listaimagenes" id="{{img}}itemimg">
               <input type="checkbox" class="form-control" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px; z-index: 1500;"
                 (change)="agregarImagenesArticulo(img)" id="{{img}}">
-                <div class="nombre-imagen-cont"style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
-                  {{img}}
-                </div>
+              <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
+                {{img}}
+              </div>
               <img src="{{URL_IMAGES}}/md/{{img}}" class="imagen-item-articulo">
             </div>
           </div>
@@ -440,7 +417,8 @@
                     <label> Buscar: </label>
                   </div>
                   <div style="flex-grow: 0; width: 90%;">
-                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" id="input-busqueda-imagenes-articulo-editor" (keyup)="buscarImagenesFiltroEditor()">
+                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" id="input-busqueda-imagenes-articulo-editor"
+                      (keyup)="buscarImagenesFiltroEditor()">
                   </div>
                 </div>
               </div>
@@ -454,9 +432,9 @@
               *ngFor="let img of listaimagenes" id="{{img}}editor">
               <input type="radio" class="form-check-input" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
                 (change)="elegirImagen(img)" name="imagen-editor">
-                <div class="nombre-imagen-cont"style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
-                  {{img}}
-                </div>
+              <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
+                {{img}}
+              </div>
               <img src="{{URL_IMAGES}}/md/{{img}}" class="imagen-item-articulo">
             </div>
           </div>
@@ -470,15 +448,11 @@
     </div>
   </div>
 </div>
-
 <button data-toggle="modal" data-target="#modalimageneseditor" id="btnimageneditor" (click)="buscarImagen()"></button>
-
-
 <!-- Modal detalle equipo -->
-<div class="modal fade" id="modalequipo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="modalequipo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" style="width: 100%;" >
+    <div class="modal-content" style="width: 100%;">
       <div class="modal-header">
         <h6 class="modal-title" id="titulomodal">{{descripcionEquipoSeleccionado}}</h6>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
@@ -486,105 +460,96 @@
         </button>
       </div>
       <div class="modal-body" style="overflow-y: auto;display: flex; flex-direction: row; flex-wrap: wrap; width: 100%;">
-          <div [hidden]="mostrarListaImgenesEquipo" style="width: 100%;">
-            <mat-card class="example-card" style="margin: 5px; width: 100%;">      
-              <mat-card-header>
-                  <mat-card-title>Datos del equipo </mat-card-title>
-                </mat-card-header>
-
+        <div [hidden]="mostrarListaImgenesEquipo" style="width: 100%;">
+          <mat-card class="example-card" style="margin: 5px; width: 100%;">
+            <mat-card-header>
+              <mat-card-title>Datos del equipo </mat-card-title>
+            </mat-card-header>
             <mat-card-content style="display: flex; flex-direction: row; flex-wrap: wrap;">
-                <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">                  
-                   <!-- <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">-->
-                    <mat-card style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
-                        <i  [hidden]="mostrarImagen" class="material-icons btn-imagen" (click)="abrirImagenes()">add_photo_alternate</i>     
-                        <img  [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">     
-                        <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>          
-                    </mat-card>
-                </div>   
+              <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">
+                <!-- <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">-->
+                <mat-card style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
+                  <i [hidden]="mostrarImagen" class="material-icons btn-imagen" (click)="abrirImagenes()">add_photo_alternate</i>
+                  <img [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">
+                  <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>
+                </mat-card>
+              </div>
               <div style="display: flex; flex-direction: column; width: 60%; align-items: center; margin-top: 10px; padding-left: 10px;">
                 <div style="display: flex; flex-direction: row; width: 100%; ">
-                    <div style="width: 60%; margin: 5px;">
-                        <mat-form-field class="example-full-width">
-                          <input matInput placeholder="Nombre del color" [(ngModel)]="nombreColor" >
-                        </mat-form-field>
-                      </div>
-                      <div style="width: 30%; margin: 5px;margin-top: 15px;">
-                        <input matInput placeholder="seleccione color" type="color" style="height: 35px;" [(ngModel)]="codigoColor">                   
-                      </div> 
+                  <div style="width: 60%; margin: 5px;">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Nombre del color" [(ngModel)]="nombreColor">
+                    </mat-form-field>
+                  </div>
+                  <div style="width: 30%; margin: 5px;margin-top: 15px;">
+                    <input matInput placeholder="seleccione color" type="color" style="height: 35px;" [(ngModel)]="codigoColor">
+                  </div>
                 </div>
                 <div style="display: flex; flex-direction: row; width: 100%;">
-                    <div style="width: 100%; margin: 5px;">
-                        <mat-form-field class="example-full-width">
-                          <textarea matInput placeholder="Informacion adicinal del equipo"  rows="7" [(ngModel)]="detallesEquipo"></textarea>
-                        </mat-form-field>
-                      </div>
+                  <div style="width: 100%; margin: 5px;">
+                    <mat-form-field class="example-full-width">
+                      <textarea matInput placeholder="Informacion adicinal del equipo" rows="7" [(ngModel)]="detallesEquipo"></textarea>
+                    </mat-form-field>
+                  </div>
                 </div>
-                                   
-              </div> 
-                          
-              </mat-card-content>
-            </mat-card>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div [hidden]="!mostrarListaImgenesEquipo" style="width: 100%;">
+          <div class="opciones-lista-imagenes" style="display: flex; flex-direction: row;width: 100%; ">
+            <button mat-raised-button style="width: 20%;" (click)="abrirFormularioEquipo()"><i class="material-icons">keyboard_arrow_left</i>Regresar</button>
+            <div style="width: 10%;"></div>
+            <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
+              Subir Nueva Imagen</button>
+            <div style="width: 10%;"></div>
+            <div style="display: flex; flex-direction: row; width: 60%;">
+              <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
+                <label> Buscar: </label>
+              </div>
+              <div style="flex-grow: 0; width: 90%;">
+                <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" id="input-busqueda-imagenes-equipo"
+                  (keyup)="buscarImagenesFiltroEquipo()">
+              </div>
+            </div>
           </div>
-          
-          <div [hidden]="!mostrarListaImgenesEquipo" style="width: 100%;">
-            <div class="opciones-lista-imagenes" style="display: flex; flex-direction: row;width: 100%; ">
-              <button mat-raised-button style="width: 20%;" (click)="abrirFormularioEquipo()"><i class="material-icons">keyboard_arrow_left</i>Regresar</button>
-              <div style="width: 10%;"></div>
-              <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
-                  Subir Nueva Imagen</button>      
-                  <div style="width: 10%;"></div>          
-              <div style="display: flex; flex-direction: row; width: 60%;">
-                <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
-                  <label> Buscar: </label>
-                </div>
-                <div style="flex-grow: 0; width: 90%;">
-                  <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" id="input-busqueda-imagenes-equipo" (keyup)="buscarImagenesFiltroEquipo()">
-                </div>
-              </div>
-            </div>
-            
-            <div class="row" style="width: 100%;">
-              
-              <div class="col-lg-4 col-sm-12">
-                  <br>
-                <h6> Seleccione una imagen para agregar</h6>
-              </div>
-              <div class="col-lg-8 col-sm-12">
-                <div class="row">
-                  <div class="col-lg-4" style="text-align: center;">
-                    
-                  </div>
-                  <div class="col-lg-8">
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div style="max-height: 350px; overflow: auto; background-color: rgb(216, 240, 212);">
-              <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-                <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
-                  *ngFor="let img of listaimagenes" id="{{img}}equipo">
-                  <input type="radio" class="form-check-input" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
-                    (change)="elegirImagenEquipo(img)" name="imagen-equipo">
-                    <div class="nombre-imagen-cont"style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
-                      {{img}}
-                    </div>
-                  <img src="{{URL_IMAGES}}/md/{{img}}" class="imagen-item-articulo">
-                </div>
-              </div>
-            </div>
-            <div style="text-align: right;">
+          <div class="row" style="width: 100%;">
+            <div class="col-lg-4 col-sm-12">
               <br>
-              <button class="btn btn-success btn-success btn-pill" (click)="agregarImagenEquipo()"><i
-                  class="fa fa-plus"></i> Agregar</button>
+              <h6> Seleccione una imagen para agregar</h6>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="row">
+                <div class="col-lg-4" style="text-align: center;">
+                </div>
+                <div class="col-lg-8">
+                </div>
+              </div>
             </div>
           </div>
-          
+          <div style="max-height: 350px; overflow: auto; background-color: rgb(216, 240, 212);">
+            <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
+              <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
+                *ngFor="let img of listaimagenes" id="{{img}}equipo">
+                <input type="radio" class="form-check-input" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
+                  (change)="elegirImagenEquipo(img)" name="imagen-equipo">
+                <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
+                  {{img}}
+                </div>
+                <img src="{{URL_IMAGES}}/md/{{img}}" class="imagen-item-articulo">
+              </div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <br>
+            <button class="btn btn-success btn-success btn-pill" (click)="agregarImagenEquipo()"><i class="fa fa-plus"></i>
+              Agregar</button>
+          </div>
+        </div>
         <div style="text-align: right; width: 100%;">
           <button [hidden]="mostrarListaImgenesEquipo" mat-raised-button data-dismiss="modal" (click)="guardarDatosEquipo()">Aceptar</button>
         </div>
       </div>
-      
     </div>
   </div>
 </div>
