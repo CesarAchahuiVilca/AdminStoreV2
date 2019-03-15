@@ -59,4 +59,11 @@ export class ArticuloService {
   getCarteles(){
     return this.http.get(Constantes.URL_API_ARTICULO + '/cartel',{withCredentials: true});
   }
+  
+  postBanners(banners){
+    return this.http.post(Constantes.URL_API_ARTICULO + '/banner', {banners: banners, linea: 'PREPAGO', tipoplan:'ALTA',cuotas:0}, {withCredentials: true});
+  }
+  getBanners(){
+    return this.http.get(Constantes.URL_API_ARTICULO + '/banners/banners',{withCredentials: true});
+  } 
 }

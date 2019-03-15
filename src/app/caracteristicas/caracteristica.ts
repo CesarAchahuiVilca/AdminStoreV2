@@ -1,6 +1,6 @@
 export class Caracteristica {
 
-  constructor(_id = '', nombre = '', medida = ''){
+  constructor(_id = null, nombre = '', medida = ''){
     this._id = _id;
     this.nombre = nombre;
     this.medida = medida;

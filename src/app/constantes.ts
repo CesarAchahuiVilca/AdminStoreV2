@@ -1,6 +1,6 @@
 //const URL = 'https://latiendadeltiogeorge.herokuapp.com'
-//const URL = 'http://localhost:3000';
-const URL = 'https://www.smarket.com.pe:3000';
+const URL = 'http://localhost:3000';
+//const URL = 'https://www.smarket.com.pe:3000';
 const URL_API = URL + '/api/';
 export class Constantes {
 
@@ -11,8 +11,8 @@ export class Constantes {
     public static URL_API_ARTICULO          = URL_API + 'articulos';
     public static URL_API_MARCA             = URL_API + 'marca';
     public static URL_API_DISTRI            = URL_API + 'distribuidor';
-    //public static URL_API_IMAGEN            = 'https://latiendadeltiogeorge.herokuapp.com/api/imagenes';
-    public static URL_API_IMAGEN            = URL_API + 'imagenes';
+    public static URL_API_IMAGEN            = 'https://www.smarket.com.pe:3000/api/imagenes';
+    //public static URL_API_IMAGEN            = URL_API + 'imagenes';
     public static URL_API_MARCA_MONGODB     = URL_API + 'marca/mdb';
     public static URL_API_TIENDA            = URL_API + 'tienda';
     public static URL_API_CARACTERISTICA    = URL_API + 'caracteristica';
@@ -21,8 +21,8 @@ export class Constantes {
     public static URL_API_SESION            = URL_API + 'sesion/admin';
     public static URL_API_DIRECCION         = URL_API + 'dir';
     public static URL_API_PLANES            = URL_API + 'precio';
-    public static URL_IMAGENES              = URL + '/imagenes';
-    //public static URL_IMAGENES              = 'https://latiendadeltiogeorge.herokuapp.com/imagenes';
+    //public static URL_IMAGENES              = URL + '/imagenes';
+    public static URL_IMAGENES              = 'https://www.smarket.com.pe:3000/imagenes';
     public static URL_API_PAGO              = URL_API + 'pago';
     
 }

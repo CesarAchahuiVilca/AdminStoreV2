@@ -7,6 +7,9 @@ import { Articulo } from '../articulo/articulo';
 import { SelectImagenComponent } from './select-imagen/select-imagen.component';
 import { Respuesta } from '../usuario/respuesta';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { Constantes } from '../constantes';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { Banner, ArticuloBanner } from './banner';
 
 export class Cartel {
   _id: string;
@@ -44,9 +47,19 @@ export class HomeComponent implements OnInit {
   listaCarteles : Cartel[];
   listaArticulos: Articulo[] = [];
   planCardPlan : any;
+  listaimagenesfiltro           : string[];
+  listaimagenes          : string[];
+  readonly URL_IMAGES                             = Constantes.URL_IMAGENES;
+  imagenesSeleccionadas   : string[] = new Array();
+  selectedFile            : File                  = null;
+  readonly URL_API                                = Constantes.URL_API_IMAGEN + '/subir';
+  indexBannerSelected = 0;
 
-  constructor(public dialog: MatDialog, public articuloService: ArticuloService, public snackBar: MatSnackBar) { }
 
+  // DATOS DEL BANNER
+  banners: any[]  = new Array();
+  constructor( public http: HttpClient,public dialog: MatDialog, public articuloService: ArticuloService, public snackBar: MatSnackBar) { }
+  listaarticulosbanner: ArticuloBanner[] = new Array();
   ngOnInit() {
     this.articuloService.getArticulos().subscribe( res => {
       this.articuloService.listaArticulos = res as Articulo[];
@@ -96,8 +109,124 @@ export class HomeComponent implements OnInit {
       { valor: "0", nombre: "Sin Cuotas" },
       { valor: "12", nombre: "12 Cuotas" },
       { valor: "18", nombre: "18 Cuotas" }
-    ]
+    ];
+    this.getListaBanners();
   }
+  getListaImagenes(indice){
+    this.indexBannerSelected = indice;
+    this.articuloService.getImagenes()
+      .subscribe(res=>{
+        console.log(res);
+        this.listaimagenes = res as string[];
+        this.listaimagenesfiltro = this.listaimagenes;
+      });
+  }
+  buscaNuevaImagen(){
+    document.getElementById("imageninput").click();
+  }
+  buscarImagenesFiltro(event){
+    var input  = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
+    //this.pararbusquedaanterior = true;
+      this.listaimagenesfiltro = new Array();
+      for(var i=0;i<this.listaimagenes.length;i++){
+        var inputcheck = document.getElementById(this.listaimagenes[i]+"itemimg") as HTMLDivElement;
+        if(this.listaimagenes[i].includes(input.value)){
+          
+          inputcheck.hidden = false;
+        }else{
+          inputcheck.hidden = true;
+
+        }
+      }  
+    
+  }
+  agregarImagenesArticulo(nombre: string){
+    this.banners[this.indexBannerSelected].imagen = nombre;
+  }
+
+  eliminarItemImagen(id:string){
+    this.listaimagenesfiltro = this.listaimagenes;
+    for(var i=0;i<this.imagenesSeleccionadas.length;i++){
+      if(this.imagenesSeleccionadas[i] == id){
+        this.imagenesSeleccionadas.splice(i,1);
+        var inputcheck = document.getElementById(id) as HTMLInputElement;
+        inputcheck.checked = false;
+        //console.log(inputcheck);
+        //console.log(id);
+      }else{
+        var inputcheck = document.getElementById(id) as HTMLInputElement;
+        inputcheck.checked = true;
+      }
+    }
+  }
+
+  // FUNCIONES DEL BANNER
+  //======================================================================
+  getListaBanners(){
+    this.articuloService.getBanners()
+      .subscribe(res=>{
+        this.banners = res as Banner[];
+      });
+  }
+  agregarBanner(){
+    this.banners.push(new Banner())
+  }
+  eliminarItemBanner(i){
+    this.banners.splice(i,1);
+  }
+  listaequiposbanner: any[] = new Array();
+  listaequiposbannerfiltro: any[] = new Array();
+  getListaEquipos(indice){
+    this.banners[this.indexBannerSelected].articulos = new Array();
+    this.indexBannerSelected = indice;
+    //if(this.listaequiposbanner.length==0){
+      this.articuloService.getArticulos()
+      .subscribe(res=>{
+        this.listaequiposbanner = res as string[];
+        //this.listaequiposbannerfiltro = this.listaequiposbanner;
+      });
+    //}
+    
+  }
+  agregararticuloBanner(arti){
+    
+    var existe = false;
+    for(var i=0;i<this.banners[this.indexBannerSelected].articulos.length;i++){
+      if(this.banners[this.indexBannerSelected].articulos[i].titulo == arti.titulo){
+        this.banners[this.indexBannerSelected].articulos.splice(i,1);
+        existe = true;     
+      }
+    }
+    if(!existe){
+      var articulo = {
+        idarticulo: arti._id,
+        url: arti.url,  
+        titulo: arti.titulo,
+        categoria:arti.categoria,
+        idprecio:arti.idprecio,
+        cantidad:arti.cantidad,
+        imagenes: arti.imagenes,
+        precioplan:null,
+      }
+      this.banners[this.indexBannerSelected].articulos.push(articulo);
+    }
+  }
+
+  guardarBanners(){
+
+    this.articuloService.postBanners(this.banners).subscribe(res=>{
+      var rspta = res as Respuesta;
+      console.log(res);
+      if(rspta.status){
+        this.openSnackBar(rspta.status, rspta.msg);
+      } else {
+        this.openSnackBar(rspta.status, rspta.error);
+      }
+    })
+
+  }
+
+  //======================================================================
 
   completarRegistros(carteles: Cartel[]){
     this.cartelesEquipos = carteles.slice(0,6);
@@ -123,6 +252,40 @@ export class HomeComponent implements OnInit {
       width: '600px',
       panelClass: 'dialog'
     });
+  }
+  subirImagen2(evento){
+    this.selectedFile  = <File> evento.target.files[0];
+    //evento.preventDefault();
+    let headers = new Headers();
+    headers.append('Content-Type','multipart/form-data');
+    headers.append('nombre','nuevonombre.webp');
+    const fd = new FormData();
+   
+    fd.append('image',this.selectedFile, this.selectedFile.name);
+    this.http.post(this.URL_API,fd,{      
+      reportProgress: true,
+      observe: 'events'
+    })
+    .subscribe(event=>{
+        if(event.type === HttpEventType.UploadProgress){
+          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");
+          /*progreso.style.width = Math.round(event.loaded/event.total*100)+"%";
+          progreso.innerHTML = "Subiendo "+ Math.round(event.loaded/event.total*100)+" %";
+          inputfile.style.display="none";*/
+          if(Math.round(event.loaded/event.total*100) == 100){
+            console.log("termino subir la imagen");
+            console.log("Comprimiendo imagen");
+          /*  progreso.innerHTML = "Comprimiendo Imagen....";
+            inputfile.innerHTML = "";*/
+          }     
+        }else{
+          if(event.type === HttpEventType.Response){
+            //console.log(event.body);       
+            this.getListaImagenes(0); 
+          }
+        }
+      }
+    );
   }
 
   buscarPlanes(idPrecio: string, tipoLinea: string, tipoPlan: string, tipoCuota: string){
