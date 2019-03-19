@@ -177,8 +177,9 @@ export class HomeComponent implements OnInit {
   listaequiposbanner: any[] = new Array();
   listaequiposbannerfiltro: any[] = new Array();
   getListaEquipos(indice){
-    this.banners[this.indexBannerSelected].articulos = new Array();
+    
     this.indexBannerSelected = indice;
+    this.banners[this.indexBannerSelected].articulos = new Array();
     //if(this.listaequiposbanner.length==0){
       this.articuloService.getArticulos()
       .subscribe(res=>{
