@@ -50,7 +50,9 @@ export class ServicioClienteComponent implements OnInit {
     this.servicioClienteService.nuevoMensaje().subscribe(res=>{
       var mensaje = res as MensajeChat;
       if(mensaje.cuerpo == '$desconectar$'){
-        this.agregarMensaje(new MensajeChat('','Esta sesión ha terminado', '$desconectar','admin'));
+        if(mensaje.conversacionId == this.servicioClienteService.chatSeleccionado._id){
+          this.agregarMensaje(new MensajeChat('','Esta sesión ha terminado', '$desconectar','admin'));
+        }
       }else {
         if(mensaje.conversacionId == this.servicioClienteService.chatSeleccionado._id){
           this.agregarMensaje(mensaje);
