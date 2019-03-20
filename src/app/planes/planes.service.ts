@@ -21,7 +21,7 @@ export class PlanesService {
 
  
   getPlanesEquipo(id: String){
-    return this.http.get(Constantes.URL_API_PLANES+'/planesequipo/'+id, {withCredentials: true});
+    return this.http.get(Constantes.URL_API_PLANES +'/planesequipo/'+id +'/PREPAGO/ALTA/0', {withCredentials: true});
   }
 
 

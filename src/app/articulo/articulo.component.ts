@@ -204,10 +204,16 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.idprecio = mejor_nombre;
   }
 
+  planSeleccionado = {
+    precio:0
+  };
   buscarPlanesEquipo() {
     this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio)
       .subscribe(res => {
-        console.log(res);
+        console.log("precio del equipo");
+        
+        this.planSeleccionado = res[0];
+        console.log(this.planSeleccionado);
       });
   }
 
@@ -226,6 +232,7 @@ export class ArticuloComponent implements OnInit {
       this.articuloService.articuloSeleccionado.cantidad = articulo.Cantidad;
       this.articuloService.articuloSeleccionadoMysql = articulo;
       this.articuloService.articuloSeleccionado.titulo = articulo.Descripcion;
+      this.articuloService.articuloSeleccionado.descuento = 0;
       this.buscarPreciosEquipo();
       this.obtenerEquiposArticulo();
       this.generarURL();

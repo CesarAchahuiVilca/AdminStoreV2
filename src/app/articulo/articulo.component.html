@@ -237,9 +237,17 @@
                                         <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}"><a>{{equipo.nombreequipo}}</a></option>
                                       </select>
                                     </div>
-                                    <div style="width: 20%;margin: 5px">
-                                      <button class="btn btn-info" (click)="buscarPlanesEquipo()">Ver Precios</button>
+                                  </div>
+                                  <div style="width: 100%; display: flex; flex-direction: column;">
+                                    <br>
+                                    <div style="display:flex; flex-direction: row"> 
+                                      <h5>Precio del Articulo: <strong>S/ {{planSeleccionado.precio}}</strong></h5>
                                     </div>
+                                    <div style="display:flex; flex-direction: row;  align-items: center;"> 
+                                      <h5>Descuento (en %) : </h5>
+                                      <input  class="form-control" type="number" style="width: 30%; margin-left: 10px;" [(ngModel)]="articuloService.articuloSeleccionado.descuento" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                    
                                   </div>
                                 </mat-card-content>
                               </mat-card>

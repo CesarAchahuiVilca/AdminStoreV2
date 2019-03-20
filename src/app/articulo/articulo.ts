@@ -16,6 +16,7 @@ export class Articulo {
         this.marca = marca;
         this.equipos = equipos;
         this.palabrasclaves = palabrasclaves;
+        this.descuento = 0;
     }
   
     _id: string;
@@ -33,4 +34,5 @@ export class Articulo {
     garantias: string[];
     equipos: Equipo[];
     palabrasclaves: string;
+    descuento: Number;
   }
