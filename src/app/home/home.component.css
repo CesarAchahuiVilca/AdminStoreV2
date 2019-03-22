@@ -4,6 +4,12 @@ hr {
   width: 100%;
 }
 
+.btn-eliminar-banner {
+  position: absolute;
+  right: 0; 
+  top: 15px;
+}
+
 .imagen-item-articulo {
   display: block;
   width: auto;
@@ -26,13 +32,13 @@ hr {
   position: relative;
 }
 
-.item-banner div:first-child{
+.item-banner .imagen{
   width: 20%; 
   display: flex; 
   flex-direction: column;
 }
 
-.item-banner div:first-child div {
+.item-banner .imagen div {
   display: flex; 
   width: 100%; 
   height: auto; 
@@ -40,14 +46,14 @@ hr {
   margin-top: 10px;
 }
 
-.item-banner div:first-child div img {
+.item-banner .imagen div img {
   max-height: 100px; 
   width: auto; 
   height: auto; 
   max-width: 100%;
 }
 
-.item-banner div:nth-child(2) {
+.item-banner .equipo {
   display:flex; 
   flex-direction: column; 
   width: 75%; 
@@ -56,24 +62,42 @@ hr {
   margin-left: 5px;
 }
 
-.item-banner div:nth-child(2) div {
+.item-banner .equipo div, #btn-guardar {
   width: 100%;
 }
 
-.item-banner div:nth-child(2) div:nth-child(2){
+.item-banner .equipo div:nth-child(2){
   height: auto; 
   max-height: 400px; 
   overflow-y: auto;
+}
+.item-banner .equipo div:nth-child(2) div {
+  display:flex; 
+  flex-direction: row; 
+  justify-content: stretch;
+}
+
+.item-banner .equipo div:nth-child(2) div div {
+  width: auto; 
+  height: 100%;
 }
 
 .item-banner h6 {
   font-weight: bold;
 }
 
+.modal-body {
+  overflow-y: auto; 
+  max-height: 50% !important;
+}
+
+.modal-body .row input {
+  display: none;
+}
+
 .nombre-imagen-cont {
   background-color: rgba(0, 0, 0, 0.637);
   color: white;
-
 }
 
 #iconNuevo {

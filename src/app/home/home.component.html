@@ -13,7 +13,7 @@
         <div class="item-banner" *ngFor="let banner of banners;let i = index">
           <h6>Banner Nro: {{i+1}}</h6>
           <hr>
-          <div>
+          <div class="imagen">
             <button mat-raised-button data-toggle="modal" data-target="#modalimagenes" (click)="getListaImagenes(i)"><i
                 class="material-icons">
                 add_photo_alternate
@@ -22,7 +22,7 @@
               <img src="{{URL_IMAGES}}/md/{{banner.imagen}}">
             </div>
           </div>
-          <div>
+          <div class="equipo">
             <div>
               Equipos
               <button mat-raised-button data-toggle="modal" data-target="#modalarticulosbanner"
@@ -30,25 +30,23 @@
             </div>
             <hr>
             <div>
-              <div style="display:flex; flex-direction: row; justify-content: stretch;"
-                *ngFor="let artbanner of banner.articulos; let j =index">
-                <div style="width: auto; height: 100%;">
+              <div *ngFor="let artbanner of banner.articulos; let j =index">
+                <div>
                   {{artbanner.titulo}}
                 </div>
-                <div style="width: auto; height: 100%;">
+                <div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="btn-eliminar-banner" (click)="eliminarItemBanner(i)"
-            style="position: absolute;right: 0; top: 15px;;">
+          <div class="btn-eliminar-banner" (click)="eliminarItemBanner(i)">
             <i class="material-icons">
               close
             </i>
           </div>
           <hr>
         </div>
-        <div style="width: 100%;">
+        <div id="btn-guardar">
           <button mat-raised-button color="primary" (click)="guardarBanners()">Guardar</button>
         </div>
       </mat-card-content>
@@ -142,13 +140,12 @@
           <i class="fa fa-close"></i>
         </button>
       </div>
-      <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
+      <div class="modal-body">
         <div class="row">
           <div class="col-lg-4 col-sm-12">
             <h4> Elija Imagenes para el Articulo</h4>
           </div>
-          <input type="file" style="display: none;" (change)="subirImagen2($event)" id="imageninput">
-
+          <input type="file" (change)="subirImagen2($event)" id="imageninput">
           <div class="col-lg-8 col-sm-12">
             <div class="row">
               <div class="col-lg-4" style="text-align: center;">
@@ -195,9 +192,6 @@
   </div>
 </div>
 
-
-
-
 <!-- Modal Articulos -->
 <div class="modal fade" id="modalarticulosbanner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -209,7 +203,7 @@
           <i class="fa fa-close"></i>
         </button>
       </div>
-      <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
+      <div class="modal-body">
         <div class="row">
           <div class="col-lg-12 col-sm-12">
             <h4> Elija Ariculos para el Banner</h4>
@@ -236,7 +230,6 @@
             <div
               style="display: flex; flex-direction: row; flex-wrap: wrap; width: 100%; min-height: 40px; justify-content: space-between;"
               *ngFor="let arti of listaequiposbanner" id="{{arti.idarticulo}}itemart">
-
               <div>
                 {{arti.titulo}}
               </div>
