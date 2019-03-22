@@ -3,49 +3,53 @@
 <div class="app-body">
   <main class="main">
     <app-breadcrumb [migas]="migas"></app-breadcrumb>
-    <mat-card class="example-card">
+    <mat-card id="lista-banner">
       <mat-card-header>
         <mat-card-title>Banner
-          <button mat-raised-button  (click)="agregarBanner()">Agregar Banner</button>
-        </mat-card-title>      
-      </mat-card-header>     
-      <mat-card-content style="display: flex; flex-direction: column; width: 100%;">
-        <div class="item-banner"  *ngFor="let banner of banners;let i = index" style="display: flex;  flex-direction: row; width: 100%; flex-wrap: wrap; position: relative;">
-          <h6 style="font-weight: bold;">Banner Nro: {{i+1}}</h6>
-          <hr style="width: 0; height: 0; width: 100%;">
-          <div style="width: 20%;display: flex; flex-direction: column;">
-            <button mat-raised-button  data-toggle="modal" data-target="#modalimagenes" (click)="getListaImagenes(i)"><i class="material-icons">
-              add_photo_alternate
+          <button mat-raised-button (click)="agregarBanner()">Agregar Banner</button>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="item-banner" *ngFor="let banner of banners;let i = index">
+          <h6>Banner Nro: {{i+1}}</h6>
+          <hr>
+          <div>
+            <button mat-raised-button data-toggle="modal" data-target="#modalimagenes" (click)="getListaImagenes(i)"><i
+                class="material-icons">
+                add_photo_alternate
               </i> Agregar Imagen</button>
-              <div style="display: flex; width: 100%; height: auto; justify-content: center; margin-top: 10px;">
-                <img  style="max-height: 100px; width: auto; height: auto; max-width: 100%;" src="{{URL_IMAGES}}/md/{{banner.imagen}}" >
-              </div>
-          </div>
-          <div style="display:flex; flex-direction: column; width: 75%; padding-left: 10px; border-left: 4px solid rgb(216, 216, 216); margin-left: 5px;">
-            <div style="width: 100% ">
-              Equipos
-              <button mat-raised-button  data-toggle="modal" data-target="#modalarticulosbanner" (click)="getListaEquipos(i)">Agregar Equipos</button>
+            <div>
+              <img src="{{URL_IMAGES}}/md/{{banner.imagen}}">
             </div>
-            <hr style="width: 0; height: 0; width: 100%;">
-            <div style="width: 100%;height: auto; max-height:400px ; overflow-y: auto;">
-              <div style="display:flex; flex-direction: row; justify-content: stretch;" *ngFor="let artbanner of banner.articulos; let j =index">
+          </div>
+          <div>
+            <div>
+              Equipos
+              <button mat-raised-button data-toggle="modal" data-target="#modalarticulosbanner"
+                (click)="getListaEquipos(i)">Agregar Equipos</button>
+            </div>
+            <hr>
+            <div>
+              <div style="display:flex; flex-direction: row; justify-content: stretch;"
+                *ngFor="let artbanner of banner.articulos; let j =index">
                 <div style="width: auto; height: 100%;">
                   {{artbanner.titulo}}
                 </div>
-                <div style="width: auto; height: 100%;" >
+                <div style="width: auto; height: 100%;">
                 </div>
               </div>
             </div>
-          </div>       
-            <div class="btn-eliminar-banner" (click)="eliminarItemBanner(i)" style="position: absolute;right: 0; top: 15px;;">
-                <i class="material-icons">
-                    close
-                </i>
-            </div>
-            <hr style="width: 0; height: 0;width: 100%;">
+          </div>
+          <div class="btn-eliminar-banner" (click)="eliminarItemBanner(i)"
+            style="position: absolute;right: 0; top: 15px;;">
+            <i class="material-icons">
+              close
+            </i>
+          </div>
+          <hr>
         </div>
-        <div style="width: 100%;">        
-           <button mat-raised-button color="primary" (click)="guardarBanners()">Guardar</button>
+        <div style="width: 100%;">
+          <button mat-raised-button color="primary" (click)="guardarBanners()">Guardar</button>
         </div>
       </mat-card-content>
     </mat-card>
@@ -61,7 +65,8 @@
           <h3 mat-subheader>Carteles para equipos en el HOME</h3>
           <mat-list-item *ngFor="let cardItem of cartelesEquipos; let i = index;">
             <mat-icon mat-list-icon>dock</mat-icon>
-            <mat-select placeholder="Equipo a mostrar" [(ngModel)]="listaArticulos[i]" (selectionChange)="seleccionarCard(i, $event.value)">
+            <mat-select placeholder="Equipo a mostrar" [(ngModel)]="listaArticulos[i]"
+              (selectionChange)="seleccionarCard(i, $event.value)">
               <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
             </mat-select>
             <button mat-mini-fab style="margin: 5px 15px;" *ngIf="cardItem.idEquipo">
@@ -73,20 +78,30 @@
           <h3 mat-subheader>Cartél para equipo con plan en HOME</h3>
           <mat-list-item *ngFor="let cardPlan of cartelPlan">
             <mat-icon mat-list-icon>phonelink_setup</mat-icon>
-            <mat-select placeholder="Equipo a mostrar" [(ngModel)]="listaArticulos[6]" (selectionChange)="(seleccionarCardPlan($event.value))">
+            <mat-select placeholder="Equipo a mostrar" [(ngModel)]="listaArticulos[6]"
+              (selectionChange)="(seleccionarCardPlan($event.value))">
               <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
             </mat-select>
-            <mat-select placeholder="Linea del articulo" [(ngModel)]="cardPlan.linea" *ngIf="cardPlan.idEquipo" (selectionChange)="seleccionarLinea($event.value)">
+            <mat-select placeholder="Linea del articulo" [(ngModel)]="cardPlan.linea" *ngIf="cardPlan.idEquipo"
+              (selectionChange)="seleccionarLinea($event.value)">
               <mat-option *ngFor="let linea of listaLineas" [value]="linea.valor">{{linea.nombre}}</mat-option>
             </mat-select>
-            <mat-select placeholder="Tipo de Plan" [(ngModel)]="cardPlan.tipoPlan" *ngIf="cardPlan.linea && (cardPlan.linea == 'POSTPAGO')" (selectionChange)="seleccionarTipoPlan($event.value)">
-              <mat-option *ngFor="let tipoPlan of listaTipoPlanes" [value]="tipoPlan.valor">{{tipoPlan.nombre}}</mat-option>
+            <mat-select placeholder="Tipo de Plan" [(ngModel)]="cardPlan.tipoPlan"
+              *ngIf="cardPlan.linea && (cardPlan.linea == 'POSTPAGO')"
+              (selectionChange)="seleccionarTipoPlan($event.value)">
+              <mat-option *ngFor="let tipoPlan of listaTipoPlanes" [value]="tipoPlan.valor">{{tipoPlan.nombre}}
+              </mat-option>
             </mat-select>
-            <mat-select placeholder="Cuotas" [(ngModel)]="cardPlan.cuotas" *ngIf="cardPlan.tipoPlan && (cardPlan.linea == 'POSTPAGO')" (selectionChange)="seleccionarCuota($event.value)">
+            <mat-select placeholder="Cuotas" [(ngModel)]="cardPlan.cuotas"
+              *ngIf="cardPlan.tipoPlan && (cardPlan.linea == 'POSTPAGO')"
+              (selectionChange)="seleccionarCuota($event.value)">
               <mat-option *ngFor="let cuota of listaCuotas" [value]="cuota.valor">{{cuota.nombre}}</mat-option>
             </mat-select>
-            <mat-select placeholder="Plan a mostrar" [(ngModel)]="planCardPlan" *ngIf="cardPlan.tipoPlan || (cardPlan.linea == 'PREPAGO')" (selectionChange)="seleccionarPlan($event.value)">
-              <mat-option *ngFor="let plan of listaPreciosFiltro" [value]="plan.nombreplan">{{plan.nombreplan}}</mat-option>
+            <mat-select placeholder="Plan a mostrar" [(ngModel)]="planCardPlan"
+              *ngIf="cardPlan.tipoPlan || (cardPlan.linea == 'PREPAGO')"
+              (selectionChange)="seleccionarPlan($event.value)">
+              <mat-option *ngFor="let plan of listaPreciosFiltro" [value]="plan.nombreplan">{{plan.nombreplan}}
+              </mat-option>
             </mat-select>
             <button mat-mini-fab style="margin: 5px 15px;" *ngIf=cardPlan.linea>
               <mat-icon aria-label="Seleccionar imagen" (click)="seleccionarImagen(6)">insert_photo</mat-icon>
@@ -97,7 +112,8 @@
           <h3 mat-subheader>Carteles para accesorios en el HOME</h3>
           <mat-list-item *ngFor="let cardAcc of cartelesAccesorios; let j = index">
             <mat-icon mat-list-icon>devices</mat-icon>
-            <mat-select placeholder="Accesorio a mostrar" [(ngModel)]="listaArticulos[j+7]" (selectionChange)="seleccionarAccesorio(j, $event.value)">
+            <mat-select placeholder="Accesorio a mostrar" [(ngModel)]="listaArticulos[j+7]"
+              (selectionChange)="seleccionarAccesorio(j, $event.value)">
               <mat-option *ngFor="let art of articuloService.listaArticulos" [value]="art">{{art.titulo}}</mat-option>
             </mat-select>
             <button mat-mini-fab style="margin: 5px 15px;" *ngIf="cardAcc.idEquipo">
@@ -116,8 +132,8 @@
 
 <!-- MODAL IMAGENES -->
 
-<div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document" id="modalarticulocontenido">
     <div class="modal-content">
       <div class="modal-header">
@@ -145,7 +161,8 @@
                     <label> Buscar: </label>
                   </div>
                   <div style="flex-grow: 0; width: 90%;">
-                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" (keyup)="buscarImagenesFiltro($event)" id="input-busqueda-imagenes-articulo">
+                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes"
+                      (keyup)="buscarImagenesFiltro($event)" id="input-busqueda-imagenes-articulo">
                   </div>
                 </div>
               </div>
@@ -155,13 +172,15 @@
         <br>
         <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
           <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-            <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
+            <div class="item-imagen-list"
+              style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
               *ngFor="let img of listaimagenes" id="{{img}}itemimg">
-              <input type="radio" class="form-control" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px; z-index: 1500;"
+              <input type="radio" class="form-control"
+                style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px; z-index: 1500;"
                 (change)="agregarImagenesArticulo(img)" name="imagen-banner">
-                <div class="nombre-imagen-cont"style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
-                  {{img}}
-                </div>
+              <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
+                {{img}}
+              </div>
               <img src="{{URL_IMAGES}}/md/{{img}}" class="imagen-item-articulo">
             </div>
           </div>
@@ -180,9 +199,9 @@
 
 
 <!-- Modal Articulos -->
-<div class="modal fade" id="modalarticulosbanner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog " role="document" >
+<div class="modal fade" id="modalarticulosbanner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog " role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="titulomodal"><i class="fa fa-image"> </i> Articulos</h5>
@@ -203,7 +222,8 @@
                     <label> Buscar: </label>
                   </div>
                   <div style="flex-grow: 0; width: 90%;">
-                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Articulos" (keyup)="buscarArticuloFiltro($event)" id="input-busqueda-imagenes-articulo">
+                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Articulos"
+                      (keyup)="buscarArticuloFiltro($event)" id="input-busqueda-imagenes-articulo">
                   </div>
                 </div>
               </div>
@@ -213,14 +233,15 @@
         <br>
         <div style="max-height: 400px; overflow: auto; ">
           <div style="display: flex; flex-direction: column; padding-top: 10px;">
-            <div  style="display: flex; flex-direction: row; flex-wrap: wrap; width: 100%; min-height: 40px; justify-content: space-between;"
+            <div
+              style="display: flex; flex-direction: row; flex-wrap: wrap; width: 100%; min-height: 40px; justify-content: space-between;"
               *ngFor="let arti of listaequiposbanner" id="{{arti.idarticulo}}itemart">
-             
-                <div >
-                  {{arti.titulo}}
-                </div>
-                <input type="checkbox" (change)="agregararticuloBanner(arti)" id="{{arti.idarticulo}}">
-                <hr style="width: 100%; padding: 0px; margin: 0px;">
+
+              <div>
+                {{arti.titulo}}
+              </div>
+              <input type="checkbox" (change)="agregararticuloBanner(arti)" id="{{arti.idarticulo}}">
+              <hr style="width: 100%; padding: 0px; margin: 0px;">
             </div>
           </div>
         </div>

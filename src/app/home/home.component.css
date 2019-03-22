@@ -1,22 +1,89 @@
-#iconNuevo {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-  }
-  .nombre-imagen-cont{
-    background-color: rgba(0, 0, 0, 0.637);
-    color: white;
-    
+hr {
+  width: 0; 
+  height: 0; 
+  width: 100%;
 }
+
 .imagen-item-articulo {
   display: block;
   width: auto;
   height: 100%;
 }
+
 .imagen-item-articulo2 {
   display: block;
   height: 250px;
   width: auto;
-  height: auto;  
+  height: auto;
   max-width: 100%;
+}
+
+.item-banner {
+  display: flex;  
+  flex-direction: row; 
+  width: 100%; 
+  flex-wrap: wrap; 
+  position: relative;
+}
+
+.item-banner div:first-child{
+  width: 20%; 
+  display: flex; 
+  flex-direction: column;
+}
+
+.item-banner div:first-child div {
+  display: flex; 
+  width: 100%; 
+  height: auto; 
+  justify-content: center; 
+  margin-top: 10px;
+}
+
+.item-banner div:first-child div img {
+  max-height: 100px; 
+  width: auto; 
+  height: auto; 
+  max-width: 100%;
+}
+
+.item-banner div:nth-child(2) {
+  display:flex; 
+  flex-direction: column; 
+  width: 75%; 
+  padding-left: 10px; 
+  border-left: 4px solid rgb(216, 216, 216); 
+  margin-left: 5px;
+}
+
+.item-banner div:nth-child(2) div {
+  width: 100%;
+}
+
+.item-banner div:nth-child(2) div:nth-child(2){
+  height: auto; 
+  max-height: 400px; 
+  overflow-y: auto;
+}
+
+.item-banner h6 {
+  font-weight: bold;
+}
+
+.nombre-imagen-cont {
+  background-color: rgba(0, 0, 0, 0.637);
+  color: white;
+
+}
+
+#iconNuevo {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+#lista-banner mat-card-content {
+  display: flex; 
+  flex-direction: column; 
+  width: 100%;
 }

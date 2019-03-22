@@ -16,15 +16,7 @@ export class Cartel {
   idEquipo: string;
   urlImagen: string;
   tipo: string;
-  link: string;
   activo: boolean;
-  linea: string;
-  tipoPlan: string;
-  cuotas: string;
-  plan: string;
-  idPrecio: string;
-  orden: number;
-  titulo: string;
 }
 
 @Component({
@@ -60,6 +52,23 @@ export class HomeComponent implements OnInit {
   constructor( public http: HttpClient, public dialog: MatDialog, public articuloService: ArticuloService, public snackBar: MatSnackBar) { }
   
   ngOnInit() {
+    // Obtener todos los artículos con registro completo
+    this.articuloService.getArticulos().subscribe( res => {
+      this.articuloService.listaArticulos = res as Articulo[];
+      // Obtener los cartéles vigentes
+      this.articuloService.getCarteles().subscribe( res => {
+        const rspta = res as Respuesta;
+        if(rspta.status){
+          this.openSnackBar(rspta.status, rspta.msg);
+          this.listaCarteles = rspta.data as Cartel[];
+        } else {
+          this.openSnackBar(rspta.status, rspta.error);
+          console.log(rspta.data);
+        }
+      });
+    });
+
+    /**
     this.articuloService.getArticulos().subscribe( res => {
       this.articuloService.listaArticulos = res as Articulo[];
       this.articuloService.getCarteles().subscribe( res => {
@@ -94,7 +103,7 @@ export class HomeComponent implements OnInit {
           this.cartelesAccesorios[1] = new Cartel();
         }
       });
-    });
+    });*/
     // Lista de lineas y planes existentes
     this.listaLineas = [{ valor: "PREPAGO", nombre: "Prepago" }, { valor: "POSTPAGO", nombre: "Postpago" }];
     this.listaTipoPlanes = [
@@ -237,9 +246,9 @@ export class HomeComponent implements OnInit {
       this.listaArticulos.push(this.articuloService.listaArticulos[j]);
     }
     console.log(this.cartelPlan);
-    this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, this.cartelPlan[0].cuotas);
+    //this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, this.cartelPlan[0].cuotas);
     var i = 0 ;
-    while( i < this.listaPreciosFiltro.length && this.cartelPlan[0].plan != this.listaPreciosFiltro[i].nombreplan){ i++; }
+    //while( i < this.listaPreciosFiltro.length && this.cartelPlan[0].plan != this.listaPreciosFiltro[i].nombreplan){ i++; }
     this.planCardPlan = this.listaPreciosFiltro[i];
     console.log(this.planCardPlan);
   }
@@ -308,10 +317,10 @@ export class HomeComponent implements OnInit {
     var indice : number = i;
     this.cartelesEquipos[indice].idEquipo = evento._id;
     this.cartelesEquipos[indice].tipo = 'Equipo';
-    this.cartelesEquipos[indice].link = evento.url;
+    //this.cartelesEquipos[indice].link = evento.url;
     this.cartelesEquipos[indice].activo = true;
-    this.cartelesEquipos[indice].titulo = evento.titulo
-    this.cartelesEquipos[indice].idPrecio = evento.idprecio;
+    //this.cartelesEquipos[indice].titulo = evento.titulo
+    //this.cartelesEquipos[indice].idPrecio = evento.idprecio;
   }
 
   /**
@@ -320,11 +329,11 @@ export class HomeComponent implements OnInit {
    */
   seleccionarCardPlan(articulo: any){
     this.cartelPlan[0].idEquipo = articulo._id;
-    this.cartelPlan[0].link = articulo.url;
+    //this.cartelPlan[0].link = articulo.url;
     this.cartelPlan[0].tipo = 'Plan';
     this.cartelPlan[0].activo = true;
-    this.cartelPlan[0].idPrecio = articulo.idprecio;
-    this.cartelPlan[0].titulo = articulo.titulo;
+    //this.cartelPlan[0].idPrecio = articulo.idprecio;
+    //this.cartelPlan[0].titulo = articulo.titulo;
   }
 
   /**
@@ -336,9 +345,9 @@ export class HomeComponent implements OnInit {
     this.cartelesAccesorios[j].idEquipo = accesorio._id;
     this.cartelesAccesorios[j].tipo = 'Accesorio';
     this.cartelesAccesorios[j].activo= true;
-    this.cartelesAccesorios[j].link = accesorio.url;
-    this.cartelesAccesorios[j].titulo = accesorio.titulo;
-    this.cartelesAccesorios[j].idPrecio = accesorio.idprecio;
+    //this.cartelesAccesorios[j].link = accesorio.url;
+    //this.cartelesAccesorios[j].titulo = accesorio.titulo;
+    //this.cartelesAccesorios[j].idPrecio = accesorio.idprecio;
   }
 
   /**
@@ -347,13 +356,13 @@ export class HomeComponent implements OnInit {
    */
   seleccionarLinea(linea: string){
     console.log(this.cartelPlan[0]);
-    this.cartelPlan[0].linea = linea;
-    if(this.cartelPlan[0].linea == 'PREPAGO'){
+    //this.cartelPlan[0].linea = linea;
+    /*if(this.cartelPlan[0].linea == 'PREPAGO'){
       this.cartelPlan[0].tipoPlan = 'ALTA';
       this.cartelPlan[0].cuotas = '0';
       this.cartelPlan[0].plan = null;
       this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, this.cartelPlan[0].cuotas);
-    }
+    }*/
   }
 
   /**
@@ -361,9 +370,9 @@ export class HomeComponent implements OnInit {
    * @param tipoPlan : tipo plan seleccionado
    */
   seleccionarTipoPlan(tipoPlan: string){
-    this.cartelPlan[0].tipoPlan = tipoPlan;
-    this.cartelPlan[0].plan = null;
-    this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, "0");
+    //this.cartelPlan[0].tipoPlan = tipoPlan;
+    //this.cartelPlan[0].plan = null;
+    //this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, "0");
   }
 
   /**
@@ -371,9 +380,9 @@ export class HomeComponent implements OnInit {
    * @param cuota : cantidad de cuotas a mostrar
    */
   seleccionarCuota(cuota: string){
-    this.cartelPlan[0].cuotas = cuota;
-    this.cartelPlan[0].plan = null;
-    this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, this.cartelPlan[0].cuotas);
+    //this.cartelPlan[0].cuotas = cuota;
+    //this.cartelPlan[0].plan = null;
+    //this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, this.cartelPlan[0].cuotas);
   }
 
   /**
@@ -381,7 +390,7 @@ export class HomeComponent implements OnInit {
    * @param plan 
    */
   seleccionarPlan(plan: string){
-    this.cartelPlan[0].plan = plan;
+    //this.cartelPlan[0].plan = plan;
   }
 
   /**
@@ -410,9 +419,9 @@ export class HomeComponent implements OnInit {
   guardarCarteles(){
     var carteles : Cartel[] = [];
     carteles = carteles.concat(this.cartelesEquipos, this.cartelPlan, this.cartelesAccesorios);
-    for(var i= 0; i < carteles.length; i++){
+    /*for(var i= 0; i < carteles.length; i++){
       carteles[i].orden = i;
-    }
+    }*/
     console.log(carteles);
     this.articuloService.postCarteles(carteles).subscribe(res => {
       var rspta = res as Respuesta;
