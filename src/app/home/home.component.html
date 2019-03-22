@@ -7,11 +7,8 @@
       <mat-card-header>
         <mat-card-title>Banner
           <button mat-raised-button  (click)="agregarBanner()">Agregar Banner</button>
-        </mat-card-title>
-        
-      </mat-card-header>
-      
-      
+        </mat-card-title>      
+      </mat-card-header>     
       <mat-card-content style="display: flex; flex-direction: column; width: 100%;">
         <div class="item-banner"  *ngFor="let banner of banners;let i = index" style="display: flex;  flex-direction: row; width: 100%; flex-wrap: wrap; position: relative;">
           <h6 style="font-weight: bold;">Banner Nro: {{i+1}}</h6>
@@ -22,7 +19,6 @@
               </i> Agregar Imagen</button>
               <div style="display: flex; width: 100%; height: auto; justify-content: center; margin-top: 10px;">
                 <img  style="max-height: 100px; width: auto; height: auto; max-width: 100%;" src="{{URL_IMAGES}}/md/{{banner.imagen}}" >
-
               </div>
           </div>
           <div style="display:flex; flex-direction: column; width: 75%; padding-left: 10px; border-left: 4px solid rgb(216, 216, 216); margin-left: 5px;">
@@ -40,9 +36,7 @@
                 </div>
               </div>
             </div>
-
-          </div>
-            
+          </div>       
             <div class="btn-eliminar-banner" (click)="eliminarItemBanner(i)" style="position: absolute;right: 0; top: 15px;;">
                 <i class="material-icons">
                     close
@@ -50,11 +44,9 @@
             </div>
             <hr style="width: 0; height: 0;width: 100%;">
         </div>
-        <div style="width: 100%;">
-          
+        <div style="width: 100%;">        
            <button mat-raised-button color="primary" (click)="guardarBanners()">Guardar</button>
         </div>
-
       </mat-card-content>
     </mat-card>
     <mat-card style="margin: 10px;">

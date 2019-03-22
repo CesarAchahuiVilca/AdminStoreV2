@@ -54,12 +54,11 @@ export class HomeComponent implements OnInit {
   selectedFile            : File                  = null;
   readonly URL_API                                = Constantes.URL_API_IMAGEN + '/subir';
   indexBannerSelected = 0;
-
-
   // DATOS DEL BANNER
   banners: any[]  = new Array();
-  constructor( public http: HttpClient,public dialog: MatDialog, public articuloService: ArticuloService, public snackBar: MatSnackBar) { }
-  listaarticulosbanner: ArticuloBanner[] = new Array();
+
+  constructor( public http: HttpClient, public dialog: MatDialog, public articuloService: ArticuloService, public snackBar: MatSnackBar) { }
+  
   ngOnInit() {
     this.articuloService.getArticulos().subscribe( res => {
       this.articuloService.listaArticulos = res as Articulo[];
@@ -112,6 +111,7 @@ export class HomeComponent implements OnInit {
     ];
     this.getListaBanners();
   }
+  
   getListaImagenes(indice){
     this.indexBannerSelected = indice;
     this.articuloService.getImagenes()
@@ -121,9 +121,11 @@ export class HomeComponent implements OnInit {
         this.listaimagenesfiltro = this.listaimagenes;
       });
   }
+
   buscaNuevaImagen(){
     document.getElementById("imageninput").click();
   }
+  
   buscarImagenesFiltro(event){
     var input  = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
     //this.pararbusquedaanterior = true;
@@ -131,14 +133,11 @@ export class HomeComponent implements OnInit {
       for(var i=0;i<this.listaimagenes.length;i++){
         var inputcheck = document.getElementById(this.listaimagenes[i]+"itemimg") as HTMLDivElement;
         if(this.listaimagenes[i].includes(input.value)){
-          
           inputcheck.hidden = false;
         }else{
           inputcheck.hidden = true;
-
         }
       }  
-    
   }
   agregarImagenesArticulo(nombre: string){
     this.banners[this.indexBannerSelected].imagen = nombre;
@@ -177,7 +176,6 @@ export class HomeComponent implements OnInit {
   listaequiposbanner: any[] = new Array();
   listaequiposbannerfiltro: any[] = new Array();
   getListaEquipos(indice){
-    
     this.indexBannerSelected = indice;
     this.banners[this.indexBannerSelected].articulos = new Array();
     //if(this.listaequiposbanner.length==0){
@@ -190,7 +188,6 @@ export class HomeComponent implements OnInit {
     
   }
   agregararticuloBanner(arti){
-    
     var existe = false;
     for(var i=0;i<this.banners[this.indexBannerSelected].articulos.length;i++){
       if(this.banners[this.indexBannerSelected].articulos[i].titulo == arti.titulo){
@@ -214,7 +211,6 @@ export class HomeComponent implements OnInit {
   }
 
   guardarBanners(){
-
     this.articuloService.postBanners(this.banners).subscribe(res=>{
       var rspta = res as Respuesta;
       console.log(res);
@@ -254,6 +250,7 @@ export class HomeComponent implements OnInit {
       panelClass: 'dialog'
     });
   }
+
   subirImagen2(evento){
     this.selectedFile  = <File> evento.target.files[0];
     //evento.preventDefault();
@@ -289,12 +286,24 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  /**
+   * Método para buscar los planes de un determinado artículo
+   * @param idPrecio : identificador del precio de venta
+   * @param tipoLinea : tipo de linea del precio
+   * @param tipoPlan : tipo plan seleccionado
+   * @param tipoCuota : cantidad de cuotas seleccionadas
+   */
   buscarPlanes(idPrecio: string, tipoLinea: string, tipoPlan: string, tipoCuota: string){
     this.articuloService.getPreciosArticulo(idPrecio, tipoLinea, tipoPlan, tipoCuota).subscribe( res => {
       this.listaPreciosFiltro = res as any[];
     });
   }
 
+  /**
+   * Método para seleccionar un cartél de equipo
+   * @param i : indice del artículo
+   * @param evento : objeto de tipo artículo
+   */
   seleccionarCard(i: number, evento: any){
     var indice : number = i;
     this.cartelesEquipos[indice].idEquipo = evento._id;
@@ -305,6 +314,10 @@ export class HomeComponent implements OnInit {
     this.cartelesEquipos[indice].idPrecio = evento.idprecio;
   }
 
+  /**
+   * Método par agregar un cartel con plan
+   * @param articulo : objeto de tipo artículo
+   */
   seleccionarCardPlan(articulo: any){
     this.cartelPlan[0].idEquipo = articulo._id;
     this.cartelPlan[0].link = articulo.url;
@@ -314,6 +327,11 @@ export class HomeComponent implements OnInit {
     this.cartelPlan[0].titulo = articulo.titulo;
   }
 
+  /**
+   * Método para agregar un accesorio en el menú
+   * @param j : indice del accesorio
+   * @param accesorio : objeto del tipo accesorio
+   */
   seleccionarAccesorio(j: number, accesorio: any){
     this.cartelesAccesorios[j].idEquipo = accesorio._id;
     this.cartelesAccesorios[j].tipo = 'Accesorio';
@@ -323,6 +341,10 @@ export class HomeComponent implements OnInit {
     this.cartelesAccesorios[j].idPrecio = accesorio.idprecio;
   }
 
+  /**
+   * Método para seleccionar la linea de producto a vender
+   * @param linea : nombre de la linea de producto
+   */
   seleccionarLinea(linea: string){
     console.log(this.cartelPlan[0]);
     this.cartelPlan[0].linea = linea;
@@ -334,28 +356,43 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Método para seleccionar un tipo de plan 
+   * @param tipoPlan : tipo plan seleccionado
+   */
   seleccionarTipoPlan(tipoPlan: string){
     this.cartelPlan[0].tipoPlan = tipoPlan;
     this.cartelPlan[0].plan = null;
     this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, "0");
   }
 
+  /**
+   * Método para seleccionar cuotas de un plan
+   * @param cuota : cantidad de cuotas a mostrar
+   */
   seleccionarCuota(cuota: string){
     this.cartelPlan[0].cuotas = cuota;
     this.cartelPlan[0].plan = null;
     this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, this.cartelPlan[0].cuotas);
   }
 
+  /**
+   * Método para seleccionar un plan
+   * @param plan 
+   */
   seleccionarPlan(plan: string){
     this.cartelPlan[0].plan = plan;
   }
 
+  /**
+   * Método que muestra las imagenes disponibles de un artículo para escoger la que se mostrará en portada
+   * @param indice : indice del cartél
+   */
   seleccionarImagen(indice: number){
     const dialogRef = this.dialog.open(SelectImagenComponent, {
       width: '600px',
       panelClass: 'dialog'
     });
-
     dialogRef.afterClosed().subscribe(result => {
       if(indice < 6){
         this.cartelesEquipos[indice].urlImagen = result;
@@ -367,6 +404,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  /**
+   * Método que guarda la información relacionada a los carteles
+   */
   guardarCarteles(){
     var carteles : Cartel[] = [];
     carteles = carteles.concat(this.cartelesEquipos, this.cartelPlan, this.cartelesAccesorios);
@@ -385,7 +425,9 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * Método que muestra un Bar temporal para confirmar los mensajes de éxito y de error
+   * Método que muestra un bar temporal para confirmar un mensaje
+   * @param status : tipo de mensaje a mostrar
+   * @param mensaje : contenido del mensaje a mostrar
    */
   openSnackBar(status: boolean, mensaje: string): void {
     var clase = status ? 'exito' : 'error';
