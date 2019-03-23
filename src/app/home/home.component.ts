@@ -27,18 +27,21 @@ export class Cartel {
 export class HomeComponent implements OnInit {
 
   public migas = [ new Miga('Imágenes del Menú Principal','/home')];
-  cartelesEquipos : Cartel[] = [];
-  cartelPlan: Cartel[] = [];
-  cartelesAccesorios: Cartel[] = [];
+  articulosCartel : Cartel[] = [];
+
+
+  //cartelesEquipos : Cartel[] = [];
+  //cartelPlan: Cartel[] = [];
+  //cartelesAccesorios: Cartel[] = [];
   imagenSelected : string;
-  mostrarLinea : boolean = false;
-  listaLineas = [];
-  listaTipoPlanes = [];
-  listaCuotas = [];
+  //mostrarLinea : boolean = false;
+  //listaLineas = [];
+  //listaTipoPlanes = [];
+  //listaCuotas = [];
   listaPreciosFiltro: any[] = new Array();
   listaCarteles : Cartel[];
   listaArticulos: Articulo[] = [];
-  planCardPlan : any;
+  //planCardPlan : any;
   listaimagenesfiltro           : string[];
   listaimagenes          : string[];
   readonly URL_IMAGES                             = Constantes.URL_IMAGENES;
@@ -105,8 +108,8 @@ export class HomeComponent implements OnInit {
       });
     });*/
     // Lista de lineas y planes existentes
-    this.listaLineas = [{ valor: "PREPAGO", nombre: "Prepago" }, { valor: "POSTPAGO", nombre: "Postpago" }];
-    this.listaTipoPlanes = [
+    //this.listaLineas = [{ valor: "PREPAGO", nombre: "Prepago" }, { valor: "POSTPAGO", nombre: "Postpago" }];
+    /*this.listaTipoPlanes = [
       { valor: "ALTA", nombre: "Linea Nueva" },
       { valor: "PORTABILIDAD", nombre: "Portabilidad" },
       { valor: "RENOVACION", nombre: "Renovación" },
@@ -117,7 +120,7 @@ export class HomeComponent implements OnInit {
       { valor: "0", nombre: "Sin Cuotas" },
       { valor: "12", nombre: "12 Cuotas" },
       { valor: "18", nombre: "18 Cuotas" }
-    ];
+    ];*/
     this.getListaBanners();
   }
   
@@ -234,7 +237,7 @@ export class HomeComponent implements OnInit {
 
   //======================================================================
 
-  completarRegistros(carteles: Cartel[]){
+  /*completarRegistros(carteles: Cartel[]){
     this.cartelesEquipos = carteles.slice(0,6);
     this.cartelPlan = carteles.slice(6,7);
     this.cartelesAccesorios = carteles.slice(7,9);
@@ -251,7 +254,7 @@ export class HomeComponent implements OnInit {
     //while( i < this.listaPreciosFiltro.length && this.cartelPlan[0].plan != this.listaPreciosFiltro[i].nombreplan){ i++; }
     this.planCardPlan = this.listaPreciosFiltro[i];
     console.log(this.planCardPlan);
-  }
+  }*/
 
   subirImagen(){
     this.dialog.open(ImagenCartelComponent, {
@@ -302,18 +305,18 @@ export class HomeComponent implements OnInit {
    * @param tipoPlan : tipo plan seleccionado
    * @param tipoCuota : cantidad de cuotas seleccionadas
    */
-  buscarPlanes(idPrecio: string, tipoLinea: string, tipoPlan: string, tipoCuota: string){
+  /*buscarPlanes(idPrecio: string, tipoLinea: string, tipoPlan: string, tipoCuota: string){
     this.articuloService.getPreciosArticulo(idPrecio, tipoLinea, tipoPlan, tipoCuota).subscribe( res => {
       this.listaPreciosFiltro = res as any[];
     });
-  }
+  }*/
 
   /**
    * Método para seleccionar un cartél de equipo
    * @param i : indice del artículo
    * @param evento : objeto de tipo artículo
    */
-  seleccionarCard(i: number, evento: any){
+  /*seleccionarCard(i: number, evento: any){
     var indice : number = i;
     this.cartelesEquipos[indice].idEquipo = evento._id;
     this.cartelesEquipos[indice].tipo = 'Equipo';
@@ -321,40 +324,40 @@ export class HomeComponent implements OnInit {
     this.cartelesEquipos[indice].activo = true;
     //this.cartelesEquipos[indice].titulo = evento.titulo
     //this.cartelesEquipos[indice].idPrecio = evento.idprecio;
-  }
+  }*/
 
   /**
    * Método par agregar un cartel con plan
    * @param articulo : objeto de tipo artículo
    */
-  seleccionarCardPlan(articulo: any){
+  /*seleccionarCardPlan(articulo: any){
     this.cartelPlan[0].idEquipo = articulo._id;
     //this.cartelPlan[0].link = articulo.url;
     this.cartelPlan[0].tipo = 'Plan';
     this.cartelPlan[0].activo = true;
     //this.cartelPlan[0].idPrecio = articulo.idprecio;
     //this.cartelPlan[0].titulo = articulo.titulo;
-  }
+  }*/
 
   /**
    * Método para agregar un accesorio en el menú
    * @param j : indice del accesorio
    * @param accesorio : objeto del tipo accesorio
    */
-  seleccionarAccesorio(j: number, accesorio: any){
+  /*seleccionarAccesorio(j: number, accesorio: any){
     this.cartelesAccesorios[j].idEquipo = accesorio._id;
     this.cartelesAccesorios[j].tipo = 'Accesorio';
     this.cartelesAccesorios[j].activo= true;
     //this.cartelesAccesorios[j].link = accesorio.url;
     //this.cartelesAccesorios[j].titulo = accesorio.titulo;
     //this.cartelesAccesorios[j].idPrecio = accesorio.idprecio;
-  }
+  }*/
 
   /**
    * Método para seleccionar la linea de producto a vender
    * @param linea : nombre de la linea de producto
    */
-  seleccionarLinea(linea: string){
+  /*seleccionarLinea(linea: string){
     console.log(this.cartelPlan[0]);
     //this.cartelPlan[0].linea = linea;
     /*if(this.cartelPlan[0].linea == 'PREPAGO'){
@@ -363,41 +366,41 @@ export class HomeComponent implements OnInit {
       this.cartelPlan[0].plan = null;
       this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, this.cartelPlan[0].cuotas);
     }*/
-  }
+//}
 
   /**
    * Método para seleccionar un tipo de plan 
    * @param tipoPlan : tipo plan seleccionado
    */
-  seleccionarTipoPlan(tipoPlan: string){
+  /*seleccionarTipoPlan(tipoPlan: string){
     //this.cartelPlan[0].tipoPlan = tipoPlan;
     //this.cartelPlan[0].plan = null;
     //this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, "0");
-  }
+  }*/
 
   /**
    * Método para seleccionar cuotas de un plan
    * @param cuota : cantidad de cuotas a mostrar
    */
-  seleccionarCuota(cuota: string){
+  /*seleccionarCuota(cuota: string){
     //this.cartelPlan[0].cuotas = cuota;
     //this.cartelPlan[0].plan = null;
     //this.buscarPlanes(this.cartelPlan[0].idPrecio, this.cartelPlan[0].linea, this.cartelPlan[0].tipoPlan, this.cartelPlan[0].cuotas);
-  }
+  }*/
 
   /**
    * Método para seleccionar un plan
    * @param plan 
    */
-  seleccionarPlan(plan: string){
+  /*seleccionarPlan(plan: string){
     //this.cartelPlan[0].plan = plan;
-  }
+  }*/
 
   /**
    * Método que muestra las imagenes disponibles de un artículo para escoger la que se mostrará en portada
    * @param indice : indice del cartél
    */
-  seleccionarImagen(indice: number){
+  /*seleccionarImagen(indice: number){
     const dialogRef = this.dialog.open(SelectImagenComponent, {
       width: '600px',
       panelClass: 'dialog'
@@ -411,18 +414,18 @@ export class HomeComponent implements OnInit {
         this.cartelesAccesorios[indice - 7].urlImagen = result;
       }
     });
-  }
+  }*/
 
   /**
    * Método que guarda la información relacionada a los carteles
    */
-  guardarCarteles(){
+  /*guardarCarteles(){
     var carteles : Cartel[] = [];
-    carteles = carteles.concat(this.cartelesEquipos, this.cartelPlan, this.cartelesAccesorios);
+    carteles = carteles.concat(this.cartelesEquipos, this.cartelPlan, this.cartelesAccesorios);*/
     /*for(var i= 0; i < carteles.length; i++){
       carteles[i].orden = i;
     }*/
-    console.log(carteles);
+    /*console.log(carteles);
     this.articuloService.postCarteles(carteles).subscribe(res => {
       var rspta = res as Respuesta;
       if(rspta.status){
@@ -431,7 +434,7 @@ export class HomeComponent implements OnInit {
         this.openSnackBar(rspta.status, rspta.error);
       }
     });
-  }
+  }*/
 
   /**
    * Método que muestra un bar temporal para confirmar un mensaje
@@ -445,6 +448,22 @@ export class HomeComponent implements OnInit {
       panelClass: [clase],
       data: mensaje
     });
+  }
+
+  agregarArticulo(){
+    this.articulosCartel.push(new Cartel());
+  }
+
+  seleccionarImagen(){
+
+  }
+
+  eliminarArticulo(){
+
+  }
+
+  seleccionarArticulo(cartel: Cartel, idEquipo: string){
+    cartel.idEquipo = idEquipo;
   }
 
 }

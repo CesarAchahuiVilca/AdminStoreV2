@@ -51,7 +51,65 @@
         </div>
       </mat-card-content>
     </mat-card>
-    <mat-card style="margin: 10px;">
+    <!--
+    <mat-card id="articulo-principal">
+      <mat-card-header>
+        <mat-card-title>Artículo Principal</mat-card-title>
+        <button mat-raised-button color="accent">Agregar Artículo</button>
+      </mat-card-header>
+      <mat-card-content>
+        <hr>
+
+      </mat-card-content>
+      <mat-card-actions>
+        <hr>
+        <button mat-raised-button color="primary">GUARDAR</button>
+      </mat-card-actions>
+    </mat-card>-->
+    <mat-card id="articulos-carrusel">
+      <mat-card-header>
+        <mat-card-title>Artículos</mat-card-title>
+        <button mat-raised-button color="accent" (click)="agregarArticulo()">Agregar Artículo</button>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let artCartel of articulosCartel; let i = index">
+            <mat-icon mat-list-icon>dock</mat-icon>
+            <mat-select placeholder="Artículo a mostrar" (selectionChange)="seleccionarArticulo(artCartel, $event.value._id)">
+              <mat-option *ngFor="let articulo of articuloService.listaArticulos" [value]=articulo>{{articulo.titulo}}</mat-option>
+            </mat-select>
+            <button mat-mini-fab style="margin: 5px 15px" *ngIf="artCartel.idEquipo">
+              <mat-icon aria-label="Seleccionar imagen" (click)="seleccionarImagen()">insert_photo</mat-icon>
+            </button>
+            <label *ngIf="artCartel.idEquipo && artCartel.urlImagen">{{artCartel.urlImagen}}</label>
+            <button mat-mini-fab>
+              <mat-icon aria-label="Eliminar artículo" (click)="eliminarArticulo()">cancel</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+      <mat-card-actions>
+        <hr>
+        <button mat-raised-button color="primary">GUARDAR</button>
+      </mat-card-actions>
+    </mat-card>
+    <!--
+    <mat-card id="accesorios">
+      <mat-card-header>
+        <mat-card-title>Accesorios</mat-card-title>
+        <button mat-raised-button color="accent">Agregar Accesorio</button>
+      </mat-card-header>
+      <mat-card-content>
+        <hr>
+
+      </mat-card-content>
+      <mat-card-actions>
+        <hr>
+        <button mat-raised-button color="primary">GUARDAR</button>
+      </mat-card-actions>
+    </mat-card>-->
+    <!--
+    <mat-card>
       <mat-card-header>
         <mat-card-title>Menú Principal de Inicio</mat-card-title>
         <button mat-mini-fab color="primary" id="iconNuevo" (click)="subirImagen()">
@@ -124,7 +182,7 @@
       <mat-card-actions>
         <button mat-raised-button color="primary" (click)="guardarCarteles()">GUARDAR</button>
       </mat-card-actions>
-    </mat-card>
+    </mat-card>-->
   </main>
 </div>
 
@@ -206,7 +264,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12 col-sm-12">
-            <h4> Elija Ariculos para el Banner</h4>
+            <h4> Elija Artículos para el Banner</h4>
           </div>
           <div class="col-lg-12 col-sm-12">
             <div class="row">

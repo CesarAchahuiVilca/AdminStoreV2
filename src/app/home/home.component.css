@@ -4,6 +4,10 @@ hr {
   width: 100%;
 }
 
+mat-card {
+  margin: 10px;
+}
+
 .btn-eliminar-banner {
   position: absolute;
   right: 0; 
