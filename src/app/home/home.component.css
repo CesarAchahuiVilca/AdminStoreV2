@@ -66,7 +66,7 @@ mat-card {
   margin-left: 5px;
 }
 
-.item-banner .equipo div, #btn-guardar {
+.item-banner .equipo div, #btn-guardar, #articulos-carrusel, #accesorios  {
   width: 100%;
 }
 
@@ -102,6 +102,15 @@ mat-card {
 .nombre-imagen-cont {
   background-color: rgba(0, 0, 0, 0.637);
   color: white;
+}
+
+#articulos-carrusel mat-card-header, #accesorios mat-card-header {
+  position: relative;
+}
+
+#articulos-carrusel mat-card-header button, #accesorios mat-card-header button {
+  position: absolute; 
+  right: 0px;
 }
 
 #iconNuevo {

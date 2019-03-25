@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
 
   public migas = [ new Miga('Imágenes del Menú Principal','/home')];
   articulosCartel : Cartel[] = [];
+  accesoriosCartel : Cartel[] = [];
 
 
   //cartelesEquipos : Cartel[] = [];
@@ -452,18 +453,31 @@ export class HomeComponent implements OnInit {
 
   agregarArticulo(){
     this.articulosCartel.push(new Cartel());
+    console.log(this.articulosCartel);
   }
 
-  seleccionarImagen(){
-
+  seleccionarImagen(cartel: Cartel){
+    const dialogRef = this.dialog.open(SelectImagenComponent, {
+      width: '600px',
+      panelClass: 'dialog'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      cartel.urlImagen = result;
+      console.log(this.articulosCartel);
+    });
   }
 
-  eliminarArticulo(){
-
+  eliminarArticulo(indice: number){
+    this.articulosCartel.splice(indice, 1);
+    console.log(this.articulosCartel);
   }
 
   seleccionarArticulo(cartel: Cartel, idEquipo: string){
     cartel.idEquipo = idEquipo;
+    console.log(this.articulosCartel);
   }
 
+  agregarAccesorio() {
+    this.accesoriosCartel.push(new Cartel());
+  }
 }
