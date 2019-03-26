@@ -58,6 +58,10 @@
       </mat-card-header>
       <mat-card-content>
         <mat-list>
+          <mat-list-item *ngIf="articulosCartel.length == 0">
+            <mat-icon mat-list-icon>report</mat-icon>
+            <h4 mat-line>No existe ningun artículo agregado a la lista.</h4>
+          </mat-list-item>
           <mat-list-item *ngFor="let artCartel of articulosCartel; let i = index"
             style="position: relative; height: 160px;">
             <button mat-mini-fab style="position: absolute; right: 0px;" color="default">
@@ -94,33 +98,37 @@
       </mat-card-header>
       <mat-card-content>
         <mat-list>
-          <mat-list-item *ngFor="let artCartel of accesorioCartel; let i = index"
+          <mat-list-item *ngIf="accesoriosCartel.length == 0">
+            <mat-icon mat-list-icon>report</mat-icon>
+            <h4 mat-line>No existe ningun accesorio agregado a la lista.</h4>
+          </mat-list-item>
+          <mat-list-item *ngFor="let accCartel of accesoriosCartel; let i = index"
             style="position: relative; height: 160px;">
             <button mat-mini-fab style="position: absolute; right: 0px;" color="default">
-              <mat-icon aria-label="Eliminar artículo" (click)="eliminarArticulo(i)">cancel</mat-icon>
+              <mat-icon aria-label="Eliminar artículo" (click)="eliminarAccesorio(i)">cancel</mat-icon>
             </button>
             <div style="width: 70%">
               <mat-select mat-line placeholder="Elija un artículo"
-                (selectionChange)="seleccionarArticulo(artCartel, $event.value._id)" style="width: 100%;">
+                (selectionChange)="seleccionarAccesorio(accCartel, $event.value._id)" style="width: 100%;">
                 <mat-option *ngFor="let articulo of articuloService.listaArticulos" [value]=articulo>{{articulo.titulo}}
                 </mat-option>
               </mat-select>
-              <button mat-mini-fab style="margin: 5px 15px;" *ngIf="artCartel.idEquipo" color="primary">
-                <mat-icon aria-label="Seleccionar imagen" (click)="seleccionarImagen(artCartel)">insert_photo</mat-icon>
+              <button mat-mini-fab style="margin: 5px 15px;" *ngIf="accCartel.idEquipo" color="primary">
+                <mat-icon aria-label="Seleccionar imagen" (click)="seleccionarImagen(accCartel)">insert_photo</mat-icon>
               </button>
-              <label *ngIf="artCartel.idEquipo && artCartel.urlImagen">{{artCartel.urlImagen}}</label>
+              <label *ngIf="accCartel.idEquipo && accCartel.urlImagen">{{accCartel.urlImagen}}</label>
               <hr style="position: absolute; bottom: 0px; width: 100%;">
             </div>
             <div style="width: 30%;">
-              <img mat-line *ngIf="artCartel.idEquipo && artCartel.urlImagen"
-                src="{{URL_IMAGES}}/md/{{artCartel.urlImagen}}" style=" width: auto; height: 120px;">
+              <img mat-line *ngIf="accCartel.idEquipo && accCartel.urlImagen"
+                src="{{URL_IMAGES}}/md/{{accCartel.urlImagen}}" style=" width: auto; height: 120px;">
             </div>
           </mat-list-item>
         </mat-list>
       </mat-card-content>
       <mat-card-actions>
         <hr>
-        <button mat-raised-button color="primary">GUARDAR</button>
+        <button mat-raised-button color="primary" (click)="guardarAccesorios()">GUARDAR</button>
       </mat-card-actions>
     </mat-card>
   </main>
