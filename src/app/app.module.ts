@@ -35,6 +35,7 @@ import { HomeComponent } from './home/home.component';
 import { ImagenCartelComponent } from './home/imagen-cartel/imagen-cartel.component';
 import { SelectImagenComponent } from './home/select-imagen/select-imagen.component';
 import { SeguimientoComponent } from './seguimiento/seguimiento.component';
+import { CargoComponent } from './cargo/cargo.component';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -52,7 +53,8 @@ const routes: Route[] = [
   {path: 'servicio-cliente',component:ServicioClienteComponent},
   {path: 'usuarios', component: UsuarioComponent},
   {path: 'imagenes-inicio', component: HomeComponent},
-  {path: 'seguimiento', component:SeguimientoComponent}
+  {path: 'seguimiento', component:SeguimientoComponent},
+  {path: 'cargos', component: CargoComponent}
 ];
 
 @NgModule({
@@ -82,7 +84,8 @@ const routes: Route[] = [
     HomeComponent,
     ImagenCartelComponent,
     SelectImagenComponent,
-    SeguimientoComponent
+    SeguimientoComponent,
+    CargoComponent
   ],
   imports: [
     BrowserModule,

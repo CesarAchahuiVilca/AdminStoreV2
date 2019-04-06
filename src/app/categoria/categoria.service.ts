@@ -12,7 +12,7 @@ export class CategoriaService {
   categoriaSeleccionada: Categoria = new Categoria();
   categorias: Categoria[];
 
-  constructor(private http: HttpClient){
+  constructor(public http: HttpClient){
     this.categoriaSeleccionada = new Categoria();
   }
 
