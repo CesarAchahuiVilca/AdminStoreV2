@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar} from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog} from '@angular/material';
 import { Miga } from '../miga'
 import { Respuesta } from '../usuario/respuesta';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { CargoService } from './cargo.service';
+import { DialogoCargoComponent } from './dialogo-cargo/dialogo-cargo.component';
 
 @Component({
   selector: 'app-cargo',
@@ -11,14 +13,28 @@ import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 })
 export class CargoComponent implements OnInit {
   public migas = [ new Miga('Cargos','/cargos')];
-  displayedColumns: string[] = ['id', 'amount', 'installments', 'net_amount'];
+  displayedColumns: string[] = ['id', 'amount', 'amount_refunded', 'merchant_message', 'opciones'];
   dataSource : MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  listaCargos : any[]  = [];
 
-  constructor(public snackBar: MatSnackBar) { }
+  constructor(public snackBar: MatSnackBar, public cargoService: CargoService, public dialog: MatDialog) {}
 
   ngOnInit() {
+    this.cargoService.getCargos().subscribe( res => {
+      const rspta = res as Respuesta;
+      if(rspta.status){
+        this.listaCargos = rspta.data;
+        console.log(this.listaCargos);
+        this.openSnackBar(rspta.status, rspta.msg);
+      } else {
+        this.openSnackBar(rspta.status, rspta.error);
+      }
+      this.dataSource = new MatTableDataSource(this.listaCargos);   
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort
+    })
   }
 
   /**
@@ -30,6 +46,15 @@ export class CargoComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  detalleCargo(idCargo: string){
+    this.dialog.open(DialogoCargoComponent, {
+      width: '400px',
+      data: {
+        id: idCargo
+      }
+    });
   }
 
   /**

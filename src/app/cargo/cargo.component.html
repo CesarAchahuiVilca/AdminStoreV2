@@ -18,16 +18,25 @@
               <td mat-cell *matCellDef="let element"> {{element.id}} </td>
             </ng-container>
             <ng-container matColumnDef="amount">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto </th>
-              <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto (S/) </th>
+              <td mat-cell *matCellDef="let element"> {{element.amount / 100 | number}} </td>
             </ng-container>
-            <ng-container matColumnDef="installments">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Cuotas </th>
-              <td mat-cell *matCellDef="let element"> {{element.installments}} </td>
+            <ng-container matColumnDef="amount_refunded">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto Reembolsado (S/) </th>
+              <td mat-cell *matCellDef="let element"> {{element.amount_refunded / 100 | number}} </td>
             </ng-container>
-            <ng-container matColumnDef="net_amount">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto de Red</th>
-              <td mat-cell *matCellDef="let element"> {{element.net_amount}}</td>
+            <ng-container matColumnDef="merchant_message">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Mensaje de Culqi</th>
+              <td mat-cell *matCellDef="let element"> {{element.outcome.merchant_message}}</td>
+            </ng-container>
+            <ng-container matColumnDef="opciones">
+              <th style="width: 5%;" mat-header-cell *matHeaderCellDef mat-sort-header>Ver Detalle </th>
+              <td style="width: 5%;" mat-cell *matCellDef="let row">
+                <div>
+                  <mat-icon class="btn-opcion" color="primary" (click)="detalleCargo(element.id)">arrow_drop_down_circle
+                  </mat-icon>
+                </div>
+              </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

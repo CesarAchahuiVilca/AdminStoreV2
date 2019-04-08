@@ -9,6 +9,10 @@ export class CargoService {
 
   constructor(public http: HttpClient) { }
 
+  getCargo(id: string){
+    return this.http.get(Constantes.URL_PASARELA + '/' + id , {withCredentials: true});
+  }
+
   getCargos(){
     return this.http.get(Constantes.URL_PASARELA, {withCredentials: true});
   }

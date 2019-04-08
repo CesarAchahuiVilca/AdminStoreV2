@@ -36,6 +36,7 @@ import { ImagenCartelComponent } from './home/imagen-cartel/imagen-cartel.compon
 import { SelectImagenComponent } from './home/select-imagen/select-imagen.component';
 import { SeguimientoComponent } from './seguimiento/seguimiento.component';
 import { CargoComponent } from './cargo/cargo.component';
+import { DialogoCargoComponent } from './cargo/dialogo-cargo/dialogo-cargo.component';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -85,7 +86,8 @@ const routes: Route[] = [
     ImagenCartelComponent,
     SelectImagenComponent,
     SeguimientoComponent,
-    CargoComponent
+    CargoComponent,
+    DialogoCargoComponent
   ],
   imports: [
     BrowserModule,
@@ -100,7 +102,13 @@ const routes: Route[] = [
     MatMomentDateModule, 
     ScrollDispatchModule
   ],
-  entryComponents: [SnackBarComponent, DialogoComponent, ImagenCartelComponent, SelectImagenComponent],
+  entryComponents: [
+    SnackBarComponent, 
+    DialogoComponent, 
+    ImagenCartelComponent, 
+    SelectImagenComponent, 
+    DialogoCargoComponent
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
