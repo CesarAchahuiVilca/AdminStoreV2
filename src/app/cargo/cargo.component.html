@@ -31,7 +31,7 @@
             </ng-container>
             <ng-container matColumnDef="opciones">
               <th style="width: 5%;" mat-header-cell *matHeaderCellDef mat-sort-header>Ver Detalle </th>
-              <td style="width: 5%;" mat-cell *matCellDef="let row">
+              <td style="width: 5%;" mat-cell *matCellDef="let element">
                 <div>
                   <mat-icon class="btn-opcion" color="primary" (click)="detalleCargo(element.id)">arrow_drop_down_circle
                   </mat-icon>

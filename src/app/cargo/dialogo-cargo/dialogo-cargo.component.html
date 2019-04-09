@@ -1,23 +1,22 @@
 <h1 mat-dialog-title [style.text-align]="'center'">Detalle del Cargo Realizado</h1>
-<div mat-dialog-content>
-  <p>{{data.mensaje}}</p>
-  <p>Monto</p>
-  <p>Monto reembolsado</p>
-  <p>Codigo de Authorization</p>
-  <p>Puntos de Fraude</p>
-  <p>Id</p>
-  <p>Outcome</p>
-  <p>Outcome code</p>
-  <p>Mensaje de Pasarela</p>
-  <p>Mensaje al Usuario</p>
-  <p>Tipo de Mensaje</p>
-  <p>Reference code</p>
-  <p>Source</p>
-  <p>Numero de tarjeta</p>
-  <p>Email</p>
-  <p>Creacion</p>
-  <p>Marca Tarjeta</p>
-  <p>Tipo tarjeta</p>
+<div mat-dialog-content *ngIf="cargo != null">
+  <p>Monto</p> {{cargo.amount}}
+  <p>Monto reembolsado</p>{{cargo.amount_refunded}}
+  <p>Codigo de Authorization</p> {{cargo.authorization_code}}
+  <p>Puntos de Fraude</p> {{cargo.fraud_score}}
+  <p>Id</p>{{cargo.id}}
+  <p>Outcome</p> 
+  <p>Outcome code</p>{{cargo.outcome.code}}
+  <p>Mensaje de Pasarela</p> {{cargo.outcome.merchant_message}}
+  <p>Mensaje al Usuario</p> {{cargo.outcome.user_message}}
+  <p>Tipo de Mensaje</p> {{cargo.outcome.type}}
+  <p>Reference code</p> {{cargo.outcome.code}}
+  <p>Source</p> 
+  <p>Numero de tarjeta</p> {{cargo.source.card_number}}
+  <p>Email</p> {{cargo.source.email}}
+  <p>Creacion</p> {{cargo.source.creation_date}}
+  <p>Marca Tarjeta</p> {{cargo.source.iin.card_brand}}
+  <p>Tipo tarjeta</p> {{cargo.source.iin.card_type}}
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button color="warn" (click)="declinar()">SALIR</button>
