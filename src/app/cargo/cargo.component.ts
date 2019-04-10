@@ -50,7 +50,7 @@ export class CargoComponent implements OnInit {
 
   detalleCargo(idCargo: string){
     this.dialog.open(DialogoCargoComponent, {
-      width: '400px',
+      width: '600px',
       data: {
         id: idCargo
       }

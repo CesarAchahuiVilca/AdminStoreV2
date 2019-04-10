@@ -1,22 +1,84 @@
 <h1 mat-dialog-title [style.text-align]="'center'">Detalle del Cargo Realizado</h1>
 <div mat-dialog-content *ngIf="cargo != null">
-  <p>Monto</p> {{cargo.amount}}
-  <p>Monto reembolsado</p>{{cargo.amount_refunded}}
-  <p>Codigo de Authorization</p> {{cargo.authorization_code}}
-  <p>Puntos de Fraude</p> {{cargo.fraud_score}}
-  <p>Id</p>{{cargo.id}}
-  <p>Outcome</p> 
-  <p>Outcome code</p>{{cargo.outcome.code}}
-  <p>Mensaje de Pasarela</p> {{cargo.outcome.merchant_message}}
-  <p>Mensaje al Usuario</p> {{cargo.outcome.user_message}}
-  <p>Tipo de Mensaje</p> {{cargo.outcome.type}}
-  <p>Reference code</p> {{cargo.outcome.code}}
-  <p>Source</p> 
-  <p>Numero de tarjeta</p> {{cargo.source.card_number}}
-  <p>Email</p> {{cargo.source.email}}
-  <p>Creacion</p> {{cargo.source.creation_date}}
-  <p>Marca Tarjeta</p> {{cargo.source.iin.card_brand}}
-  <p>Tipo tarjeta</p> {{cargo.source.iin.card_type}}
+  <mat-list>
+    <mat-list-item>
+      <h5>Monto</h5>
+      <h5>{{cargo.amount / 100 | number}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Monto Reembolsado</h5>
+      <h5>{{cargo.amount_refunded / 100 | number}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Código de Autorización</h5>
+      <h5>{{cargo.authorization_code}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Puntos de Fraude</h5>
+      <h5>{{cargo.fraud_score}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>ID</h5>
+      <h5>{{cargo.id}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <h3 mat-subheader>Outcome</h3>
+    <mat-list-item>
+      <h5>Código</h5>
+      <h5>{{cargo.outcome.code}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Mensaje de la Pasarela</h5>
+      <h5>{{cargo.outcome.merchant_message}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Mensaje para el Usuario</h5>
+      <h5>{{cargo.outcome.user_message}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Tipo de Mensaje</h5>
+      <h5>{{cargo.outcome.type}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Código de referencia</h5>
+      <h5>{{cargo.outcome.code}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <h3 mat-subheader>Fuente</h3>
+    <mat-list-item>
+      <h5>Número de Tarjeta</h5>
+      <h5>{{cargo.source.card_number}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Correo electrónico</h5>
+      <h5>{{cargo.source.email}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Fecha de Creación</h5>
+      <h5>{{cargo.source.creation_date}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Marca de la Tarjeta</h5>
+      <h5>{{cargo.source.iin.card_brand}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <h5>Tipo de Tarjeta</h5>
+      <h5>{{cargo.source.iin.card_type}}</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </mat-list>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button color="warn" (click)="declinar()">SALIR</button>
