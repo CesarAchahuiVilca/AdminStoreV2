@@ -124,6 +124,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   estadopago: string;
   tipopago: string;
   nrotrans: string;
+  numeropedido:string;
   preciototal: number = 0;
   preciototalcarritos: number = 0;
   totalcarritos: number = 0;
@@ -399,6 +400,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.tipodoc = this.listapedidouni[0].Documento[0].Tipo;
         this.seriedoc = this.listapedidouni[0].Documento[0].Serie;
         this.numerodoc = this.listapedidouni[0].Documento[0].Numero;
+        this.numeropedido=this.listapedidouni[0].NroPedido;
         //  this.listararticulos();
       });
   }//944091466
@@ -597,6 +599,9 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.carErrorPago = count;
       }
     }
+  }
+  vercargo(idcargo:string){
+    console.log(idcargo);
   }
 }
 
