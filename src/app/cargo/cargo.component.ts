@@ -18,6 +18,7 @@ export class CargoComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   listaCargos : any[]  = [];
+  mostrarCargos : boolean = false;
 
   constructor(public snackBar: MatSnackBar, public cargoService: CargoService, public dialog: MatDialog) {}
 
@@ -26,11 +27,12 @@ export class CargoComponent implements OnInit {
       const rspta = res as Respuesta;
       if(rspta.status){
         this.listaCargos = rspta.data;
-        console.log(this.listaCargos);
+        //console.log(this.listaCargos);
         this.openSnackBar(rspta.status, rspta.msg);
       } else {
         this.openSnackBar(rspta.status, rspta.error);
       }
+      this.mostrarCargos = true;
       this.dataSource = new MatTableDataSource(this.listaCargos);   
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort
@@ -48,9 +50,13 @@ export class CargoComponent implements OnInit {
     }
   }
 
+  /**
+   * Método que muestra un diálogo para mostrar el detalle de un cargo
+   * @param idCargo : identificador del cargo
+   */
   detalleCargo(idCargo: string){
     this.dialog.open(DialogoCargoComponent, {
-      width: '600px',
+      width: '640px',
       data: {
         id: idCargo
       }

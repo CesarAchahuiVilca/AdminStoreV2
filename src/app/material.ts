@@ -16,10 +16,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-    imports: [MatButtonModule,MatSnackBarModule, MatCheckboxModule, MatTabsModule, MatIconModule, MatMenuModule, MatTableModule, MatInputModule, MatCardModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatListModule, MatPaginatorModule, MatSortModule, MatExpansionModule, MatDialogModule, MatGridListModule],
-    exports: [MatButtonModule,MatSnackBarModule, MatCheckboxModule, MatTabsModule, MatIconModule, MatMenuModule, MatTableModule, MatInputModule, MatCardModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatListModule, MatPaginatorModule, MatSortModule, MatExpansionModule, MatDialogModule, MatGridListModule],
+    imports: [MatButtonModule,MatSnackBarModule, MatCheckboxModule, MatTabsModule, MatIconModule, MatMenuModule, MatTableModule, MatInputModule, MatCardModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatListModule, MatPaginatorModule, MatSortModule, MatExpansionModule, MatDialogModule, MatGridListModule, MatProgressBarModule, MatProgressSpinnerModule],
+    exports: [MatButtonModule,MatSnackBarModule, MatCheckboxModule, MatTabsModule, MatIconModule, MatMenuModule, MatTableModule, MatInputModule, MatCardModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatListModule, MatPaginatorModule, MatSortModule, MatExpansionModule, MatDialogModule, MatGridListModule, MatProgressBarModule, MatProgressSpinnerModule],
     providers: [{ provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl}]
   })
   export class MaterialModule { }

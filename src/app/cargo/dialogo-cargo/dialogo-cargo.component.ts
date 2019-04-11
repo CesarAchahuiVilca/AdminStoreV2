@@ -15,13 +15,10 @@ export class DialogoCargoComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<DialogoCargoComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public cargoService: CargoService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    console.log(this.data);
     this.cargoService.getCargo(this.data.id).subscribe( res => {
-      console.log(res);
       const rspta = res as Respuesta;
       if(rspta.status){
         this.cargo = rspta.data
-        console.log(rspta.data);
         this.openSnackBar(rspta.status, rspta.msg);
       } else {
         this.openSnackBar(rspta.status, rspta.error);
