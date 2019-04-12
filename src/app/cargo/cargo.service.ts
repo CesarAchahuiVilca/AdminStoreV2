@@ -17,7 +17,7 @@ export class CargoService {
     return this.http.get(Constantes.URL_PASARELA, {withCredentials: true});
   }
 
-  devolverCargo(){
-    return this.http.post(Constantes.URL_PASARELA + '/devolucion',{body : 'Hola'} ,{withCredentials: true});
+  devolverCargo(monto: string, idCargo: string, razon: string){
+    return this.http.post(Constantes.URL_PASARELA + '/devolucion',{amount : monto, charge_id: idCargo, reason: razon } ,{withCredentials: true});
   }
 }
