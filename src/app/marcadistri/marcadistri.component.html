@@ -38,9 +38,19 @@
                             <tr *ngFor="let marca of marcaService.marcaMysql">
                               <td>{{marca.idMarcaProducto}}</td>
                               <td>{{marca.NombreMarca}}</td>
-                              <td><button class="btn btn-primary" (click)="cambiarvista(marca,marcaForm)">Completar
-                                  Registro<i class="material-icons">note_add</i></button></td>
-                              <td><button class="btn btn-success"><i class="material-icons">edit</i></button></td>
+                              <td style="align-items: center;"><button *ngIf="marca.Estado == 0" mat-raised-button color="primary" (click)="cambiarvista(marca)">Completar Registro</button>
+                                  <i style="width: 100%; text-align: center;" *ngIf="marca.Estado == 1" class="material-icons">
+                                      done
+                                      </i>
+                                </td>
+                              <td>
+                                  <i class="material-icons" style="color: green" *ngIf="marca.Estado == 1" (click)="editarMarca(marca)">
+                                      edit
+                                      </i>                
+                                      <i class="material-icons"  style="color: gray;" *ngIf="marca.Estado == 0">
+                                        edit
+                                      </i>                 
+                                    </td>
                             </tr>
                           </tbody>
                         </table>
@@ -59,33 +69,28 @@
           <div class="card-header" (click)="regresar(marcaForm)"><button class="btn btn-success"><i class="material-icons">arrow_back</i></button></div>
           <div class="card-body">
             <br>
-            <form #marcaForm="ngForm" (ngSubmit)="guardarmarca(marcaForm)">
-              <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="marcaService.marcaselect._id">
+            <form  >
+              <input type="hidden" name="_id"  [(ngModel)]="marcaService.marcaselect._id">
               <div class="row">
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label for="name">idMarca</label>
-                    <textarea class="form-control" value={{idm}} id="idmarca" name="idmarca" #idmarca="ngModel"
-                      [(ngModel)]="marcaService.marcaselect.idMarca"></textarea>
-                  </div>
-                  <div class="form-group">
                     <label for="name">Nombre Marca</label>
-                    <textarea class="form-control" value={{nombrem}} id="nombremarca" name="nombremarca" #nombremarca="ngModel"
-                      [(ngModel)]="marcaService.marcaselect.nombre"></textarea>
+                    <textarea class="form-control"id="nombremarca" name="nombremarca" 
+                      [(ngModel)]="marcaService.marcaselect.nombremarca"></textarea>
                   </div>
                   <div class="form-group">
                     <label for="name">Descripción</label>
-                    <textarea class="form-control" id="descripcion" name="descripcion" #decripcion="ngModel"
+                    <textarea class="form-control" id="descripcion" name="descripcion" 
                       [(ngModel)]="marcaService.marcaselect.descripcion" rows="3" placeholder="Ingrese descripcion de la categoria"
                       required></textarea>
                   </div>
-                  <input type="text" name="imagen" id="imagen" #imagen="ngModel" [(ngModel)]="marcaService.marcaselect.imagen" [style.display]="'none'" required>
+                  <input type="text" name="imagen" id="imagen" [(ngModel)]="marcaService.marcaselect.imagen" [style.display]="'none'" required>
                 </div>
                 <div class="col-lg-5">
-                  <div class="col-lg-7">
+                  <div class="col-lg-12">
                     <div class="row">
                       <div class="col-lg-12">
-                        <label>Imagen de portada de la categoria</label>
+                        <label>Imagen de la Marca</label>
                       </div>
                       <div class="col-lg-12">
                         <div style="display:flex; flex-direction: row; width: 100%; ">
@@ -120,7 +125,7 @@
                     <hr>
                     <button type="button" class="btn btn-default" (click)="limpiarform(marcaForm)"><i class="fa fa-trash"></i>
                       Limpiar</button>
-                    <button type="submit" class="btn btn-success" style="margin-left: 10px;"> <i class="fa fa-save"></i>
+                    <button type="submit" class="btn btn-success" style="margin-left: 10px;" (click)="guardarmarca()"> <i class="fa fa-save"></i>
                       Guardar</button>
                   </div>
                 </div>

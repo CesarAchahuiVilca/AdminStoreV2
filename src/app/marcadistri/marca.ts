@@ -2,7 +2,7 @@ export class Marca {
     constructor(_id=null,idMarca='',nombre='',descripcion='', imagen = ''){
         this._id=_id;
         this.idMarca=idMarca;
-        this.nombre=nombre;
+        this.nombremarca=nombre;
         this.imagen=imagen;
         this.descripcion=descripcion;
     }
@@ -10,7 +10,7 @@ export class Marca {
     
     _id:string;
     idMarca:string;
-    nombre:string;
+    nombremarca:string;
     descripcion:string;
     imagen:string;
 }

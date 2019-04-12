@@ -95,6 +95,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     this.marcaService.listarmarcamysql()
     .subscribe(res =>{
       this.marcaService.marcaMysql=res as MarcaMysql[];
+      console.log(res);
 
       if(this.marcaService.marcaMysql.length == 0){
         console.log("No se encontraron datos");
@@ -152,10 +153,10 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
           if(event.type === HttpEventType.Response){
             console.log(event.body);
             var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src =Constantes.URL_IMAGENES+"/md/"+this.selectedFile.name;
+            imagen.src =Constantes.URL_IMAGENES+"/md/"+this.selectedFile.name+".webp";
             progreso.style.backgroundColor = "green";
             progreso.innerHTML = "Completado.";   
-            this.marcaService.marcaselect.imagen=this.selectedFile.name;                 
+            this.marcaService.marcaselect.imagen=this.selectedFile.name+".webp";                 
           }
         }
       }
@@ -201,10 +202,10 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       this.todasMarcas = res as Marca[];     
     });
   }
-  guardarmarca(form:NgForm){
+  guardarmarca(){
    var btncerrarmodal = document.getElementById("btnCerrarModal");
-   console.log(form.value);
-    this.marcaService.postMarca(form.value)
+   
+    this.marcaService.postMarca(this.marcaService.marcaselect)
     .subscribe(res => {
       var respuesta = JSON.parse(JSON.stringify(res));
       //this.limpiarform(form);
@@ -214,17 +215,29 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
           //this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
     });
   }
+  editarMarca(marca){
+    document.getElementById('marca-detalle').hidden=false;
+    document.getElementById('marcageneral').hidden=true;
+    this.marcaService.getMarcaMongo(marca.idMarca).subscribe(res=>{
+      this.marcaService.marcaselect = res as Marca;
+      console.log(res);
+      var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+            imagen.src =Constantes.URL_IMAGENES+"/md/"+this.marcaService.marcaselect.imagen;
+    })
+  }
 
-  cambiarvista(marca?:MarcaMysql,form?:NgForm){
+  
+  cambiarvista(marca){
+    console.log(marca);
     document.getElementById('marca-detalle').hidden=false;
     document.getElementById('marcageneral').hidden=true;
     this.marcaService.marcaselect.idMarca=marca.idMarcaProducto;
-    this.marcaService.marcaselect.nombre=marca.NombreMarca;
+    this.marcaService.marcaselect.nombremarca=marca.NombreMarca;
   }
-  regresar(form?: NgForm){
+  regresar(){
     document.getElementById('marca-detalle').hidden=true;
     document.getElementById('marcageneral').hidden=false;
-    this.limpiarform(form);
+    this.marcaService.marcaselect = new Marca();
   }
 }
 

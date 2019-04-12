@@ -197,14 +197,15 @@ export class HomeComponent implements OnInit {
     }
     if(!existe){
       var articulo = {
-        idarticulo: arti._id,
+        idarticulo: arti.idarticulo,
         url: arti.url,  
         titulo: arti.titulo,
         categoria:arti.categoria,
         idprecio:arti.idprecio,
         cantidad:arti.cantidad,
         imagenes: arti.imagenes,
-        precioplan:null,
+        marca: arti.marca,
+        descuento: arti.descuento
       }
       this.banners[this.indexBannerSelected].articulos.push(articulo);
     }

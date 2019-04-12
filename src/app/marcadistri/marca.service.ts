@@ -27,5 +27,8 @@ export class MarcaService {
   getMarcas(){
     return this.http.get(Constantes.URL_API_MARCA_MONGODB, {withCredentials: true})
   }
+  getMarcaMongo(id){
+    return this.http.get(Constantes.URL_API_MARCA_MONGODB+"/"+id,{withCredentials: true});
+  }
 
 }
