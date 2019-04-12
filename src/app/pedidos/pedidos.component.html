@@ -292,6 +292,9 @@
               <div class="card-body">
                 <table class="table">
                   <tr>
+                      <td><button mat-stroked-button color="accent" (click)="vercargo(nrotrans)" >Ver Cargo</button></td>
+                  </tr>
+                  <tr>
                     <td style="color:black">Estado de Envio</td>
                     <td><label id="extadoselect" style="color:black">{{estadoenvio}}</label></td>
                     <td>
@@ -326,8 +329,8 @@
                   <tr>
                     <td>Tipo de Pago</td>
                     <td>{{tipopago}}</td>
-                    <td>N° Transaccion</td>
-                    <td>{{nrotrans}}</td>
+                    <td>N° Pedido</td>
+                    <td>{{numeropedido}}</td>
                   </tr>
                   <tr>
                     <td>Fecha de Compra</td>
