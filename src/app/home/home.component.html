@@ -62,7 +62,7 @@
             <mat-icon mat-list-icon>report</mat-icon>
             <h4 mat-line>No existe ningun artículo agregado a la lista.</h4>
           </mat-list-item>
-          <mat-list-item *ngFor="let artCartel of articulosCartel; let i = index"
+          <mat-list-item *ngFor="let artCartel of articulosCartel; let i = index" 
             style="position: relative; height: 160px;">
             <button mat-mini-fab style="position: absolute; right: 0px;" color="default">
               <mat-icon aria-label="Eliminar artículo" (click)="eliminarArticulo(i)">cancel</mat-icon>
