@@ -68,7 +68,7 @@
               <mat-icon aria-label="Eliminar artículo" (click)="eliminarArticulo(i)">cancel</mat-icon>
             </button>
             <div style="width: 70%">
-              <mat-select mat-line placeholder="Elija un artículo"
+              <mat-select mat-line placeholder="Elija un artículo" [(ngModel)]="listaArticulos[i]"
                 (selectionChange)="seleccionarArticulo(artCartel, $event.value._id)" style="width: 100%;">
                 <mat-option *ngFor="let articulo of articuloService.listaArticulos" [value]=articulo>{{articulo.titulo}}
                 </mat-option>
@@ -108,7 +108,7 @@
               <mat-icon aria-label="Eliminar artículo" (click)="eliminarAccesorio(i)">cancel</mat-icon>
             </button>
             <div style="width: 70%">
-              <mat-select mat-line placeholder="Elija un artículo"
+              <mat-select mat-line placeholder="Elija un artículo" [(ngModel)]="listaAccesorios[i]"
                 (selectionChange)="seleccionarAccesorio(accCartel, $event.value._id)" style="width: 100%;">
                 <mat-option *ngFor="let articulo of articuloService.listaArticulos" [value]=articulo>{{articulo.titulo}}
                 </mat-option>

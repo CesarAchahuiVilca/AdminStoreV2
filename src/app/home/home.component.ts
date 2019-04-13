@@ -29,20 +29,11 @@ export class HomeComponent implements OnInit {
   public migas = [ new Miga('Imágenes del Menú Principal','/home')];
   articulosCartel : Cartel[] = [];
   accesoriosCartel : Cartel[] = [];
-
-
-  //cartelesEquipos : Cartel[] = [];
-  //cartelPlan: Cartel[] = [];
-  //cartelesAccesorios: Cartel[] = [];
+  listaArticulos: Articulo[] = [];
+  listaAccesorios: Articulo[] = [];
   imagenSelected : string;
-  //mostrarLinea : boolean = false;
-  //listaLineas = [];
-  //listaTipoPlanes = [];
-  //listaCuotas = [];
   listaPreciosFiltro: any[] = new Array();
   listaCarteles : Cartel[];
-  listaArticulos: Articulo[] = [];
-  //planCardPlan : any;
   listaimagenesfiltro           : string[];
   listaimagenes          : string[];
   readonly URL_IMAGES                             = Constantes.URL_IMAGENES;
@@ -66,6 +57,7 @@ export class HomeComponent implements OnInit {
           this.openSnackBar(rspta.status, rspta.msg);
           this.articulosCartel = rspta.data as Cartel[];
           this.accesoriosCartel = rspta.data2 as Cartel[];
+          this.preSeleccionarListas();
         } else {
           this.openSnackBar(rspta.status, rspta.error);
         }
@@ -224,6 +216,26 @@ export class HomeComponent implements OnInit {
         }
       }
     );
+  }
+
+  /**
+   * Método que pre selecciona los equipos guardados anteriormente en los artículos y los accesorios
+   */
+  preSeleccionarListas() {
+    for(var i = 0; i < this.articulosCartel.length; i++){
+      var j = 0;
+      while((j < this.articuloService.listaArticulos.length) && (this.articuloService.listaArticulos[j]._id != this.articulosCartel[i].idEquipo)){
+        j++;
+      }
+      this.listaArticulos.push(this.articuloService.listaArticulos[j]);
+    }
+    for(var i = 0; i < this.accesoriosCartel.length; i++){
+      var j = 0;
+      while((j < this.articuloService.listaArticulos.length) && (this.articuloService.listaArticulos[j]._id != this.accesoriosCartel[i].idEquipo)){
+        j++;
+      }
+      this.listaAccesorios.push(this.articuloService.listaArticulos[j]);
+    }
   }
 
   /**
