@@ -1,23 +1,22 @@
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
+import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar} from '@angular/material';
 import { Articulo } from './articulo';
 import { ArticuloMysql } from './articuloMysql';
-import { ArticuloService} from './articulo.service';
+import { Categoria } from '../categoria/categoria';
 import { Caracteristica }  from '../caracteristicas/caracteristica';
 import { CaracteristicaItem } from './caracteristica';
-import { CaracteristicaService } from '../caracteristicas/caracteristica.service';
-import { Categoria } from '../categoria/categoria';
-import { CategoriaService } from '../categoria/categoria.service';
-import { Component, OnInit } from '@angular/core';
 import { Constantes } from '../constantes';
-import { HttpClient, HttpEventType } from '@angular/common/http';
-import { Marca } from './marca';
-import { MarcaService} from '../marcadistri/marca.service';
-import { Miga } from '../miga';
-import { NgForm } from '@angular/forms';
-import { ViewChild } from '@angular/core';
-import { PlanesService} from '../planes/planes.service';
-import { Precios} from '../planes/precios';
-import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar} from '@angular/material';
 import { Equipo } from './equipo';
+import { Marca } from './marca';
+import { Miga } from '../miga';
+import { Precios} from '../planes/precios';
+import { ArticuloService} from './articulo.service';
+import { CaracteristicaService } from '../caracteristicas/caracteristica.service';
+import { CategoriaService } from '../categoria/categoria.service';
+import { MarcaService} from '../marcadistri/marca.service';
+import { PlanesService} from '../planes/planes.service';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 
 export interface articuloData {
@@ -27,7 +26,6 @@ export interface articuloData {
   cantidad: Number;
   estado: string;
 }
-
 
 @Component({
   selector: 'app-articulo',
@@ -107,12 +105,10 @@ export class ArticuloComponent implements OnInit {
   // DATA TABLE ANGULAR MATERIAL  
   displayedColumns: string[] = ['idArticulo', 'Descripcion', 'Cantidad', 'Categoria', 'Estado','editar'];
   dataSource: MatTableDataSource<ArticuloMysql>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
+  @ViewChildren(MatSort) sort = new QueryList<MatSort>();
   displayedColumnsEquipos: string[] = ['Imagen','idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','Editar'];
   dataSourceEquipos: MatTableDataSource<Equipo>;
-  @ViewChild(MatPaginator) paginator2: MatPaginator;
-  @ViewChild(MatSort) sort2: MatSort;
   indiceEquipo = 0;
   nombreColor = "";
   codigoColor = "";
@@ -122,6 +118,9 @@ export class ArticuloComponent implements OnInit {
   palabraImagenesbuscar="";
   listaimagenesfiltro           : string[];
   agregarEn = "equipo"; // o editor
+  planSeleccionado = {
+    precio:0
+  };
 
   constructor(public http: HttpClient, 
               public articuloService: ArticuloService,
@@ -134,24 +133,25 @@ export class ArticuloComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.itemsDatosGenerales.push([1,""]);
+    this.itemsDatosGenerales.push([1, ""]);
     this.itemsCaracteristicas.push(1);
-    this.itemsImagenes.push("imagen-1");   
+    this.itemsImagenes.push("imagen-1");
     this.listacaracteristicas = new Array();
-    this.getArticulosMysql();    
-    this.getCategorias();    
+    this.getArticulosMysql();
+    this.getCategorias();
     this.getMarcas();
     this.obtenerListaPrecios();
-    this.articuloService.articuloSeleccionado.equipos.push(new Equipo("","",0,"","",""));
+    this.articuloService.articuloSeleccionado.equipos.push(new Equipo("", "", 0, "", "", ""));
     this.getListaImagenes();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator.toArray()[0];
+    this.dataSource.sort = this.sort.toArray()[0];
   }
 
   created(editorInstance: any) {
     this.editorInstance = editorInstance;
-  }
-
-  newHandlerImage(){
-    // Evento del limpiar
   }
 
   limpiarFormulario() {
@@ -162,7 +162,6 @@ export class ArticuloComponent implements OnInit {
     this.contenidoEditor = "<p></p>";
     this.listacaracteristicasarticulo = new Array();
   }
-
 
   obtenerListaPrecios() {
     this.planesService.getEquipos().subscribe(res => {
@@ -175,9 +174,9 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.equipos.push(new Equipo("", "", 0, "", "", ""));
     this.articuloService.getEquiposArticulo().subscribe(res => {
       this.articuloService.articuloSeleccionado.equipos = res as Equipo[];
-      this.dataSourceEquipos = new MatTableDataSource(this.articuloService.articuloSeleccionado.equipos);
-      this.dataSourceEquipos.paginator = this.paginator2;
-      this.dataSourceEquipos.sort = this.sort2;
+      this.dataSourceEquipos = new MatTableDataSource(res as Equipo[]);
+      this.dataSourceEquipos.paginator = this.paginator.toArray()[1];
+      this.dataSourceEquipos.sort = this.sort.toArray()[1];
     });
   }
 
@@ -204,17 +203,10 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.idprecio = mejor_nombre;
   }
 
-  planSeleccionado = {
-    precio:0
-  };
   buscarPlanesEquipo() {
-    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio)
-      .subscribe(res => {
-        console.log("precio del equipo");
-        
-        this.planSeleccionado = res[0];
-        console.log(this.planSeleccionado);
-      });
+    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio).subscribe(res => {
+      this.planSeleccionado = res[0];
+    });
   }
 
   mostrarDetalleTipoPlan(tipoplan) {
@@ -242,30 +234,24 @@ export class ArticuloComponent implements OnInit {
       this.mostrarFormularioArticulo = false;
       this.mostrarBotonOpcion = false;
       this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator.toArray()[0];
+      this.dataSource.sort = this.sort.toArray()[0];
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   getArticulosMysql() {
     this.mostrarCarga = true;
     this.mostrarListaArticulos = false;
-    this.articuloService.getArticulosMysql()
-      .subscribe(res => {
-        this.articuloService.articulosMysql = res as ArticuloMysql[];
-        if (this.articuloService.articulosMysql.length > 0) {
-          this.mostrarListaArticulos = true;
-        }
-        this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.mostrarCarga = false;
-      });
+    this.articuloService.getArticulosMysql().subscribe(res => {
+      this.articuloService.articulosMysql = res as ArticuloMysql[];
+      if (this.articuloService.articulosMysql.length > 0) {
+        this.mostrarListaArticulos = true;
+      }
+      this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
+      this.dataSource.paginator = this.paginator.toArray()[0];
+      this.dataSource.sort = this.sort.toArray()[0];
+      this.mostrarCarga = false;
+    });
   }
 
   getCategorias() {
@@ -295,31 +281,30 @@ export class ArticuloComponent implements OnInit {
   editarArticulo(art) {
     this.itemsDatosGenerales = new Array();
     this.articuloService.articuloSeleccionadoMysql = art;
-    this.articuloService.getArticulo(this.articuloService.articuloSeleccionadoMysql.idArticulo)
-      .subscribe(res => {
-        this.articuloService.articuloSeleccionado = res[0] as Articulo;
-        this.imagenesSeleccionadas = this.articuloService.articuloSeleccionado.imagenes;
-        try {
-          for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
-            var inputcheck = document.getElementById(this.imagenesSeleccionadas[i]) as HTMLInputElement;
-            inputcheck.checked = true;
-          }
-        } catch (e) {
-          this.openSnackBar(false, e);
+    this.articuloService.getArticulo(this.articuloService.articuloSeleccionadoMysql.idArticulo).subscribe(res => {
+      this.articuloService.articuloSeleccionado = res[0] as Articulo;
+      this.imagenesSeleccionadas = this.articuloService.articuloSeleccionado.imagenes;
+      try {
+        for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
+          var inputcheck = document.getElementById(this.imagenesSeleccionadas[i]) as HTMLInputElement;
+          inputcheck.checked = true;
         }
-        this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
-        this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
-        this.obtenerEquiposArticulo();
-        if (this.listacaracteristicasarticulo.length == 0) {
-          this.getCaracteristicas();
-        }
-        this.buscarPlanesEquipo();
-        this.vista = "2";
-        this.mostrarListaArticulos = false;
-        this.mostrarFormularioArticulo = true;
-        this.mostrarBotonOpcion = true;
-        this.mostrarBotonOpcion = true;
-      });
+      } catch (e) {
+        this.openSnackBar(false, e);
+      }
+      this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
+      this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
+      this.obtenerEquiposArticulo();
+      if (this.listacaracteristicasarticulo.length == 0) {
+        this.getCaracteristicas();
+      }
+      this.buscarPlanesEquipo();
+      this.vista = "2";
+      this.mostrarListaArticulos = false;
+      this.mostrarFormularioArticulo = true;
+      this.mostrarBotonOpcion = true;
+      this.mostrarBotonOpcion = true;
+    });
   }
 
   agregarCaractgarCaracteristica() {
@@ -352,6 +337,7 @@ export class ArticuloComponent implements OnInit {
   buscaNuevaImagen() {
     document.getElementById("imageninput").click();
   }
+
   buscaNuevaImagenEditor() {
     this.agregarEn = "editor";
     document.getElementById("btnimageneditor").click();
@@ -361,12 +347,15 @@ export class ArticuloComponent implements OnInit {
     this.agregarEn = "equipo";
     this.mostrarListaImgenesEquipo = true;
   }
+
   abrirFormularioEquipo() {
     this.mostrarListaImgenesEquipo = false;
   }
+
   elegirImagenEquipo(img) {
     this.imagenEquipo = img;
   }
+
   agregarImagenEquipo() {
     var imagen = document.getElementById("imagen-select") as HTMLImageElement;
     imagen.src = this.URL_IMAGES + "/md/" + this.imagenEquipo;
@@ -376,11 +365,10 @@ export class ArticuloComponent implements OnInit {
   }
 
   getListaImagenes() {
-    this.articuloService.getImagenes()
-      .subscribe(res => {
-        this.listaimagenes = res as string[];
-        this.listaimagenesfiltro = this.listaimagenes;
-      });
+    this.articuloService.getImagenes().subscribe(res => {
+      this.listaimagenes = res as string[];
+      this.listaimagenesfiltro = this.listaimagenes;
+    });
   }
 
   buscarImagen() {
@@ -398,7 +386,7 @@ export class ArticuloComponent implements OnInit {
   elegirImagen(nombre: string) {
     this.imageneditorseleccionada = nombre;
   }
-  
+
   agregarImagenEditor() {
     const range = this.editorInstance.getSelection();
     this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES + "/lg/" + this.imageneditorseleccionada);
@@ -429,54 +417,43 @@ export class ArticuloComponent implements OnInit {
     this.mostrarImagen = true;
   }
 
-  //pararbusquedaanterior = false;
   buscarImagenesFiltro(event) {
     var input = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
-    //this.pararbusquedaanterior = true;
     this.listaimagenesfiltro = new Array();
     for (var i = 0; i < this.listaimagenes.length; i++) {
       var inputcheck = document.getElementById(this.listaimagenes[i] + "itemimg") as HTMLDivElement;
       if (this.listaimagenes[i].includes(input.value)) {
-
         inputcheck.hidden = false;
       } else {
         inputcheck.hidden = true;
-
       }
     }
-
   }
+
   buscarImagenesFiltroEditor() {
     var input = document.getElementById("input-busqueda-imagenes-articulo-editor") as HTMLInputElement;
-    //this.pararbusquedaanterior = true;
     this.listaimagenesfiltro = new Array();
     for (var i = 0; i < this.listaimagenes.length; i++) {
       var inputcheck = document.getElementById(this.listaimagenes[i] + "editor") as HTMLDivElement;
       if (this.listaimagenes[i].includes(input.value)) {
-
         inputcheck.hidden = false;
       } else {
         inputcheck.hidden = true;
-
       }
     }
-
   }
+
   buscarImagenesFiltroEquipo() {
     var input = document.getElementById("input-busqueda-imagenes-equipo") as HTMLInputElement;
-    //this.pararbusquedaanterior = true;
     this.listaimagenesfiltro = new Array();
     for (var i = 0; i < this.listaimagenes.length; i++) {
       var inputcheck = document.getElementById(this.listaimagenes[i] + "equipo") as HTMLDivElement;
       if (this.listaimagenes[i].includes(input.value)) {
-
         inputcheck.hidden = false;
       } else {
         inputcheck.hidden = true;
-
       }
     }
-
   }
 
   subirImagen(evento) {
@@ -487,21 +464,20 @@ export class ArticuloComponent implements OnInit {
     const fd = new FormData();
     fd.append('image', this.selectedFile, this.selectedFile.name);
     this.http.post(this.URL_API, fd, {
-        reportProgress: true,
-        observe: 'events'
-      })
-      .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
-          if (Math.round(event.loaded / event.total * 100) == 100) {
-            this.openSnackBar(true, "La imagén se subió al servidor con éxito");
-          }
-        } else {
-          if (event.type === HttpEventType.Response) {
-            this.getListaImagenes();
-          }
+      reportProgress: true,
+      observe: 'events'
+    }).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
+        if (Math.round(event.loaded / event.total * 100) == 100) {
+          this.openSnackBar(true, "La imagén se subió al servidor con éxito");
         }
-      });
+      } else {
+        if (event.type === HttpEventType.Response) {
+          this.getListaImagenes();
+        }
+      }
+    });
   }
 
   subirImagenEditor(evento) {
@@ -509,21 +485,20 @@ export class ArticuloComponent implements OnInit {
     const fd = new FormData();
     fd.append('image', this.selectedFile, this.selectedFile.name);
     this.http.post(this.URL_API, fd, {
-        reportProgress: true,
-        observe: 'events'
-      })
-      .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
-          if (Math.round(event.loaded / event.total * 100) == 100) {
-            this.openSnackBar(true, "La imagén se subió al servidor con éxito");
-          }
-        } else {
-          if (event.type === HttpEventType.Response) {
-            this.getListaImagenes();
-          }
+      reportProgress: true,
+      observe: 'events'
+    }).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
+        if (Math.round(event.loaded / event.total * 100) == 100) {
+          this.openSnackBar(true, "La imagén se subió al servidor con éxito");
         }
-      });
+      } else {
+        if (event.type === HttpEventType.Response) {
+          this.getListaImagenes();
+        }
+      }
+    });
   }
 
   guardarDatos() {
@@ -550,29 +525,27 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.descripcion = this.contenidoEditor;
     //guardar datos
     if (this.articuloService.articuloSeleccionado._id) {
-      this.articuloService.putArticulo(this.articuloService.articuloSeleccionado)
-        .subscribe(res => {
-          var respuesta = JSON.parse(JSON.stringify(res));
-          if (respuesta.estado == "0") {
-            this.openSnackBar(false, respuesta.mensaje);
-          } else {
-            this.cambiarvista();
-            this.getArticulosMysql();
-            this.openSnackBar(true, respuesta.mensaje);
-          }
-        });
+      this.articuloService.putArticulo(this.articuloService.articuloSeleccionado).subscribe(res => {
+        var respuesta = JSON.parse(JSON.stringify(res));
+        if (respuesta.estado == "0") {
+          this.openSnackBar(false, respuesta.mensaje);
+        } else {
+          this.cambiarvista();
+          this.getArticulosMysql();
+          this.openSnackBar(true, respuesta.mensaje);
+        }
+      });
     } else {
-      this.articuloService.postArticulo(this.articuloService.articuloSeleccionado)
-        .subscribe(res => {
-          var respuesta = JSON.parse(JSON.stringify(res));
-          if (respuesta.estado == "0") {
-            this.openSnackBar(false, respuesta.mensaje);
-          } else {
-            this.cambiarvista();
-            this.getArticulosMysql();
-            this.openSnackBar(true, respuesta.mensaje);
-          }
-        });
+      this.articuloService.postArticulo(this.articuloService.articuloSeleccionado).subscribe(res => {
+        var respuesta = JSON.parse(JSON.stringify(res));
+        if (respuesta.estado == "0") {
+          this.openSnackBar(false, respuesta.mensaje);
+        } else {
+          this.cambiarvista();
+          this.getArticulosMysql();
+          this.openSnackBar(true, respuesta.mensaje);
+        }
+      });
     }
   }
 

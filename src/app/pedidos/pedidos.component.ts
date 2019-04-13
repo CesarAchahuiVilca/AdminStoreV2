@@ -632,7 +632,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
-        this.cargoService.devolverCargo('1000', this.nrotrans, 'solicitud_comprador').subscribe( res => {
+        this.cargoService.devolverCargo(this.preciototal.toString(), this.nrotrans, 'solicitud_comprador').subscribe( res => {
           const rspta = res as Respuesta;
           if(rspta.status) {
             this.openSnackBar(rspta.status, rspta.msg);
