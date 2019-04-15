@@ -150,36 +150,192 @@ export class ArticuloComponent implements OnInit {
     this.dataSource.sort = this.sort.toArray()[0];
   }
 
-  created(editorInstance: any) {
-    this.editorInstance = editorInstance;
+  /**
+   * Método que vuelve abrir el formulario de lista de equipos
+   */
+  abrirFormularioEquipo() {
+    this.mostrarListaImgenesEquipo = false;
   }
 
-  limpiarFormulario() {
-    this.articuloService.articuloSeleccionado = new Articulo();
-    this.imagenesSeleccionadas = new Array();
-    this.listacaracteristicas = new Array();
-    this.itemsDatosGenerales = new Array();
-    this.contenidoEditor = "<p></p>";
-    this.listacaracteristicasarticulo = new Array();
+  /**
+   * Método para abrir el modal para seleccionar y subir imágenes
+   */
+  abrirImagenes() {
+    this.agregarEn = "equipo";
+    this.mostrarListaImgenesEquipo = true;
   }
 
-  obtenerListaPrecios() {
-    this.planesService.getEquipos().subscribe(res => {
-      this.listaequipos = res as any[];
+  /**
+   * Método para agregar una imagen en el editor
+   */
+  agregarImagenEditor() {
+    const range = this.editorInstance.getSelection();
+    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES + "/lg/" + this.imageneditorseleccionada);
+  }
+
+  /**
+   * Método que selecciona una imagen y la agrega a la lista de imágenes de un artículo
+   */
+  agregarImagenEquipo() {
+    var imagen = document.getElementById("imagen-select") as HTMLImageElement;
+    imagen.src = this.URL_IMAGES + "/md/" + this.imagenEquipo;
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = this.imagenEquipo;
+    this.mostrarImagen = true;
+    this.abrirFormularioEquipo();
+  }
+
+  /**
+   * Método que agrega una imagen a un artículo
+   * @param nombre : nombre de la imagen
+   */
+  agregarImagenesArticulo(nombre: string) {
+    var existe = false;
+    for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
+      if (this.imagenesSeleccionadas[i] == nombre) {
+        this.imagenesSeleccionadas.splice(i, 1);
+        existe = true;
+      }
+    }
+    if (!existe) {
+      this.imagenesSeleccionadas.push(nombre);
+    }
+  }
+
+  /**
+   * Método que aplica un filtro para buscar en la tabla de ARTÍCULOS
+   * @param filterValue : valor a filtrar
+   */
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  /**
+   * Método que aplica un filtro para buscar en la tabla de EQUIPOS
+   * @param filterValue : valor a filtrar
+   */
+  applyFilterEquipo(filterValue: string) {
+    this.dataSourceEquipos.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceEquipos.paginator) {
+      this.dataSourceEquipos.paginator.firstPage();
+    }
+  }
+
+  /**
+   * Método que abre un evento click para agregar una nueva imagen
+   */
+  buscaNuevaImagen() {
+    document.getElementById("imageninput").click();
+  }
+
+  /**
+   * Método para agregar una imagen en el editor de la descripción de un equipo
+   */
+  buscaNuevaImagenEditor() {
+    this.agregarEn = "editor";
+    document.getElementById("btnimageneditor").click();
+  }
+
+  /**
+   * Método que obtiene la lista de imágenes
+   */
+  buscarImagen() {
+    this.getListaImagenes();
+  }
+
+  /**
+   * Método que busca las imágenes por nombre de imagen
+   * @param event : evento de levantar la tecla presionada (keyup)
+   */
+  buscarImagenesFiltro(event) {
+    var input = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
+    this.listaimagenesfiltro = new Array();
+    for (var i = 0; i < this.listaimagenes.length; i++) {
+      var inputcheck = document.getElementById(this.listaimagenes[i] + "itemimg") as HTMLDivElement;
+      if (this.listaimagenes[i].includes(input.value)) {
+        inputcheck.hidden = false;
+      } else {
+        inputcheck.hidden = true;
+      }
+    }
+  }
+
+  /**
+   * Método para buscar imágenes en el modal de editor
+   */
+  buscarImagenesFiltroEditor() {
+    var input = document.getElementById("input-busqueda-imagenes-articulo-editor") as HTMLInputElement;
+    this.listaimagenesfiltro = new Array();
+    for (var i = 0; i < this.listaimagenes.length; i++) {
+      var inputcheck = document.getElementById(this.listaimagenes[i] + "editor") as HTMLDivElement;
+      if (this.listaimagenes[i].includes(input.value)) {
+        inputcheck.hidden = false;
+      } else {
+        inputcheck.hidden = true;
+      }
+    }
+  }
+
+  /**
+   * Método para buscar imagenes de un equipo
+   */
+  buscarImagenesFiltroEquipo() {
+    var input = document.getElementById("input-busqueda-imagenes-equipo") as HTMLInputElement;
+    this.listaimagenesfiltro = new Array();
+    for (var i = 0; i < this.listaimagenes.length; i++) {
+      var inputcheck = document.getElementById(this.listaimagenes[i] + "equipo") as HTMLDivElement;
+      if (this.listaimagenes[i].includes(input.value)) {
+        inputcheck.hidden = false;
+      } else {
+        inputcheck.hidden = true;
+      }
+    }
+  }
+
+  /**
+   * Método que genera las palabras clave de un artículo para su busqueda
+   */
+  buscarPalabrasClaves() {
+    var palabras = this.articuloService.articuloSeleccionado.titulo;
+    for (var i = 0; i < this.listacategorias.length; i++) {
+      if (this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id) {
+        palabras += " " + this.listacategorias[i].nombre;
+        break;
+      }
+    }
+    for (var i = 0; i < this.listamarcas.length; i++) {
+      if (this.articuloService.articuloSeleccionado.marca == this.listamarcas[i]._id) {
+        palabras += " " + this.listamarcas[i].nombremarca;
+        break;
+      }
+    }
+    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");
+    var caracteristicas = datoscaracteristicas.getElementsByClassName("item-caracteristicas");
+    for (var i = 0; i < caracteristicas.length; i++) {
+      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value, caracteristicas[i].getElementsByTagName("input")[1].value);
+      palabras += " " + c.nombre + " " + c.valor;
+    }
+    for (var i = 0; i < this.articuloService.articuloSeleccionado.equipos.length; i++) {
+      if (this.articuloService.articuloSeleccionado.equipos[i].cantidad > 0)
+        palabras += " " + this.articuloService.articuloSeleccionado.equipos[i].color + " " + this.articuloService.articuloSeleccionado.equipos[i].detalle;
+    }
+    this.articuloService.articuloSeleccionado.palabrasclaves = palabras.toLowerCase();
+  }
+
+  /**
+   * Método que obtiene los planes de cada equipo
+   */
+  buscarPlanesEquipo() {
+    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio).subscribe(res => {
+      this.planSeleccionado = res[0];
     });
   }
 
-  obtenerEquiposArticulo() {
-    this.articuloService.articuloSeleccionado.equipos = new Array();
-    this.articuloService.articuloSeleccionado.equipos.push(new Equipo("", "", 0, "", "", ""));
-    this.articuloService.getEquiposArticulo().subscribe(res => {
-      this.articuloService.articuloSeleccionado.equipos = res as Equipo[];
-      this.dataSourceEquipos = new MatTableDataSource(res as Equipo[]);
-      this.dataSourceEquipos.paginator = this.paginator.toArray()[1];
-      this.dataSourceEquipos.sort = this.sort.toArray()[1];
-    });
-  }
-
+  /**
+   * Método que busca el precio que sea el más parecido al nombre del artículo
+   */
   buscarPreciosEquipo() {
     var cont = 0;
     var cont_ante = 0;
@@ -203,16 +359,11 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.idprecio = mejor_nombre;
   }
 
-  buscarPlanesEquipo() {
-    this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio).subscribe(res => {
-      this.planSeleccionado = res[0];
-    });
-  }
-
-  mostrarDetalleTipoPlan(tipoplan) {
-    this.planesseleccionada = tipoplan;
-  }
-
+  /**
+   * Método que cambia la vista de lista a detalle de un artículo
+   * @param articulo : artículo a mostrar detalle
+   * @param form : formualario del artículo
+   */
   cambiarvista(articulo ? : ArticuloMysql, form ? : NgForm) {
     if (this.vista == "1") {
       this.vista = "2";
@@ -239,45 +390,17 @@ export class ArticuloComponent implements OnInit {
     }
   }
 
-  getArticulosMysql() {
-    this.mostrarCarga = true;
-    this.mostrarListaArticulos = false;
-    this.articuloService.getArticulosMysql().subscribe(res => {
-      this.articuloService.articulosMysql = res as ArticuloMysql[];
-      if (this.articuloService.articulosMysql.length > 0) {
-        this.mostrarListaArticulos = true;
-      }
-      this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
-      this.dataSource.paginator = this.paginator.toArray()[0];
-      this.dataSource.sort = this.sort.toArray()[0];
-      this.mostrarCarga = false;
-    });
+  /**
+   * Evento que crea el editor de la descripción del artículo
+   * @param editorInstance 
+   */
+  created(editorInstance: any) {
+    this.editorInstance = editorInstance;
   }
 
-  getCategorias() {
-    this.categoriaService.getCategorias().subscribe(res => {
-      this.listacategorias = res as Categoria[];
-    });
-  }
-
-  getMarcas() {
-    this.marcaService.getMarcas().subscribe(res => {
-      this.listamarcas = res as Marca[];
-    });
-  }
-
-  getCaracteristicas() {
-    this.listacaracteristicasarticulo = new Array();
-    for (var i = 0; i < this.listacategorias.length; i++) {
-      if (this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id) {
-        this.listacaracteristicas = this.listacategorias[i].caracteristicas;
-      }
-    }
-    for (var i = 0; i < this.listacaracteristicas.length; i++) {
-      this.listacaracteristicasarticulo.push(new CaracteristicaItem(this.listacaracteristicas[i].nombre, ""));
-    }
-  }
-
+  /**
+   * Método que obtiene los datos de un artículo para poder editarlos y modificarlos
+   */
   editarArticulo(art) {
     this.itemsDatosGenerales = new Array();
     this.articuloService.articuloSeleccionadoMysql = art;
@@ -307,19 +430,42 @@ export class ArticuloComponent implements OnInit {
     });
   }
 
-  agregarCaractgarCaracteristica() {
-    this.contador_caracteristicas = this.contador_caracteristicas + 1;
-    this.itemsCaracteristicas.push(this.contador_caracteristicas);
+  /**
+   * Método para editar las características de un equipo de un artículo
+   * @param i : indice del equipo en la lista de equipos del artículo
+   */
+  editarEquipo(i) {
+    this.indiceEquipo = i;
+    this.imagenEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
+    this.descripcionEquipoSeleccionado = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].descripcion;
+    this.nombreColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color;
+    this.codigoColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor;
+    this.detallesEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle;
+    var imagen = document.getElementById("imagen-select") as HTMLImageElement;
+    imagen.src = this.URL_IMAGES + "/md/" + this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
+    this.mostrarImagen = true;
   }
 
-  eliminarItemCaracteristica(id: Number) {
-    for (var i = 0; i < this.itemsCaracteristicas.length; i++) {
-      if (this.itemsCaracteristicas[i] == id) {
-        this.itemsCaracteristicas.splice(i, 1);
-      }
-    }
+  /**
+   * Método para elegir imagen del artículo
+   * @param nombre : nombre de la imagen
+   */
+  elegirImagen(nombre: string) {
+    this.imageneditorseleccionada = nombre;
   }
 
+  /**
+   * Método para elegir la imagen de un equipo
+   * @param img : nombre de la imagen
+   */
+  elegirImagenEquipo(img) {
+    this.imagenEquipo = img;
+  }
+
+  /**
+   * 
+   * @param id 
+   */
   eliminarItemImagen(id: string) {
     this.listaimagenesfiltro = this.listaimagenes;
     for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
@@ -334,47 +480,9 @@ export class ArticuloComponent implements OnInit {
     }
   }
 
-  buscaNuevaImagen() {
-    document.getElementById("imageninput").click();
-  }
-
-  buscaNuevaImagenEditor() {
-    this.agregarEn = "editor";
-    document.getElementById("btnimageneditor").click();
-  }
-
-  abrirImagenes() {
-    this.agregarEn = "equipo";
-    this.mostrarListaImgenesEquipo = true;
-  }
-
-  abrirFormularioEquipo() {
-    this.mostrarListaImgenesEquipo = false;
-  }
-
-  elegirImagenEquipo(img) {
-    this.imagenEquipo = img;
-  }
-
-  agregarImagenEquipo() {
-    var imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src = this.URL_IMAGES + "/md/" + this.imagenEquipo;
-    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = this.imagenEquipo;
-    this.mostrarImagen = true;
-    this.abrirFormularioEquipo();
-  }
-
-  getListaImagenes() {
-    this.articuloService.getImagenes().subscribe(res => {
-      this.listaimagenes = res as string[];
-      this.listaimagenesfiltro = this.listaimagenes;
-    });
-  }
-
-  buscarImagen() {
-    this.getListaImagenes();
-  }
-
+  /**
+   * Método que genera la url para el artículo tomando el nombre del artículo como referencia
+   */
   generarURL() {
     var titulo = this.articuloService.articuloSeleccionado.titulo;
     for (var i = 0; i < titulo.length; i++) {
@@ -383,124 +491,70 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.url = titulo.toLowerCase();
   }
 
-  elegirImagen(nombre: string) {
-    this.imageneditorseleccionada = nombre;
-  }
-
-  agregarImagenEditor() {
-    const range = this.editorInstance.getSelection();
-    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES + "/lg/" + this.imageneditorseleccionada);
-  }
-
-  agregarImagenesArticulo(nombre: string) {
-    var existe = false;
-    for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
-      if (this.imagenesSeleccionadas[i] == nombre) {
-        this.imagenesSeleccionadas.splice(i, 1);
-        existe = true;
+  /**
+   * Método que obtiene los artículos de la base de datos MySQL
+   */
+  getArticulosMysql() {
+    this.mostrarCarga = true;
+    this.mostrarListaArticulos = false;
+    this.articuloService.getArticulosMysql().subscribe(res => {
+      this.articuloService.articulosMysql = res as ArticuloMysql[];
+      if (this.articuloService.articulosMysql.length > 0) {
+        this.mostrarListaArticulos = true;
       }
-    }
-    if (!existe) {
-      this.imagenesSeleccionadas.push(nombre);
-    }
-  }
-
-  editarEquipo(i) {
-    this.indiceEquipo = i;
-    this.imagenEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
-    this.descripcionEquipoSeleccionado = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].descripcion;
-    this.nombreColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color;
-    this.codigoColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor;
-    this.detallesEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle;
-    var imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src = this.URL_IMAGES + "/md/" + this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
-    this.mostrarImagen = true;
-  }
-
-  buscarImagenesFiltro(event) {
-    var input = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
-    this.listaimagenesfiltro = new Array();
-    for (var i = 0; i < this.listaimagenes.length; i++) {
-      var inputcheck = document.getElementById(this.listaimagenes[i] + "itemimg") as HTMLDivElement;
-      if (this.listaimagenes[i].includes(input.value)) {
-        inputcheck.hidden = false;
-      } else {
-        inputcheck.hidden = true;
-      }
-    }
-  }
-
-  buscarImagenesFiltroEditor() {
-    var input = document.getElementById("input-busqueda-imagenes-articulo-editor") as HTMLInputElement;
-    this.listaimagenesfiltro = new Array();
-    for (var i = 0; i < this.listaimagenes.length; i++) {
-      var inputcheck = document.getElementById(this.listaimagenes[i] + "editor") as HTMLDivElement;
-      if (this.listaimagenes[i].includes(input.value)) {
-        inputcheck.hidden = false;
-      } else {
-        inputcheck.hidden = true;
-      }
-    }
-  }
-
-  buscarImagenesFiltroEquipo() {
-    var input = document.getElementById("input-busqueda-imagenes-equipo") as HTMLInputElement;
-    this.listaimagenesfiltro = new Array();
-    for (var i = 0; i < this.listaimagenes.length; i++) {
-      var inputcheck = document.getElementById(this.listaimagenes[i] + "equipo") as HTMLDivElement;
-      if (this.listaimagenes[i].includes(input.value)) {
-        inputcheck.hidden = false;
-      } else {
-        inputcheck.hidden = true;
-      }
-    }
-  }
-
-  subirImagen(evento) {
-    this.selectedFile = < File > evento.target.files[0];
-    let headers = new Headers();
-    headers.append('Content-Type', 'multipart/form-data');
-    headers.append('nombre', 'nuevonombre.webp');
-    const fd = new FormData();
-    fd.append('image', this.selectedFile, this.selectedFile.name);
-    this.http.post(this.URL_API, fd, {
-      reportProgress: true,
-      observe: 'events'
-    }).subscribe(event => {
-      if (event.type === HttpEventType.UploadProgress) {
-        this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
-        if (Math.round(event.loaded / event.total * 100) == 100) {
-          this.openSnackBar(true, "La imagén se subió al servidor con éxito");
-        }
-      } else {
-        if (event.type === HttpEventType.Response) {
-          this.getListaImagenes();
-        }
-      }
+      this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
+      this.dataSource.paginator = this.paginator.toArray()[0];
+      this.dataSource.sort = this.sort.toArray()[0];
+      this.mostrarCarga = false;
     });
   }
 
-  subirImagenEditor(evento) {
-    this.selectedFile = < File > evento.target.files[0];
-    const fd = new FormData();
-    fd.append('image', this.selectedFile, this.selectedFile.name);
-    this.http.post(this.URL_API, fd, {
-      reportProgress: true,
-      observe: 'events'
-    }).subscribe(event => {
-      if (event.type === HttpEventType.UploadProgress) {
-        this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
-        if (Math.round(event.loaded / event.total * 100) == 100) {
-          this.openSnackBar(true, "La imagén se subió al servidor con éxito");
-        }
-      } else {
-        if (event.type === HttpEventType.Response) {
-          this.getListaImagenes();
-        }
+  /**
+   * Método que obtiene las características de una categoría para el artículo
+   */
+  getCaracteristicas() {
+    this.listacaracteristicasarticulo = new Array();
+    for (var i = 0; i < this.listacategorias.length; i++) {
+      if (this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id) {
+        this.listacaracteristicas = this.listacategorias[i].caracteristicas;
       }
+    }
+    for (var i = 0; i < this.listacaracteristicas.length; i++) {
+      this.listacaracteristicasarticulo.push(new CaracteristicaItem(this.listacaracteristicas[i].nombre, ""));
+    }
+  }
+
+  /**
+   * Método que obtiene las categorias disponibles
+   */
+  getCategorias() {
+    this.categoriaService.getCategorias().subscribe(res => {
+      this.listacategorias = res as Categoria[];
     });
   }
 
+  /**
+   * Método que obtiene la lista de imagenes de los artículos
+   */
+  getListaImagenes() {
+    this.articuloService.getImagenes().subscribe(res => {
+      this.listaimagenes = res as string[];
+      this.listaimagenesfiltro = this.listaimagenes;
+    });
+  }
+
+  /**
+   * Método que obtiene las marcas registradas
+   */
+  getMarcas() {
+    this.marcaService.getMarcas().subscribe(res => {
+      this.listamarcas = res as Marca[];
+    });
+  }
+
+  /**
+   * Método para guardar la información de un artículo
+   */
   guardarDatos() {
     //Obtener datos generales del articulo
     this.articuloService.articuloSeleccionado.especificaciones = new Array();
@@ -549,30 +603,70 @@ export class ArticuloComponent implements OnInit {
     }
   }
 
-  /// aplicar filtro en el data table de material
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  /**
+   * Método para guardar los datos de un equipo
+   */
+  guardarDatosEquipo() {
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color = this.nombreColor;
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle = this.detallesEquipo;
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor = this.codigoColor;
+    this.imagenEquipo = ""
   }
 
-  applyFilterEquipo(filterValue: string) {
-    this.dataSourceEquipos.filter = filterValue.trim().toLowerCase();
-    if (this.dataSourceEquipos.paginator) {
-      this.dataSourceEquipos.paginator.firstPage();
-    }
+  /**
+   * Me
+   */
+  limpiarFormulario() {
+    this.articuloService.articuloSeleccionado = new Articulo();
+    this.imagenesSeleccionadas = new Array();
+    this.listacaracteristicas = new Array();
+    this.itemsDatosGenerales = new Array();
+    this.contenidoEditor = "<p></p>";
+    this.listacaracteristicasarticulo = new Array();
   }
 
-  abrirInputFile() {
-    var archivoinput = document.getElementById("archivo") as HTMLInputElement;
-    archivoinput.click();
-  }
-
+  /**
+   * 
+   */
   limpiarImagen() {
     this.mostrarImagen = false;
   }
 
+  /**
+   * 
+   * @param tipoplan 
+   */
+  mostrarDetalleTipoPlan(tipoplan) {
+    this.planesseleccionada = tipoplan;
+  }
+
+  /**
+   * 
+   */
+  obtenerEquiposArticulo() {
+    this.articuloService.articuloSeleccionado.equipos = new Array();
+    this.articuloService.articuloSeleccionado.equipos.push(new Equipo("", "", 0, "", "", ""));
+    this.articuloService.getEquiposArticulo().subscribe(res => {
+      this.articuloService.articuloSeleccionado.equipos = res as Equipo[];
+      this.dataSourceEquipos = new MatTableDataSource(res as Equipo[]);
+      this.dataSourceEquipos.paginator = this.paginator.toArray()[1];
+      this.dataSourceEquipos.sort = this.sort.toArray()[1];
+    });
+  }
+
+  /**
+   * 
+   */
+  obtenerListaPrecios() {
+    this.planesService.getEquipos().subscribe(res => {
+      this.listaequipos = res as any[];
+    });
+  }
+
+  /**
+   * 
+   * @param event 
+   */
   onFileSelected(event) {
     this.selectedFile = event.target.files[0];
     const fd = new FormData();
@@ -583,7 +677,6 @@ export class ArticuloComponent implements OnInit {
       })
       .subscribe(event => {
         if (event.type === HttpEventType.UploadProgress) {
-          this.openSnackBar(true, "Subiendo " + Math.round(event.loaded / event.total * 100) + " %");
           if (Math.round(event.loaded / event.total * 100) == 100) {
             this.openSnackBar(true, "Se subió la imagen con éxito");
           }
@@ -600,40 +693,6 @@ export class ArticuloComponent implements OnInit {
       });
   }
 
-  guardarDatosEquipo() {
-    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color = this.nombreColor;
-    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle = this.detallesEquipo;
-    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor = this.codigoColor;
-    this.imagenEquipo = ""
-  }
-
-  buscarPalabrasClaves() {
-    var palabras = this.articuloService.articuloSeleccionado.titulo;
-    for (var i = 0; i < this.listacategorias.length; i++) {
-      if (this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id) {
-        palabras += " " + this.listacategorias[i].nombre;
-        break;
-      }
-    }
-    for (var i = 0; i < this.listamarcas.length; i++) {
-      if (this.articuloService.articuloSeleccionado.marca == this.listamarcas[i]._id) {
-        palabras += " " + this.listamarcas[i].nombremarca;
-        break;
-      }
-    }
-    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");
-    var caracteristicas = datoscaracteristicas.getElementsByClassName("item-caracteristicas");
-    for (var i = 0; i < caracteristicas.length; i++) {
-      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value, caracteristicas[i].getElementsByTagName("input")[1].value);
-      palabras += " " + c.nombre + " " + c.valor;
-    }
-    for (var i = 0; i < this.articuloService.articuloSeleccionado.equipos.length; i++) {
-      if (this.articuloService.articuloSeleccionado.equipos[i].cantidad > 0)
-        palabras += " " + this.articuloService.articuloSeleccionado.equipos[i].color + " " + this.articuloService.articuloSeleccionado.equipos[i].detalle;
-    }
-    this.articuloService.articuloSeleccionado.palabrasclaves = palabras.toLowerCase();
-  }
-
   /**
    * Método que muestra un Bar temporal para confirmar los mensajes de éxito y de error
    * @param status : Determina si es un mensaje de confirmación o error
@@ -647,4 +706,54 @@ export class ArticuloComponent implements OnInit {
     });
   }
 
+  /**
+   * 
+   * @param evento 
+   */
+  subirImagen(evento) {
+    this.selectedFile = < File > evento.target.files[0];
+    let headers = new Headers();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('nombre', 'nuevonombre.webp');
+    const fd = new FormData();
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+    this.http.post(this.URL_API, fd, {
+      reportProgress: true,
+      observe: 'events'
+    }).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        if (Math.round(event.loaded / event.total * 100) == 100) {
+          this.openSnackBar(true, "La imagén se subió al servidor con éxito");
+        }
+      } else {
+        if (event.type === HttpEventType.Response) {
+          this.getListaImagenes();
+        }
+      }
+    });
+  }
+
+  /**
+   * 
+   * @param evento 
+   */
+  subirImagenEditor(evento) {
+    this.selectedFile = < File > evento.target.files[0];
+    const fd = new FormData();
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+    this.http.post(this.URL_API, fd, {
+      reportProgress: true,
+      observe: 'events'
+    }).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        if (Math.round(event.loaded / event.total * 100) == 100) {
+          this.openSnackBar(true, "La imagén se subió al servidor con éxito");
+        }
+      } else {
+        if (event.type === HttpEventType.Response) {
+          this.getListaImagenes();
+        }
+      }
+    });
+  }
 }
