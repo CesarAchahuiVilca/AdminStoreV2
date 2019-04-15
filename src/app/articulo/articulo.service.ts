@@ -63,7 +63,12 @@ export class ArticuloService {
   postBanners(banners){
     return this.http.post(Constantes.URL_API_ARTICULO + '/banner', {banners: banners}, {withCredentials: true});
   }
+
   getBanners(){
     return this.http.get(Constantes.URL_API_ARTICULO + '/banners/banners',{withCredentials: true});
   } 
+
+  eliminarCartel(id: string) {
+    return this.http.delete(Constantes.URL_API_ARTICULO + '/cartel/' + id, { withCredentials: true});
+  }
 }

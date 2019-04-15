@@ -8,14 +8,17 @@ import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subject, from } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { HttpClient, HttpEventType } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Miga } from '../miga';
 import { PedidosService } from './pedidos.service';
 import { Pedidos } from './pedidos';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+import { DialogoCargoComponent } from '../cargo/dialogo-cargo/dialogo-cargo.component';
+import { DialogoComponent } from '../dialogo/dialogo.component';
+import { CargoService } from '../cargo/cargo.service';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 
 export interface PedidosData {
   _id: string;
@@ -179,7 +182,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   listadatos: string[] = ['datos1', 'datos2', 'datos3', 'datos4', 'datos5', 'dtos6', 'datos7'];
   migas = [new Miga('Pedidos', '/pedidos')];
   //fin datos temp
-  constructor(public snackBar: MatSnackBar, public http: HttpClient, public pedidosservice: PedidosService, public usuarioservice: UsuarioService) {
+  constructor(public snackBar: MatSnackBar, public http: HttpClient, public pedidosservice: PedidosService, public usuarioservice: UsuarioService, public dialog: MatDialog, public cargoService: CargoService) {
     //table material
     // Assign the data to the data source for the table to render   JSON.parse(JSON.stringify(this.listpedidos))
     //  console.log(datos);
@@ -600,11 +603,58 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     }
   }
-  vercargo(idcargo:string){
-    console.log(idcargo);
+  
+  /**
+   * Método para visualizar la información del cargo realizado
+   * @param idCargo : identificador del cargo realizado
+   */
+  verCargo( idCargo: string ){
+    this.dialog.open(DialogoCargoComponent, {
+      width: '640px',
+      data: {
+        id: idCargo
+      }
+    });
+  }
+
+  /**
+   * Método que permite anular una venta realizada, devolviendo el monto al cliente y anulando la boleta emitida
+   * @param idCargo : identificador del cargo realizado
+   */
+  anularVenta(idCargo: string){
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Mensaje de Confirmación para Anular Venta',
+        mensaje: '¿Está seguro de anular la venta realizada? Este proceso es irreversible, una vez anulado la venta el dinero de compra retorna al cliente y el artículo vuelve al inventario. Además que la anulación es dentro de los 7 días realizado la venta.'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.cargoService.devolverCargo(this.preciototal.toString(), this.nrotrans, 'solicitud_comprador').subscribe( res => {
+          const rspta = res as Respuesta;
+          if(rspta.status) {
+            this.openSnackBar(rspta.status, rspta.msg);
+            console.log(rspta.data);
+          } else {
+            this.openSnackBar(rspta.status, rspta.error);
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Método que muestra un bar temporal con un mensaje
+   * @param status : indica si es un error o confirmación
+   * @param mensaje : texto del mensaje
+   */
+  openSnackBar(status: boolean, mensaje: string): void {
+    this.snackBar.openFromComponent(SnackBarComponent, {
+      duration: 3000,
+      panelClass: [status ? 'exito' : 'error'],
+      data: mensaje
+    });
   }
 }
-
-
-
-//table 609

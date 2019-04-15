@@ -10,8 +10,10 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
               <mat-card style="width: 100%;">
                 <mat-card-header>
-                  <mat-card-title style="margin: 0px !important;" [hidden]="mostrarBotonOpcion">Artículos</mat-card-title>
-                  <mat-card-title style="margin: 0px !important;" [hidden]="!mostrarBotonOpcion" style="display: flex; align-items: center; justify-content: center; flex-direction: row; width: 100%;">
+                  <mat-card-title style="margin: 0px !important;" [hidden]="mostrarBotonOpcion">Artículos
+                  </mat-card-title>
+                  <mat-card-title style="margin: 0px !important;" [hidden]="!mostrarBotonOpcion"
+                    style="display: flex; align-items: center; justify-content: center; flex-direction: row; width: 100%;">
                     <div style="display: flex; align-items: center; justify-content: flex-start; width: 50%">
                       <i class="material-icons">stay_primary_portrait</i>
                       {{articuloService.articuloSeleccionadoMysql.Descripcion}}
@@ -56,7 +58,8 @@
                             <ng-container matColumnDef="Estado">
                               <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
                               <td style="width: 25%;" mat-cell *matCellDef="let row" style="text-align: center;">
-                                <button *ngIf="row.Estado == '0'" mat-raised-button (click)="cambiarvista(row,articuloForm)">Completar Registro</button>
+                                <button *ngIf="row.Estado == '0'" mat-raised-button
+                                  (click)="cambiarvista(row,articuloForm)">Completar Registro</button>
                                 <i class="material-icons" style="color: green;" *ngIf="row.Estado == '1'">check</i>
                               </td>
                             </ng-container>
@@ -65,9 +68,10 @@
                               <td style="width: 25%;" mat-cell *matCellDef="let row">
                                 <div style="margin-left: 0px; display: flex; flex-direction: row;">
                                   <div style="flex-grow: 0;margin-right: 2px;">
-                                    <button *ngIf="row.Estado == '0'" mat-button disabled (click)="editarArticulo(row)"><i
+                                    <button *ngIf="row.Estado == '0'" mat-button disabled
+                                      (click)="editarArticulo(row)"><i class="material-icons">edit</i></button>
+                                    <button *ngIf="row.Estado == '1'" mat-button (click)="editarArticulo(row)"><i
                                         class="material-icons">edit</i></button>
-                                    <button *ngIf="row.Estado == '1'" mat-button (click)="editarArticulo(row)"><i class="material-icons">edit</i></button>
                                   </div>
                                 </div>
                               </td>
@@ -81,49 +85,58 @@
                       </div>
                       <div [hidden]="!mostrarFormularioArticulo">
                         <form #articuloForm="ngForm">
-                          <input class="form-control" id="_id" #_id="ngModel" [(ngModel)]="articuloService.articuloSeleccionado._id"
-                            name="idarticulo" type="text" required hidden="true">
-                          <input class="form-control" id="idarticulo" #idarticulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.idarticulo"
-                            name="idarticulo" type="text" required hidden="true">
+                          <input class="form-control" id="_id" #_id="ngModel"
+                            [(ngModel)]="articuloService.articuloSeleccionado._id" name="idarticulo" type="text"
+                            required hidden="true">
+                          <input class="form-control" id="idarticulo" #idarticulo="ngModel"
+                            [(ngModel)]="articuloService.articuloSeleccionado.idarticulo" name="idarticulo" type="text"
+                            required hidden="true">
                           <div class="row">
                             <div class="col-lg-12">
                               <div class="form-group">
                                 <h5>Titulo del Artículo</h5>
-                                <input class="form-control" id="titulo" placeholder="Ingrese titulo del articulo" name="titulo"
-                                  #titulo="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.titulo" type="text"
-                                  required style="border-color: rgb(167, 167, 167); height: 35px;" (change)="generarURL()">
+                                <input class="form-control" id="titulo" placeholder="Ingrese titulo del articulo"
+                                  name="titulo" #titulo="ngModel"
+                                  [(ngModel)]="articuloService.articuloSeleccionado.titulo" type="text" required
+                                  style="border-color: rgb(167, 167, 167); height: 35px;" (change)="generarURL()">
                               </div>
                             </div>
                             <div class="col-lg-12">
                               <div class="form-group">
                                 <h5>URL del Artículo</h5>
-                                <input class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.url"
-                                  type="text" placeholder="URL del articulo" required style="border-color: rgb(167, 167, 167);">
+                                <input class="form-control" id="url" name="url" #url="ngModel"
+                                  [(ngModel)]="articuloService.articuloSeleccionado.url" type="text"
+                                  placeholder="URL del articulo" required style="border-color: rgb(167, 167, 167);">
                               </div>
                             </div>
                             <div class="col-lg-5">
                               <div class="form-group">
                                 <h5>Categoria</h5>
-                                <select class="form-control" id="categoria" #categoria="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.categoria"
-                                  name="categoria" style="border-color: rgb(167, 167, 167);" (change)="getCaracteristicas()">
-                                  <option *ngFor="let cat of listacategorias" value="{{cat._id}}"> {{cat.nombre}}</option>
+                                <select class="form-control" id="categoria" #categoria="ngModel"
+                                  [(ngModel)]="articuloService.articuloSeleccionado.categoria" name="categoria"
+                                  style="border-color: rgb(167, 167, 167);" (change)="getCaracteristicas()">
+                                  <option *ngFor="let cat of listacategorias" value="{{cat._id}}"> {{cat.nombre}}
+                                  </option>
                                 </select>
                               </div>
                             </div>
                             <div class="col-lg-4">
                               <div class="form-group">
                                 <h5>Marca</h5>
-                                <select class="form-control" id="marca" name="marca" #marca="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.marca"
+                                <select class="form-control" id="marca" name="marca" #marca="ngModel"
+                                  [(ngModel)]="articuloService.articuloSeleccionado.marca"
                                   style="border-color: rgb(167, 167, 167);">
-                                  <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}</option>
+                                  <option *ngFor="let marca of listamarcas" value="{{marca._id}}">{{marca.nombremarca}}
+                                  </option>
                                 </select>
                               </div>
                             </div>
                             <div class="col-lg-3">
                               <div class="form-group">
                                 <h5>Cantidad</h5>
-                                <input type="number" #cantidad="ngModel" [(ngModel)]="articuloService.articuloSeleccionado.cantidad"
-                                  class="form-control" style="border-color: rgb(167, 167, 167);" [ngModelOptions]="{standalone: true}"
+                                <input type="number" #cantidad="ngModel"
+                                  [(ngModel)]="articuloService.articuloSeleccionado.cantidad" class="form-control"
+                                  style="border-color: rgb(167, 167, 167);" [ngModelOptions]="{standalone: true}"
                                   disabled="true">
                               </div>
                             </div>
@@ -134,16 +147,21 @@
                                   <mat-card-title>Características del Artículo</mat-card-title>
                                 </mat-card-header>
                                 <mat-card-content>
-                                  <div style="display: flex; flex-direction: column;" id="contenido-datos-caracteristicas">
-                                    <div class="item-caracteristicas" style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
+                                  <div style="display: flex; flex-direction: column;"
+                                    id="contenido-datos-caracteristicas">
+                                    <div class="item-caracteristicas"
+                                      style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
                                       *ngFor="let caracteristica of listacaracteristicasarticulo ">
                                       <div style="flex-grow: 0; width: 20%;">
-                                        <input style="border-color: rgba(255, 255, 255, 0); background: rgb(255, 255, 255); height: 35px; color: black; font-weight: bold;"
+                                        <input
+                                          style="border-color: rgba(255, 255, 255, 0); background: rgb(255, 255, 255); height: 35px; color: black; font-weight: bold;"
                                           value="{{caracteristica.nombre}}" readonly>
                                       </div>
                                       <div style="flex-grow: 0; width: 75%;">
-                                        <input type="text" class="form-control" style="border-color: rgb(167, 167, 167);"
-                                          placeholder="Ingrese valor de la característica" value="{{caracteristica.valor}}">
+                                        <input type="text" class="form-control"
+                                          style="border-color: rgb(167, 167, 167);"
+                                          placeholder="Ingrese valor de la característica"
+                                          value="{{caracteristica.valor}}">
                                       </div>
                                     </div>
                                   </div>
@@ -160,12 +178,14 @@
                                 <mat-card-content>
                                   <div class="datatable-example" style="width: 100%;">
                                     <mat-form-field>
-                                      <input matInput (keyup)="applyFilterEquipo($event.target.value)" placeholder="Buscar">
+                                      <input matInput (keyup)="applyFilterEquipo($event.target.value)"
+                                        placeholder="Buscar">
                                     </mat-form-field>
                                     <div class="mat-elevation-z2">
                                       <table mat-table [dataSource]="dataSourceEquipos" matSort>
                                         <ng-container matColumnDef="Imagen">
-                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                          </th>
                                           <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">
                                             <img *ngIf="equipo.imagen == ''" src="./assets/images/sinimagen.jpg">
                                             <img *ngIf="equipo.imagen != ''" src="{{URL_IMAGES}}/sm/{{equipo.imagen}}">
@@ -174,7 +194,8 @@
                                         <ng-container matColumnDef="idArticulo">
                                           <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
                                             IdArtículo </th>
-                                          <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">{{equipo.idequipo}}
+                                          <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i = index;">
+                                            {{equipo.idequipo}}
                                           </td>
                                         </ng-container>
                                         <ng-container matColumnDef="Descripcion">
@@ -202,7 +223,8 @@
                                           </td>
                                         </ng-container>
                                         <ng-container matColumnDef="Editar">
-                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                          </th>
                                           <td style="width: 15%;" mat-cell *matCellDef="let equipo; let i=index;">
                                             <button mat-button (click)="editarEquipo(i)" data-toggle="modal"
                                               data-target="#modalequipo"><i class="material-icons">edit</i></button>
@@ -227,27 +249,32 @@
                                   <mat-card-title>Precios del Artículo</mat-card-title>
                                 </mat-card-header>
                                 <mat-card-content>
-                                  <div style="display: flex; flex-direction: row; flex-wrap: wrap;" id="contenido-datos-generales">
+                                  <div style="display: flex; flex-direction: row; flex-wrap: wrap;"
+                                    id="contenido-datos-generales">
                                     <div style="width: 100%; ">
                                       <label style="font-weight: bold;">Seleccione el nombre del equipo </label>
                                     </div>
                                     <div style="width: 70%;margin: 5px">
                                       <select [(ngModel)]="articuloService.articuloSeleccionado.idprecio"
-                                        [ngModelOptions]="{standalone: true}" (change)="buscarPlanesEquipo()" class="form-control">
-                                        <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}"><a>{{equipo.nombreequipo}}</a></option>
+                                        [ngModelOptions]="{standalone: true}" (change)="buscarPlanesEquipo()"
+                                        class="form-control">
+                                        <option *ngFor="let equipo of listaequipos" value="{{equipo.nombreequipo}}">
+                                          <a>{{equipo.nombreequipo}}</a></option>
                                       </select>
                                     </div>
                                   </div>
                                   <div style="width: 100%; display: flex; flex-direction: column;">
                                     <br>
-                                    <div style="display:flex; flex-direction: row"> 
+                                    <div style="display:flex; flex-direction: row">
                                       <h5>Precio del Articulo: <strong>S/ {{planSeleccionado.precio}}</strong></h5>
                                     </div>
-                                    <div style="display:flex; flex-direction: row;  align-items: center;"> 
+                                    <div style="display:flex; flex-direction: row;  align-items: center;">
                                       <h5>Descuento (en %) : </h5>
-                                      <input  class="form-control" type="number" style="width: 30%; margin-left: 10px;" [(ngModel)]="articuloService.articuloSeleccionado.descuento" [ngModelOptions]="{standalone: true}">
+                                      <input class="form-control" type="number" style="width: 30%; margin-left: 10px;"
+                                        [(ngModel)]="articuloService.articuloSeleccionado.descuento"
+                                        [ngModelOptions]="{standalone: true}">
                                     </div>
-                                    
+
                                   </div>
                                 </mat-card-content>
                               </mat-card>
@@ -257,11 +284,14 @@
                               <mat-card class="example-card">
                                 <mat-card-header>
                                   <mat-card-title>Imágenes del Artículo</mat-card-title>
-                                  <input type="file" style="display: none;" (change)="subirImagen($event)" id="imageninput">
-                                  <input type="file" style="display: none;" (change)="subirImagenEditor($event)" id="imageninputeditor">
+                                  <input type="file" style="display: none;" (change)="subirImagen($event)"
+                                    id="imageninput">
+                                  <input type="file" style="display: none;" (change)="subirImagenEditor($event)"
+                                    id="imageninputeditor">
                                   <div style="flex-grow:0; margin-top: -5px;">
-                                    <button type="button" class="btn btn-link" style=" height: 35px;" (click)=" buscarImagen()"
-                                      data-toggle="modal" data-target="#modalimagenes"><i class="fa fa-plus"></i>
+                                    <button type="button" class="btn btn-link" style=" height: 35px;"
+                                      (click)=" buscarImagen()" data-toggle="modal" data-target="#modalimagenes"><i
+                                        class="fa fa-plus"></i>
                                       Agregar
                                       Imágenes</button>
                                   </div>
@@ -269,11 +299,14 @@
                                 <mat-card-content>
                                   <hr>
                                   <div style="display: flex; flex-flow: row wrap;" id="contenido-datos-caracteristicas">
-                                    <div class="item-imagen" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px;"
+                                    <div class="item-imagen"
+                                      style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px;"
                                       *ngFor="let item of imagenesSeleccionadas ">
-                                      <img style="position: absolute; right: -10px;top: -10px;z-index: 100;" src="assets/imagenes/close.png"
-                                        width="20px" height="20px" (click)="eliminarItemImagen(item)">
-                                      <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
+                                      <img style="position: absolute; right: -10px;top: -10px;z-index: 100;"
+                                        src="assets/imagenes/close.png" width="20px" height="20px"
+                                        (click)="eliminarItemImagen(item)">
+                                      <div class="nombre-imagen-cont"
+                                        style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
                                         {{item}}
                                       </div>
                                       <img src="" class="imagen-item-articulo" src="{{URL_IMAGES}}/md/{{item}}">
@@ -289,11 +322,13 @@
                                   <mat-card-title>Detalles del Artículo</mat-card-title>
                                 </mat-card-header>
                                 <mat-card-content>
-                                  <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;"
+                                  <div
+                                    style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;"
                                     id="contenido-datos-detalle">
                                     <div style="width: 100%;" class="row">
                                       <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditor"
-                                        (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}"></quill-editor>
+                                        (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}">
+                                      </quill-editor>
                                     </div>
                                   </div>
                                 </mat-card-content>
@@ -304,12 +339,15 @@
                               <mat-card class="example-card">
                                 <mat-card-header>
                                   <mat-card-title>Palabras claves
-                                    <button mat-raised-button (click)="buscarPalabrasClaves()">Buscar palabras claves</button>
+                                    <button mat-raised-button (click)="buscarPalabrasClaves()">Buscar palabras
+                                      claves</button>
                                   </mat-card-title>
                                 </mat-card-header>
                                 <mat-card-content>
-                                  <textarea class="form-control" [(ngModel)]="articuloService.articuloSeleccionado.palabrasclaves"
-                                    [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(146, 146, 146);"></textarea>
+                                  <textarea class="form-control"
+                                    [(ngModel)]="articuloService.articuloSeleccionado.palabrasclaves"
+                                    [ngModelOptions]="{standalone: true}"
+                                    style="border: 1px solid rgb(146, 146, 146);"></textarea>
                                 </mat-card-content>
                               </mat-card>
                             </div>
@@ -317,8 +355,6 @@
                               <hr>
                               <button class="btn btn-default" style="margin-right: 5px;" (click)="cambiarvista()">
                                 <i class="fa fa-angle-left"></i> Regresar</button>
-                              <button class="btn btn-danger" style="margin-right: 5px;" (click)="newHandlerImage();">
-                                <i class="fa fa-close"></i> Limpiar</button>
                               <button class="btn btn-success" (click)="guardarDatos()"> <i class="fa fa-save"></i>
                                 Guardar Artículo</button>
                             </div>
@@ -338,8 +374,8 @@
 </div>
 
 <!-- Modal Articulos -->
-<div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog" role="document" id="modalarticulocontenido">
     <div class="modal-content">
       <div class="modal-header">
@@ -365,8 +401,8 @@
                     <label> Buscar: </label>
                   </div>
                   <div style="flex-grow: 0; width: 90%;">
-                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" (keyup)="buscarImagenesFiltro($event)"
-                      id="input-busqueda-imagenes-articulo">
+                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes"
+                      (keyup)="buscarImagenesFiltro($event)" id="input-busqueda-imagenes-articulo">
                   </div>
                 </div>
               </div>
@@ -376,9 +412,11 @@
         <br>
         <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
           <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-            <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
+            <div class="item-imagen-list"
+              style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
               *ngFor="let img of listaimagenes" id="{{img}}itemimg">
-              <input type="checkbox" class="form-control" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px; z-index: 1500;"
+              <input type="checkbox" class="form-control"
+                style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px; z-index: 1500;"
                 (change)="agregarImagenesArticulo(img)" id="{{img}}">
               <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
                 {{img}}
@@ -425,8 +463,8 @@
                     <label> Buscar: </label>
                   </div>
                   <div style="flex-grow: 0; width: 90%;">
-                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" id="input-busqueda-imagenes-articulo-editor"
-                      (keyup)="buscarImagenesFiltroEditor()">
+                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes"
+                      id="input-busqueda-imagenes-articulo-editor" (keyup)="buscarImagenesFiltroEditor()">
                   </div>
                 </div>
               </div>
@@ -436,9 +474,11 @@
         <br>
         <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
           <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-            <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
+            <div class="item-imagen-list"
+              style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
               *ngFor="let img of listaimagenes" id="{{img}}editor">
-              <input type="radio" class="form-check-input" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
+              <input type="radio" class="form-check-input"
+                style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
                 (change)="elegirImagen(img)" name="imagen-editor">
               <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
                 {{img}}
@@ -458,7 +498,8 @@
 </div>
 <button data-toggle="modal" data-target="#modalimageneseditor" id="btnimageneditor" (click)="buscarImagen()"></button>
 <!-- Modal detalle equipo -->
-<div class="modal fade" id="modalequipo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalequipo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content" style="width: 100%;">
       <div class="modal-header">
@@ -467,7 +508,8 @@
           <i class="fa fa-close"></i>
         </button>
       </div>
-      <div class="modal-body" style="overflow-y: auto;display: flex; flex-direction: row; flex-wrap: wrap; width: 100%;">
+      <div class="modal-body"
+        style="overflow-y: auto;display: flex; flex-direction: row; flex-wrap: wrap; width: 100%;">
         <div [hidden]="mostrarListaImgenesEquipo" style="width: 100%;">
           <mat-card class="example-card" style="margin: 5px; width: 100%;">
             <mat-card-header>
@@ -476,13 +518,16 @@
             <mat-card-content style="display: flex; flex-direction: row; flex-wrap: wrap;">
               <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">
                 <!-- <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">-->
-                <mat-card style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
-                  <i [hidden]="mostrarImagen" class="material-icons btn-imagen" (click)="abrirImagenes()">add_photo_alternate</i>
+                <mat-card
+                  style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
+                  <i [hidden]="mostrarImagen" class="material-icons btn-imagen"
+                    (click)="abrirImagenes()">add_photo_alternate</i>
                   <img [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">
                   <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>
                 </mat-card>
               </div>
-              <div style="display: flex; flex-direction: column; width: 60%; align-items: center; margin-top: 10px; padding-left: 10px;">
+              <div
+                style="display: flex; flex-direction: column; width: 60%; align-items: center; margin-top: 10px; padding-left: 10px;">
                 <div style="display: flex; flex-direction: row; width: 100%; ">
                   <div style="width: 60%; margin: 5px;">
                     <mat-form-field class="example-full-width">
@@ -490,13 +535,15 @@
                     </mat-form-field>
                   </div>
                   <div style="width: 30%; margin: 5px;margin-top: 15px;">
-                    <input matInput placeholder="seleccione color" type="color" style="height: 35px;" [(ngModel)]="codigoColor">
+                    <input matInput placeholder="seleccione color" type="color" style="height: 35px;"
+                      [(ngModel)]="codigoColor">
                   </div>
                 </div>
                 <div style="display: flex; flex-direction: row; width: 100%;">
                   <div style="width: 100%; margin: 5px;">
                     <mat-form-field class="example-full-width">
-                      <textarea matInput placeholder="Informacion adicinal del equipo" rows="7" [(ngModel)]="detallesEquipo"></textarea>
+                      <textarea matInput placeholder="Informacion adicinal del equipo" rows="7"
+                        [(ngModel)]="detallesEquipo"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -506,7 +553,8 @@
         </div>
         <div [hidden]="!mostrarListaImgenesEquipo" style="width: 100%;">
           <div class="opciones-lista-imagenes" style="display: flex; flex-direction: row;width: 100%; ">
-            <button mat-raised-button style="width: 20%;" (click)="abrirFormularioEquipo()"><i class="material-icons">keyboard_arrow_left</i>Regresar</button>
+            <button mat-raised-button style="width: 20%;" (click)="abrirFormularioEquipo()"><i
+                class="material-icons">keyboard_arrow_left</i>Regresar</button>
             <div style="width: 10%;"></div>
             <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
               Subir Nueva Imagen</button>
@@ -516,8 +564,8 @@
                 <label> Buscar: </label>
               </div>
               <div style="flex-grow: 0; width: 90%;">
-                <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes" id="input-busqueda-imagenes-equipo"
-                  (keyup)="buscarImagenesFiltroEquipo()">
+                <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes"
+                  id="input-busqueda-imagenes-equipo" (keyup)="buscarImagenesFiltroEquipo()">
               </div>
             </div>
           </div>
@@ -537,9 +585,11 @@
           </div>
           <div style="max-height: 350px; overflow: auto; background-color: rgb(216, 240, 212);">
             <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-              <div class="item-imagen-list" style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
+              <div class="item-imagen-list"
+                style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
                 *ngFor="let img of listaimagenes" id="{{img}}equipo">
-                <input type="radio" class="form-check-input" style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
+                <input type="radio" class="form-check-input"
+                  style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
                   (change)="elegirImagenEquipo(img)" name="imagen-equipo">
                 <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
                   {{img}}
@@ -550,12 +600,14 @@
           </div>
           <div style="text-align: right;">
             <br>
-            <button class="btn btn-success btn-success btn-pill" (click)="agregarImagenEquipo()"><i class="fa fa-plus"></i>
+            <button class="btn btn-success btn-success btn-pill" (click)="agregarImagenEquipo()"><i
+                class="fa fa-plus"></i>
               Agregar</button>
           </div>
         </div>
         <div style="text-align: right; width: 100%;">
-          <button [hidden]="mostrarListaImgenesEquipo" mat-raised-button data-dismiss="modal" (click)="guardarDatosEquipo()">Aceptar</button>
+          <button [hidden]="mostrarListaImgenesEquipo" mat-raised-button data-dismiss="modal"
+            (click)="guardarDatosEquipo()">Aceptar</button>
         </div>
       </div>
     </div>
