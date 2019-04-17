@@ -29,7 +29,7 @@ export interface PedidosData {
   total: string;
   estado: string;
   direccion: string;
-  Colorfila:string;
+  Colorfila: string;
 }
 
 
@@ -127,7 +127,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   estadopago: string;
   tipopago: string;
   nrotrans: string;
-  numeropedido:string;
+  numeropedido: string;
   preciototal: number = 0;
   preciototalcarritos: number = 0;
   totalcarritos: number = 0;
@@ -334,23 +334,23 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.totalcarritos = this.pedidosservice.pedidos.length;
         for (var j = 0; j < this.pedidosservice.pedidos.length; j++) {
           /*color */
-          var color='white';
-          if(this.pedidosservice.pedidos[j].EstadoEnvio=='Proceso'){
-            color='white';
+          var color = 'white';
+          if (this.pedidosservice.pedidos[j].EstadoEnvio == 'Proceso') {
+            color = 'white';
           }
-          if(this.pedidosservice.pedidos[j].EstadoEnvio=='Enviado'){
-            color='#F3F293';
+          if (this.pedidosservice.pedidos[j].EstadoEnvio == 'Enviado') {
+            color = '#F3F293';
           }
-          if(this.pedidosservice.pedidos[j].EstadoEnvio=='Entregado'){
-            color='#CEF6CE';
+          if (this.pedidosservice.pedidos[j].EstadoEnvio == 'Entregado') {
+            color = '#CEF6CE';
           }
-          if(this.pedidosservice.pedidos[j].EstadoEnvio=='Devolucion'){
-            color='#F6CECE';
+          if (this.pedidosservice.pedidos[j].EstadoEnvio == 'Devolucion') {
+            color = '#F6CECE';
           }
           //console.log(color);
           /*fin color */
           this.preciototalcarritos = this.preciototalcarritos + Number(this.pedidosservice.pedidos[j].PrecioTotal)
-          this.listpedidos.push({ _id: this.pedidosservice.pedidos[j]._id, Correocliente: this.pedidosservice.pedidos[j].Correocliente, entrega: this.pedidosservice.pedidos[j].EstadoEnvio, fecha: this.pedidosservice.pedidos[j].FechaCompra, pago: this.pedidosservice.pedidos[j].idTipoPago, total: this.pedidosservice.pedidos[j].PrecioTotal, estado: this.pedidosservice.pedidos[j].EstadoPago, idUsuario: this.pedidosservice.pedidos[j].idUsuario, direccion: this.pedidosservice.pedidos[j].idDireccion, Colorfila:color });
+          this.listpedidos.push({ _id: this.pedidosservice.pedidos[j]._id, Correocliente: this.pedidosservice.pedidos[j].Correocliente, entrega: this.pedidosservice.pedidos[j].EstadoEnvio, fecha: this.pedidosservice.pedidos[j].FechaCompra, pago: this.pedidosservice.pedidos[j].idTipoPago, total: this.pedidosservice.pedidos[j].PrecioTotal, estado: this.pedidosservice.pedidos[j].EstadoPago, idUsuario: this.pedidosservice.pedidos[j].idUsuario, direccion: this.pedidosservice.pedidos[j].idDireccion, Colorfila: color });
         }
         // this.dataSource = new MatTableDataSource(this.listpedidos);
         this.filtrarCarritos('1');
@@ -403,7 +403,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.tipodoc = this.listapedidouni[0].Documento[0].Tipo;
         this.seriedoc = this.listapedidouni[0].Documento[0].Serie;
         this.numerodoc = this.listapedidouni[0].Documento[0].Numero;
-        this.numeropedido=this.listapedidouni[0].NroPedido;
+        this.numeropedido = this.listapedidouni[0].NroPedido;
         //  this.listararticulos();
       });
   }//944091466
@@ -429,32 +429,48 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.direccionenvio = this.listadireccion.direccion;
       });
   }
+  anularventaMongoMysql() {
+    this.listapedidouni[0].EstadoPago = 'Devolucion';
+    this.listapedidouni[0].EstadoEnvio = 'Reembolso';
+    //actualizar moongo
+    this.pedidosservice.GuardarPagomysql(this.arreglomysql)
+      .subscribe(res => {
+        var tempo = JSON.parse(JSON.stringify(res));
+        console.log(res);
+        this.mensajemysql = tempo[0][0].Mensaje;
+        console.log(this.mensajemysql);
+        if (this.mensajemysql == 'HECHO') {
+          
+        }
+      });
+    //
+  }
   actualizarpago() {
     var id = this.listapedidouni._id;
- /*   this.DocumentoAct[0].Tipo = this.tipodoc;
-    this.DocumentoAct[0].Serie = this.seriedoc;
-    this.DocumentoAct[0].Numero = this.numerodoc;
-    this.listapedidouni.Documento = this.DocumentoAct;
-    console.log(this.DocumentoAct);*/
+    /*   this.DocumentoAct[0].Tipo = this.tipodoc;
+       this.DocumentoAct[0].Serie = this.seriedoc;
+       this.DocumentoAct[0].Numero = this.numerodoc;
+       this.listapedidouni.Documento = this.DocumentoAct;
+       console.log(this.DocumentoAct);*/
     this.listapedidouni[0].EstadoPago = this.estadopago;
     this.listapedidouni[0].EstadoEnvio = this.estadoenvio;
     this.guardarmyql();
     /*guardar mysql-mongo */
-     this.pedidosservice.GuardarPagomysql(this.arreglomysql)
-       .subscribe(res => {
-         var tempo = JSON.parse(JSON.stringify(res));
-         console.log(res);
-         this.mensajemysql = tempo[0][0].Mensaje;
-         console.log(this.mensajemysql);
-         if (this.mensajemysql == 'HECHO') {
-           this.guardarmysqldetalle();
-         }
-         else{
-           this.snackBar.open('Error!!'+ this.mensajemysql, '🧓🏻', {
-             duration: 2000,
-           });
-         }
-       });
+    this.pedidosservice.GuardarPagomysql(this.arreglomysql)
+      .subscribe(res => {
+        var tempo = JSON.parse(JSON.stringify(res));
+        console.log(res);
+        this.mensajemysql = tempo[0][0].Mensaje;
+        console.log(this.mensajemysql);
+        if (this.mensajemysql == 'HECHO') {
+          this.guardarmysqldetalle();
+        }
+        else {
+          this.snackBar.open('Error!!' + this.mensajemysql, '🧓🏻', {
+            duration: 2000,
+          });
+        }
+      });
     /*fin guardar*/
   }
   guardarmyql() {
@@ -603,12 +619,12 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     }
   }
-  
+
   /**
    * Método para visualizar la información del cargo realizado
    * @param idCargo : identificador del cargo realizado
    */
-  verCargo( idCargo: string ){
+  verCargo(idCargo: string) {
     this.dialog.open(DialogoCargoComponent, {
       width: '640px',
       data: {
@@ -621,7 +637,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
    * Método que permite anular una venta realizada, devolviendo el monto al cliente y anulando la boleta emitida
    * @param idCargo : identificador del cargo realizado
    */
-  anularVenta(idCargo: string){
+  anularVenta(idCargo: string) {
     const dialogRef = this.dialog.open(DialogoComponent, {
       width: '400px',
       data: {
@@ -631,10 +647,10 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
-        this.cargoService.devolverCargo(this.preciototal.toString(), this.nrotrans, 'solicitud_comprador').subscribe( res => {
+      if (result) {
+        this.cargoService.devolverCargo(this.preciototal.toString(), this.nrotrans, 'solicitud_comprador').subscribe(res => {
           const rspta = res as Respuesta;
-          if(rspta.status) {
+          if (rspta.status) {
             this.openSnackBar(rspta.status, rspta.msg);
             console.log(rspta.data);
           } else {
@@ -643,8 +659,8 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         });
       }
     });
+    this.anularventaMongoMysql();
   }
-
   /**
    * Método que muestra un bar temporal con un mensaje
    * @param status : indica si es un error o confirmación
