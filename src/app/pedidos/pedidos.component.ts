@@ -440,11 +440,27 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.mensajemysql = tempo[0][0].Mensaje;
         console.log(this.mensajemysql);
         if (this.mensajemysql == 'HECHO') {
-          
+          this.actualizarexistenciamysql();
+          if(this.mensajemysql=='HECHO'){
+            this.anularventmysql();
+          }
         }
       });
     //
   }
+  actualizarexistenciamysql(){
+    var pIdLocalMvto ;
+    var pIdTipoDocumento = this.tipodoc;
+    var pSerie=this.seriedoc;
+    var pNro=this.numerodoc;
+    var pIdArticulo;
+    var pSerieArticulo ;
+    var pCantidad 
+  }
+  anularventmysql(){
+
+  }
+
   actualizarpago() {
     var id = this.listapedidouni._id;
     /*   this.DocumentoAct[0].Tipo = this.tipodoc;
