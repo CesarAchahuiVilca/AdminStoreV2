@@ -147,27 +147,14 @@
                                   <mat-card-title>Características del Artículo</mat-card-title>
                                 </mat-card-header>
                                 <mat-card-content>
-                                  <div style="display: flex; flex-direction: column;"
-                                    id="contenido-datos-caracteristicas">
-                                    <div class="item-caracteristicas"
-                                      style="display: flex; flex-direction: row; flex-grow: 0;margin-top: 3px;"
-                                      *ngFor="let caracteristica of listacaracteristicasarticulo ">
-                                      <div style="flex-grow: 0; width: 20%;">
-                                        <input
-                                          style="border-color: rgba(255, 255, 255, 0); background: rgb(255, 255, 255); height: 35px; color: black; font-weight: bold;"
-                                          value="{{caracteristica.nombre}}" readonly>
-                                      </div>
-                                      <div style="flex-grow: 0; width: 75%;">
-                                        <input type="text" class="form-control"
-                                          style="border-color: rgb(167, 167, 167);"
-                                          placeholder="Ingrese valor de la característica"
-                                          value="{{caracteristica.valor}}">
-                                      </div>
-                                    </div>
+                                  <div style="display:flex; flex-direction: column">
+                                    
+                                    <textarea [(ngModel)]="articuloService.articuloSeleccionado.caracteristicas" [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(196, 195, 195); background: rgb(255, 255, 255); color: black; " rows="10" placeholder="Ingrese caracteristicas del articulo"></textarea>
                                   </div>
                                 </mat-card-content>
                               </mat-card>
                             </div>
+                            
                             <div class="col-lg-12">
                               <br>
                               <mat-card class="example-card">
@@ -334,6 +321,34 @@
                                 </mat-card-content>
                               </mat-card>
                             </div>
+                            <div class="col-lg-12">
+                                <br>
+                                <mat-card class="example-card">
+                                  <mat-card-header>
+                                    <mat-card-title>Informacion de Garantia del Artículo</mat-card-title>
+                                  </mat-card-header>
+                                  <mat-card-content>
+                                    <div style="display:flex; flex-direction: column">
+                                      
+                                      <textarea [(ngModel)]="articuloService.articuloSeleccionado.garantias" [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(196, 195, 195); background: rgb(255, 255, 255); color: black; " rows="10" placeholder="Ingrese caracteristicas del articulo"></textarea>
+                                    </div>
+                                  </mat-card-content>
+                                </mat-card>
+                              </div>
+                              <div class="col-lg-12">
+                                  <br>
+                                  <mat-card class="example-card">
+                                    <mat-card-header>
+                                      <mat-card-title>Descripcion SEO</mat-card-title>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                      <div style="display:flex; flex-direction: column">
+                                        
+                                        <textarea [(ngModel)]="articuloService.articuloSeleccionado.seodescripcion" [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(196, 195, 195); background: rgb(255, 255, 255); color: black; " rows="10" placeholder="Ingrese caracteristicas del articulo"></textarea>
+                                      </div>
+                                    </mat-card-content>
+                                  </mat-card>
+                                </div>
                             <div class="col-lg-12">
                               <br>
                               <mat-card class="example-card">

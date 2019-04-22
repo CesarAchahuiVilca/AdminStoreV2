@@ -416,11 +416,11 @@ export class ArticuloComponent implements OnInit {
         this.openSnackBar(false, e);
       }
       this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
-      this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
+      //this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
       this.obtenerEquiposArticulo();
-      if (this.listacaracteristicasarticulo.length == 0) {
+      /*if (this.listacaracteristicasarticulo.length == 0) {
         this.getCaracteristicas();
-      }
+      }*/
       this.buscarPlanesEquipo();
       this.vista = "2";
       this.mostrarListaArticulos = false;
@@ -512,7 +512,7 @@ export class ArticuloComponent implements OnInit {
   /**
    * Método que obtiene las características de una categoría para el artículo
    */
-  getCaracteristicas() {
+  /*getCaracteristicas() {
     this.listacaracteristicasarticulo = new Array();
     for (var i = 0; i < this.listacategorias.length; i++) {
       if (this.articuloService.articuloSeleccionado.categoria == this.listacategorias[i]._id) {
@@ -522,7 +522,7 @@ export class ArticuloComponent implements OnInit {
     for (var i = 0; i < this.listacaracteristicas.length; i++) {
       this.listacaracteristicasarticulo.push(new CaracteristicaItem(this.listacaracteristicas[i].nombre, ""));
     }
-  }
+  }*/
 
   /**
    * Método que obtiene las categorias disponibles
@@ -556,24 +556,7 @@ export class ArticuloComponent implements OnInit {
    * Método para guardar la información de un artículo
    */
   guardarDatos() {
-    //Obtener datos generales del articulo
-    this.articuloService.articuloSeleccionado.especificaciones = new Array();
-    var datosgenerales = document.getElementById("contenido-datos-generales");
-    var datos = datosgenerales.getElementsByTagName("input");
-    for (var i = 0; i < datos.length; i++) {
-      var dato = datos[i] as HTMLInputElement;
-      if (dato.value != "") {
-        this.articuloService.articuloSeleccionado.especificaciones.push(dato.value);
-      }
-    }
-    //Obtener datos caracteristicas   
-    this.articuloService.articuloSeleccionado.caracteristicas = new Array();
-    var datoscaracteristicas = document.getElementById("contenido-datos-caracteristicas");
-    var caracteristicas = datoscaracteristicas.getElementsByClassName("item-caracteristicas");
-    for (var i = 0; i < caracteristicas.length; i++) {
-      var c = new CaracteristicaItem(caracteristicas[i].getElementsByTagName("input")[0].value, caracteristicas[i].getElementsByTagName("input")[1].value);
-      this.articuloService.articuloSeleccionado.caracteristicas.push(c);
-    }
+        
     //Asignar imagenes
     this.articuloService.articuloSeleccionado.imagenes = this.imagenesSeleccionadas;
     this.articuloService.articuloSeleccionado.descripcion = this.contenidoEditor;
@@ -622,7 +605,7 @@ export class ArticuloComponent implements OnInit {
     this.listacaracteristicas = new Array();
     this.itemsDatosGenerales = new Array();
     this.contenidoEditor = "<p></p>";
-    this.listacaracteristicasarticulo = new Array();
+   // this.listacaracteristicasarticulo = new Array();
   }
 
   /**

@@ -3,7 +3,7 @@ import { Equipo }  from './equipo';
 
 export class Articulo {
 
-    constructor( _id=null,idarticulo = '', titulo = '',url='', categoria = '',marca='',cantidad=0, idprecio = '', caracteristicas= [], imagenes=[], descripcion='', garantias=[], equipos=[], palabrasclaves='') {
+    constructor( _id=null,idarticulo = '', titulo = '',url='', categoria = '',marca='',cantidad=0, idprecio = '', caracteristicas= '', imagenes=[], descripcion='', garantias='', equipos=[], palabrasclaves='', seo='') {
         this.idarticulo = idarticulo;
         this.titulo = titulo;
         this.url = url;
@@ -17,6 +17,7 @@ export class Articulo {
         this.equipos = equipos;
         this.palabrasclaves = palabrasclaves;
         this.descuento = 0;
+        this.seodescripcion = seo;
     }
   
     _id: string;
@@ -28,11 +29,12 @@ export class Articulo {
     cantidad: Number;
     idprecio:String;
     especificaciones: string[];
-    caracteristicas:CaracteristicaItem[];
+    caracteristicas:string;
     imagenes: string[];
     descripcion: string;
-    garantias: string[];
+    garantias: string;
     equipos: Equipo[];
     palabrasclaves: string;
     descuento: Number;
+    seodescripcion: string;
   }
