@@ -24,6 +24,10 @@ export class CategoriaService {
     return this.http.get(Constantes.URL_API_CATEGORIA+'/subcategorias/'+id, {withCredentials: true})
   }
 
+  getCategoriasHijos() {
+    return this.http.get(Constantes.URL_API_CATEGORIA+ '/subs', {withCredentials: true});
+  }
+
   postCategoria(Categoria: Categoria){
     return this.http.post(Constantes.URL_API_CATEGORIA,Categoria, {withCredentials: true});
   }

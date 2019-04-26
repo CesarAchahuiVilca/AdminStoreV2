@@ -562,7 +562,7 @@ export class ArticuloComponent implements OnInit {
    * Método que obtiene las categorias disponibles
    */
   getCategorias() {
-    this.categoriaService.getCategorias().subscribe(res => {
+    this.categoriaService.getCategoriasHijos().subscribe(res => {
       this.listacategorias = res as Categoria[];
     });
   }
