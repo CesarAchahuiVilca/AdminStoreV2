@@ -6,6 +6,8 @@ export class Equipo{
         this.color = color;
         this.detalle = detalle;
         this.imagen = imagen;
+        this.preciocompra = 0;
+        this.precioventa = 0;
     }
     idequipo: string;
     descripcion: string;
@@ -14,4 +16,6 @@ export class Equipo{
     detalle: string;
     imagen: string;
     codigocolor: string;
+    preciocompra:Number;
+    precioventa:Number;
 }

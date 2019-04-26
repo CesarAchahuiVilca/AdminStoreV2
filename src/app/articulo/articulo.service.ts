@@ -36,8 +36,8 @@ export class ArticuloService {
     return this.http.get(Constantes.URL_API_PLANES +'/planesequipo/'+nombreequipo +'/'+linea+'/'+tipoplan+'/'+cuotas, {withCredentials: true});
   }
 
-  getEquiposArticulo(){
-    return this.http.get(Constantes.URL_API_ARTICULO+"/equipos/"+this.articuloSeleccionado.idarticulo,{withCredentials:true});
+  getEquiposArticulo(opcion){
+    return this.http.get(Constantes.URL_API_ARTICULO+"/equipos/"+this.articuloSeleccionado.idarticulo+"/"+opcion,{withCredentials:true});
   }
 
   postArticulo(articulo: Articulo){

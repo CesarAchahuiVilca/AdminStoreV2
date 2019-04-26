@@ -147,9 +147,16 @@
                                   <mat-card-title>Características del Artículo</mat-card-title>
                                 </mat-card-header>
                                 <mat-card-content>
-                                  <div style="display:flex; flex-direction: column">
-                                    
-                                    <textarea [(ngModel)]="articuloService.articuloSeleccionado.caracteristicas" [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(196, 195, 195); background: rgb(255, 255, 255); color: black; " rows="10" placeholder="Ingrese caracteristicas del articulo"></textarea>
+
+                                  <br>
+                                  <div
+                                    style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;"
+                                    id="contenido-datos-detalle">
+                                    <div style="width: 100%;" class="row">
+                                      <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditorCaracteristicas"
+                                        (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}">
+                                      </quill-editor>
+                                    </div>
                                   </div>
                                 </mat-card-content>
                               </mat-card>
@@ -162,6 +169,10 @@
                                   <mat-card-title>Equipos </mat-card-title>
                                 </mat-card-header>
                                 <mat-divider></mat-divider>
+                                <br>
+                                <button mat-raised-button color="primary" (click)="actualizarPreciosEquipos()"><i class="material-icons">
+                                  update
+                                  </i>Actualizar Precios</button>
                                 <mat-card-content>
                                   <div class="datatable-example" style="width: 100%;">
                                     <mat-form-field>
@@ -209,6 +220,18 @@
                                           <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.detalle}}
                                           </td>
                                         </ng-container>
+                                        <ng-container matColumnDef="PrecioCompra">
+                                          <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Precio Compra </th>
+                                          <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.preciocompra}}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="PrecioVenta">
+                                          <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Precio Venta </th>
+                                          <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.precioventa}}
+                                          </td>
+                                        </ng-container>
                                         <ng-container matColumnDef="Editar">
                                           <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
                                           </th>
@@ -233,12 +256,13 @@
                               <br>
                               <mat-card class="example-card">
                                 <mat-card-header>
-                                  <mat-card-title>Precios del Artículo</mat-card-title>
+                                  <mat-card-title>Descuento</mat-card-title>
                                 </mat-card-header>
                                 <mat-card-content>
                                   <div style="display: flex; flex-direction: row; flex-wrap: wrap;"
                                     id="contenido-datos-generales">
-                                    <div style="width: 100%; ">
+                                    <!--
+                                      <div style="width: 100%; ">
                                       <label style="font-weight: bold;">Seleccione el nombre del equipo </label>
                                     </div>
                                     <div style="width: 70%;margin: 5px">
@@ -249,12 +273,10 @@
                                           <a>{{equipo.nombreequipo}}</a></option>
                                       </select>
                                     </div>
+                                    -->
                                   </div>
                                   <div style="width: 100%; display: flex; flex-direction: column;">
                                     <br>
-                                    <div style="display:flex; flex-direction: row">
-                                      <h5>Precio del Articulo: <strong>S/ {{planSeleccionado.precio}}</strong></h5>
-                                    </div>
                                     <div style="display:flex; flex-direction: row;  align-items: center;">
                                       <h5>Descuento (en %) : </h5>
                                       <input class="form-control" type="number" style="width: 30%; margin-left: 10px;"
@@ -328,10 +350,15 @@
                                     <mat-card-title>Informacion de Garantia del Artículo</mat-card-title>
                                   </mat-card-header>
                                   <mat-card-content>
-                                    <div style="display:flex; flex-direction: column">
-                                      
-                                      <textarea [(ngModel)]="articuloService.articuloSeleccionado.garantias" [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(196, 195, 195); background: rgb(255, 255, 255); color: black; " rows="10" placeholder="Ingrese caracteristicas del articulo"></textarea>
+                                    <div
+                                    style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;"
+                                    id="contenido-datos-detalle">
+                                    <div style="width: 100%;" class="row">
+                                      <quill-editor [modules]="quillConfig" [(ngModel)]="contenidoEditorGarantias"
+                                        (onEditorCreated)="created($event)" [ngModelOptions]="{standalone: true}">
+                                      </quill-editor>
                                     </div>
+                                  </div>
                                   </mat-card-content>
                                 </mat-card>
                               </div>
@@ -344,7 +371,7 @@
                                     <mat-card-content>
                                       <div style="display:flex; flex-direction: column">
                                         
-                                        <textarea [(ngModel)]="articuloService.articuloSeleccionado.seodescripcion" [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(196, 195, 195); background: rgb(255, 255, 255); color: black; " rows="10" placeholder="Ingrese caracteristicas del articulo"></textarea>
+                                        <textarea [(ngModel)]="articuloService.articuloSeleccionado.seodescripcion" [ngModelOptions]="{standalone: true}" style="border: 1px solid rgb(196, 195, 195); background: rgb(255, 255, 255); color: black; " rows="3" placeholder="Ingrese caracteristicas del articulo"></textarea>
                                       </div>
                                     </mat-card-content>
                                   </mat-card>
@@ -557,8 +584,20 @@
                 <div style="display: flex; flex-direction: row; width: 100%;">
                   <div style="width: 100%; margin: 5px;">
                     <mat-form-field class="example-full-width">
-                      <textarea matInput placeholder="Informacion adicinal del equipo" rows="7"
+                      <textarea matInput placeholder="Informacion adicinal del equipo" rows="4"
                         [(ngModel)]="detallesEquipo"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                  <div style="width: 50%; margin: 5px; display: flex; flex-direction: column;">
+                    <label for="">Precio Sugerido</label>
+                    <h6 style="font-weight: 5px;">  S/ {{preciosugerido}}</h6>
+                  </div>
+                  <div style="width: 50%; margin: 5px;">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Precio Venta" rows="7"
+                        [(ngModel)]="precioventa">
                     </mat-form-field>
                   </div>
                 </div>

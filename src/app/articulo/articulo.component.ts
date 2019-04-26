@@ -58,6 +58,8 @@ export class ArticuloComponent implements OnInit {
   listaimagenes           : string[];
   //contenido del editor
   contenidoEditor         : string = "<p></p>";
+  contenidoEditorCaracteristicas         : string = "<p></p>";
+  contenidoEditorGarantias : string="<p></p>";
   // lista de imagenes seleccionadas
   imagenesSeleccionadas   : string[] = new Array();
    // nombre imagen para el editor
@@ -107,7 +109,7 @@ export class ArticuloComponent implements OnInit {
   dataSource: MatTableDataSource<ArticuloMysql>;
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
-  displayedColumnsEquipos: string[] = ['Imagen','idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','Editar'];
+  displayedColumnsEquipos: string[] = ['Imagen','idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','PrecioCompra','PrecioVenta','Editar'];
   dataSourceEquipos: MatTableDataSource<Equipo>;
   indiceEquipo = 0;
   nombreColor = "";
@@ -377,7 +379,7 @@ export class ArticuloComponent implements OnInit {
       this.articuloService.articuloSeleccionado.titulo = articulo.Descripcion;
       this.articuloService.articuloSeleccionado.descuento = 0;
       this.buscarPreciosEquipo();
-      this.obtenerEquiposArticulo();
+      this.obtenerEquiposArticulo("NO");
       this.generarURL();
     } else {
       this.vista = "1";
@@ -416,8 +418,10 @@ export class ArticuloComponent implements OnInit {
         this.openSnackBar(false, e);
       }
       this.contenidoEditor = this.articuloService.articuloSeleccionado.descripcion;
+      this.contenidoEditorCaracteristicas = this.articuloService.articuloSeleccionado.caracteristicas;
+      this.contenidoEditorGarantias= this.articuloService.articuloSeleccionado.garantias;
       //this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
-      this.obtenerEquiposArticulo();
+      this.obtenerEquiposArticulo("NO");
       /*if (this.listacaracteristicasarticulo.length == 0) {
         this.getCaracteristicas();
       }*/
@@ -434,6 +438,9 @@ export class ArticuloComponent implements OnInit {
    * Método para editar las características de un equipo de un artículo
    * @param i : indice del equipo en la lista de equipos del artículo
    */
+
+   precioventa : any;
+   preciosugerido: any = 0;;
   editarEquipo(i) {
     this.indiceEquipo = i;
     this.imagenEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
@@ -441,9 +448,16 @@ export class ArticuloComponent implements OnInit {
     this.nombreColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color;
     this.codigoColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor;
     this.detallesEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle;
+    this.precioventa = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioventa;
+    if(this.preciosugerido == 0){
+    this.preciosugerido = this.precioventa;
+    }
     var imagen = document.getElementById("imagen-select") as HTMLImageElement;
     imagen.src = this.URL_IMAGES + "/md/" + this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
     this.mostrarImagen = true;
+  }
+  actualizarPreciosEquipos(){
+    this.obtenerEquiposArticulo("UPDATE");
   }
 
   /**
@@ -560,6 +574,8 @@ export class ArticuloComponent implements OnInit {
     //Asignar imagenes
     this.articuloService.articuloSeleccionado.imagenes = this.imagenesSeleccionadas;
     this.articuloService.articuloSeleccionado.descripcion = this.contenidoEditor;
+    this.articuloService.articuloSeleccionado.caracteristicas = this.contenidoEditorCaracteristicas;
+    this.articuloService.articuloSeleccionado.garantias = this.contenidoEditorGarantias;
     //guardar datos
     if (this.articuloService.articuloSeleccionado._id) {
       this.articuloService.putArticulo(this.articuloService.articuloSeleccionado).subscribe(res => {
@@ -593,6 +609,7 @@ export class ArticuloComponent implements OnInit {
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color = this.nombreColor;
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle = this.detallesEquipo;
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor = this.codigoColor;
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioventa = this.precioventa;
     this.imagenEquipo = ""
   }
 
@@ -626,10 +643,11 @@ export class ArticuloComponent implements OnInit {
   /**
    * 
    */
-  obtenerEquiposArticulo() {
+  obtenerEquiposArticulo(opcion) {
     this.articuloService.articuloSeleccionado.equipos = new Array();
     this.articuloService.articuloSeleccionado.equipos.push(new Equipo("", "", 0, "", "", ""));
-    this.articuloService.getEquiposArticulo().subscribe(res => {
+    this.articuloService.getEquiposArticulo(opcion).subscribe(res => {
+      console.log(res);
       this.articuloService.articuloSeleccionado.equipos = res as Equipo[];
       this.dataSourceEquipos = new MatTableDataSource(res as Equipo[]);
       this.dataSourceEquipos.paginator = this.paginator.toArray()[1];
