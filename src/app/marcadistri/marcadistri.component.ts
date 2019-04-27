@@ -1,15 +1,16 @@
 import { Constantes } from './../constantes';
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import { MatSnackBar} from '@angular/material';
 import { Subject } from 'rxjs';
 import { MarcaMysql } from './marca-mysql';
 import { MarcaService } from './marca.service';
-import {HttpClient, HttpEventType} from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Marca } from './marca';
 import { DataTableDirective } from 'angular-datatables';
-import { Form, NgForm } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Miga } from '../miga';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 
 @Component({
   selector: 'app-marcadistri',
@@ -30,11 +31,9 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   dtOptions: DataTables.Settings = {};
   dtTriggers: Subject<any> = new Subject();
   flag: boolean = true;
-  migas: Miga[] = [];
+  migas: Miga[] = [ new Miga('Marcas', 'marcadistri')];
   //fin
-  constructor(public http: HttpClient,public marcaService:MarcaService) {
-    this.migas.push( new Miga('Marcas', 'marcadistri'));
-   }
+  constructor(public http: HttpClient,public marcaService:MarcaService, public snackBar: MatSnackBar) {}
 
   ngOnInit() {
     var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
@@ -92,16 +91,12 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   listarmarcas(){
     document.getElementById("carga").hidden = false;
     document.getElementById("listarmarcas").hidden=true;
-    this.marcaService.listarmarcamysql()
-    .subscribe(res =>{
-      this.marcaService.marcaMysql=res as MarcaMysql[];
-      console.log(res);
-
+    this.marcaService.listarmarcamysql().subscribe(res =>{
+      this.marcaService.marcaMysql = res as MarcaMysql[];
       if(this.marcaService.marcaMysql.length == 0){
-        console.log("No se encontraron datos");
+        this.openSnackBar(false, 'No se encontraron datos, inténtelo nuevamente');
       }else{
-
-        console.log("Exito..");
+        this.openSnackBar(true, 'Los datos se obtuvieron con éxito.');
         document.getElementById("listarmarcas").hidden=false;
       }
       this.rerender();
@@ -110,19 +105,17 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   }
 
   guardartemdatos(marcamysql:MarcaMysql){
-    document.getElementById("titulomodal").innerHTML = "Completar Registro para la Marca : "+marcamysql.NombreMarca;
+    document.getElementById("titulomodal").innerHTML = "Completar Registro para la Marca : " + marcamysql.NombreMarca;
     this.idm=marcamysql.idMarcaProducto;
     this.nombrem=marcamysql.NombreMarca;
-    /*document.getElementById("idmarca").innerHTML=marcamysql.idMarcaProducto.toString();
-    document.getElementById("nombremarca").innerHTML=marcamysql.NombreMarca.toString();*/
   }
+
   //imagen
   onFileSelected(event){
     var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
     var file = document.getElementById("archivo") as HTMLInputElement;
     inputfile.innerHTML = file.value;
     this.selectedFile  = <File> event.target.files[0];
-    console.log(event);
   }
 
   onUpload(evento){
@@ -135,25 +128,20 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     this.http.post(Constantes.URL_API_IMAGEN+'/subir',fd,{
       reportProgress: true,
       observe: 'events'
-    })
-    .subscribe(event=>{
+    }).subscribe(event=>{
         if(event.type === HttpEventType.UploadProgress){
-          console.log("Subiendo "+ Math.round(event.loaded/event.total*100)+" %");
           progreso.style.width = Math.round(event.loaded/event.total*100)+"%";
           progreso.innerHTML = "Subiendo "+ Math.round(event.loaded/event.total*100)+" %";
           inputfile.style.display="none";
           if(Math.round(event.loaded/event.total*100) == 100){
-            console.log("termino subir la imagen");
-            console.log("Comprimiendo imagen");
+            this.openSnackBar(true, 'La imagen se subió con éxito');
             progreso.innerHTML = "Comprimiendo Imagen....";
             inputfile.innerHTML = "";
-          }
-        
+          } 
         }else{
           if(event.type === HttpEventType.Response){
-            console.log(event.body);
             var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src =Constantes.URL_IMAGENES+"/md/"+this.selectedFile.name+".webp";
+            imagen.src = Constantes.URL_IMAGENES+"/md/"+this.selectedFile.name+".webp";
             progreso.style.backgroundColor = "green";
             progreso.innerHTML = "Completado.";   
             this.marcaService.marcaselect.imagen=this.selectedFile.name+".webp";                 
@@ -162,18 +150,17 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       }
     );
   }
+
+
   limpiarform(form?: NgForm){    
     if(form){   
       this.marcaService.marcaselect=new Marca();   
-     // form.reset();      
-     // document.getElementById("titulomodal").innerHTML='<i class="fa fa-plus"></i> Agregar Marca';
       var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
       imagen.src ="//placehold.it/600x300?text=Ninguna Imagen Seleccionada";
-      var progreso = document.getElementById("progreso") as HTMLDivElement;
-     // progreso.innerHTML = "";
-     // progreso.style.width = "0%";        
+      var progreso = document.getElementById("progreso") as HTMLDivElement;     
     }
   }
+
   clearProgress(){
     var progreso = document.getElementById("progreso") as HTMLDivElement;
     progreso.style.width="0%";
@@ -184,6 +171,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     var archivoinput = document.getElementById("archivo") as HTMLInputElement;
     archivoinput.click();
   }
+
   mostrarmensaje(mensaje: string, estado: string){
     if(estado == "0"){
       var labelmensaje =  document.getElementById("resultadoerror") as HTMLLabelElement;
@@ -195,6 +183,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       document.getElementById("btnmensajeexito").click();
     }
   }
+
   //fin imagen
   getCategorias(){
     this.marcaService.listarmarcamysql()
@@ -202,16 +191,16 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
       this.todasMarcas = res as Marca[];     
     });
   }
+
   guardarmarca(){
    var btncerrarmodal = document.getElementById("btnCerrarModal");
-   
     this.marcaService.postMarca(this.marcaService.marcaselect)
     .subscribe(res => {
       var respuesta = JSON.parse(JSON.stringify(res));
+      this.openSnackBar(true, 'Todo esta correcto');
       //this.limpiarform(form);
-          //btncerrarmodal.click();
+      btncerrarmodal.click();
          // this.getCategorias();
-          console.log("TODO ESTA CORRECTO");
           //this.mostrarmensaje(respuesta.mensaje, respuesta.estado);
     });
   }
@@ -220,24 +209,35 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
     document.getElementById('marcageneral').hidden=true;
     this.marcaService.getMarcaMongo(marca.idMarca).subscribe(res=>{
       this.marcaService.marcaselect = res as Marca;
-      console.log(res);
       var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
             imagen.src =Constantes.URL_IMAGENES+"/md/"+this.marcaService.marcaselect.imagen;
     })
   }
-
   
   cambiarvista(marca){
-    console.log(marca);
     document.getElementById('marca-detalle').hidden=false;
     document.getElementById('marcageneral').hidden=true;
     this.marcaService.marcaselect.idMarca=marca.idMarcaProducto;
     this.marcaService.marcaselect.nombremarca=marca.NombreMarca;
   }
+
   regresar(){
     document.getElementById('marca-detalle').hidden=true;
     document.getElementById('marcageneral').hidden=false;
     this.marcaService.marcaselect = new Marca();
+  }
+
+   /**
+   * Método que muestra un Bar temporal para confirmar los mensajes de éxito y de error
+   * @param status : Determina si es un mensaje de confirmación o error
+   * @param mensaje : mensaje a enviar
+   */
+  openSnackBar(status: boolean, mensaje: string): void {
+    this.snackBar.openFromComponent(SnackBarComponent, {
+      duration: 3000,
+      panelClass: [status ? 'exito' : 'error'],
+      data: mensaje
+    });
   }
 }
 
