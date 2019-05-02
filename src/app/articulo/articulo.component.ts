@@ -469,9 +469,9 @@ export class ArticuloComponent implements OnInit {
     this.codigoColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor;
     this.detallesEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle;
     this.precioventa = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioventa;
-    if(this.preciosugerido == 0){
-    this.preciosugerido = this.precioventa;
-    }
+    
+    this.preciosugerido = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioreferencial;
+    
     var imagen = document.getElementById("imagen-select") as HTMLImageElement;
     imagen.src = this.URL_IMAGES + "/md/" + this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
     this.mostrarImagen = true;

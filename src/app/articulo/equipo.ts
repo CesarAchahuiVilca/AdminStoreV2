@@ -8,6 +8,7 @@ export class Equipo{
         this.imagen = imagen;
         this.preciocompra = 0;
         this.precioventa = 0;
+        this.precioreferencial = 0;
     }
     idequipo: string;
     descripcion: string;
@@ -18,4 +19,5 @@ export class Equipo{
     codigocolor: string;
     preciocompra:Number;
     precioventa:Number;
+    precioreferencial: Number;
 }
