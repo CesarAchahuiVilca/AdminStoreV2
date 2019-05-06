@@ -129,7 +129,7 @@ export class ArticuloComponent implements OnInit {
   dataSource: MatTableDataSource<ArticuloMysql>;
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
-  displayedColumnsEquipos: string[] = ['Imagen','idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','PrecioCompra','PrecioVenta','Editar'];
+  displayedColumnsEquipos: string[] = ['Imagen','idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','PrecioCompra','PrecioVenta','PrecioDescuento','Editar'];
   dataSourceEquipos: MatTableDataSource<Equipo>;
   indiceEquipo = 0;
   nombreColor = "";
@@ -349,16 +349,16 @@ export class ArticuloComponent implements OnInit {
   /**
    * Método que obtiene los planes de cada equipo
    */
-  buscarPlanesEquipo() {
+  /*buscarPlanesEquipo() {
     this.planesService.getPlanesEquipo(this.articuloService.articuloSeleccionado.idprecio).subscribe(res => {
       this.planSeleccionado = res[0];
     });
-  }
+  }*/
 
   /**
    * Método que busca el precio que sea el más parecido al nombre del artículo
    */
-  buscarPreciosEquipo() {
+  /*buscarPreciosEquipo() {
     var cont = 0;
     var cont_ante = 0;
     var mejor_nombre = "";
@@ -379,7 +379,7 @@ export class ArticuloComponent implements OnInit {
       }
     }
     this.articuloService.articuloSeleccionado.idprecio = mejor_nombre;
-  }
+  }*/
 
   /**
    * Método que cambia la vista de lista a detalle de un artículo
@@ -398,7 +398,7 @@ export class ArticuloComponent implements OnInit {
       this.articuloService.articuloSeleccionadoMysql = articulo;
       this.articuloService.articuloSeleccionado.titulo = articulo.Descripcion;
       this.articuloService.articuloSeleccionado.descuento = 0;
-      this.buscarPreciosEquipo();
+      //this.buscarPreciosEquipo();
       this.obtenerEquiposArticulo("NO");
       this.generarURL();
     } else {
@@ -445,7 +445,7 @@ export class ArticuloComponent implements OnInit {
       /*if (this.listacaracteristicasarticulo.length == 0) {
         this.getCaracteristicas();
       }*/
-      this.buscarPlanesEquipo();
+      //this.buscarPlanesEquipo();
       this.vista = "2";
       this.mostrarListaArticulos = false;
       this.mostrarFormularioArticulo = true;
@@ -460,7 +460,7 @@ export class ArticuloComponent implements OnInit {
    */
 
    precioventa : any;
-   preciosugerido: any = 0;;
+   preciosugerido: Number = 0;;
   editarEquipo(i) {
     this.indiceEquipo = i;
     this.imagenEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
