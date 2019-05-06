@@ -42,6 +42,7 @@ export class HomeComponent implements OnInit {
   listaimagenesfiltro : string[];
   listaPreciosFiltro: any[]   = new Array();
   selectedFile      : File                  = null;
+  URL_IMAGES = Constantes.URL_IMAGENES;
 
   constructor( public http: HttpClient, public dialog: MatDialog, public articuloService: ArticuloService, public snackBar: MatSnackBar) { }
   

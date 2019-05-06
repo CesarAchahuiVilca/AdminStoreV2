@@ -37,6 +37,7 @@ import { SelectImagenComponent } from './home/select-imagen/select-imagen.compon
 import { SeguimientoComponent } from './seguimiento/seguimiento.component';
 import { CargoComponent } from './cargo/cargo.component';
 import { DialogoCargoComponent } from './cargo/dialogo-cargo/dialogo-cargo.component';
+import { ArchivosComponent } from './archivos/archivos.component';
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -55,7 +56,8 @@ const routes: Route[] = [
   {path: 'usuarios', component: UsuarioComponent},
   {path: 'imagenes-inicio', component: HomeComponent},
   {path: 'seguimiento', component:SeguimientoComponent},
-  {path: 'cargos', component: CargoComponent}
+  {path: 'cargos', component: CargoComponent},
+  {path: 'archivos', component: ArchivosComponent}
 ];
 
 @NgModule({
@@ -87,7 +89,8 @@ const routes: Route[] = [
     SelectImagenComponent,
     SeguimientoComponent,
     CargoComponent,
-    DialogoCargoComponent
+    DialogoCargoComponent,
+    ArchivosComponent
   ],
   imports: [
     BrowserModule,
