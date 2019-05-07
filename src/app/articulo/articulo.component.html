@@ -114,7 +114,7 @@
                                 <h5>Categoria</h5>
                                 <select class="form-control" id="categoria" #categoria="ngModel"
                                   [(ngModel)]="articuloService.articuloSeleccionado.categoria" name="categoria"
-                                  style="border-color: rgb(167, 167, 167);" (change)="getCaracteristicas()">
+                                  style="border-color: rgb(167, 167, 167);" >
                                   <option *ngFor="let cat of listacategorias" value="{{cat._id}}"> {{cat.nombre}}
                                   </option>
                                 </select>

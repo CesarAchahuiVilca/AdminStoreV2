@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { SeguimientoService } from './seguimiento.service';
 import { Pedidos } from '../pedidos/pedidos';
 import { PedidosService } from '../pedidos/pedidos.service';
+import { Miga } from '../miga';
 
 @Component({
   selector: 'app-seguimiento',
@@ -15,6 +16,7 @@ export class SeguimientoComponent implements OnInit {
   arreglopedidos: any;
   arregloarti:any;
   estadoenv: string = '';
+  public migas = [ new Miga('Seguimiento','/home')];
 
   constructor(public seguimientoservice: SeguimientoService, public pedidosservice: PedidosService) { }
 
