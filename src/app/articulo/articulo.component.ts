@@ -191,6 +191,7 @@ export class ArticuloComponent implements OnInit {
    * Método para agregar una imagen en el editor
    */
   agregarImagenEditor() {
+    console.log(this.imageneditorseleccionada);
     const range = this.editorInstance.getSelection();
     this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES + "/lg/" + this.imageneditorseleccionada);
   }
