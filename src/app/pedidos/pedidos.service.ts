@@ -1,3 +1,4 @@
+import { Articulo } from './../articulo/articulo';
 import { Injectable } from '@angular/core';
 import { Pedidos } from './pedidos';
 import { Constantes } from '../constantes';
@@ -6,6 +7,13 @@ import { HttpClient } from '@angular/common/http'
 @Injectable({
   providedIn: 'root'
 })
+
+export interface articulArr{
+  id:string,
+  seriearti:string,
+  cantidad:string,
+}
+
 export class PedidosService {
   pedidoselec: Pedidos = new Pedidos();
   pedidos: Pedidos[];
@@ -20,6 +28,9 @@ export class PedidosService {
   }
   actualizarpedido2(pedido: Pedidos) {
     return this.http.put(Constantes.URL_API_PAGO + "/actu2" + `/${pedido._id}`, pedido);
+  }
+  actualizarcantidad(artiarr:articulArr) {
+    return this.http.put(Constantes.URL_API_PAGO + '/cantidad'+ `/${artiarr.id}`, artiarr);
   }
   eliminarpedido(_id: string) {
     return this.http.delete(Constantes.URL_API_PAGO + `/${_id}`);

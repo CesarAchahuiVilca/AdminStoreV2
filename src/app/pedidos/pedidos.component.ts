@@ -564,6 +564,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
               this.pedidosservice.actualizarpedido(this.listapedidouni)
                 .subscribe(res => {
                   console.log(res);
+                //  this.actualiazrcantidadArti(idart,)
                   this.snackBar.open('Pago Guardado', '🧓🏻', {
                     duration: 2000,
                   });
@@ -579,7 +580,17 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
   }
-
+  actualiazrcantidadArti(idart:string,serie:string,cantidad:string) {
+    var articuloarr = {
+      id: idart,
+      seriearti: serie,
+      cantidad: cantidad,
+    }
+    this.pedidosservice.actualizarcantidad(articuloarr)
+    .subscribe(res=>{
+      console.log(res);
+    })
+  }
   filtrarCarritos(id: string) {
     if (id == '1') {
       this.applyFilter('');
