@@ -441,23 +441,23 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         console.log(this.mensajemysql);
         if (this.mensajemysql == 'HECHO') {
           this.actualizarexistenciamysql();
-          if(this.mensajemysql=='HECHO'){
+          if (this.mensajemysql == 'HECHO') {
             this.anularventmysql();
           }
         }
       });
     //
   }
-  actualizarexistenciamysql(){
-    var pIdLocalMvto ;
+  actualizarexistenciamysql() {
+    var pIdLocalMvto;
     var pIdTipoDocumento = this.tipodoc;
-    var pSerie=this.seriedoc;
-    var pNro=this.numerodoc;
+    var pSerie = this.seriedoc;
+    var pNro = this.numerodoc;
     var pIdArticulo;
-    var pSerieArticulo ;
-    var pCantidad 
+    var pSerieArticulo;
+    var pCantidad
   }
-  anularventmysql(){
+  anularventmysql() {
 
   }
 
