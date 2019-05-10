@@ -4,15 +4,16 @@ import { Pedidos } from './pedidos';
 import { Constantes } from '../constantes';
 import { HttpClient } from '@angular/common/http'
 
-@Injectable({
-  providedIn: 'root'
-})
-
 export interface articulArr{
   id:string,
   seriearti:string,
   cantidad:string,
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+
 
 export class PedidosService {
   pedidoselec: Pedidos = new Pedidos();
