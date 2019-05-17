@@ -346,7 +346,7 @@ export class HomeComponent implements OnInit {
    */
   seleccionarImagen(cartel: Cartel){
     const dialogRef = this.dialog.open(SelectImagenComponent, {
-      width: '600px',
+      width: '800px',
       panelClass: 'dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
