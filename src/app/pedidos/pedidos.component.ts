@@ -448,17 +448,20 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       });
     //
   }
+  anularventamongo(){
+
+  }
   actualizarexistenciamysql() {
-    var pIdLocalMvto;
+    var pIdLocalMvto='611';
     var pIdTipoDocumento = this.tipodoc;
     var pSerie = this.seriedoc;
     var pNro = this.numerodoc;
     var pIdArticulo;
     var pSerieArticulo;
-    var pCantidad
+    var pCantidad;
+
   }
   anularventmysql() {
-
   }
 
   actualizarpago() {
@@ -687,6 +690,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     });
     this.anularventaMongoMysql();
+    this.anularventamongo();
   }
   /**
    * Método que muestra un bar temporal con un mensaje
