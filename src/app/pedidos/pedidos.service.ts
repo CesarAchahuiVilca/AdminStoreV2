@@ -9,6 +9,12 @@ export interface articulArr{
   seriearti:string,
   cantidad:string,
 }
+export class arregloartex{
+  id:string;
+  idarticulo:string;
+  serieart:string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +38,9 @@ export class PedidosService {
   }
   actualizarcantidad(artiarr:articulArr) {
     return this.http.put(Constantes.URL_API_PAGO + '/cantidad'+ `/${artiarr.id}`, artiarr);
+  }
+  actualizarserieart(arti:arregloartex){
+    return this.http.put(Constantes.URL_API_PAGO + '/serieart'+ `/${arti.id}`, arti);
   }
   eliminarpedido(_id: string) {
     return this.http.delete(Constantes.URL_API_PAGO + `/${_id}`);

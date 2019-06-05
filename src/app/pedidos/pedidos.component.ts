@@ -463,7 +463,9 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   anularventmysql() {
   }
-
+  actualizarpedidoartiseries(id:string,idart:string,serieart:string){
+    
+  }
   actualizarpago() {
     var id = this.listapedidouni._id;
     /*   this.DocumentoAct[0].Tipo = this.tipodoc;
@@ -512,7 +514,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       pFechaRegistro: fecha_actual,
       pEsVentaAlContad: 1,
       pIdEmpleado: this.idempleado,
-      pIdLocal: '609',
+      pIdLocal: '611',
       pIdCliente: this.doccliente,
       pEsCancelad: 1,
       pImprimirGui: 0,
