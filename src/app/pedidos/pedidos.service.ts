@@ -11,7 +11,7 @@ export interface articulArr{
 }
 export class arregloartex{
   id:string;
-  idarticulo:string;
+  idart:string;
   serieart:string;
 }
 

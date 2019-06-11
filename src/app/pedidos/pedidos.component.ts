@@ -448,11 +448,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       });
     //
   }
-  anularventamongo(){
+  anularventamongo() {
 
   }
   actualizarexistenciamysql() {
-    var pIdLocalMvto='611';
+    var pIdLocalMvto = '611';
     var pIdTipoDocumento = this.tipodoc;
     var pSerie = this.seriedoc;
     var pNro = this.numerodoc;
@@ -463,8 +463,18 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   anularventmysql() {
   }
-  actualizarpedidoartiseries(id:string,idart:string,serieart:string){
-    
+  actualizarpedidoartiseries(id: string, idart: string, serieart: string) {
+    console.log(this.listapedidouni);
+    var art = {
+      id: id,
+      idart: idart,
+      serieart: serieart,
+    }
+    console.log(art);
+    this.pedidosservice.actualizarserieart(art)
+      .subscribe(res => {
+        console.log(res);
+      });
   }
   actualizarpago() {
     var id = this.listapedidouni._id;
@@ -544,7 +554,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       // console.log(arregloseries);
       for (var j = 0; j < arregloseries.length; j++) {
         this.detalleventmysql = [{
-          pIdLocal: '609',
+          pIdLocal: '611',
           pTipoComprobante: this.tipodoc,
           pSerieComprobante: this.seriedoc,
           pNroComprobante: this.numerodoc,
@@ -568,6 +578,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
             if (this.mensajemysql == 'HECHO') {
               this.pedidosservice.actualizarpedido(this.listapedidouni)
                 .subscribe(res => {
+                  this.actualizarpedidoartiseries(this.listapedidouni[0]._id,idart,arregloseries[j]);
                   console.log(res);
                   //  this.actualiazrcantidadArti(idart,)
                   this.snackBar.open('Pago Guardado', '🧓🏻', {
