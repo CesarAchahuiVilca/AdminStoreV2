@@ -464,7 +464,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   anularventmysql() {
   }
   actualizarpedidoartiseries(id: string, idart: string, serieart: string) {
-    console.log(this.listapedidouni);
+    console.log(serieart);
     var art = {
       id: id,
       idart: idart,
@@ -490,9 +490,8 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.pedidosservice.GuardarPagomysql(this.arreglomysql)
       .subscribe(res => {
         var tempo = JSON.parse(JSON.stringify(res));
-        console.log(res);
         this.mensajemysql = tempo[0][0].Mensaje;
-        console.log(this.mensajemysql);
+        /* this.mensajemysql='HECHO'; */
         if (this.mensajemysql == 'HECHO') {
           this.guardarmysqldetalle();
         }
@@ -538,8 +537,6 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       pObservacion: ' ',
       pMontoPagadoReal: this.preciototal
     }];
-    console.log('arreglo mysql');
-    console.log(this.arreglomysql);
   }
   guardarmysqldetalle() {
     /*console.log('seriessss');
@@ -551,8 +548,10 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       var precio = this.Articuloarreglo[i].precio;
       var arreglotem = this.listpruebaseries[i];
       var arregloseries = arreglotem.split('-');
-      // console.log(arregloseries);
+      var serieartact= arregloseries[0];
+      this.actualizarpedidoartiseries(this.listapedidouni[0]._id,idart,serieartact);
       for (var j = 0; j < arregloseries.length; j++) {
+        var jj=j;
         this.detalleventmysql = [{
           pIdLocal: '611',
           pTipoComprobante: this.tipodoc,
@@ -568,17 +567,15 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
           pDsctoNivel4: 5,
           pIdTipoPlan: '1',
         }];
-        console.log('arreglo detalle');
-        console.log(this.detalleventmysql);
         this.pedidosservice.GuardarDetallemysql(this.detalleventmysql)
           .subscribe(res => {
-            console.log(res);
             var tempo = JSON.parse(JSON.stringify(res));
             this.mensajemysql = tempo[0][0].Mensaje;
+            /* this.mensajemysql='HECHO'; */
             if (this.mensajemysql == 'HECHO') {
               this.pedidosservice.actualizarpedido(this.listapedidouni)
                 .subscribe(res => {
-                  this.actualizarpedidoartiseries(this.listapedidouni[0]._id,idart,arregloseries[j]);
+                  /* this.actualizarpedidoartiseries(this.listapedidouni[0]._id,idart,serieartact); */
                   console.log(res);
                   //  this.actualiazrcantidadArti(idart,)
                   this.snackBar.open('Pago Guardado', '🧓🏻', {
