@@ -42,7 +42,7 @@ import {AuthGuard} from './auth.guard';
 import { TokenInterceptorService } from './token-interceptor.service';
 
 const routes: Route[] = [
-  {path: '', component: LoginComponent,canActivate: [AuthGuard]},
+  {path: 'login', component: LoginComponent},
   {path: 'articulos', component: ArticuloComponent,canActivate: [AuthGuard]},
   {path: 'caracteristicas', component: CaracteristicasComponent,canActivate: [AuthGuard]},
   {path: 'categoria', component: CategoriaComponent,canActivate: [AuthGuard]},

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SesionService } from '../usuario/sesion.service';
+//import { SesionService } from '../usuario/sesion.service';
+import { UsuarioService } from '../usuario/usuario.service';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,7 @@ import { SesionService } from '../usuario/sesion.service';
 export class HeaderComponent implements OnInit {
   mensajes : number = 0;
 
-  constructor(public sesionService: SesionService,public router: Router) {}
+  constructor(public usuarioService: UsuarioService,public router: Router) {}
 
   ngOnInit() {
    /* this.sesionService.getNotificaciones().subscribe(res => {
@@ -28,6 +29,8 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/']);
       }
     })*/
+    this.usuarioService.logout();
+    this.router.navigate(['/login']);
   }
 
 }
