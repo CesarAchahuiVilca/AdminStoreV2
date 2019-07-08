@@ -13,19 +13,10 @@ export class ArchivosComponent implements OnInit {
               public archivosService: ArchivosService,) { }
 
   ngOnInit() {
-    this.getFiles();
+    
   }
 
   recibido: any;
 
-  getFiles(){
-    var ruta = {
-      ruta: "/tmp"
-    }
-    console.log("enviando peticion");
-    this.archivosService.getImagenes(ruta).subscribe(res=>{
-     console.log(res);
-    });
-  }
 
 }

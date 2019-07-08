@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Usuario } from './usuario';
 import { catchError} from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import * as moment from "moment";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class UsuarioService {
 
   usuarioSeleccionado : Usuario;
   usuarios : Usuario[];
-
+  readonly URL_API_SESSION = Constantes.URL_API_SESION;
   constructor(public http : HttpClient) {
     this.usuarioSeleccionado = new Usuario();
   }
@@ -70,5 +71,47 @@ export class UsuarioService {
       console.error(error);
       return of(result as T);
     };
+  }
+  esTokenPublicoVigente(){
+    return moment().isBefore(this.getExpiration());
+  }
+  esRefreshTokenVigente(){
+    return moment().isBefore(this.getExpirationRefreshToken());
+  }
+  getExpirationRefreshToken() {
+    const expiration = localStorage.getItem("admin_refresh_token_exp");
+    const expiresAt = JSON.parse(expiration);
+    return moment(expiresAt);
+  }
+  esSessionTokenVigente(){
+    return moment().isBefore(this.getExpirationSessionToken());
+  }
+  getExpirationSessionToken() {
+    const expiration = localStorage.getItem("admin_session_token_exp");
+    const expiresAt = JSON.parse(expiration);
+    return moment(expiresAt);
+  }
+  getExpiration() {
+    const expiration = localStorage.getItem("admin_expires_pt");
+    const expiresAt = JSON.parse(expiration);
+    return moment(expiresAt);
+  }
+  getToken(){
+    
+    return localStorage.getItem('admin_session_token');
+    
+  }
+  logueado(){
+    return !!localStorage.getItem("admin_session_token");
+  }
+  async getNewSessionToken(){
+    const res = await  this.http.post(this.URL_API_SESSION+'/newsessiontoken', {refresh_token: localStorage.getItem('admin_refresh_token')},{ withCredentials : true }).toPromise();
+    return res;
+  }
+  logout(){
+    localStorage.removeItem('admin_session_token');
+    localStorage.removeItem('admin_session_token_exp');
+    localStorage.removeItem('admin_refresh_token');
+    localStorage.removeItem('admin_refresh_token_exp');
   }
 }

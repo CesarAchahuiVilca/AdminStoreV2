@@ -13,21 +13,21 @@ export class HeaderComponent implements OnInit {
   constructor(public sesionService: SesionService,public router: Router) {}
 
   ngOnInit() {
-    this.sesionService.getNotificaciones().subscribe(res => {
+   /* this.sesionService.getNotificaciones().subscribe(res => {
       const rspta = JSON.parse(JSON.stringify(res));
       if( rspta.status) {
         this.mensajes = rspta.data;
       }
-    })
+    })*/
   }
 
   cerrarSesion(){
-    this.sesionService.cerrarSesion().subscribe(res => {
+   /* this.sesionService.cerrarSesion().subscribe(res => {
       var jres = JSON.parse(JSON.stringify(res));
       if( jres.status ){
         this.router.navigate(['/']);
       }
-    })
+    })*/
   }
 
 }

@@ -11,7 +11,7 @@ import { MarcadistriComponent } from './marcadistri/marcadistri.component';
 import { RouterModule, Route } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { CategoriaComponent } from './categoria/categoria.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CaracteristicasComponent } from './caracteristicas/caracteristicas.component';
 import { DetallemarcaComponent } from './detallemarca/detallemarca.component';
 import { UsuarioComponent } from './usuario/usuario.component';
@@ -38,26 +38,28 @@ import { SeguimientoComponent } from './seguimiento/seguimiento.component';
 import { CargoComponent } from './cargo/cargo.component';
 import { DialogoCargoComponent } from './cargo/dialogo-cargo/dialogo-cargo.component';
 import { ArchivosComponent } from './archivos/archivos.component';
+import {AuthGuard} from './auth.guard';
+import { TokenInterceptorService } from './token-interceptor.service';
 
 const routes: Route[] = [
-  {path: '', component: LoginComponent},
-  {path: 'articulos', component: ArticuloComponent},
-  {path: 'caracteristicas', component: CaracteristicasComponent},
-  {path: 'categoria', component: CategoriaComponent},
-  {path: 'distribuidor',component: DistribuidorComponent},
-  {path: 'locales', component: TiendaComponent},
-  {path: 'marca', component: MarcadistriComponent},
-  {path: 'menu', component: PrincipalComponent},
-  {path: 'pedidos',component:PedidosComponent},
-  {path: 'planes', component: PlanesComponent},
-  {path: 'precios', component: PreciosComponent},
-  {path: 'region', component: RegionComponent},
-  {path: 'servicio-cliente',component:ServicioClienteComponent},
-  {path: 'usuarios', component: UsuarioComponent},
-  {path: 'imagenes-inicio', component: HomeComponent},
-  {path: 'seguimiento', component:SeguimientoComponent},
-  {path: 'cargos', component: CargoComponent},
-  {path: 'archivos', component: ArchivosComponent}
+  {path: '', component: LoginComponent,canActivate: [AuthGuard]},
+  {path: 'articulos', component: ArticuloComponent,canActivate: [AuthGuard]},
+  {path: 'caracteristicas', component: CaracteristicasComponent,canActivate: [AuthGuard]},
+  {path: 'categoria', component: CategoriaComponent,canActivate: [AuthGuard]},
+  {path: 'distribuidor',component: DistribuidorComponent,canActivate: [AuthGuard]},
+  {path: 'locales', component: TiendaComponent,canActivate: [AuthGuard]},
+  {path: 'marca', component: MarcadistriComponent,canActivate: [AuthGuard]},
+  {path: 'menu', component: PrincipalComponent,canActivate: [AuthGuard]},
+  {path: 'pedidos',component:PedidosComponent,canActivate: [AuthGuard]},
+  {path: 'planes', component: PlanesComponent,canActivate: [AuthGuard]},
+  {path: 'precios', component: PreciosComponent,canActivate: [AuthGuard]},
+  {path: 'region', component: RegionComponent,canActivate: [AuthGuard]},
+  {path: 'servicio-cliente',component:ServicioClienteComponent,canActivate: [AuthGuard]},
+  {path: 'usuarios', component: UsuarioComponent,canActivate: [AuthGuard]},
+  {path: 'imagenes-inicio', component: HomeComponent,canActivate: [AuthGuard]},
+  {path: 'seguimiento', component:SeguimientoComponent,canActivate: [AuthGuard]},
+  {path: 'cargos', component: CargoComponent,canActivate: [AuthGuard]},
+  {path: 'archivos', component: ArchivosComponent,canActivate: [AuthGuard]}
 ];
 
 @NgModule({
@@ -112,7 +114,11 @@ const routes: Route[] = [
     SelectImagenComponent, 
     DialogoCargoComponent
   ],
-  providers: [],
+  providers: [AuthGuard,{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

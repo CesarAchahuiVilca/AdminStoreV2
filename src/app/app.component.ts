@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SesionService } from './usuario/sesion.service';
 import { Respuesta } from './usuario/respuesta';
 import { Router } from '@angular/router';
+import { UsuarioService } from './usuario/usuario.service';
 
 @Component({
   selector: 'app-root',
@@ -10,15 +11,12 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit{
 
-  constructor(public sesionService: SesionService, public router: Router){
+  constructor(public usuarioService: UsuarioService, public router: Router){
   }
 
   ngOnInit(){
-    this.sesionService.obtenerSesion().subscribe(res => {
-      var rspta = res as Respuesta;
-      if(!rspta.status){
-        this.router.navigate(['/']);
-      }
-    });
+    if(!this.usuarioService.logueado()){
+      this.router.navigate(['/login']);
+    }
   }
 }

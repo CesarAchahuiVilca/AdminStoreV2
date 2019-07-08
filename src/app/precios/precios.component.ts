@@ -14,11 +14,13 @@ export class PreciosComponent implements OnInit {
   mensajeestado = "";
   selectedFile: File = null;
   migas = [new Miga('Precios','/precios')];
+  progreso=50;
+  modo = 'determinate';
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    var progreso = document.getElementById("progreso") as HTMLDivElement;
-    progreso.style.width = 0+"%";
+    /*var progreso = document.getElementById("progreso") as HTMLDivElement;
+    progreso.style.width = 0+"%";*/
   }
 
   buscaNuevaArchivo(){
