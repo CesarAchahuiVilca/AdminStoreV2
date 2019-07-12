@@ -30,7 +30,8 @@
                         <img src="assets/imagenes/carga.gif"> Cargando Datos
                       </div>
                       <div class="datatable-example" style="width: 100%;" [hidden]="!mostrarListaArticulos">
-                        <mat-form-field>
+                        <mat-form-field appearance="fill" style="width: 100%;">
+                          <mat-label>Buscar Articulo</mat-label>
                           <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
                         </mat-form-field>
                         <div class="mat-elevation-z2">
@@ -175,14 +176,26 @@
                                   <div style="display:flex; flex-direction: row;  align-items: center;">
                                     <h5>Descuento (en %) : </h5>
                                     <input class="form-control" type="number" style="width: 30%; margin-left: 10px;"
-                                      [(ngModel)]="articuloService.articuloSeleccionado.descuento"
+                                      [(ngModel)]="descuento"
                                       [ngModelOptions]="{standalone: true}">
+                                  </div>
+                                  <div style="display:flex; flex-direction: row; width: 100%; align-items: center; justify-content: space-evenly; margin-top: 25px;">
+                                    <div style="display: flex; flex-direction: column; width: auto;">
+                                      <label for="" style="font-weight: 600;color: gray;"> Precio de Compra:</label>
+                                      <h3>S/ {{preciocompra.toFixed(2)}}</h3>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; width: auto;">
+                                      <label for="" style="font-weight: 600;color: gray;"> Precio Venta:</label>
+                                      <h3>S/ {{precioventa.toFixed(2)}}</h3>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; width: auto;">
+                                      <label for="" style="font-weight: 600;color: gray;"> Precio con Descuento:</label>
+                                      <h3>S/ {{(precioventa - (precioventa * descuento/100)).toFixed(2)}}</h3>
+                                    </div>
+
                                   </div>
 
                                 </div>
-                                <button mat-raised-button color="primary" (click)="actualizarPreciosEquipos()"><i class="material-icons">
-                                  update
-                                  </i>Actualizar Precios</button>
                                 <mat-card-content>
                                   <div class="datatable-example" style="width: 100%;">
                                     <mat-form-field>
@@ -218,34 +231,10 @@
                                           <td style="width: 10%;" mat-cell *matCellDef="let equipo">
                                             {{equipo.cantidad}} </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="Color">
-                                          <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                            Color </th>
-                                          <td style="width: 15%;" mat-cell *matCellDef="let equipo"> {{equipo.color}}
-                                          </td>
-                                        </ng-container>
                                         <ng-container matColumnDef="Detalle">
                                           <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header>
                                             Detalle </th>
-                                          <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.detalle}}
-                                          </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="PrecioCompra">
-                                          <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                            Precio Compra </th>
-                                          <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.preciocompra}}
-                                          </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="PrecioVenta">
-                                          <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                            Precio Venta </th>
-                                          <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{equipo.precioventa}}
-                                          </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="PrecioDescuento">
-                                          <th style="width: 30%;" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                            Precio Descuento </th>
-                                          <td style="width: 30%;" mat-cell *matCellDef="let equipo"> {{(equipo.precioventa -((articuloService.articuloSeleccionado.descuento/100)* equipo.precioventa)).toFixed(2)}}
+                                          <td style="width: 30%; text-overflow: ellipsis;" mat-cell *matCellDef="let equipo"> {{equipo.detalle}}
                                           </td>
                                         </ng-container>
                                         <ng-container matColumnDef="Editar">

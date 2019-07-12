@@ -11,43 +11,102 @@
                         <mat-divider></mat-divider>
                         <mat-card-content style="min-height:300px;">
                           <div style="display: flex;flex-direction: row; width: 100%; margin-top: 10px;">
-                              <button mat-raised-button> <i class="material-icons">
-                                  cloud_download</i> Descargar Archivo Base
+                              <button mat-raised-button (click)="descargarExcel()" style="background-color: rgb(45, 98, 211); color: white;"> <i class="material-icons">
+                                cloud_download
+                                </i> Descargar Archivo Base
                               </button>
-                              <button mat-raised-button style="margin-left: 5px;"><i class="material-icons">
-                                  cloud_upload</i> Subir Archivo
+                              <button mat-raised-button style="margin-left: 5px; background-color: white; color: black;" (click)="abrirDialogo()" [disabled]="disabledbtnFile"><i class="material-icons" >
+                                attach_file</i> Seleccionar Archivo
                               </button>
-                              <div style="height: 30px; width: 60%; margin-left: 15px;">
-                                <label style="margin: 0; padding: 0;color: rgb(145, 145, 145);">Subiendo 50%</label>
-                                  <section style="display: flex;align-content: center;align-items: center;height: 15px;">
-                                      <mat-progress-bar
-                                          [mode]="modo"
-                                          [value]="progreso">
-                                      </mat-progress-bar>
-                                    </section>
+                              <input type="file" accept=".xlsx" hidden id="input_excel" #input_excel_file (change)="eligioArchivo($event)">
+                              <div style="height: 30px; width: 60%; margin-left: 20px;display: flex; flex-direction: row; align-items: center; height: 100%"  *ngIf="mostrarOpciones" >
+                                <div style="display:flex; flex-direction: column">
+                                  <label for="" style="font-weight: 600; font-size: small; margin: 0; padding: 0;">Nombre del archivo: </label>
+                                  <label for="" style="margin: 0;padding: 0;">{{nombreArchivoSeleccionado}}</label>
+                                </div>
+                                
+                                <button mat-raised-button style="background-color: rgb(31, 161, 31); color:white; margin-left: 15px;" (click)="procesarExcel()" ><i class="material-icons">
+                                  cloud_upload
+                                  </i>  Subir Archivo</button>                          
                               </div>
-                          </div>
-                          <div style="display: none; width: 100%; flex-direction: column; margin-top: 10px;">
-                              
-                              <mat-card-content>
-                                  <h5>Subiendo 50%</h5>                              
-                                  
-                                </mat-card-content>
+                              <div style="height: 30px; width: 60%; margin-left: 15px; display : flex; flex-direction: row;" *ngIf="mostrarProceso">
+                                <div style="display:flex; flex-direction: column;width: 80%;">
+                                  <label style="margin: 0; padding: 0;color: rgb(145, 145, 145);">{{mensajeestado}}</label>
+                                  <section style="display: flex;align-content: center;align-items: center;height: 15px; ">
+                                    <mat-progress-bar
+                                        [mode]="modo"
+                                        [value]="progreso">
+                                    </mat-progress-bar>
+                                  </section>
+                                </div>                                
+                                <i class="material-icons" style="margin-top: 5px;" (click)="cancelarProceso()">
+                                  close
+                                  </i>
+                              </div>
                           </div>
                           <div style="display: flex; flex-direction: row; flex-wrap: wrap; width: 100%; margin-top:15px;">
                             <label style="color: rgb(124, 124, 124);">Ultima actualizacion: 25 de Julio del 2019</label>
-                            <div style="width: 100%; margin-top: 10px;">
-                              AQUI IRA UNA TABLE DE PRECIOS....
+                            <div style="width: 100%; margin-top: 10px;overflow-x: auto;">
+                              <!-- TABLE LISTA DE PRECIOS-->
+
+                              <div class="datatable-example" style="width: 100%;" [hidden]="!mostrarListaPrecios">
+                                <mat-form-field appearance="fill" style="width: 100%;">
+                                  <mat-label>Buscar Articulo</mat-label>
+                                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                                </mat-form-field>
+                                <div class="mat-elevation-z2">
+                                  <table mat-table [dataSource]="dataSource" matSort>
+                                    <ng-container matColumnDef="idArticulo">
+                                      <th style="width: 20%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArtículo
+                                      </th>
+                                      <td style="width: 20%;" mat-cell *matCellDef="let row"> {{row[0]}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Descripcion">
+                                      <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripción
+                                      </th>
+                                      <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row[1]}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Cantidad">
+                                      <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                                      <td style="width: 10%;" mat-cell *matCellDef="let row"> {{row[2]}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="PrecioCompra">
+                                      <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> PrecioCompra </th>
+                                      <td style="width: 15%;" mat-cell *matCellDef="let row"> {{row[3] | number:'1.2-2'}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Precio Compra con IGV">
+                                      <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> Precio Compra con IGV </th>
+                                      <td style="width: 15%;" mat-cell *matCellDef="let row"> {{row[4] | number:'1.2-2'}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Precio Venta">
+                                      <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> Precio Venta</th>
+                                      <td style="width: 15%;" mat-cell *matCellDef="let row"> {{row[5] | number:'1.2-2'}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Precio Venta Minimo">
+                                      <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header> Precio Venta Minimo </th>
+                                      <td style="width: 15%;" mat-cell *matCellDef="let row"> {{row[6] | number:'1.2-2'}} </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                                    </tr>
+                                  </table>
+                                  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                                </div>
+                              </div>
+
+
+
+
                             </div>
 
                           </div>
                           
                         </mat-card-content>
-                        <mat-card-actions>
+                        <mat-card-actions [hidden]="!mostrarListaPrecios">
                           <button mat-stroked-button><i class="material-icons" style="color: red;" disabled>
                             close
                             </i> Cancelar</button>
-                          <button mat-stroked-button style="margin-left: 10px;"><i class="material-icons" style="color:#3ac47d;" disabled>
+                          <button mat-stroked-button style="margin-left: 10px;" (click)="guardarListaPrecios()"><i class="material-icons" style="color:#3ac47d;" disabled>
                             save
                             </i> Guardar</button>
                         </mat-card-actions>

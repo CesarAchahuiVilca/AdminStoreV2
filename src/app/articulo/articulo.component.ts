@@ -18,6 +18,7 @@ import { CategoriaService } from '../categoria/categoria.service';
 import { MarcaService} from '../marcadistri/marca.service';
 import { PlanesService} from '../planes/planes.service';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { PreciosService} from '../precios/precios.service';
 
 export interface articuloData {
   id: string;
@@ -129,7 +130,7 @@ export class ArticuloComponent implements OnInit {
   dataSource: MatTableDataSource<ArticuloMysql>;
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
-  displayedColumnsEquipos: string[] = ['Imagen','idArticulo', 'Descripcion', 'Cantidad', 'Color', 'Detalle','PrecioCompra','PrecioVenta','PrecioDescuento','Editar'];
+  displayedColumnsEquipos: string[] = ['Imagen','idArticulo', 'Descripcion', 'Cantidad','Detalle','Editar'];
   dataSourceEquipos: MatTableDataSource<Equipo>;
   indiceEquipo = 0;
   nombreColor = "";
@@ -143,13 +144,15 @@ export class ArticuloComponent implements OnInit {
   planSeleccionado = {
     precio:0
   };
+  descuento: Number = 0;
 
   constructor(public http: HttpClient, 
               public articuloService: ArticuloService,
               public categoriaService: CategoriaService,
               public caracteristicaService: CaracteristicaService,
               public marcaService: MarcaService,
-              public planesService: PlanesService, 
+              public planesService: PlanesService,
+              public precioService: PreciosService, 
               public snackBar: MatSnackBar) { 
                 this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
               }
@@ -390,6 +393,9 @@ export class ArticuloComponent implements OnInit {
   cambiarvista(articulo ? : ArticuloMysql, form ? : NgForm) {
     if (this.vista == "1") {
       this.vista = "2";
+      this.contenidoEditor = "";
+      this.contenidoEditorCaracteristicas = "";
+      this.contenidoEditorGarantias = "";
       this.mostrarListaArticulos = false;
       this.mostrarFormularioArticulo = true;
       this.mostrarBotonOpcion = true;
@@ -401,6 +407,7 @@ export class ArticuloComponent implements OnInit {
       this.articuloService.articuloSeleccionado.descuento = 0;
       //this.buscarPreciosEquipo();
       this.obtenerEquiposArticulo("NO");
+      this.obtenerPrecioArticulo(this.articuloService.articuloSeleccionadoMysql.idArticulo);
       this.generarURL();
     } else {
       this.vista = "1";
@@ -425,6 +432,9 @@ export class ArticuloComponent implements OnInit {
    * Método que obtiene los datos de un artículo para poder editarlos y modificarlos
    */
   editarArticulo(art) {
+    this.contenidoEditor = "";
+    this.contenidoEditorCaracteristicas = "";
+    this.contenidoEditorGarantias = "";
     this.itemsDatosGenerales = new Array();
     this.articuloService.articuloSeleccionadoMysql = art;
     this.articuloService.getArticulo(this.articuloService.articuloSeleccionadoMysql.idArticulo).subscribe(res => {
@@ -442,6 +452,7 @@ export class ArticuloComponent implements OnInit {
       this.contenidoEditorCaracteristicas = this.articuloService.articuloSeleccionado.caracteristicas;
       this.contenidoEditorGarantias= this.articuloService.articuloSeleccionado.garantias;
       //this.listacaracteristicasarticulo = this.articuloService.articuloSeleccionado.caracteristicas;
+      this.obtenerPrecioArticulo(this.articuloService.articuloSeleccionadoMysql.idArticulo);
       this.obtenerEquiposArticulo("NO");
       /*if (this.listacaracteristicasarticulo.length == 0) {
         this.getCaracteristicas();
@@ -460,8 +471,9 @@ export class ArticuloComponent implements OnInit {
    * @param i : indice del equipo en la lista de equipos del artículo
    */
 
-   precioventa : any;
-   preciosugerido: Number = 0;;
+   precioventa :  Number = 0;
+   preciosugerido: Number = 0;
+   preciocompra: Number = 0;;
   editarEquipo(i) {
     this.indiceEquipo = i;
     this.imagenEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
@@ -469,14 +481,22 @@ export class ArticuloComponent implements OnInit {
     this.nombreColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color;
     this.codigoColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor;
     this.detallesEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle;
-    this.precioventa = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioventa;
+    //this.precioventa = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioventa;
     
-    this.preciosugerido = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioreferencial;
+    this.preciosugerido = 0;//this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioreferencial;
     
     var imagen = document.getElementById("imagen-select") as HTMLImageElement;
     imagen.src = this.URL_IMAGES + "/md/" + this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
     this.mostrarImagen = true;
   }
+  obtenerPrecioArticulo(idArticuloGlobal){
+    this.precioService.obtenerPrecioArticulo(idArticuloGlobal).subscribe(res=>{
+      var precio = res[0] as any;
+      this.precioventa = precio.precioventa;
+      this.preciocompra = precio.preciocompra;
+    });
+  }
+
   actualizarPreciosEquipos(){
     this.obtenerEquiposArticulo("UPDATE");
   }
