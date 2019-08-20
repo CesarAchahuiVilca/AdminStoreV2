@@ -10,6 +10,7 @@ import { Respuesta } from '../usuario/respuesta';
 import { ImagenCartelComponent } from './imagen-cartel/imagen-cartel.component';
 import { SelectImagenComponent } from './select-imagen/select-imagen.component';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { DialogoBannerComponent } from './dialogo-banner/dialogo-banner.component';
 
 export class Cartel {
   _id: string;
@@ -125,6 +126,7 @@ export class HomeComponent implements OnInit {
    */
   agregarBanner(){
     this.banners.push(new Banner())
+    this.abrirDialogoBanner(this.banners[this.banners.length-1],this.banners.length-1);
   }
 
   /**
@@ -414,5 +416,35 @@ export class HomeComponent implements OnInit {
     } else {
       return true;
     }
+  }
+
+
+  // BANNERS
+  abrirDialogoBanner(banner, index){
+    var oldbanner = {
+      imagen: banner.imagen,
+      articulos: banner.articulos
+    };
+    const dialogRef = this.dialog.open(DialogoBannerComponent, {
+      width: '70%',
+      data: oldbanner,
+      disableClose: true
+    });
+    console.log("IMAGEN");
+    console.log(banner.imagen);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        //guaradar datos
+        console.log(result);
+        this.banners[index] = result;
+      }else{
+        console.log("CANCELO");
+        if(banner.imagen == "" && banner.articulos.length == 0){
+          this.banners.splice(index,1);
+        }
+        
+      }
+    });
   }
 }

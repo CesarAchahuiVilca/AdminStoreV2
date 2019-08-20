@@ -9,8 +9,11 @@ export class PreciosService {
   constructor(public http: HttpClient) { }
 
 
+  obtenerPrecios(){
+    return this.http.get(Constantes.URL_API_PRECIOS,{withCredentials: true});
+  }
   obtenerPrecioArticulo(idarticuloglobal){
-    return this.http.get(Constantes.URL_API_PRECIOS+ '//obtener-precio/'+idarticuloglobal, {withCredentials: true});
+    return this.http.get(Constantes.URL_API_PRECIOS+ '/obtener-precio/'+idarticuloglobal, {withCredentials: true});
 
   }
   descargarBaseExcel(){
@@ -19,5 +22,8 @@ export class PreciosService {
   guardarPreciosVenta(data){
     return this.http.post(Constantes.URL_API_PRECIOS+ '/guardar-lista-precios',data, {withCredentials: true});
 
+  }
+  actualizarPrecios(datos){
+    return this.http.post(Constantes.URL_API_PRECIOS+"/actualizar-precio", datos,{withCredentials: true});
   }
 }

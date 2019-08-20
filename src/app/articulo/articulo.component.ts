@@ -144,7 +144,8 @@ export class ArticuloComponent implements OnInit {
   planSeleccionado = {
     precio:0
   };
-  descuento: Number = 0;
+  descuento: any = 0;
+  preciocondescuento: any = 0;
 
   constructor(public http: HttpClient, 
               public articuloService: ArticuloService,
@@ -345,7 +346,7 @@ export class ArticuloComponent implements OnInit {
     }
     for (var i = 0; i < this.articuloService.articuloSeleccionado.equipos.length; i++) {
       if (this.articuloService.articuloSeleccionado.equipos[i].cantidad > 0)
-        palabras += " " + this.articuloService.articuloSeleccionado.equipos[i].color + " " + this.articuloService.articuloSeleccionado.equipos[i].detalle;
+        palabras += " " + this.articuloService.articuloSeleccionado.equipos[i].detalle;
     }
     this.articuloService.articuloSeleccionado.palabrasclaves = palabras.toLowerCase();
   }
@@ -471,15 +472,13 @@ export class ArticuloComponent implements OnInit {
    * @param i : indice del equipo en la lista de equipos del artículo
    */
 
-   precioventa :  Number = 0;
+   precioventa :  any = 0;
    preciosugerido: Number = 0;
    preciocompra: Number = 0;;
   editarEquipo(i) {
     this.indiceEquipo = i;
     this.imagenEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen;
     this.descripcionEquipoSeleccionado = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].descripcion;
-    this.nombreColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color;
-    this.codigoColor = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor;
     this.detallesEquipo = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle;
     //this.precioventa = this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioventa;
     
@@ -490,10 +489,18 @@ export class ArticuloComponent implements OnInit {
     this.mostrarImagen = true;
   }
   obtenerPrecioArticulo(idArticuloGlobal){
+    this.precioventa = 0;
+    this.descuento = 0;
+    this.preciocondescuento = 0;
     this.precioService.obtenerPrecioArticulo(idArticuloGlobal).subscribe(res=>{
       var precio = res[0] as any;
-      this.precioventa = precio.precioventa;
-      this.preciocompra = precio.preciocompra;
+      console.log("HOLA HOA HOLA HOLA HOLA");
+      console.log(precio);
+      
+        this.precioventa = precio.precioventa;
+        this.descuento = precio.descuento;
+        this.preciocondescuento = this.precioventa - (this.precioventa*this.descuento/100);
+      
     });
   }
 
@@ -647,10 +654,8 @@ export class ArticuloComponent implements OnInit {
    * Método para guardar los datos de un equipo
    */
   guardarDatosEquipo() {
-    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].color = this.nombreColor;
     this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].detalle = this.detallesEquipo;
-    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].codigocolor = this.codigoColor;
-    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioventa = this.precioventa;
+    //this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].precioventa = this.precioventa;
     this.imagenEquipo = ""
   }
 

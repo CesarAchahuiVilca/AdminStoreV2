@@ -4,47 +4,33 @@
     <app-breadcrumb [migas]="migas"></app-breadcrumb>
     <mat-card id="lista-banner">
       <mat-card-header>
-        <mat-card-title>Banner
-          <button mat-raised-button (click)="agregarBanner()">Agregar Banner</button>
+        <mat-card-title>Banners 
+          <button mat-raised-button (click)="agregarBanner()"> <i class="material-icons">
+              add
+              </i> Agregar Banner</button>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="item-banner" *ngFor="let banner of banners;let i = index">
-          <h6>Banner Nro: {{i+1}}</h6>
-          <hr>
-          <div class="imagen">
-            <button mat-raised-button data-toggle="modal" data-target="#modalimagenes" (click)="getListaImagenes(i)"><i
-                class="material-icons">
-                add_photo_alternate
-              </i> Agregar Imagen</button>
-            <div>
-              <img src="{{URL_IMAGES}}/md/{{banner.imagen}}">
-            </div>
-          </div>
-          <div class="equipo">
-            <div>
-              Equipos
-              <button mat-raised-button data-toggle="modal" data-target="#modalarticulosbanner"
-                (click)="getListaEquipos(i)">Agregar Equipos</button>
-            </div>
-            <hr>
-            <div>
-              <div *ngFor="let artbanner of banner.articulos; let j =index">
-                <div>
-                  {{artbanner.titulo}}
-                </div>
-                <div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="btn-eliminar-banner" (click)="eliminarItemBanner(i)">
-            <i class="material-icons">
-              close
-            </i>
-          </div>
-          <hr>
+        <div  style="display: flex; flex-direction: row; flex-wrap: wrap; width: 100%;">
+            <mat-card  style="width: 30%;background-color: rgb(233, 233, 233);" *ngFor="let banner of banners;let i = index" >
+                <mat-card-header>
+                  <mat-card-title>Banner {{i+1}}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <img  style="height: auto;max-height: 100px; width: auto; max-width: 100%;" src="{{URL_IMAGES}}/md/{{banner.imagen}}" alt="{{banner.imagen}}">
+                </mat-card-content>
+                <mat-card-actions>
+                  <button mat-button (click)="abrirDialogoBanner(banner,i)"><i class="material-icons">
+                      edit
+                      </i> Editar</button>
+                  <button mat-button (click)="eliminarItemBanner(i)"><i class="material-icons">
+                      delete
+                      </i> Eliminar</button>
+                </mat-card-actions>
+              </mat-card>
+
         </div>
+
         <div id="btn-guardar">
           <button mat-raised-button color="primary" (click)="guardarBanners()">Guardar</button>
         </div>

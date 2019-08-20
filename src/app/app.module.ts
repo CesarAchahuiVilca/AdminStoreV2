@@ -40,6 +40,9 @@ import { DialogoCargoComponent } from './cargo/dialogo-cargo/dialogo-cargo.compo
 import { ArchivosComponent } from './archivos/archivos.component';
 import {AuthGuard} from './auth.guard';
 import { TokenInterceptorService } from './token-interceptor.service';
+import { DialogoPrecioComponent } from './precios/dialogo-precio/dialogo-precio.component';
+import { DialogoResultadoComponent } from './precios/dialogo-resultado/dialogo-resultado.component';
+import { DialogoBannerComponent } from './home/dialogo-banner/dialogo-banner.component';
 
 const routes: Route[] = [
   {path: 'login', component: LoginComponent},
@@ -92,7 +95,10 @@ const routes: Route[] = [
     SeguimientoComponent,
     CargoComponent,
     DialogoCargoComponent,
-    ArchivosComponent
+    ArchivosComponent,
+    DialogoPrecioComponent,
+    DialogoResultadoComponent,
+    DialogoBannerComponent
   ],
   imports: [
     BrowserModule,
@@ -112,7 +118,11 @@ const routes: Route[] = [
     DialogoComponent, 
     ImagenCartelComponent, 
     SelectImagenComponent, 
-    DialogoCargoComponent
+    DialogoCargoComponent,
+    DialogoPrecioComponent,
+    DialogoResultadoComponent,
+    DialogoBannerComponent,
+    ArchivosComponent
   ],
   providers: [AuthGuard,{
     provide: HTTP_INTERCEPTORS,

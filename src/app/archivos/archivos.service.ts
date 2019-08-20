@@ -8,7 +8,10 @@ import { Constantes} from '../constantes'
 export class ArchivosService {
 
   constructor(public http: HttpClient) { }
-  getImagenes(archivos){
-    return this.http.put(Constantes.URL_API_IMAGEN+'/files',archivos, {withCredentials: true});
+  getArchivos(ruta){
+    return this.http.post(Constantes.URL_API_IMAGEN+'/files',ruta, {withCredentials: true});
+  }
+  crearCarpeta(ruta, nombrecarpeta){
+    return this.http.post(Constantes.URL_API_IMAGEN+'/crear-carpeta',{ruta:ruta, carpeta:nombrecarpeta}, {withCredentials: true});
   }
 }

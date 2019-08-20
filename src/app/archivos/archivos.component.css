@@ -24,3 +24,29 @@
     width: 98%;
     
 }
+.item-file{
+    width: auto; 
+    height: 120px; 
+    margin: 5px; 
+    padding: 5px; 
+    border: solid 1px rgb(255, 255, 255); 
+    display: flex; 
+    flex-direction: column; 
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+.item-file:hover{
+    background-color: rgba(172, 171, 170, 0.281) ; 
+    border-radius: 5px;
+    cursor: pointer;
+}
+.noseleccionable{
+    -moz-user-select: -moz-none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+  
+      outline:0px !important;
+  }

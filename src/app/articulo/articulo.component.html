@@ -172,25 +172,21 @@
                                 <mat-divider></mat-divider>
                                 <br>
                                 <div style="width: 100%; display: flex; flex-direction: column;">
-                                  <br>
-                                  <div style="display:flex; flex-direction: row;  align-items: center;">
-                                    <h5>Descuento (en %) : </h5>
-                                    <input class="form-control" type="number" style="width: 30%; margin-left: 10px;"
-                                      [(ngModel)]="descuento"
-                                      [ngModelOptions]="{standalone: true}">
-                                  </div>
-                                  <div style="display:flex; flex-direction: row; width: 100%; align-items: center; justify-content: space-evenly; margin-top: 25px;">
-                                    <div style="display: flex; flex-direction: column; width: auto;">
-                                      <label for="" style="font-weight: 600;color: gray;"> Precio de Compra:</label>
-                                      <h3>S/ {{preciocompra.toFixed(2)}}</h3>
-                                    </div>
+                                  <br>                                 
+                                  
+                                  <div style="display:flex; flex-direction: row; width: 100%; align-items: center; justify-content: space-evenly; margin-top: 25px; flex-wrap: wrap;">
+                                   
                                     <div style="display: flex; flex-direction: column; width: auto;">
                                       <label for="" style="font-weight: 600;color: gray;"> Precio Venta:</label>
                                       <h3>S/ {{precioventa.toFixed(2)}}</h3>
                                     </div>
                                     <div style="display: flex; flex-direction: column; width: auto;">
+                                      <label for="" style="font-weight: 600;color: gray;"> Descuento:</label>
+                                      <h3> {{descuento}} %</h3>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; width: auto;">
                                       <label for="" style="font-weight: 600;color: gray;"> Precio con Descuento:</label>
-                                      <h3>S/ {{(precioventa - (precioventa * descuento/100)).toFixed(2)}}</h3>
+                                      <h3>S/ {{preciocondescuento.toFixed(2)}}</h3>
                                     </div>
 
                                   </div>
@@ -520,7 +516,7 @@
         </button>
       </div>
       <div class="modal-body"
-        style="overflow-y: auto;display: flex; flex-direction: row; flex-wrap: wrap; width: 100%;">
+        style="overflow-y: auto;display: flex; flex-direction: row; flex-wrap: wrap; width: 100%; margin: 0; padding: 0;">
         <div [hidden]="mostrarListaImgenesEquipo" style="width: 100%;">
           <mat-card class="example-card" style="margin: 5px; width: 100%;">
             <mat-card-header>
@@ -537,36 +533,13 @@
                   <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>
                 </mat-card>
               </div>
-              <div
-                style="display: flex; flex-direction: column; width: 60%; align-items: center; margin-top: 10px; padding-left: 10px;">
-                <div style="display: flex; flex-direction: row; width: 100%; ">
-                  <div style="width: 60%; margin: 5px;">
-                    <mat-form-field class="example-full-width">
-                      <input matInput placeholder="Nombre del color" [(ngModel)]="nombreColor">
-                    </mat-form-field>
-                  </div>
-                  <div style="width: 30%; margin: 5px;margin-top: 15px;">
-                    <input matInput placeholder="seleccione color" type="color" style="height: 35px;"
-                      [(ngModel)]="codigoColor">
-                  </div>
-                </div>
+              <div style="display: flex; flex-direction: column; width: 60%; align-items: center; margin-top: 10px; padding-left: 10px;">
+                
                 <div style="display: flex; flex-direction: row; width: 100%;">
                   <div style="width: 100%; margin: 5px;">
-                    <mat-form-field class="example-full-width">
-                      <textarea matInput placeholder="Informacion adicinal del equipo" rows="4"
-                        [(ngModel)]="detallesEquipo"></textarea>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div style="display: flex; flex-direction: row; width: 100%;">
-                  <div style="width: 50%; margin: 5px; display: flex; flex-direction: column;">
-                    <label for="">Precio Sugerido</label>
-                    <h6 style="font-weight: 5px;">  S/ {{ preciosugerido }}</h6>
-                  </div>
-                  <div style="width: 50%; margin: 5px;">
-                    <mat-form-field class="example-full-width">
-                      <input matInput placeholder="Precio Venta" rows="7"
-                        [(ngModel)]="precioventa">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Detalles</mat-label>
+                      <textarea matInput placeholder="Ingrese caracteristicas del equipo" [(ngModel)]="detallesEquipo" rows="6"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
