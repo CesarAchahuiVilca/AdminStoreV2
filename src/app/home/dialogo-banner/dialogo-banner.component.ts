@@ -28,7 +28,7 @@ export class DialogoBannerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.displayedColumns2 = ["Imagen","idArticulo","Descripcion","Agregar"];
+    this.displayedColumns2 = ["Imagen","Descripcion","Agregar"];
     this.obtenerArticulos();
     this.listaArticulosBanner = this.data.articulos;
     this.dataSource = new MatTableDataSource(this.listaArticulosBanner);

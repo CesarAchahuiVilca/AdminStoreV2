@@ -46,7 +46,7 @@ export class ArchivosComponent implements OnInit {
     this.mostrarCargandoDatos = true;
     this.obtenerArchivos();
     this.opcion = this.data.option;
-    console.log("OPCION: "+this.opcion);
+   // console.log("OPCION: "+this.opcion);
     
     
   }
@@ -134,7 +134,7 @@ export class ArchivosComponent implements OnInit {
         }
       } else {
         if (event.type === HttpEventType.Response) {
-          console.log("TERMIN DE SUBIR Y PRECESAR LA IMEAGEN");
+          console.log("TERMINO DE SUBIR Y PROCESAR LA IMAGEN");
           this.openSnackBar(true, "La imagén se subió al servidor con éxito");
           this.obtenerArchivos();
           console.log(event.body)
@@ -151,11 +151,37 @@ export class ArchivosComponent implements OnInit {
   }
   crearCarpeta(){
     this.mostrarnuevacarpeta = true;
-    setTimeout(()=>{this.inputNuecaCarpeta.nativeElement.focus();},0);
+    setTimeout(()=>{this.inputNuecaCarpeta.nativeElement.focus();},0);    
+  }
+  eliminaArchivo(archivo){
+    this.archivosService.eliminarArchivo(this.nombreruta+"/"+archivo).subscribe(res=>{
+      var mensaje = res as any ;
+      if(mensaje.estado == 1){
+        this.openSnackBar(true, "El archivo "+archivo+" se elimino exitosamente");
+        this.obtenerArchivos();
+      }else{
+        this.openSnackBar(false, "Ocurrio un error al eliminar el archivo");
+      }
+    });
+    
+  }
+  eliminarCarpeta(carpeta){
+    console.log(this.nombreruta+"/"+carpeta);
+    this.archivosService.eliminarCarpeta(this.nombreruta+"/"+carpeta).subscribe(res=>{
+      var mensaje = res as any ;
+      if(mensaje.estado == 1){
+        this.openSnackBar(true, "La carpeta "+carpeta+" se elimino exitosamente");
+        this.obtenerArchivos();
+      }else{
+        this.openSnackBar(false, mensaje.mensaje);
+      }
+    });
     
   }
   procesarCreacionCarpeta(){
     console.log("CREANDO CARPETA: "+this.nuevaCarpeta);
+    this.nuevaCarpeta = this.nuevaCarpeta.split(' ').join('_');
+    
     this.archivosService.crearCarpeta(this.nombreruta,this.nuevaCarpeta).subscribe(res=>{
       var mensaje = res as any ;
       if(mensaje.estado == 1){
@@ -168,8 +194,6 @@ export class ArchivosComponent implements OnInit {
       this.obtenerArchivos();
       
     });
-    
-
   }
   cancelarCreacionCarpeta(){
     this.mostrarnuevacarpeta = false;

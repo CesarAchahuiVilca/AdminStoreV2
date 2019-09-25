@@ -11,6 +11,7 @@ import { ImagenCartelComponent } from './imagen-cartel/imagen-cartel.component';
 import { SelectImagenComponent } from './select-imagen/select-imagen.component';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 import { DialogoBannerComponent } from './dialogo-banner/dialogo-banner.component';
+import { ArchivosComponent } from '../archivos/archivos.component';
 
 export class Cartel {
   _id: string;
@@ -347,13 +348,27 @@ export class HomeComponent implements OnInit {
    * @param cartel : objeto de tipo cartel
    */
   seleccionarImagen(cartel: Cartel){
-    const dialogRef = this.dialog.open(SelectImagenComponent, {
+    var datos = {option: "simple"}
+    const dialogRef = this.dialog.open(ArchivosComponent, {
+      width: '70%',
+      data: datos ,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        cartel.urlImagen = result.imagen;
+      }else{
+        console.log("CANCELO");
+      }
+    });
+    /*const dialogRef = this.dialog.open(SelectImagenComponent, {
       width: '800px',
       panelClass: 'dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
       cartel.urlImagen = result;
-    });
+    });*/
   }
 
   /**

@@ -16,8 +16,8 @@ export class PreciosService {
     return this.http.get(Constantes.URL_API_PRECIOS+ '/obtener-precio/'+idarticuloglobal, {withCredentials: true});
 
   }
-  descargarBaseExcel(){
-    return this.http.get(Constantes.URL_API_PRECIOS+ '/generar-reporte-excel', {withCredentials: true,responseType: 'blob'});
+  descargarBaseExcel(opcion){
+    return this.http.get(Constantes.URL_API_PRECIOS+ '/generar-reporte-excel/'+opcion, {withCredentials: true,responseType: 'blob'});
   }
   guardarPreciosVenta(data){
     return this.http.post(Constantes.URL_API_PRECIOS+ '/guardar-lista-precios',data, {withCredentials: true});

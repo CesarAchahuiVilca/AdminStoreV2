@@ -1,7 +1,7 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar} from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog} from '@angular/material';
 import { Articulo } from './articulo';
 import { ArticuloMysql } from './articuloMysql';
 import { Categoria } from '../categoria/categoria';
@@ -19,6 +19,7 @@ import { MarcaService} from '../marcadistri/marca.service';
 import { PlanesService} from '../planes/planes.service';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 import { PreciosService} from '../precios/precios.service';
+import { ArchivosComponent } from '../archivos/archivos.component';
 
 export interface articuloData {
   id: string;
@@ -154,7 +155,7 @@ export class ArticuloComponent implements OnInit {
               public marcaService: MarcaService,
               public planesService: PlanesService,
               public precioService: PreciosService, 
-              public snackBar: MatSnackBar) { 
+              public snackBar: MatSnackBar,public dialog: MatDialog) { 
                 this.dataSource = new MatTableDataSource(this.articuloService.articulosMysql);
               }
 
@@ -191,24 +192,77 @@ export class ArticuloComponent implements OnInit {
     this.mostrarListaImgenesEquipo = true;
   }
 
+  abrirDialgoImagenes(){
+    var datos = {option: "multi"}
+    const dialogRef = this.dialog.open(ArchivosComponent, {
+      width: '70%',
+      data: datos ,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        var arrayImagenes = result.lista;
+        for(var i = 0;i< arrayImagenes.length;i++){
+          this.agregarImagenesArticulo(arrayImagenes[i]);
+        }
+      }else{
+        console.log("CANCELO");
+      }
+    });
+  }
+
+  abrirDialgoImagenesEditor(){
+    var datos = {option: "simple"}
+    const dialogRef = this.dialog.open(ArchivosComponent, {
+      width: '70%',
+      data: datos ,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        console.log(result);
+        this.agregarImagenEditor(result.imagen);
+      }else{
+        console.log("CANCELO");
+      }
+    });
+  }
+  abrirDialogoImagenEquipo(){
+    var datos = {option: "simple"}
+    const dialogRef = this.dialog.open(ArchivosComponent, {
+      width: '70%',
+      data: datos ,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        console.log(result);
+        this.agregarImagenEquipo(result.imagen);
+      }else{
+        console.log("CANCELO");
+      }
+    });
+  }
+
   /**
    * Método para agregar una imagen en el editor
    */
-  agregarImagenEditor() {
-    console.log(this.imageneditorseleccionada);
+  agregarImagenEditor(imagen) {
     const range = this.editorInstance.getSelection();
-    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES + "/lg/" + this.imageneditorseleccionada);
+    this.editorInstance.insertEmbed(range.index, 'image', this.URL_IMAGES + "/lg" + imagen);
   }
 
   /**
    * Método que selecciona una imagen y la agrega a la lista de imágenes de un artículo
    */
-  agregarImagenEquipo() {
+  agregarImagenEquipo(imagenSeleccionada) {
     var imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src = this.URL_IMAGES + "/md/" + this.imagenEquipo;
-    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = this.imagenEquipo;
-    this.mostrarImagen = true;
-    this.abrirFormularioEquipo();
+    imagen.src = this.URL_IMAGES + "/md/" + imagenSeleccionada;
+    this.articuloService.articuloSeleccionado.equipos[this.indiceEquipo].imagen = imagenSeleccionada;
+    
   }
 
   /**
@@ -219,7 +273,7 @@ export class ArticuloComponent implements OnInit {
     var existe = false;
     for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
       if (this.imagenesSeleccionadas[i] == nombre) {
-        this.imagenesSeleccionadas.splice(i, 1);
+        //this.imagenesSeleccionadas.splice(i, 1);
         existe = true;
       }
     }
@@ -254,15 +308,14 @@ export class ArticuloComponent implements OnInit {
    * Método que abre un evento click para agregar una nueva imagen
    */
   buscaNuevaImagen() {
-    document.getElementById("imageninput").click();
   }
 
   /**
    * Método para agregar una imagen en el editor de la descripción de un equipo
    */
   buscaNuevaImagenEditor() {
-    this.agregarEn = "editor";
-    document.getElementById("btnimageneditor").click();
+    console.log("hola mundo");
+    document.getElementById("btnDialogoImgEditor").click();
   }
 
   /**
@@ -270,55 +323,6 @@ export class ArticuloComponent implements OnInit {
    */
   buscarImagen() {
     this.getListaImagenes();
-  }
-
-  /**
-   * Método que busca las imágenes por nombre de imagen
-   * @param event : evento de levantar la tecla presionada (keyup)
-   */
-  buscarImagenesFiltro(event) {
-    var input = document.getElementById("input-busqueda-imagenes-articulo") as HTMLInputElement;
-    this.listaimagenesfiltro = new Array();
-    for (var i = 0; i < this.listaimagenes.length; i++) {
-      var inputcheck = document.getElementById(this.listaimagenes[i] + "itemimg") as HTMLDivElement;
-      if (this.listaimagenes[i].includes(input.value)) {
-        inputcheck.hidden = false;
-      } else {
-        inputcheck.hidden = true;
-      }
-    }
-  }
-
-  /**
-   * Método para buscar imágenes en el modal de editor
-   */
-  buscarImagenesFiltroEditor() {
-    var input = document.getElementById("input-busqueda-imagenes-articulo-editor") as HTMLInputElement;
-    this.listaimagenesfiltro = new Array();
-    for (var i = 0; i < this.listaimagenes.length; i++) {
-      var inputcheck = document.getElementById(this.listaimagenes[i] + "editor") as HTMLDivElement;
-      if (this.listaimagenes[i].includes(input.value)) {
-        inputcheck.hidden = false;
-      } else {
-        inputcheck.hidden = true;
-      }
-    }
-  }
-
-  /**
-   * Método para buscar imagenes de un equipo
-   */
-  buscarImagenesFiltroEquipo() {
-    var input = document.getElementById("input-busqueda-imagenes-equipo") as HTMLInputElement;
-    this.listaimagenesfiltro = new Array();
-    for (var i = 0; i < this.listaimagenes.length; i++) {
-      var inputcheck = document.getElementById(this.listaimagenes[i] + "equipo") as HTMLDivElement;
-      if (this.listaimagenes[i].includes(input.value)) {
-        inputcheck.hidden = false;
-      } else {
-        inputcheck.hidden = true;
-      }
-    }
   }
 
   /**
@@ -529,16 +533,11 @@ export class ArticuloComponent implements OnInit {
    * @param id 
    */
   eliminarItemImagen(id: string) {
-    this.listaimagenesfiltro = this.listaimagenes;
     for (var i = 0; i < this.imagenesSeleccionadas.length; i++) {
       if (this.imagenesSeleccionadas[i] == id) {
         this.imagenesSeleccionadas.splice(i, 1);
-        var inputcheck = document.getElementById(id) as HTMLInputElement;
-        inputcheck.checked = false;
-      } else {
-        var inputcheck = document.getElementById(id) as HTMLInputElement;
-        inputcheck.checked = true;
-      }
+        break;
+      } 
     }
   }
 

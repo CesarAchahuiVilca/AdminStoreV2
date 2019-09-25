@@ -99,12 +99,12 @@
                 <div style="display:flex;flex-direction: row; flex-wrap: wrap;">
                   <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">
                     <h6>Imagen de Portada </h6>
-                    <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">
-                    <mat-card style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
-                      <i [hidden]="mostrarImagen" class="material-icons btn-imagen" (click)="abrirInputFile()">add_photo_alternate</i>
-                      <img [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">
-                      <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>
-                    </mat-card>
+                    <button mat-button (click)="abrirDialogoImagen()"><i class="material-icons">
+                      image_search
+                      </i> Buscar Imagen</button>
+                    <div style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
+                      <img  id="imagen-select" class="imagen-cat">
+                    </div>
                   </div>
                   <div class="inputs-categoria" style="width: 50%; display: flex; flex-direction: column; margin-left: 5px; align-items: center;">
                     <br>
@@ -133,19 +133,6 @@
                         [(ngModel)]="categoriaService.categoriaSeleccionada.descripcion"></textarea>
                     </mat-form-field>
                   </div>
-                </div>
-                <div>
-                  <br>
-                  <mat-card style="display: flex; width: 100%; flex-direction: row; flex-wrap: wrap; ">
-                    <div style="width: 100%;">
-                      <h6 style="font-weight: 600">Caracteristicas</h6>
-                    </div>
-                    <div class="form-check checkbox" *ngFor="let caracteristica of caracteristicas" style="margin: 10px;">
-                      <input id="{{caracteristica.nombre}}" type="checkbox" class="form-check-input" value="{{caracteristica.nombre}}"
-                        (click)="checkCaracteristica(caracteristica)">
-                      <label for="{{caracteristica.nombre}}" class="form-check-label">{{caracteristica.nombre}}</label>
-                    </div>
-                  </mat-card>
                 </div>
               </div>
               <div style="display: flex; flex-direction: column; width: 100%;" [hidden]="noMostrarIcons">

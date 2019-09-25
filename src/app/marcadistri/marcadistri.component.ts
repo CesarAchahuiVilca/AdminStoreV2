@@ -1,7 +1,7 @@
 import { Constantes } from './../constantes';
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
-import { MatSnackBar} from '@angular/material';
+import { MatSnackBar, MatDialog} from '@angular/material';
 import { Subject } from 'rxjs';
 import { MarcaMysql } from './marca-mysql';
 import { MarcaService } from './marca.service';
@@ -11,6 +11,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { NgForm } from '@angular/forms';
 import { Miga } from '../miga';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
+import { ArchivosComponent } from '../archivos/archivos.component';
 
 @Component({
   selector: 'app-marcadistri',
@@ -33,7 +34,7 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   flag: boolean = true;
   migas: Miga[] = [ new Miga('Marcas', 'marcadistri')];
   //fin
-  constructor(public http: HttpClient,public marcaService:MarcaService, public snackBar: MatSnackBar) {}
+  constructor(public http: HttpClient,public marcaService:MarcaService, public snackBar: MatSnackBar,public dialog: MatDialog) {}
 
   ngOnInit() {
     var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
@@ -111,44 +112,25 @@ export class MarcadistriComponent implements AfterViewInit,OnDestroy,OnInit {
   }
 
   //imagen
-  onFileSelected(event){
-    var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
-    var file = document.getElementById("archivo") as HTMLInputElement;
-    inputfile.innerHTML = file.value;
-    this.selectedFile  = <File> event.target.files[0];
-  }
 
-  onUpload(evento){
-    evento.preventDefault()
-    var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
-    var progreso = document.getElementById("progreso") as HTMLDivElement;
-    inputfile.innerHTML="";
-    const fd = new FormData();
-    fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(Constantes.URL_API_IMAGEN+'/subir',fd,{
-      reportProgress: true,
-      observe: 'events'
-    }).subscribe(event=>{
-        if(event.type === HttpEventType.UploadProgress){
-          progreso.style.width = Math.round(event.loaded/event.total*100)+"%";
-          progreso.innerHTML = "Subiendo "+ Math.round(event.loaded/event.total*100)+" %";
-          inputfile.style.display="none";
-          if(Math.round(event.loaded/event.total*100) == 100){
-            this.openSnackBar(true, 'La imagen se subió con éxito');
-            progreso.innerHTML = "Comprimiendo Imagen....";
-            inputfile.innerHTML = "";
-          } 
-        }else{
-          if(event.type === HttpEventType.Response){
-            var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src = Constantes.URL_IMAGENES+"/md/"+this.selectedFile.name+".webp";
-            progreso.style.backgroundColor = "green";
-            progreso.innerHTML = "Completado.";   
-            this.marcaService.marcaselect.imagen=this.selectedFile.name+".webp";                 
-          }
-        }
+  abrirDialogoImagen(){
+    var datos = {option: "simple"}
+    const dialogRef = this.dialog.open(ArchivosComponent, {
+      width: '70%',
+      data: datos ,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+        imagen.src = Constantes.URL_IMAGENES+"/md/"+result.imagen;
+         
+        this.marcaService.marcaselect.imagen= result.imagen; 
+      }else{
+        console.log("CANCELO");
       }
-    );
+    });
   }
 
 

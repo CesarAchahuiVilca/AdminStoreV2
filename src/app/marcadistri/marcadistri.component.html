@@ -100,23 +100,9 @@
                       <div class="col-lg-12">
                         <div style="display:flex; flex-direction: row; width: 100%; ">
                           <div style="flex-grow: 0;margin-right: 2px;">
-                            <span class="btn btn-primary" style="background-color: orange; border: 1px solid gray;"
-                              (click)="clearProgress()">
-                              <i class="fa fa-search"></i> <input type="file" hidden="true"
-                                (change)="onFileSelected($event)" id="archivo">
-                            </span>
-                          </div>
-                          <div style="flex-grow: 0;margin-right: 2px; width: 50%;">
-                            <div class="progress" style="height: 35px;">
-                              <label id="nombrearchivo"></label>
-                              <div id="progreso" class="progress-bar progress-bar-striped progress-bar-animated"
-                                role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                                style="width: 0%; background-color: orange; float: left;"></div>
-                            </div>
-                          </div>
-                          <div style="flex-grow: 0;margin-right: 2px;">
-                            <button class="btn btn-success input-group-btn" style="background-color: dimgrey;"
-                              (click)="onUpload($event)"><i class="fa fa-upload"></i> Subir</button>
+                            <button mat-button (click)="abrirDialogoImagen()"> <i class="material-icons">
+                              image_search
+                              </i> Buscar Imagen</button>
                           </div>
                         </div>
                       </div>

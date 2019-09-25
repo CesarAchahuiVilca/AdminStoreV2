@@ -6,9 +6,10 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Categoria } from './categoria';
 import { Caracteristica }  from '../caracteristicas/caracteristica';
 import { Miga } from '../miga';
-import { MatPaginator, MatSort, MatTableDataSource, MatTable, MatSnackBar} from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatTable, MatSnackBar, MatDialog} from '@angular/material';
 import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 import { IconsMaterial } from '../material_icons';
+import { ArchivosComponent } from '../archivos/archivos.component';
 
 @Component({
   selector: 'app-categoria',
@@ -26,7 +27,6 @@ export class CategoriaComponent implements OnInit {
   IDCategoriaSelecionada  : string = "root";
   breadcrumb_categorias   : Categoria[] = new Array();
   todasCategorias         : Categoria[];
-  caracteristicas         : Caracteristica[];
   mostrarCarga            : boolean = false;
   migas                   : Miga[] = [];
   mostrarImagen           : boolean = false;
@@ -45,7 +45,7 @@ export class CategoriaComponent implements OnInit {
     public http: HttpClient, 
     public categoriaService: CategoriaService,
     public caracteristicasService: CaracteristicaService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -55,7 +55,6 @@ export class CategoriaComponent implements OnInit {
     cat.padre="root";
     this.mostrarSubCategorias(cat);
     this.getCategorias();
-    this.getCaracteristicas();
     this.categoriaService.categoriaSeleccionada.padre  = "root";    
     this.migas.push(new Miga('Categorias', 'categorias'));
   }
@@ -63,7 +62,6 @@ export class CategoriaComponent implements OnInit {
   limpiarform(){        
       this.categoriaService.categoriaSeleccionada = new Categoria();   
       this.categoriaService.categoriaSeleccionada.padre  = this.breadcrumb_categorias[this.breadcrumb_categorias.length-1]._id;
-      this.limpiarChecks();     
       this.mostrarImagen = false;
       this.limpiarImagen();
     
@@ -83,23 +81,6 @@ export class CategoriaComponent implements OnInit {
     this.noMostrarIcons = true;
     this.categoriaService.categoriaSeleccionada.icono = icon;
   }
-
-  clearProgress(){
-    var progreso = document.getElementById("progreso") as HTMLDivElement;
-    progreso.style.width="0%";
-    progreso.style.backgroundColor = "orange";
-    var inputfile = document.getElementById("nombrearchivo") as HTMLDivElement;
-    inputfile.style.display = "block";
-    progreso.innerHTML = "";
-    var archivoinput = document.getElementById("archivo") as HTMLInputElement;
-    archivoinput.click();
-  }
-
-  abrirInputFile(){
-    var archivoinput = document.getElementById("archivo") as HTMLInputElement;
-    archivoinput.click();
-  }
-
   mostrarmensaje(mensaje: string, estado: string){
     if(estado == "0"){
       var labelmensaje =  document.getElementById("resultadoerror") as HTMLLabelElement;
@@ -147,18 +128,9 @@ export class CategoriaComponent implements OnInit {
   
   editarCategoria(categoria: Categoria){  
     this.categoriaService.categoriaSeleccionada = categoria;
-    this.limpiarChecks();
-    for(var i = 0; i < this.categoriaService.categoriaSeleccionada.caracteristicas.length; i++){
-      var j = 0;
-      while(this.categoriaService.categoriaSeleccionada.caracteristicas[i]._id != this.caracteristicas[j]._id)
-      {
-        j = j + 1;
-      }
-      var check = document.getElementById(this.caracteristicas[j].nombre) as HTMLInputElement;
-      check.checked = true;
-    }
+    
     var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-    imagen.src =this.URL_IMAGES+"/tmp/"+this.categoriaService.categoriaSeleccionada.imagen;  
+    imagen.src =this.URL_IMAGES+"/md/"+this.categoriaService.categoriaSeleccionada.imagen;  
     this.mostrarImagen = true;
   }
 
@@ -182,11 +154,6 @@ export class CategoriaComponent implements OnInit {
     });
   }
 
-  getCaracteristicas(){
-    this.caracteristicasService.getCaracteristicas().subscribe(res =>{
-      this.caracteristicas = res as Caracteristica[];
-    });
-  }
 
   mostrarSubCategorias(categoria: Categoria){    
     this.breadcrumb_categorias.push(categoria);  
@@ -209,57 +176,28 @@ export class CategoriaComponent implements OnInit {
     }
     this.breadcrumb_categorias.pop();   
     this.mostrarSubCategorias(categoria);
-    this.limpiarChecks();
   }
 
-  onFileSelected(event){
-    this.selectedFile = event.target.files[0];
-    const fd = new FormData();
-    fd.append('image',this.selectedFile, this.selectedFile.name);
-    this.http.post(Constantes.URL_API_IMAGEN + '/subir',fd,{
-      reportProgress: true,
-      observe: 'events'
-    })
-    .subscribe(event=>{
-        if(event.type === HttpEventType.UploadProgress){
-          this.openSnackBar(true, "Subiendo "+ Math.round(event.loaded/event.total*100)+" %");
-          if(Math.round(event.loaded/event.total*100) == 100){
-            this.openSnackBar(true, 'Se subió la imagen con éxito');
-          }        
-        }else{
-          if(event.type === HttpEventType.Response){
-            var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
-            imagen.src =this.URL_IMAGES+"/tmp/"+this.selectedFile.name;            
-            this.categoriaService.categoriaSeleccionada.imagen = this.selectedFile.name;
-            this.mostrarImagen = true;
-          }
-        }
+  abrirDialogoImagen(){
+    var datos = {option: "simple"}
+    const dialogRef = this.dialog.open(ArchivosComponent, {
+      width: '70%',
+      data: datos ,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        var  imagen = document.getElementById("imagen-select") as HTMLImageElement;
+        imagen.src =this.URL_IMAGES+"/md"+result.imagen;            
+        this.categoriaService.categoriaSeleccionada.imagen = result.imagen;
+      }else{
+        console.log("CANCELO");
       }
-    );
+    });
   }
 
-  onUpload(evento){
-    evento.preventDefault()
-  }
 
-  checkCaracteristica(caracteristica : Caracteristica){
-    var checkButton = document.getElementById(caracteristica.nombre) as HTMLInputElement;
-    if (checkButton.checked){
-      this.categoriaService.categoriaSeleccionada.caracteristicas.push(caracteristica);
-    }else {
-      var i = 0;
-      while(this.categoriaService.categoriaSeleccionada.caracteristicas[i]._id != caracteristica._id){ i = i + 1;}
-      this.categoriaService.categoriaSeleccionada.caracteristicas.splice(i,1);
-    }
-  }
-
-  limpiarChecks(){
-    this.openSnackBar(true, 'Limpiando Checks');
-    for(var i = 0; i < this.caracteristicas.length; i++){
-      var check = document.getElementById(this.caracteristicas[i].nombre) as HTMLInputElement;
-      check.checked = false;
-    }
-  }
 
   /// aplicar filtro en el data table de material
   applyFilter(filterValue: string) {

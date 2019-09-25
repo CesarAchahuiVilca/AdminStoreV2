@@ -41,6 +41,8 @@ export class PreciosComponent implements OnInit {
   fechavigenciaPrecios:any = new Date();
   mostrarCargandoNuevaListaPrecios = false;
   mostrarCargandoDatos = true;
+
+  sinPrecios = false;
   constructor(private http: HttpClient,public preciosService: PreciosService,public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -66,6 +68,9 @@ export class PreciosComponent implements OnInit {
       
     });
   }
+  cambioPrecios(){
+    console.log(this.sinPrecios);
+  }
 
 
   guardarListaPrecios(){
@@ -80,7 +85,11 @@ export class PreciosComponent implements OnInit {
   }
   descargarExcel(){
     console.log("decargnado excel");
-    this.preciosService.descargarBaseExcel().subscribe(res=>{
+    var sinprecios = 0;
+    if(this.sinPrecios){
+      sinprecios = 1;
+    }
+    this.preciosService.descargarBaseExcel(sinprecios).subscribe(res=>{
       var data: any = res;
       let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
       var url = window.URL.createObjectURL(blob);
@@ -134,7 +143,7 @@ export class PreciosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result.estado == 1){
         this.mostrarFormulario = false;
-        this.obtenerListaPreciosActual();
+        //this.obtenerListaPreciosActual();
       }
     });
   }

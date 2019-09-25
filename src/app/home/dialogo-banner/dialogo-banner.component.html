@@ -24,9 +24,9 @@
           </mat-card-header>
           <mat-card-content>
               <div class="datatable-example2" style="width: 100%;">
-                  <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Buscar Articulo</mat-label>
+                  <mat-form-field appearance="legacy"  style="width: 100%;">
                     <input matInput (keyup)="applyFilter2($event.target.value)" placeholder="Buscar">
+                    <mat-icon matSuffix>search</mat-icon>
                   </mat-form-field>
                   <div class="mat-elevation-z2">
                     <div style="min-height:300px; display:flex; flex-direction: column; justify-content: center; align-items: center;" [hidden]="!mostrarCargandoDatos">
@@ -41,20 +41,15 @@
                           <img src="{{URL_IMAGES}}/md/{{row.imagenes[0]}}"  style="width: 50px; height: auto;">
                          </td>
                       </ng-container>
-                      <ng-container matColumnDef="idArticulo">
-                        <th style="width: 20%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArtículo
-                        </th>
-                        <td style="width: 20%;" mat-cell *matCellDef="let row"> {{row.idarticulo}} </td>
-                      </ng-container>
                       <ng-container matColumnDef="Descripcion">
-                        <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripción
+                        <th style="width: 35%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripción
                         </th>
-                        <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row.titulo}} </td>
+                        <td style="width: 35%;" mat-cell *matCellDef="let row"> {{row.titulo}} </td>
                       </ng-container>                      
                       
                       <ng-container matColumnDef="Agregar">
-                        <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
-                        <td style="width: 15%;" mat-cell *matCellDef="let row" style="color: green;" > <i class="material-icons btn-icon" (click)="agregarArticulo(row)">
+                        <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+                        <td style="width: 10%;" mat-cell *matCellDef="let row" style="color: green;" > <i class="material-icons btn-icon" (click)="agregarArticulo(row)">
                           add
                           </i> </td>
                       </ng-container>
@@ -78,9 +73,9 @@
               
               <div style="width: 100%;">
                   <div class="datatable-example2" style="width: 100%;">
-                      <mat-form-field appearance="fill" style="width: 100%;">
-                        <mat-label>Buscar Articulo</mat-label>
+                      <mat-form-field appearance="legacy" style="width: 100%;">
                         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                        <mat-icon matSuffix>search</mat-icon>
                       </mat-form-field>
                       <div class="mat-elevation-z2">                        
                         <table mat-table [dataSource]="dataSource" matSort>
@@ -91,20 +86,15 @@
                               <img src="{{URL_IMAGES}}/md/{{row.imagenes[0]}}"  style="width: 50px; height: auto;">
                              </td>
                           </ng-container>
-                          <ng-container matColumnDef="idArticulo">
-                            <th style="width: 20%;" mat-header-cell *matHeaderCellDef mat-sort-header> IdArtículo
-                            </th>
-                            <td style="width: 20%;" mat-cell *matCellDef="let row"> {{row.idarticulo}} </td>
-                          </ng-container>
                           <ng-container matColumnDef="Descripcion">
-                            <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripción
+                            <th style="width: 35%;" mat-header-cell *matHeaderCellDef mat-sort-header> Descripción
                             </th>
-                            <td style="width: 25%;" mat-cell *matCellDef="let row"> {{row.titulo}} </td>
+                            <td style="width: 35%;" mat-cell *matCellDef="let row"> {{row.titulo}} </td>
                           </ng-container>                      
                           
                           <ng-container matColumnDef="Agregar">
-                            <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
-                            <td style="width: 15%;" mat-cell *matCellDef="let row" style="color: rgb(214, 27, 27);" > <i class="material-icons btn-icon" (click)="eliminarArticuloBanner(row)">
+                            <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+                            <td style="width: 10%;" mat-cell *matCellDef="let row" style="color: rgb(214, 27, 27);" > <i class="material-icons btn-icon" (click)="eliminarArticuloBanner(row)">
                               delete
                               </i> </td>
                           </ng-container>

@@ -3,13 +3,13 @@
   
   <mat-form-field appearance="outline" style="margin-right: 10px;">
     <mat-label>Precio de Compra sin IGV</mat-label>
-    <input matInput placeholder="Ingrese precio compra" [(ngModel)]="data.preciocomprasinigv">
+    <input matInput placeholder="Ingrese precio compra" [(ngModel)]="data.preciocomprasinigv" [disabled]="true">
     <span matPrefix>S/&nbsp;</span>
   </mat-form-field>
 
   <mat-form-field appearance="outline" style="margin-right: 10px;">
     <mat-label>Precio de Venta</mat-label>
-    <input matInput placeholder="Ingrese precio venta" [(ngModel)]="data.precioventa">
+    <input matInput placeholder="Ingrese precio venta" [(ngModel)]="data.precioventa" >
     <span matPrefix>S/&nbsp;</span>
   </mat-form-field>
 

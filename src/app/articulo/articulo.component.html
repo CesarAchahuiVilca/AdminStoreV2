@@ -264,7 +264,7 @@
                                     id="imageninputeditor">
                                   <div style="flex-grow:0; margin-top: -5px;">
                                     <button type="button" class="btn btn-link" style=" height: 35px;"
-                                      (click)=" buscarImagen()" data-toggle="modal" data-target="#modalimagenes"><i
+                                      (click)=" abrirDialgoImagenes()" ><i
                                         class="fa fa-plus"></i>
                                       Agregar
                                       Imágenes</button>
@@ -294,6 +294,7 @@
                               <mat-card class="example-card">
                                 <mat-card-header>
                                   <mat-card-title>Detalles del Artículo</mat-card-title>
+                                  <button id="btnDialogoImgEditor" (click)="abrirDialgoImagenesEditor()" style="display: none;"></button>
                                 </mat-card-header>
                                 <mat-card-content>
                                   <div
@@ -381,128 +382,8 @@
 </div>
 
 <!-- Modal Articulos -->
-<div class="modal fade" id="modalimagenes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog" role="document" id="modalarticulocontenido">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="titulomodal"><i class="fa fa-image"> </i> Imagenes</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
-          <i class="fa fa-close"></i>
-        </button>
-      </div>
-      <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
-        <div class="row">
-          <div class="col-lg-4 col-sm-12">
-            <h4> Elija Imagenes para el Artículo</h4>
-          </div>
-          <div class="col-lg-8 col-sm-12">
-            <div class="row">
-              <div class="col-lg-4" style="text-align: center;">
-                <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
-                  Subir Imagen</button>
-              </div>
-              <div class="col-lg-8">
-                <div style="display: flex; flex-direction: row; width: 100%;">
-                  <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
-                    <label> Buscar: </label>
-                  </div>
-                  <div style="flex-grow: 0; width: 90%;">
-                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes"
-                      (keyup)="buscarImagenesFiltro($event)" id="input-busqueda-imagenes-articulo">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <br>
-        <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
-          <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-            <div class="item-imagen-list"
-              style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
-              *ngFor="let img of listaimagenes" id="{{img}}itemimg">
-              <input type="checkbox" class="form-control"
-                style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px; z-index: 1500;"
-                (change)="agregarImagenesArticulo(img)" id="{{img}}">
-              <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
-                {{img}}
-              </div>
-              <img src="{{URL_IMAGES}}/md/{{img}}" class="imagen-item-articulo">
-            </div>
-          </div>
-        </div>
-        <div style="text-align: right;">
-          <br>
-          <button class="btn btn-success btn-success btn-pill" data-dismiss="modal"><i class="fa fa-check"></i>
-            Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal Imagenes editor -->
-<div class="modal fade" id="modalimageneseditor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog" role="document" id="modalarticulocontenidoeditor">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="titulomodal"><i class="fa fa-image"> </i> Imagenes</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCerrarModal">
-          <i class="fa fa-close"></i>
-        </button>
-      </div>
-      <div class="modal-body" style="overflow-y: auto; max-height: 50% !important;">
-        <div class="row">
-          <div class="col-lg-4 col-sm-12">
-            <h4> Seleccione una imagen para agregar</h4>
-          </div>
-          <div class="col-lg-8 col-sm-12">
-            <div class="row">
-              <div class="col-lg-4" style="text-align: center;">
-                <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
-                  Subir Nueva Imagen</button>
-              </div>
-              <div class="col-lg-8">
-                <div style="display: flex; flex-direction: row; width: 100%;">
-                  <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
-                    <label> Buscar: </label>
-                  </div>
-                  <div style="flex-grow: 0; width: 90%;">
-                    <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes"
-                      id="input-busqueda-imagenes-articulo-editor" (keyup)="buscarImagenesFiltroEditor()">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <br>
-        <div style="max-height: 400px; overflow: auto; background-color: rgb(216, 240, 212);">
-          <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-            <div class="item-imagen-list"
-              style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
-              *ngFor="let img of listaimagenes" id="{{img}}editor">
-              <input type="radio" class="form-check-input"
-                style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
-                (change)="elegirImagen(img)" name="imagen-editor">
-              <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
-                {{img}}
-              </div>
-              <img src="{{URL_IMAGES}}/md/{{img}}" class="imagen-item-articulo">
-            </div>
-          </div>
-        </div>
-        <div style="text-align: right;">
-          <br>
-          <button class="btn btn-success btn-success btn-pill" data-dismiss="modal" (click)="agregarImagenEditor()"><i
-              class="fa fa-plus"></i> Agregar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
 <button data-toggle="modal" data-target="#modalimageneseditor" id="btnimageneditor" (click)="buscarImagen()"></button>
 <!-- Modal detalle equipo -->
 <div class="modal fade" id="modalequipo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -516,27 +397,20 @@
         </button>
       </div>
       <div class="modal-body"
-        style="overflow-y: auto;display: flex; flex-direction: row; flex-wrap: wrap; width: 100%; margin: 0; padding: 0;">
+        style="overflow-y: auto;display: flex; flex-direction: row; flex-wrap: wrap; width: 100%;">
         <div [hidden]="mostrarListaImgenesEquipo" style="width: 100%;">
-          <mat-card class="example-card" style="margin: 5px; width: 100%;">
-            <mat-card-header>
-              <mat-card-title>Datos del equipo </mat-card-title>
-            </mat-card-header>
-            <mat-card-content style="display: flex; flex-direction: row; flex-wrap: wrap;">
-              <div class="cont-img-cat" style="width: 40%; margin-top: 10px;">
-                <!-- <input type="file" hidden="true" (change)="onFileSelected($event)" id="archivo">-->
-                <mat-card
-                  style="width: 100%; height: 200px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
-                  <i [hidden]="mostrarImagen" class="material-icons btn-imagen"
-                    (click)="abrirImagenes()">add_photo_alternate</i>
-                  <img [hidden]="!mostrarImagen" id="imagen-select" class="imagen-cat">
-                  <i [hidden]="!mostrarImagen" class="material-icons btn-cancel-img" (click)="limpiarImagen()">close</i>
-                </mat-card>
+            <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+              <div class="cont-img-cat" style="width: 40%;">
+                <button mat-button (click)="abrirDialogoImagenEquipo()"><i class="material-icons">image_search</i> Buscar Imagen</button>
+                <div style="width: 100%; height: 150px;margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;position: relative;">
+                  
+                  <img id="imagen-select" style="width: 100%; height: auto; max-height: 100%; width: auto;">
+                </div>
               </div>
-              <div style="display: flex; flex-direction: column; width: 60%; align-items: center; margin-top: 10px; padding-left: 10px;">
+              <div style="display: flex; flex-direction: column; width: 60%; align-items: center; margin-top: 10px; padding-left: 10px; padding-top: 20px;">
                 
                 <div style="display: flex; flex-direction: row; width: 100%;">
-                  <div style="width: 100%; margin: 5px;">
+                  <div style="width: 100%; margin: 15px;">
                     <mat-form-field appearance="fill">
                       <mat-label>Detalles</mat-label>
                       <textarea matInput placeholder="Ingrese caracteristicas del equipo" [(ngModel)]="detallesEquipo" rows="6"></textarea>
@@ -544,63 +418,9 @@
                   </div>
                 </div>
               </div>
-            </mat-card-content>
-          </mat-card>
+            </div>
         </div>
-        <div [hidden]="!mostrarListaImgenesEquipo" style="width: 100%;">
-          <div class="opciones-lista-imagenes" style="display: flex; flex-direction: row;width: 100%; ">
-            <button mat-raised-button style="width: 20%;" (click)="abrirFormularioEquipo()"><i
-                class="material-icons">keyboard_arrow_left</i>Regresar</button>
-            <div style="width: 10%;"></div>
-            <button class="btn btn-default btn-pill" (click)="buscaNuevaImagen()"><i class="fa fa-upload"></i>
-              Subir Nueva Imagen</button>
-            <div style="width: 10%;"></div>
-            <div style="display: flex; flex-direction: row; width: 60%;">
-              <div style="flex-grow: 0; width: 10%;margin-right: 5px;margin-top: 5px;">
-                <label> Buscar: </label>
-              </div>
-              <div style="flex-grow: 0; width: 90%;">
-                <input type="text" class="form-control" style="flex-grow: 0;" placeholder="Buscar Imagenes"
-                  id="input-busqueda-imagenes-equipo" (keyup)="buscarImagenesFiltroEquipo()">
-              </div>
-            </div>
-          </div>
-          <div class="row" style="width: 100%;">
-            <div class="col-lg-4 col-sm-12">
-              <br>
-              <h6> Seleccione una imagen para agregar</h6>
-            </div>
-            <div class="col-lg-8 col-sm-12">
-              <div class="row">
-                <div class="col-lg-4" style="text-align: center;">
-                </div>
-                <div class="col-lg-8">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="max-height: 350px; overflow: auto; background-color: rgb(216, 240, 212);">
-            <div style="display: flex; flex-flow: row wrap; padding-top: 10px;">
-              <div class="item-imagen-list"
-                style="position: relative; margin-left: 10px;margin-right: 10px;margin-bottom: 10px; min-width: 0px;"
-                *ngFor="let img of listaimagenes" id="{{img}}equipo">
-                <input type="radio" class="form-check-input"
-                  style="position: absolute; right: -10px;top: -10px; width: 20px; height: 20px;z-index: 1500;"
-                  (change)="elegirImagenEquipo(img)" name="imagen-equipo">
-                <div class="nombre-imagen-cont" style="position: absolute; left: 0;top: 0; width: 100%; height: auto;">
-                  {{img}}
-                </div>
-                <img src="{{URL_IMAGES}}/md/{{img}}" class="imagen-item-articulo">
-              </div>
-            </div>
-          </div>
-          <div style="text-align: right;">
-            <br>
-            <button class="btn btn-success btn-success btn-pill" (click)="agregarImagenEquipo()"><i
-                class="fa fa-plus"></i>
-              Agregar</button>
-          </div>
-        </div>
+        
         <div style="text-align: right; width: 100%;">
           <button [hidden]="mostrarListaImgenesEquipo" mat-raised-button data-dismiss="modal"
             (click)="guardarDatosEquipo()">Aceptar</button>
