@@ -14,7 +14,6 @@ export class AppComponent implements OnInit{
   constructor(public usuarioService: UsuarioService, public router: Router){
   }
   mostrarMenu = false;  
-
   ngOnInit(){
     this.router.events.subscribe((event: Event)=>{
       if (event instanceof NavigationEnd) {

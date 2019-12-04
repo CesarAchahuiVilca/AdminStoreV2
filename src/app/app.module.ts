@@ -128,7 +128,7 @@ const routes: Route[] = [
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptorService,
     multi: true
-  }],
+  },SnackBarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

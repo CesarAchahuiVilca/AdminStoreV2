@@ -18,7 +18,7 @@ import { UsuarioService } from '../usuario/usuario.service';
 export class LoginComponent implements OnInit {
 
   constructor(public loginService: LoginService,public usuarioService:UsuarioService, public router: Router, public sesionService: SesionService, public snackBar: MatSnackBar) {  }
-
+  mensaje_respuesta = "";
   ngOnInit() {
     /*this.sesionService.obtenerSesion().subscribe(res => {
       const respuesta = res as Respuesta;
